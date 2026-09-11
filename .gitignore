@@ -286,4 +286,29 @@ $RECYCLE.BIN/
 # Archieve docs
 docs/design/_archive/
 
+### Project ###
+# Secrets: only .env.example is committed (D15/D18)
+.env.*
+!.env.example
+*.pem
+*.p12
+
+# Local editor / assistant state
+.vscode/
+.idea/
+.claude/settings.local.json
+
+# Local compose overrides and container volumes
+docker-compose.override.yml
+compose.override.yaml
+.volumes/
+
+# Go dispatcher build output
+dispatcher/dispatcher
+dispatcher/bin/
+
+# Local run artifacts
+*.sqlite3
+.uv-cache/
+
 # End of https://www.toptal.com/developers/gitignore/api/python,go,macos,data,windows,linux

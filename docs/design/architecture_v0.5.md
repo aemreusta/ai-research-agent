@@ -198,33 +198,65 @@ Her LLM çıktı şemasında kısa bir **`rationale`** alanı bulunur. Bu, model
 
 ```python
 class SubQuestion(BaseModel):
-    id: str; text: str; priority: Literal["must", "nice"]
-    facets: list[Facet]                 # "cevaplandı" kriterleri
+    id: str
+    text: str
+    priority: Literal["must", "nice"]
+    facets: list[Facet]  # "cevaplandı" kriterleri
     status: Literal["pending", "searching", "sufficient", "exhausted"]
-    queries_tried: list[str]; rounds_without_progress: int
+    queries_tried: list[str]
+    rounds_without_progress: int
+
 
 class Document(BaseModel):
-    id: str; url: str; canonical_url: str; domain: str
-    title: str; published_at: date | None; content: str
-    content_hash: str; minhash: bytes; origin_cluster_id: str
-    score: SourceScore                  # bileşenler + gerekçe
+    id: str
+    url: str
+    canonical_url: str
+    domain: str
+    title: str
+    published_at: date | None
+    content: str
+    content_hash: str
+    minhash: bytes
+    origin_cluster_id: str
+    score: SourceScore  # bileşenler + gerekçe
+
 
 class Claim(BaseModel):
-    id: str; subq_id: str; doc_id: str
-    text: str; quote: str; kind: ClaimKind
-    entity: str | None; attribute: str | None
-    value: str | None; unit: str | None; as_of: date | None
+    id: str
+    subq_id: str
+    doc_id: str
+    text: str
+    quote: str
+    kind: ClaimKind
+    entity: str | None
+    attribute: str | None
+    value: str | None
+    unit: str | None
+    as_of: date | None
+
 
 class ClaimCluster(BaseModel):
-    id: str; claim_ids: list[str]; origin_ids: set[str]
-    confidence: float; status: Literal["supported", "single_source", "contested"]
+    id: str
+    claim_ids: list[str]
+    origin_ids: set[str]
+    confidence: float
+    status: Literal["supported", "single_source", "contested"]
+
 
 class ResearchState(BaseModel):
-    run_id: str; question: str; as_of: date; analysis: QueryAnalysis
-    plan: list[SubQuestion]; queries: list[QueryRecord]
-    documents: dict[str, Document]; claims: dict[str, Claim]
-    clusters: dict[str, ClaimCluster]; contradictions: list[Contradiction]
-    iteration: int; budget: BudgetUsage; stop_reason: StopReason | None
+    run_id: str
+    question: str
+    as_of: date
+    analysis: QueryAnalysis
+    plan: list[SubQuestion]
+    queries: list[QueryRecord]
+    documents: dict[str, Document]
+    claims: dict[str, Claim]
+    clusters: dict[str, ClaimCluster]
+    contradictions: list[Contradiction]
+    iteration: int
+    budget: BudgetUsage
+    stop_reason: StopReason | None
 ```
 
 Alt soru durum makinesi: `pending → searching → sufficient | exhausted` (geri dönüş: `searching → pending` sadece yeni facet/çelişki eklendiğinde).
@@ -345,15 +377,19 @@ LLM çağrısı yok; aynı girdi → aynı sonuç; her kural ID'li, severity'li 
 ### 13.1 Hata modeli
 ```python
 class AgentError(BaseModel):
-    code: ErrorCode            # ör. SEARCH_TIMEOUT
+    code: ErrorCode  # ör. SEARCH_TIMEOUT
     category: Literal["search", "llm", "fetch", "budget", "pii", "gate", "config", "infra", "bug"]
-    expected: bool             # öngörülen ve ele alınan mı, yoksa bug mı
+    expected: bool  # öngörülen ve ele alınan mı, yoksa bug mı
     retryable: bool
-    run_id: str; span_id: str; node: str; iteration: int
-    provider: str | None; attempt: int
-    decision: str              # ne yapıldı: "retry", "fallback→brave", "skip query", "mark exhausted"…
-    outcome: str | None        # sonuç: "OK 7 results", "FAILED"
-    cause: str | None          # redacted mesaj; unexpected ise stack trace
+    run_id: str
+    span_id: str
+    node: str
+    iteration: int
+    provider: str | None
+    attempt: int
+    decision: str  # ne yapıldı: "retry", "fallback→brave", "skip query", "mark exhausted"…
+    outcome: str | None  # sonuç: "OK 7 results", "FAILED"
+    cause: str | None  # redacted mesaj; unexpected ise stack trace
 ```
 
 - **Expected (öngörülen) hatalar:** ele alınır, sistem degrade ederek devam eder, `level=warn` event olarak **hata → karar → sonuç** zinciriyle kaydedilir. Örnek: `SEARCH_TIMEOUT (tavily, 2/3) → fallback brave → OK 7 results`
