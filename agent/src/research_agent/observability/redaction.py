@@ -54,7 +54,8 @@ def _luhn(digits: str) -> bool:
     return total % 10 == 0
 
 
-def _is_card(value: str) -> bool:
+def is_valid_card(value: str) -> bool:
+    """Luhn check, so a long invoice number is not reported as a credit card."""
     return _luhn(re.sub(r"\D", "", value))
 
 
@@ -86,7 +87,7 @@ _RULES: Final[tuple[tuple[str, re.Pattern[str], Callable[[str], bool] | None], .
         None,
     ),
     ("IBAN", re.compile(r"\b[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}\b"), None),
-    ("CREDIT_CARD", re.compile(r"\b(?:\d[ -]?){12,18}\d\b"), _is_card),
+    ("CREDIT_CARD", re.compile(r"\b(?:\d[ -]?){12,18}\d\b"), is_valid_card),
     ("TCKN", re.compile(r"\b[1-9][0-9]{10}\b"), is_valid_tckn),
     ("EMAIL", re.compile(r"\b[\w.+-]+@[\w-]+\.[\w.-]+\b"), None),
     (

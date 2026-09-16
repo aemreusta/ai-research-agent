@@ -28,7 +28,7 @@ from research_agent.contracts import RunStatus, run_state_machine
 from research_agent.db.models import Run, RunSecret
 from research_agent.errors import AgentError, AgentException, ErrorCode
 from research_agent.keys import Provider, ProviderKeys, SecretBox
-from research_agent.observability.events import notify_run_queued
+from research_agent.observability.events import notify_run_queued, notify_status_changed
 
 
 class IllegalTransitionError(AgentException):
@@ -327,5 +327,8 @@ class RunRepository:
         )
         if also is not None:
             await also()
+        # Status changes wake SSE listeners too; otherwise a run cancelled from the queue would
+        # leave its open stream waiting for the next keepalive before it noticed.
+        await notify_status_changed(self._session, run_id, target.value)
         await self._session.commit()
         return await self.require(run_id)

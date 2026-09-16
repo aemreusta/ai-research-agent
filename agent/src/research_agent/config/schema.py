@@ -315,6 +315,22 @@ class TunableField(BaseModel):
     annotation: str
     default: Any = None
     locked: bool = False
+    minimum: float | None = None
+    maximum: float | None = None
+
+
+def _bounds(info: FieldInfo) -> tuple[float | None, float | None]:
+    """Numeric bounds from `Field(ge=..., le=...)`, so the form renders the same limits."""
+    minimum: float | None = None
+    maximum: float | None = None
+    for constraint in info.metadata:
+        for attribute in ("ge", "gt"):
+            if (value := getattr(constraint, attribute, None)) is not None:
+                minimum = float(value)
+        for attribute in ("le", "lt"):
+            if (value := getattr(constraint, attribute, None)) is not None:
+                maximum = float(value)
+    return minimum, maximum
 
 
 def _extra(info: FieldInfo) -> dict[str, Any]:
@@ -331,6 +347,7 @@ def _walk(model: type[BaseModel], prefix: str = "") -> list[TunableField]:
             rows.extend(_walk(annotation, f"{path}."))
             continue
         extra = _extra(info)
+        minimum, maximum = _bounds(info)
         rows.append(
             TunableField(
                 path=path,
@@ -339,6 +356,8 @@ def _walk(model: type[BaseModel], prefix: str = "") -> list[TunableField]:
                 annotation=str(annotation),
                 default=info.get_default(call_default_factory=False),
                 locked=bool(extra.get(LOCKED_KEY, False)),
+                minimum=minimum,
+                maximum=maximum,
             )
         )
     return rows

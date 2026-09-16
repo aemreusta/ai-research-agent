@@ -31,6 +31,8 @@ line-length = 100
 src = ["agent/src", "agent/tests"]
 
 [tool.ruff.lint]
+# Turkish text is first-class here (reports, questions, test fixtures).
+allowed-confusables = ["ı", "İ", "ş", "Ş", "ğ", "Ğ", "ü", "Ü", "ö", "Ö", "ç", "Ç"]
 select = [
     "E", "W",   # pycodestyle
     "F",        # pyflakes

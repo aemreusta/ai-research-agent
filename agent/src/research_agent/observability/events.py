@@ -128,6 +128,17 @@ async def notify_run_queued(session: AsyncSession, run_id: uuid.UUID) -> None:
     )
 
 
+async def notify_status_changed(session: AsyncSession, run_id: uuid.UUID, status: str) -> None:
+    """Wake SSE listeners on a status change, delivered with the transaction that made it."""
+    await session.execute(
+        text("SELECT pg_notify(:channel, :payload)"),
+        {
+            "channel": EVENTS_CHANNEL,
+            "payload": json.dumps({"run_id": str(run_id), "status": status}),
+        },
+    )
+
+
 # One statement: bump the run's counter, insert the row, return the sequence number. Taking the
 # counter from the run row serialises writers per run - which is what makes `seq` gap-free - while
 # runs stay independent of each other.

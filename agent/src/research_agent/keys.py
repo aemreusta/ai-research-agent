@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import os
 from enum import StrEnum
+from pathlib import Path
 from typing import Final
 
 from cryptography.fernet import Fernet, InvalidToken
@@ -66,6 +67,34 @@ class KeyError_(AgentException):
         )
 
 
+def _secret_key_from_environment() -> str:
+    """`APP_SECRET_KEY` if set, otherwise the file compose generates on first start."""
+    if value := os.environ.get("APP_SECRET_KEY", "").strip():
+        return value
+    if path := os.environ.get("APP_SECRET_KEY_FILE", "").strip():
+        file = Path(path)
+        if file.is_file():
+            return file.read_text(encoding="utf-8").strip()
+    return ""
+
+
+def ensure_secret_key_file(path: Path) -> bool:
+    """Create a Fernet key at `path` unless one is already there. Returns whether it created one.
+
+    Run by the `migrate` one-shot container so that a fresh `docker compose up` needs no manual
+    key generation. An existing key is never replaced: that would make every stored secret
+    undecryptable. (Production keeps this key in a KMS instead - v0.6 §19.)
+    """
+    if path.is_file() and path.read_text(encoding="utf-8").strip():
+        return False
+    path.parent.mkdir(parents=True, exist_ok=True)
+    descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+    with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
+        handle.write(Fernet.generate_key().decode() + "\n")
+    path.chmod(0o600)
+    return True
+
+
 class SecretBox:
     """Symmetric encryption for values on their way into `run_secrets`.
 
@@ -74,7 +103,7 @@ class SecretBox:
     """
 
     def __init__(self, secret_key: str | None = None) -> None:
-        key = secret_key if secret_key is not None else os.environ.get("APP_SECRET_KEY", "")
+        key = secret_key if secret_key is not None else _secret_key_from_environment()
         if not key:
             raise KeyError_(
                 "refuse to start",

@@ -57,6 +57,7 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 | D34 | Citation verification maliyeti | `verify_citations` batch'li: tek çağrıda N cümle + atıflı claim'ler, 2–3 batch `asyncio` ile paralel | ✅ |
 | D36 | DB sürücüsü | **psycopg 3 tek sürücü** (`postgresql+psycopg://`). Gerekçe: LangGraph Postgres checkpointer psycopg istiyor; alembic (sync) + SQLAlchemy (async) + `LISTEN/NOTIFY` aynı sürücüyle çalışınca tek bağlantı dizesi yetiyor. asyncpg (D8) yerine bu seçildi; `DATABASE_URL` hangi yazımla verilirse verilsin `db/session.py` normalize ediyor (testli) | ✅ |
 | D37 | Şema kapsamı | Tablolar: `runs` (kuyruk + sayaçlar + `event_seq`), `run_secrets`, `run_events`, `llm_calls`, `search_calls`, `run_artifacts`, `search_cache`, **`embedding_cache`** (D6), `presets`. **prompt/skill/eval tablosu yok** — versiyonlar Langfuse'ta (v0.6 §6). LangGraph checkpoint tablolarını kütüphane kendi açar | ✅ |
+| D38 | Kurulum sürtünmesi | Reviewer'ın tek adımı provider key'leri olmalı: `APP_SECRET_KEY` boşsa `migrate` üretir (paylaşılan volume), Langfuse init değerleri `.env.example`'da lokal-dev varsayılanlarıyla dolu, compose `.env` yoksa da kalkar. Key'ler UI'dan da girilebildiği için `.env` düzenlemek bile opsiyonel | ✅ |
 | D35 | Prompt injection | Web içeriği her katmanda untrusted data. Yapısal savunma: enjekte talimat claim'e dönüşemez (verbatim quote doğrulaması), uydurma sayı G4'ü geçemez, Gate LLM içermez. README'de Design Question 6 ile birlikte anlatılır | ✅ |
 
 ---
@@ -99,15 +100,15 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 - [x] `observability/events.py` — `run_events` writer (run satırındaki sayaçtan boşluksuz `seq`, kendi bağlantısında commit), `EventType` sözlüğü, `pg_notify` + `listen()` yardımcısı, redaction'dan geçen payload
 - [ ] **Go dispatcher:** `queue` (claim `SKIP LOCKED`, `LISTEN` + polling), `capacity` + agent seçimi, `agentclient` (execute/cancel/healthz), `watchdog` (heartbeat kaybı → requeue, deadline → cancel → failed), `events` (`run_events`'e `node=dispatcher`), `slog` JSON, `dispatcher.yaml`
 - [x] **Python agent_server:** `execute` (202) / `cancel` / `healthz` / `capacity`; `RunExecutor` (slot, heartbeat, tek terminal yazım, kooperatif cancel, drain); `db/repository.py` (claim `SKIP LOCKED`, kontratla doğrulanan geçişler, requeue + `max_attempts`, stale/overdue taramaları, `run_secrets` yaşam döngüsü); `keys.py` (Fernet + UI>env çözümleme, `repr` sızdırmıyor)
-- [ ] `api` iskeleti: `/healthz`, `/readyz`, `POST /api/runs`, `GET /api/runs/{id}`
+- [x] `api`: `/healthz` (bağımlılıksız) · `/readyz` (bağımlılık başına ok/required) · `POST/GET /api/runs` · `GET /api/runs/{id}` · `/cancel` (kuyruktaysa hemen `cancelled`, çalışıyorsa bayrak) · **SSE** (önce `LISTEN`, sonra backfill, `Last-Event-ID`, keepalive, terminal durumda kapanış) · `/export` (report/trace/state/gate) · `/api/config/schema` (etkin varsayılanlar + sınırlar) · `/api/presets` · `/api/keys/validate` + `/status`. Doğrulama hataları girdiyi geri yansıtmıyor (key sızıntısı)
 - [ ] `docker compose up` ile uçtan uca "boş run": api → PG → dispatcher → agent (dummy graph) → event'ler DB'de; agent'ı öldür → heartbeat kaybı → requeue → resume
 - [ ] ⛔ Bu noktadan sonra dispatcher'a yalnızca bug fix
 
 ## Faz 2 — Provider'lar & PII · Cum
 - [ ] `providers/llm` — Gemini, OpenAI, Ollama adapter; `structured.py` (Pydantic + repair retry); `chain.py` (fallback, `LLM_FALLBACK_USED`); token/cost → `llm_calls`
 - [ ] `providers/search` — Tavily, Brave; normalize `SearchResult`; PG cache; timeout/retry/fallback → `search_calls`
-- [ ] `pii/` — Presidio HTTP client, TR ad-hoc recognizer'lar (TCKN + checksum post-filter, TR telefon), regex-only degrade, redaction yardımcıları
-- [ ] Key çözümleme: `run_secrets` (Fernet) → `.env` varsayılanı; kaynak metadata'sı
+- [~] `pii/` — **`RegexMasker` hazır** (intake B1: kararlı numaralı placeholder `<TCKN_1>`, checksum/Luhn doğrulamalı, isimler korunuyor, entity kaydı değer taşımıyor; Presidio yokken degrade modu da bu). Kalan: Presidio HTTP client + TR ad-hoc recognizer'lar
+- [x] Key çözümleme: `run_secrets` (Fernet) → `.env` varsayılanı; kaynak metadata'sı. `APP_SECRET_KEY` boşsa `migrate` paylaşılan volume'a bir kez üretir (`APP_SECRET_KEY_FILE`, 0600, asla döndürülmez) — kullanıcı Fernet anahtarı üretmek zorunda değil (D38). Key probe'ları: Tavily `/usage`, OpenAI/Gemini model listesi (key header'da, URL'de değil), Ollama `/api/tags`, Brave 1 arama
 - [ ] `FakeLLM` + `FakeSearchProvider` + `FakePresidio`
 - [ ] `prompting/` — `Signature`, `Predict`/`Reasoned`, registry (YAML seed → DB, aktif versiyon çözümleme, run snapshot), `skills.py` (SKILL.md parse, seçim listesi, enjeksiyon)
 - [ ] Langfuse: callback handler, `mask` redaction, `trace_id` ↔ `run_id`, trace URL; `PromptRegistry` (Langfuse → YAML fallback, şema hash, template değişken kontrolü); `seed_sync` (YAML → Langfuse, skills → `skill/<name>`) + export script

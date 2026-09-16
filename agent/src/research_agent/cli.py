@@ -75,6 +75,20 @@ def _cmd_run(args: argparse.Namespace) -> int:
     return 3
 
 
+def _cmd_serve(args: argparse.Namespace) -> int:
+    from research_agent import services
+
+    {"api": services.serve_api, "agent": services.serve_agent}[args.role]()
+    return 0
+
+
+def _cmd_migrate(_args: argparse.Namespace) -> int:
+    from research_agent import services
+
+    services.migrate()
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="research", description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -97,6 +111,15 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("question")
     run.add_argument("--out", help="directory for report.md, trace.jsonl, gate_result.json")
     run.set_defaults(func=_cmd_run)
+
+    serve = sub.add_parser("serve", help="run a service: the browser-facing api or an agent")
+    serve.add_argument("role", choices=["api", "agent"])
+    serve.set_defaults(func=_cmd_serve)
+
+    migrate = sub.add_parser(
+        "migrate", help="bring the schema to head and create the encryption key if missing"
+    )
+    migrate.set_defaults(func=_cmd_migrate)
 
     return parser
 

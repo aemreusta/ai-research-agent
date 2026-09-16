@@ -2,11 +2,20 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
 from cryptography.fernet import Fernet
 
 from research_agent.errors import ErrorCode
-from research_agent.keys import KeyError_, KeySource, Provider, ProviderKeys, SecretBox
+from research_agent.keys import (
+    KeyError_,
+    KeySource,
+    Provider,
+    ProviderKeys,
+    SecretBox,
+    ensure_secret_key_file,
+)
 
 SECRET = Fernet.generate_key().decode()
 
@@ -93,3 +102,36 @@ def test_ollama_base_url_is_configuration_not_a_secret(monkeypatch: pytest.Monke
     monkeypatch.setenv("OLLAMA_BASE_URL", "http://ollama:11434")
     keys = ProviderKeys.resolve(supplied={})
     assert keys.get(Provider.OLLAMA) == "http://ollama:11434"
+
+
+def test_the_secret_key_can_come_from_a_file(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Compose shares a generated key through a volume, so nobody has to paste one into .env."""
+    key_file = tmp_path / "fernet.key"
+    key_file.write_text(SECRET + "\n")
+    monkeypatch.delenv("APP_SECRET_KEY", raising=False)
+    monkeypatch.setenv("APP_SECRET_KEY_FILE", str(key_file))
+    box = SecretBox()
+    assert box.decrypt(SecretBox(SECRET).encrypt("v")) == "v"
+
+
+def test_an_explicit_environment_key_beats_the_file(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    key_file = tmp_path / "fernet.key"
+    key_file.write_text(Fernet.generate_key().decode())
+    monkeypatch.setenv("APP_SECRET_KEY", SECRET)
+    monkeypatch.setenv("APP_SECRET_KEY_FILE", str(key_file))
+    assert SecretBox().decrypt(SecretBox(SECRET).encrypt("v")) == "v"
+
+
+def test_ensure_secret_key_file_creates_it_once(tmp_path: Path) -> None:
+    path = tmp_path / "secrets" / "fernet.key"
+    first = ensure_secret_key_file(path)
+    assert first is True
+    content = path.read_text()
+    assert ensure_secret_key_file(path) is False
+    assert path.read_text() == content, "an existing key must never be rotated silently"
+    assert oct(path.stat().st_mode & 0o777) == "0o600"
+    SecretBox(content.strip())
