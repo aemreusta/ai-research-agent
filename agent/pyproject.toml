@@ -24,6 +24,10 @@ dependencies = [
     # Agent core: full-text extraction for fetched pages (D7) and MinHash near-duplicates (L2).
     "trafilatura>=2.0",
     "datasketch>=1.6",
+    # Orchestration (D2): nodes are plain functions, routing is plain Python; the Postgres
+    # checkpointer is what lets a requeued run resume where the dead agent stopped.
+    "langgraph>=1.0",
+    "langgraph-checkpoint-postgres>=3.0",
 ]
 
 [build-system]

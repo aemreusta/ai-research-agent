@@ -120,17 +120,17 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 - [ ] `intake_guard` (doğrulama, dil, PII maskeleme)
 - [ ] `analyze_query` (+ skill seçimi), `plan`, `generate_queries` — signature seed YAML'ları (her şemada `rationale`)
 - [ ] Seed skill'ler: `regulatory-research-tr`, `company-research`, (ops.) `market-sizing`
-- [ ] L4 query dedup · L1 URL canonicalization · snippet triage + top-K fetch · L2 MinHash → `origin_cluster`
-- [ ] `evaluate_sources` (skor + gerekçe)
-- [ ] `extract_claims` + quote doğrulama
-- [ ] `cluster_and_corroborate` (L3) · `detect_contradictions`
+- [x] L1 URL canonicalization (şema, www/m/amp, tracking, AMP son eki, sıralı query) · L2 normalize hash + MinHash LSH → `origin_id` (checkpoint'ten yeniden kurulabilir) · L4 token-Jaccard query dedup · ortak `text.py` (eşleştirme için tüm i-varyantları tek `i`: "ApilexAI" = "apilexaı" sorunu testle yakalandı)
+- [~] `scoring.py` hazır: domain tier (skill eklentili, taban mutasyonsuz), şirketin kendi alanı = primary, kapsam-duyarlı recency, ağırlıklı toplam + tek satır gerekçe; LLM tier bandı içinde en fazla ±0.1 oynatabilir, tier atlatamaz (injection testi). Kalan: node
+- [~] `quotes.py` hazır: exact → fuzzy (±1 kelime pencere, oran ≥ 0.88); **rakam ve sayı-kelimesi (beş/on, five/ten) birebir şart** — testte yakalanan "beş iş günü"→"on iş günü" kaçağı kapandı. Kalan: node
+- [~] `clustering.py` (L3: benzerlik + aynı normalize entity + **farklı değerli iddialar asla birleşmez**; kararlı cluster id; destek = bağımsız origin, "X'e göre" → X origin; güven = bağımsız kanıtların birleşimi) ve `contradictions.py` (aynı entity+attribute, tolerans dışı değer) hazır. Kalan: node'lar + LLM judge
 
 ## Faz 4 — Döngü, sentez, Gate · Cmt
-- [ ] `assess_coverage` + `termination.py` + router
+- [~] `coverage.py` (facet yeterliliği; takip sorgusu denenmiş çelişki artık facet'i bloklamıyor, raporlanıyor) + `termination.py` (başarı → hard limit → durgunluk; **kapalı gelen süre/maliyet kapıları testle açılıp doğrulandı**) hazır. Kalan: node + router bağlantısı
 - [ ] LangGraph wiring + Postgres checkpointer (`thread_id = run_id`)
 - [ ] Çelişki çözüm follow-up'ı
 - [ ] `synthesize` + `verify_citations` (**batch'li**, 1 kez geri bildirimle yeniden sentez — D34)
-- [ ] `gate/` — G1–G11, sayı/tarih normalizer, **G4 üç kovalı + tolerans (D32)**, deterministik remediation, `gate_result.json`
+- [x] `gate/` — `numeric.py` (TR+EN sayı/para/yüzde/tarih, çoklu okuma, **yazıldığı hassasiyete yuvarlama** toleransı, para birimi farkı = eşleşmez, tarih granülaritesi = kapsama) · `rules.py` G1–G11 (G4: soru bağlamı → B2 ledger'dan yeniden hesap → B1 birebir → B3 tolerans=warn; G1 ayrıca "hiç bulgu kalmadıysa" remediation'sız hata — boş raporun "None" ile temiz görünmesini engeller) · `runner.py` (değerlendir → düzelt → yeniden değerlendir, kaynak listesi her zaman atıflardan türetilir, "N cümle çıkarıldı" notu, fail'de banner, deterministik `to_dict`)
 - [ ] `render_report` (Summary · Key Findings · Conflicting/Uncertain · Conclusion (+Action Plan) · Known Gaps · Sources · Metadata)
 - [ ] Worker'a bağla: gerçek run uçtan uca compose içinde
 
@@ -154,12 +154,12 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 
 ## Faz 7 — Test (Faz 2'den itibaren sürekli)
 - [x] Unit: kontrat eşitliği, config loader + override sınırları + kilitli alanlar + `config_hash` kararlılığı, redaction + TCKN checksum, log pipeline (40 test yeşil)
-- [ ] Unit: URL canonicalization, MinHash, query dedup, query generation
-- [ ] Unit: scoring, facet yeterlilik, contradiction adayları, termination/router
-- [ ] Unit: Gate G1–G11 (ayrı ayrı), sayı/tarih normalizer, **G4 üç kova + yanlış pozitif senaryoları** (türetilmiş sayı, yuvarlama, kur, tarih granülaritesi)
+- [x] Unit: URL canonicalization, MinHash, query dedup (query generation node ile gelecek)
+- [x] Unit: scoring, facet yeterlilik, contradiction adayları, termination/router
+- [x] Unit: Gate G1–G11 (ayrı ayrı), sayı/tarih normalizer, **G4 üç kova + yanlış pozitif senaryoları** (türetilmiş sayı, yuvarlama, kur, tarih granülaritesi, soru bağlamı)
 - [ ] Unit: PII redaction + TCKN checksum, secret redaction, structured output repair, config override sınırları
 - [ ] Senaryo: sufficient · stagnation · aynı sorgu · timeout→fallback · invalid JSON · max iteration · gate fail→remediation
-- [ ] Senaryo: **`max_wall_clock` ve `max_cost_usd` açıkken** `stop_reason=budget` (kapılar varsayılan kapalı olduğu için bu yol yalnızca testle korunur — D11)
+- [~] **`max_wall_clock` ve `max_cost_usd` açıkken** `stop_reason=budget` — router seviyesinde testli (kapalıyken asla durdurmadığı da testli); graph senaryosu node'larla gelecek (D11)
 - [ ] Hata izlenebilirliği: her expected hata doğru `ErrorCode`/`decision`/`outcome` üretiyor
 - [ ] API: run oluşturma, SSE resume, cancel, **key sızıntısı yok**
 - [ ] Go: watchdog karar tablosu (table-driven), backoff, kapasite seçimi, durum geçişleri ↔ `run_states.yaml`

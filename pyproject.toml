@@ -51,7 +51,8 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"agent/tests/**" = ["S", "B008"]
+# Tests hold long literal sentences and URLs; wrapping them hurts readability more than it helps.
+"agent/tests/**" = ["S", "B008", "E501"]
 
 [tool.mypy]
 python_version = "3.13"
@@ -64,6 +65,11 @@ exclude = ["^dispatcher/"]
 [[tool.mypy.overrides]]
 module = ["tests.*"]
 strict = false
+
+[[tool.mypy.overrides]]
+# Ships no type information; used behind a small typed wrapper (agent/dedup/minhash.py).
+module = ["datasketch.*"]
+ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 testpaths = ["agent/tests"]
