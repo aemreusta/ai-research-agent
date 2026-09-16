@@ -1,0 +1,23 @@
+# Go dispatcher - control plane only. No business logic, no LLM, no secrets (v0.6 §2).
+version: 1
+
+queue:
+  poll_interval_seconds: 5 # backup for LISTEN/NOTIFY
+  claim_batch_size: 1
+
+capacity:
+  max_concurrent_runs: 4
+  slots_per_agent: 2
+
+watchdog:
+  tick_seconds: 5
+  heartbeat_timeout_seconds: 30
+  cancel_grace_seconds: 10
+
+retry:
+  max_attempts: 3 # must equal contracts/run_states.yaml max_attempts
+  backoff_seconds: [5, 15]
+
+agent_client:
+  execute_timeout_seconds: 10 # the call returns 202; the run itself is not bounded by this
+  health_timeout_seconds: 2

@@ -1,0 +1,38 @@
+# PII boundaries (v0.6 §12). Sensitive identifiers are always masked; person and organisation
+# names found in web content are not - public figures and companies are the subject of research.
+version: 1
+
+# Always masked, at all three boundaries (intake, telemetry, output).
+always_masked_entities:
+  - TR_TCKN
+  - IBAN_CODE
+  - CREDIT_CARD
+  - PHONE_NUMBER
+  - EMAIL_ADDRESS
+  - IP_ADDRESS
+
+# Configurable: person names inside the user's question.
+mask_question_person_names: false
+
+boundaries:
+  intake: true # B1 - before anything leaves for an LLM or search provider
+  telemetry: true # B2 - logs, run_events, llm_calls, Langfuse payloads
+  output: true # B3 - output gate G9
+
+score_threshold: 0.5
+
+# Turkish support: the default Presidio image ships an English spaCy model, so TR identifiers are
+# covered by pattern-based ad-hoc recognizers sent with each request. TCKN checksum is verified in
+# code as a post-filter to keep false positives out of the logs.
+ad_hoc_recognizers:
+  TR_TCKN:
+    pattern: '\b[1-9][0-9]{10}\b'
+    checksum: tckn
+    score: 0.6
+  TR_PHONE:
+    pattern: '(\+90|0)?\s?5[0-9]{2}\s?[0-9]{3}\s?[0-9]{2}\s?[0-9]{2}'
+    score: 0.5
+
+# If Presidio is unreachable the intake boundary degrades to regex-only masking and emits
+# PII_ENGINE_DEGRADED. It never fails open: known patterns are masked in every mode.
+degrade_to_regex_only: true

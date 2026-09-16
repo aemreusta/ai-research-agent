@@ -1,0 +1,40 @@
+# Run state machine. Shared by the Python agent and the Go dispatcher; parity with the Python
+# `RunStatus` enum and the transition table is asserted by tests/unit/test_contracts.py.
+version: 1
+
+initial: queued
+
+terminal:
+  - succeeded
+  - succeeded_with_warnings
+  - failed
+  - cancelled
+
+# max_attempts counts dispatch attempts in total: the first dispatch plus at most two requeues
+# after a lost heartbeat (architecture v0.6 §2).
+max_attempts: 3
+
+states:
+  queued:
+    owner: dispatcher
+    transitions: [dispatched, cancelled, failed]
+  dispatched:
+    owner: dispatcher
+    # back to queued when no replica accepted the run (AGENT_UNREACHABLE)
+    transitions: [running, queued, cancelled, failed]
+  running:
+    owner: agent
+    # back to queued on AGENT_HEARTBEAT_LOST, resumed from the LangGraph checkpoint
+    transitions: [succeeded, succeeded_with_warnings, failed, cancelled, queued]
+  succeeded:
+    owner: agent
+    transitions: []
+  succeeded_with_warnings:
+    owner: agent
+    transitions: []
+  failed:
+    owner: agent
+    transitions: []
+  cancelled:
+    owner: dispatcher
+    transitions: []

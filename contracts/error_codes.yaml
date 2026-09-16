@@ -1,0 +1,177 @@
+# Single source of truth for error codes. Loaded by the Python agent and the Go dispatcher;
+# parity with the Python `ErrorCode` enum is asserted by tests/unit/test_contracts.py.
+#
+#   category  : owning subsystem (search | llm | fetch | budget | pii | gate | config | infra | bug)
+#   expected  : true  = anticipated, handled, system degrades and continues (level=warn)
+#               false = a bug; run fails with a stack trace and an event id (level=error)
+#   retryable : whether retrying the same operation can succeed
+version: 1
+
+codes:
+  # --- search -------------------------------------------------------------
+  SEARCH_TIMEOUT:
+    category: search
+    expected: true
+    retryable: true
+    description: Search provider did not answer within the timeout.
+  SEARCH_RATE_LIMIT:
+    category: search
+    expected: true
+    retryable: true
+    description: Search provider returned 429.
+  SEARCH_PROVIDER_ERROR:
+    category: search
+    expected: true
+    retryable: true
+    description: Search provider returned 5xx or a malformed payload.
+  SEARCH_AUTH:
+    category: search
+    expected: true
+    retryable: false
+    description: Search provider rejected the API key (401/403). Fail fast, surface in the UI.
+  SEARCH_EMPTY:
+    category: search
+    expected: true
+    retryable: false
+    description: Query returned no results; one broadened rewrite is attempted.
+  DUPLICATE_QUERY:
+    category: search
+    expected: true
+    retryable: false
+    description: Generator only produced queries already tried (L4 dedup).
+  NO_EVIDENCE:
+    category: search
+    expected: true
+    retryable: false
+    description: No usable claim was collected; the report says so instead of inventing an answer.
+
+  # --- llm ----------------------------------------------------------------
+  LLM_TIMEOUT:
+    category: llm
+    expected: true
+    retryable: true
+    description: LLM provider did not answer within the timeout.
+  LLM_RATE_LIMIT:
+    category: llm
+    expected: true
+    retryable: true
+    description: LLM provider returned 429.
+  LLM_PROVIDER_ERROR:
+    category: llm
+    expected: true
+    retryable: true
+    description: LLM provider returned 5xx or a malformed payload.
+  LLM_AUTH:
+    category: llm
+    expected: true
+    retryable: false
+    description: LLM provider rejected the API key.
+  LLM_INVALID_OUTPUT:
+    category: llm
+    expected: true
+    retryable: true
+    description: Structured output failed Pydantic validation; one repair retry follows.
+  LLM_REPAIR_FAILED:
+    category: llm
+    expected: true
+    retryable: false
+    description: Repair retry still did not validate; the node falls back deterministically.
+  LLM_FALLBACK_USED:
+    category: llm
+    expected: true
+    retryable: false
+    description: Informational - the provider chain moved to the next provider.
+  EMBEDDING_UNAVAILABLE:
+    category: llm
+    expected: true
+    retryable: false
+    description: No embedding provider reachable; claim clustering degrades to lexical similarity.
+  EXTRACT_QUOTE_NOT_FOUND:
+    category: llm
+    expected: true
+    retryable: false
+    description: Claim quote could not be located in the document; the claim is dropped.
+
+  # --- fetch --------------------------------------------------------------
+  FETCH_FAILED:
+    category: fetch
+    expected: true
+    retryable: true
+    description: Full-content fetch failed; processing continues with the snippet.
+
+  # --- budget -------------------------------------------------------------
+  MAX_ITERATIONS:
+    category: budget
+    expected: true
+    retryable: false
+    description: Iteration cap reached; the agent stops in a controlled way and reports gaps.
+  BUDGET_EXCEEDED:
+    category: budget
+    expected: true
+    retryable: false
+    description: Search, cost or wall-clock budget exhausted.
+
+  # --- pii ----------------------------------------------------------------
+  PII_ENGINE_DEGRADED:
+    category: pii
+    expected: true
+    retryable: false
+    description: Presidio unreachable; regex-only masking is used. Known patterns never leak.
+
+  # --- gate ---------------------------------------------------------------
+  GATE_REMEDIATED:
+    category: gate
+    expected: true
+    retryable: false
+    description: Output gate found fixable violations and repaired them deterministically.
+  GATE_FAILED:
+    category: gate
+    expected: true
+    retryable: false
+    description: Output gate still fails after remediation; the report ships with a banner.
+
+  # --- config -------------------------------------------------------------
+  CONFIG_INVALID:
+    category: config
+    expected: true
+    retryable: false
+    description: Config or per-run override rejected before the run starts.
+  PROMPT_REGISTRY_DEGRADED:
+    category: config
+    expected: true
+    retryable: false
+    description: Prompt registry unreachable; repo YAML seeds are used.
+  PROMPT_SCHEMA_MISMATCH:
+    category: config
+    expected: true
+    retryable: false
+    description: Registry prompt version does not match the code output schema hash; rejected.
+
+  # --- infra (dispatcher owns these) --------------------------------------
+  AGENT_UNREACHABLE:
+    category: infra
+    expected: true
+    retryable: true
+    description: No healthy agent replica accepted the run; it goes back on the queue.
+  AGENT_HEARTBEAT_LOST:
+    category: infra
+    expected: true
+    retryable: true
+    description: Heartbeat went stale; the run is requeued and resumes from its checkpoint.
+  DEADLINE_EXCEEDED:
+    category: infra
+    expected: true
+    retryable: false
+    description: External hard deadline passed; the dispatcher cancels, then fails the run.
+  DISPATCH_DEFERRED:
+    category: infra
+    expected: true
+    retryable: true
+    description: Informational - no capacity, the run waits on the queue.
+
+  # --- bug ----------------------------------------------------------------
+  UNEXPECTED_EXCEPTION:
+    category: bug
+    expected: false
+    retryable: false
+    description: Unhandled exception. Run fails with a stack trace and a searchable event id.

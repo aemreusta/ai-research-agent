@@ -1,0 +1,39 @@
+# Source authority tiers (v0.6 §9). Unknown domains fall to tier 3; the LLM may nudge the score
+# but cannot promote a domain across tiers.
+version: 1
+
+tier_scores: { 1: 1.0, 2: 0.65, 3: 0.3 }
+
+tier_1: # official, regulatory, primary
+  suffixes: [.gov.tr, .gov, .europa.eu, .gov.uk]
+  domains:
+    - resmigazete.gov.tr
+    - kvkk.gov.tr
+    - mevzuat.gov.tr
+    - eur-lex.europa.eu
+    - edpb.europa.eu
+    - ticaret.gov.tr
+    - sanayi.gov.tr
+
+tier_2: # established news and research organisations
+  domains:
+    - reuters.com
+    - bloomberg.com
+    - ft.com
+    - apnews.com
+    - aa.com.tr
+    - dunya.com
+    - hukukihaber.net
+    - gartner.com
+    - idc.com
+
+tier_3_markers: # explicit downgrades regardless of domain
+  - medium.com
+  - substack.com
+  - blogspot.com
+  - wordpress.com
+  - quora.com
+  - reddit.com
+
+# A company's own domain counts as primary for claims about itself (v0.6 §9).
+self_primary_for_own_claims: true

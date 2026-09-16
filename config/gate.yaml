@@ -1,0 +1,72 @@
+# Output Gate rules (architecture v0.6 §11.2-11.3). No LLM calls: same input, same verdict.
+# Every rule has an id, a severity and its own unit test.
+version: 1
+
+severity_order: [warn, error]
+
+rules:
+  G1:
+    severity: error
+    description: Required sections are present.
+    remediation: add_missing_section_with_none_marker
+    required_sections: [summary, key_findings, conflicting_or_uncertain, conclusion, sources]
+    conditional_sections:
+      known_gaps: when_exhausted_subquestions_exist
+  G2:
+    severity: error
+    description: Every factual sentence carries at least one citation.
+    remediation: drop_sentence
+  G3:
+    severity: error
+    description: Every citation id exists in the ledger and in the source list; no uncited source.
+    remediation: rebuild_source_list
+  G4:
+    severity: error
+    description: Every number, date, percentage and money amount in a sentence is supported.
+    remediation: bucket_specific
+    # Three buckets (v0.6 §11.3). Classification is deterministic.
+    buckets:
+      bare_fact: # value must come from a cited claim
+        severity: error
+        remediation: drop_sentence
+      ledger_derived: # counts, ordinals, totals - the gate recomputes them from the ledger
+        severity: error
+        remediation: drop_sentence
+      within_tolerance: # rounding, unit or currency conversion, date granularity
+        severity: warn
+        remediation: mark_approximate
+    tolerance:
+      numeric_relative: 0.02
+      date_granularity_days: 31
+      percentage_absolute: 0.5
+  G5:
+    severity: warn
+    description: Sentences citing a contested cluster sit in the conflicting section or are hedged.
+    remediation: add_uncertainty_label
+  G6:
+    severity: warn
+    description: Single-source findings are labelled as such.
+    remediation: add_single_source_label
+  G7:
+    severity: error
+    description: Exhausted sub-questions are listed under known gaps.
+    remediation: add_to_known_gaps
+  G8:
+    severity: error
+    description: Source URLs are valid http(s), canonical and unique.
+    remediation: fix_or_drop_source
+  G9:
+    severity: error
+    description: No sensitive identifier or secret pattern in the output.
+    remediation: mask
+  G10:
+    severity: warn
+    description: Report language matches the question language.
+    remediation: flag
+  G11:
+    severity: error
+    description: Every recommendation links to at least one finding.
+    remediation: drop_recommendation
+
+# A report never reaches the user without this line when anything was dropped.
+report_note_on_drop: "{count} sentence(s) removed for insufficient evidence - see gate_result.json"

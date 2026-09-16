@@ -1,0 +1,94 @@
+# Agent settings. YAML is the source of truth; a small allowlist of infrastructure values may be
+# overridden by the environment, and per-run overrides arrive from the UI (architecture v0.6 §3).
+# Fields the UI may not touch are marked `locked` in agent/src/research_agent/config/schema.py.
+#
+# All thresholds are starting values, to be calibrated with the example queries (§7).
+
+budget:
+  # Hard limits (v0.6 §7 / D11)
+  max_iterations: 4 # 1 initial round + 3 follow-ups
+  max_searches: 45
+  # Wall-clock and cost gates ship DISABLED. They are real code paths with scenario tests; they
+  # are switched on per run from the UI when a run needs to be bounded (D11).
+  max_wall_clock_seconds: null
+  max_cost_usd: null
+  # Round width is the actual budget control: wide first round, narrow follow-ups.
+  queries_per_subquestion_first_round: 3
+  queries_per_gap_followup_round: 1
+  max_queries_per_followup_round: 8
+  # A sub-question is exhausted after this many rounds without new clusters or origins.
+  stagnation_threshold: 2
+
+plan:
+  min_subquestions: 3
+  max_subquestions: 6
+  max_facets_per_subquestion: 5
+
+fetch:
+  # Snippet-first triage: only the top-K documents get full content (D7).
+  top_k_first_round: 5
+  top_k_followup_round: 3
+  timeout_seconds: 10
+  retries: 1
+  max_content_bytes: 2000000
+
+dedup:
+  # L2 - document near-duplicate detection
+  minhash_num_perm: 128
+  minhash_shingle_size: 5
+  minhash_jaccard_threshold: 0.8
+  # L3 - claim clustering (cosine AND same normalised entity)
+  claim_similarity_threshold: 0.86
+  claim_lexical_fallback_threshold: 0.7
+  # L4 - query dedup
+  query_similarity_threshold: 0.9
+
+scoring:
+  # source_score = 0.35*authority + 0.25*primary + 0.15*recency + 0.25*relevance (v0.6 §9)
+  weights:
+    authority: 0.35
+    primary: 0.25
+    recency: 0.15
+    relevance: 0.25
+  # A facet is sufficient with one primary source at or above this score, or two independent origins.
+  primary_source_min_score: 0.7
+  min_independent_origins: 2
+  unknown_domain_tier: 3
+
+contradiction:
+  # Numeric values differing by more than this fraction are contradiction candidates.
+  numeric_relative_tolerance: 0.05
+  date_granularity_days: 31
+
+concurrency:
+  max_parallel_searches: 5
+  max_parallel_fetches: 5
+  max_parallel_llm_calls: 4
+  citation_verification_batch_size: 10
+
+llm:
+  timeout_seconds: 60
+  retries: 2
+  repair_retries: 1
+
+search:
+  timeout_seconds: 15
+  retries: 2
+  results_per_query: 10
+  cache_ttl_seconds: 86400
+
+pii:
+  # Locked: cannot be disabled from the UI (v0.6 §3, §12).
+  enabled: true
+  mask_question_person_names: false
+  presidio_timeout_seconds: 5
+  score_threshold: 0.5
+
+gate:
+  # Locked: the output gate cannot be switched off from the UI.
+  enabled: true
+  max_remediation_rounds: 1
+
+logging:
+  level: INFO
+  format: json

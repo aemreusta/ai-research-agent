@@ -1,0 +1,32 @@
+# Provider chain, tier -> model mapping and token prices (used for cost tracking, D33).
+# Model ids are verified against provider docs when the keys are wired up (Faz 2); prices are
+# USD per 1M tokens and are kept aligned with the Langfuse model pricing definitions.
+version: 1
+
+chain: [gemini, openai, ollama]
+
+tiers:
+  reasoning: # analyze_query, plan, assess_coverage, synthesize
+    gemini: gemini-2.5-pro
+    openai: gpt-5
+    ollama: qwen3:14b
+  fast: # generate_queries, evaluate_sources, extract_claims, contradiction judge, entailment
+    gemini: gemini-2.5-flash
+    openai: gpt-5-mini
+    ollama: qwen3:8b
+  embedding: # one model per run (D6)
+    gemini: gemini-embedding-001
+    openai: text-embedding-3-small
+    ollama: nomic-embed-text
+
+prices_usd_per_million_tokens:
+  gemini-2.5-pro: { input: 1.25, output: 10.0 }
+  gemini-2.5-flash: { input: 0.30, output: 2.50 }
+  gemini-embedding-001: { input: 0.15, output: 0.0 }
+  gpt-5: { input: 1.25, output: 10.0 }
+  gpt-5-mini: { input: 0.25, output: 2.0 }
+  text-embedding-3-small: { input: 0.02, output: 0.0 }
+  # Local models are free; kept explicit so the cost dashboard shows 0 instead of "unknown".
+  qwen3:14b: { input: 0.0, output: 0.0 }
+  qwen3:8b: { input: 0.0, output: 0.0 }
+  nomic-embed-text: { input: 0.0, output: 0.0 }

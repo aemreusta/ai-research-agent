@@ -1,0 +1,19 @@
+# Search providers. Tavily is primary, Brave adds fallback and result diversity (D3).
+version: 1
+
+chain: [tavily, brave]
+
+providers:
+  tavily:
+    base_url: https://api.tavily.com
+    search_depth: advanced
+    include_raw_content: true # avoids a separate fetch when available (D7)
+    max_results: 10
+  brave:
+    base_url: https://api.search.brave.com/res/v1
+    max_results: 10
+    freshness: null
+
+cache:
+  enabled: true
+  ttl_seconds: 86400

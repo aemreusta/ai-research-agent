@@ -80,14 +80,20 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 - [ ] API key'leri: kod + `.env.example` + testler yeşil olduktan sonra `.env`'e eklenecek. Geliştirme `FakeLLM`/`FakeSearchProvider` ile key'siz ilerler (Langfuse key'leri headless init ile üretilir)
 
 ## Faz 1 — Altyapı iskeleti · Per akşam → Cum öğlen
-- [ ] `uv init` + `agent/pyproject.toml` + `uv.lock` (kök `pyproject.toml` tooling ayarları hazır)
+- [x] uv workspace (kök = tooling + `[tool.uv.workspace]`, üye = `agent/`), `agent/pyproject.toml`, `uv.lock`
 - [ ] `agent/Dockerfile` (Python, 3 entrypoint) + `dispatcher/Dockerfile` (Go multi-stage → distroless) + `docker-compose.yml` (postgres, migrate, api, dispatcher, agent, presidio×2 + `observability` profili: langfuse-web, langfuse-worker, clickhouse, redis, minio; postgres init'te ayrı `langfuse` DB; headless init env'leri; healthcheck'ler)
-- [ ] `contracts/`: `agent-api.openapi.yaml`, `run_states.yaml`, `error_codes.yaml`
-- [ ] `config/*.yaml` + `config/schema.py` (Pydantic, `ui` metadata) + loader + override doğrulama + snapshot/hash
-- [ ] `.env.example` (sadece secret + altyapı)
+- [x] `contracts/error_codes.yaml` (30 kod) + `contracts/run_states.yaml` (durum makinesi, `max_attempts`)
+- [x] `research_agent/contracts.py` — YAML → Pydantic; enum ↔ YAML eşitliği ve `dispatcher.yaml` ↔ `run_states.yaml` retry sayısı testli
+- [ ] `contracts/agent-api.openapi.yaml` (execute/cancel/healthz/capacity)
+- [x] `config/*.yaml` (settings, models, search, domain_tiers, pii, gate, dispatcher)
+- [x] `config/schema.py` — `tunable()` / `locked()`, grup + açıklama, sınırlar; `tunable_fields()` → `/api/config/schema`
+- [x] `config/loader.py` — YAML < env allowlist < run override; kilitli alan reddi, sınır doğrulaması, `config_hash` (kanonik JSON)
+- [ ] `config/prompts/*.yaml` (signature seed'leri — Faz 2)
+- [x] `.env.example` (sadece secret + altyapı)
 - [ ] alembic: `runs`, `run_secrets`, `run_events`, `llm_calls`, `search_calls`, `run_artifacts`, `search_cache`, `presets`, `prompt_versions`, `skills`, `skill_versions`, `eval_sets`, `eval_runs`
-- [ ] `errors.py` — `AgentError`, `ErrorCode`
-- [ ] `observability/logging.py` — structlog JSON + correlation + redaction processor
+- [x] `errors.py` — `ErrorCode`, `ErrorCategory`, `AgentError` (code → decision → outcome), `AgentException`
+- [x] `observability/logging.py` — structlog JSON + contextvar korelasyon + redaction processor
+- [x] `observability/redaction.py` — provider key / bearer / DSN / IBAN / kart (Luhn) / TCKN (checksum) / e-posta / telefon / IP + hassas alan adları; pipeline'dan geçtiği testli
 - [ ] `observability/events.py` — `run_events` writer + `NOTIFY`
 - [ ] **Go dispatcher:** `queue` (claim `SKIP LOCKED`, `LISTEN` + polling), `capacity` + agent seçimi, `agentclient` (execute/cancel/healthz), `watchdog` (heartbeat kaybı → requeue, deadline → cancel → failed), `events` (`run_events`'e `node=dispatcher`), `slog` JSON, `dispatcher.yaml`
 - [ ] **Python agent_server:** `POST /v1/runs/{id}/execute` (202), `/cancel`, `/healthz`, `/capacity`; heartbeat döngüsü; node sınırında cancel kontrolü
@@ -105,7 +111,7 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 - [ ] Langfuse: callback handler, `mask` redaction, `trace_id` ↔ `run_id`, trace URL; `PromptRegistry` (Langfuse → YAML fallback, şema hash, template değişken kontrolü); `seed_sync` (YAML → Langfuse, skills → `skill/<name>`) + export script
 
 ## Faz 3 — Agent çekirdeği · Cum akşam → Cmt
-- [ ] `cli.py` — `research "soru"` → `report.md` + `trace.jsonl` + `gate_result.json` (D30)
+- [~] `cli.py` — `research config` / `research contracts` çalışıyor; `research run "soru"` graph bağlanınca (D30)
 - [ ] `intake_guard` (doğrulama, dil, PII maskeleme)
 - [ ] `analyze_query` (+ skill seçimi), `plan`, `generate_queries` — signature seed YAML'ları (her şemada `rationale`)
 - [ ] Seed skill'ler: `regulatory-research-tr`, `company-research`, (ops.) `market-sizing`
@@ -142,6 +148,7 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 - [ ] Prompt'ları gözden geçir (TR/EN, web içeriğini "untrusted data" olarak işaretle — prompt injection)
 
 ## Faz 7 — Test (Faz 2'den itibaren sürekli)
+- [x] Unit: kontrat eşitliği, config loader + override sınırları + kilitli alanlar + `config_hash` kararlılığı, redaction + TCKN checksum, log pipeline (40 test yeşil)
 - [ ] Unit: URL canonicalization, MinHash, query dedup, query generation
 - [ ] Unit: scoring, facet yeterlilik, contradiction adayları, termination/router
 - [ ] Unit: Gate G1–G11 (ayrı ayrı), sayı/tarih normalizer, **G4 üç kova + yanlış pozitif senaryoları** (türetilmiş sayı, yuvarlama, kur, tarih granülaritesi)

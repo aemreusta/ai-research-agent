@@ -1,0 +1,23 @@
+[project]
+name = "research-agent"
+version = "0.1.0"
+description = "Research agent core: graph, claim ledger, output gate, providers"
+requires-python = ">=3.13,<3.14"
+# Dependencies are added phase by phase, as the module that needs them lands. Faz 1 only needs
+# configuration, contracts and logging; LangGraph, FastAPI and the providers arrive in Faz 1-2.
+dependencies = [
+    "pydantic>=2.11",
+    "pydantic-settings>=2.7",
+    "pyyaml>=6.0",
+    "structlog>=25.1",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/research_agent"]
+
+[project.scripts]
+research = "research_agent.cli:main"
