@@ -286,6 +286,9 @@ $RECYCLE.BIN/
 # Archieve docs
 docs/design/_archive/
 
+# Case PDF — Apilex telifli, repoda tutulmuyor (D31)
+docs/reference/
+
 ### Project ###
 # Secrets: only .env.example is committed (D15/D18)
 .env.*

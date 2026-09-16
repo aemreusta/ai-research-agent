@@ -1,8 +1,8 @@
 # TODO — Apilex AI Research Agent Case
 
-- **Teslim:** Pazartesi 14 Eylül 2026, 16:00 → muhammed.bilgin@apilex.ai
-- **Mimari taslak:** [`docs/design/architecture_v0.5.md`](docs/design/architecture_v0.5.md) (önceki sürümler: `docs/design/_archive/`)
-- **Case:** [`docs/reference/ai-eng-case-i.pdf`](docs/reference/ai-eng-case-i.pdf)
+- **Teslim:** planlanan tarih (Pzt 14 Eyl 2026) geçti. **Takvim serbest** — kapsam daraltılmıyor, sistem bütün olarak yazılıyor. Alıcı: muhammed.bilgin@apilex.ai (D31)
+- **Mimari taslak:** [`docs/design/architecture_v0.5.md`](docs/design/architecture_v0.5.md) (önceki sürümler: `docs/design/_archive/`) · **Denetim + karar kapanışı:** [`docs/design/analysis_v1.md`](docs/design/analysis_v1.md)
+- **Case:** `docs/reference/ai-eng-case-i.pdf` — Apilex telifli, **repoda tutulmuyor** (gitignore, D31); lokalde durur
 - **Ana ilkeler:** Kontrol akışı kodda, muhakeme LLM'de · Claim ledger merkezli · Kullanıcıya çıkmadan önce deterministik Gate · Her karar ve hata izlenebilir · Basit ama gerekçeli
 
 Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓ karar bekliyor** · **✅ karar verildi** · `öneri` = onay bekleyen best-practice önerisi
@@ -18,10 +18,10 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 | D2 | Orchestration | LangGraph `StateGraph`; node'lar saf fonksiyon, router/termination saf Python | ✅ |
 | D3 | Search | Tavily (birincil) + Brave (fallback/çeşitlilik) | ✅ |
 | D4 | Dil | README + kod EN · Design Question cevapları TR · rapor = sorunun dili | ✅ |
-| D6 | Claim embedding | Gemini embedding birincil; OpenAI / Ollama fallback. **Bir run içinde tek embedding modeli.** Hiçbiri yoksa lexical fallback | öneri |
-| D7 | Tam içerik | Provider raw content; yoksa `httpx` + `trafilatura`; sadece top-K doküman | öneri |
-| D11 | Sonlandırma parametreleri | `max_iterations=4`, `max_searches=30`, `max_wall_clock=300s`, cost cap, stagnation eşiği 2 — `settings.yaml`, UI'dan run başına override | öneri |
-| D12 | Örnek sorgular (≥3) | (1) KVKK 2026 SaaS aksiyon planı (TR, regülasyon) · (2) ApilexAI ürün/partnerlik/strateji (az kaynak → gap) · (3) EU AI Act uygulama takvimindeki değişiklikler (tarih çelişkileri, EN) · (4 ops.) pazar büyüklüğü (sayısal çelişki → Gate G4 vitrini) | öneri |
+| D6 | Claim embedding | Gemini embedding birincil; OpenAI / Ollama fallback. **Bir run içinde tek embedding modeli** (`runs.models_used`'a yazılır). L3 eşiği: cosine ≥ τ **ve** aynı normalize entity. Provider yoksa lexical fallback (token Jaccard + entity eşleşmesi). Embedding cache: `sha256(model+text)` → Postgres | ✅ |
+| D7 | Tam içerik | Provider raw content → yoksa `httpx` + `trafilatura`. Yalnızca snippet triage'ı geçen top-K (tur 1: K=5, follow-up: K=3); timeout 10 sn + 1 retry; içerik boyutu cap'li; başarısızsa snippet ile devam (`FETCH_FAILED`) | ✅ |
+| D11 | Sonlandırma parametreleri | `max_iterations=4`, **`max_searches=45`**, stagnation eşiği 2. **Tur genişliği:** tur 1 → açık alt soru başına 2–3 sorgu; tur ≥2 → eksik facet / çözülmemiş çelişki başına 1 sorgu, tur başına ≤8. **`max_wall_clock=null` ve `max_cost_usd=null` — kapalı başlar**, parametrik (`settings.yaml` + UI). Sayaçlar (token/maliyet/süre) her zaman çalışır ve UI'da canlı | ✅ |
+| D12 | Örnek sorgular (4) | (1) KVKK 2026 SaaS aksiyon planı — TR, regülasyon, Recommendation/G11 vitrini · (2) ApilexAI ürün/partnerlik/strateji — case'in kendi örneği, az kaynak → Known Gaps · (3) EU AI Act uygulama takvimi — EN, tarih çelişkisi · (4) pazar büyüklüğü — sayısal çelişki → G4 + Conflicting | ✅ |
 
 ### Servis & altyapı
 | # | Konu | Karar / öneri | Durum |
@@ -30,30 +30,41 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 | D14 | Veritabanı | PostgreSQL 16: runs/kuyruk, `run_events`, LangGraph checkpoint, search cache, preset | ✅ |
 | D15 | Konfig | YAML ağırlıklı (`config/*.yaml`, prompt'lar dahil); `.env` sadece secret + altyapı; YAML < env (altyapı) < UI override; run başına config snapshot + hash | ✅ |
 | D16 | Worker + kuyruk | **Go dispatcher** (control plane: claim, kapasite, agent seçimi, heartbeat watchdog, hard deadline, cancel, retry; iş mantığı/secret yok) + **Python agent servisi** (data plane, N replica, `202 + heartbeat`). PG kuyruğu `SKIP LOCKED` + `LISTEN/NOTIFY`. Kontrat `contracts/` (OpenAPI, run states, error codes). Not: öneri Python worker'dı; Go'nun kazancı izolasyon + dış deadline güvencesi | ✅ (Emre) |
-| D17 | Frontend | API'nin servis ettiği statik HTML + vanilla JS + SSE; build adımı yok | öneri |
+| D17 | Frontend | API'nin servis ettiği statik HTML + vanilla JS + SSE, build adımı yok. **Çok ekranlı** hash router: `#/new` · `#/runs` · `#/runs/:id` (canlı timeline + rapor + Gate checklist) · `#/costs` · `#/prompts` · `#/settings`. **Ürünün birincil yüzü UI'dır** | ✅ |
 | D18 | API key yönetimi | UI → `sessionStorage` → run başına Fernet-şifreli `run_secrets` → run bitince silinir; `.env` varsayılan yedek; dispatcher key görmez; key'ler log/event/trace'e asla girmez (testli) | ✅ |
 | D19 | Kullanıcıya çıkış kontrolü | Deterministik Output Gate G1–G11 (`gate.yaml`), deterministik remediation, sessiz başarısızlık yok | ✅ |
 | D20 | PII | Microsoft Presidio (analyzer + anonymizer). Hassas tanımlayıcılar (TCKN, IBAN, kart, telefon, e-posta, IP) her zaman maskeli; web içeriğindeki kişi/kurum adları maskelenmez; 3 sınır: intake, telemetri, çıktı | ✅ |
 | D21 | Trace backend | Postgres `run_events` birincil (UI buradan) + **Langfuse self-host** (LangGraph callback, generation ↔ prompt versiyonu bağlantısı, SDK `mask` ile redaction, trace URL `runs`'ta). LangSmith elendi: self-host Enterprise lisansı gerektiriyor | ✅ (revize) |
 | D22 | Logging | `structlog` (Python) + `log/slog` (Go), ortak JSON alanları, `run_id`/`span_id` korelasyonu, redaction processor | ✅ |
 | D23 | Hata izlenebilirliği | `AgentError` + `ErrorCode` taksonomisi (`contracts/error_codes.yaml`, Python + Go ortak); expected (degrade + hata→karar→sonuç) vs unexpected (stack trace, event ID) | ✅ |
-| D24 | UI parametre ayarı | Pydantic şeması → `/api/config/schema` → otomatik form; run başına override, preset'ler DB'de, YAML'a yazılmaz; güvenlik-kritik ayarlar UI'dan kapatılamaz | öneri |
-| D25 | Reasoning akışı | Her LLM şemasında `rationale` alanı → SSE ile UI zaman çizelgesi; Gemini thought summaries opsiyonel bayrak; ham CoT gösterilmez | öneri |
-| D8 | Runtime | Python 3.12 (`python:3.12-slim`), uv, FastAPI, Pydantic v2, SQLAlchemy + alembic, asyncpg/psycopg, httpx, tenacity, structlog, pytest | öneri |
+| D24 | UI parametre ayarı | Pydantic şeması → `/api/config/schema` → otomatik gruplu form; run başına override, preset'ler DB'de, YAML'a yazılmaz; güvenlik-kritik alanlar `ui: false` ve sunucuda reddedilir; override'lar `config_snapshot`'a yazılır | ✅ |
+| D25 | Reasoning akışı | Her LLM şemasında `rationale` alanı → SSE ile UI zaman çizelgesi; provider thought summaries opsiyonel bayrak (varsayılan kapalı); ham CoT gösterilmez ve saklanmaz | ✅ |
+| D8 | Runtime | **Python 3.13** (`python:3.13-slim`), uv, FastAPI, Pydantic v2, SQLAlchemy 2 + alembic, asyncpg, httpx, tenacity, structlog, pytest + pytest-asyncio, trafilatura, MinHash kütüphanesi, LangGraph + Postgres checkpointer, Langfuse SDK, `cryptography` (Fernet) | ✅ |
 | D26 | Prompt tekniği | DSPy tarzı signature'lar (Pydantic I/O + talimat + demolar) kendi runtime'ımızda; **DSPy 3.x + GEPA offline optimize job'ı** (eval set = Langfuse dataset, koşu = experiment) → Langfuse'a `candidate` versiyon; Gate ihlalleri GEPA'ya textual feedback | ✅ |
 | D27 | Prompt yönetimi | **Langfuse Prompt Management** (headless init ile hazır admin) = düzenleme arayüzü; repo YAML = seed + kanonik export; app `PromptRegistry`: Langfuse → YAML fallback; output şema hash + template değişken kontrolü; run başında versiyon sabitlenir | ✅ |
 | D28 | Skills | **Agent Skills** (`SKILL.md`) formatı; `analyze_query` 0–2 skill seçer (progressive disclosure); script yok; bütçe/Gate'i değiştiremez. Saklama önerisi: repo `skills/` kanonik, Langfuse'ta `skill/<name>` prompt olarak versiyon/label (aç/kapa = `production`) | ✅ (saklama: öneri) |
-| D29 | Ek araçlar | promptfoo (injection/regression, COULD) · BAML ve Instructor değerlendirildi, seçilmedi (gerekçe §20.4) | öneri |
-| D9 | Repo teslimi | GitHub private + reviewer davet (veya public) | ❓ (sonra) |
-| D10 | Bonus kapsamı | Artık mimarinin parçası: streaming (SSE), persistent state (PG checkpoint), detailed tracing, parallel search, caching, cost tracking, citation verification, multiple search providers, LLM fallback, semantic dedup, reranking. Zaman kalırsa: mini eval set. **Yok:** human-in-the-loop | öneri |
+| D29 | Ek araçlar | promptfoo = SHOULD (injection + regression, lokal script) · BAML ve Instructor değerlendirildi, seçilmedi (§20.4) · DSPy runtime'da değil — **birincil gerekçe:** kontrol akışı LangGraph'ta + tek LLM erişim katmanı (fallback/redaction/tracing tek yerde); LiteLLM tedarik zinciri notu ikincil | ✅ |
+| D9 | Repo teslimi | GitHub **private** + reviewer daveti; mail'de repo linki. Case PDF repoda değil. Reviewer `docker compose up` ile ayağa kaldırır | ✅ (bkz. D31) |
+| D10 | Bonus kapsamı | Mimarinin parçası: streaming (SSE), persistent state (PG checkpoint), detailed tracing, parallel search, caching, cost tracking, citation verification, multiple search providers, LLM fallback, semantic dedup, reranking. **SHOULD:** mini eval set. **COULD:** human-in-the-loop plan onayı (UI zaten çok ekranlı, opsiyonel bayrak) | ✅ |
+
+### Analiz v1 sonrası (2026-09-16)
+| # | Konu | Karar / öneri | Durum |
+|---|---|---|---|
+| D30 | CLI | `research` CLI MUST — aynı agent çekirdeğini servis katmanı olmadan koşar: `examples/` üretimi, eşik kalibrasyonu, debug. **Ürünün birincil yüzü UI'dır**, CLI geliştirici aracı | ✅ |
+| D31 | Teslim | GitHub **private** + reviewer daveti, mail'de link. Case PDF gitignore'da (Apilex telifli). Reviewer `docker compose up` ile ayağa kaldırır | ✅ |
+| D32 | Gate G4 kovaları | (1) çıplak olgusal sayı → claim'de normalize eşleşme yok ise `error`, cümle çıkar · (2) ledger'dan türetilmiş sayı (sayım/ordinal/toplam) → Gate **yeniden hesaplar** · (3) tolerans dahilindeki varyant (yuvarlama, birim/kur, tarih granülaritesi) → `warn` + "yaklaşık". Her ihlal `gate_result.json` + trace'e; rapor "N cümle çıkarıldı" satırı olmadan gitmez | ✅ |
+| D33 | Maliyet takibi | `llm_calls` + `runs` toplamı (birincil) **ve** Langfuse generation usage/cost. Fiyatlar `models.yaml`'da tek kaynak, Langfuse model pricing ile hizalı. UI `#/costs`: run başına + toplam maliyet, model/provider kırılımı, token, latency, cache hit oranı | ✅ |
+| D34 | Citation verification maliyeti | `verify_citations` batch'li: tek çağrıda N cümle + atıflı claim'ler, 2–3 batch `asyncio` ile paralel | ✅ |
+| D35 | Prompt injection | Web içeriği her katmanda untrusted data. Yapısal savunma: enjekte talimat claim'e dönüşemez (verbatim quote doğrulaması), uydurma sayı G4'ü geçemez, Gate LLM içermez. README'de Design Question 6 ile birlikte anlatılır | ✅ |
 
 ---
 
 ## Kapsam çizgisi
-- **MUST:** compose (postgres, migrate, api, dispatcher, agent, presidio×2) · Go dispatcher (dar kapsam) + PG kuyruk + watchdog + deadline · Langfuse self-host (headless init) + trace + `PromptRegistry` + seed sync · signature katmanı · 2–3 seed skill + seçim · UI'da prompt/skill özet + Langfuse linki · `run_events` + SSE · minimal UI (key, soru, parametre, canlı akış, rapor) · agent çekirdeği · Output Gate · hata taksonomisi · structlog + redaction · testler · 3 örnek
-- **SHOULD:** preset'ler · cancel · crash sonrası resume · export · DSPy/GEPA ile 1 node optimizasyonu + before/after
-- **COULD:** Ollama profili · thought summaries · promptfoo · skill zip import/export · Go dispatcher span'lerini Langfuse OTLP'ye
-- ⚠️ Değerlendirmenin %75'i agent kalitesi. Kapsam artık 4 günün sınırında → **kesme sırası:** önce COULD, sonra SHOULD'daki optimizasyon. MUST'a dokunulmaz.
+- **MUST:** compose (postgres, migrate, api, dispatcher, agent, presidio×2) · Go dispatcher (dar kapsam) + PG kuyruk + watchdog + deadline · Langfuse self-host (headless init) + trace + maliyet + `PromptRegistry` + seed sync · signature katmanı · 2–3 seed skill + seçim · `run_events` + SSE · **çok ekranlı UI** (key, soru, parametre, canlı akış, rapor, maliyet panosu, prompt/skill özeti) · **`research` CLI** (örnek üretimi + debug, D30) · agent çekirdeği + deterministik heuristic kontroller · Output Gate (G4 üç kovalı, D32) · hata taksonomisi · structlog + redaction · testler · 4 örnek · README + 8 Design Question
+- **SHOULD:** preset'ler · cancel · crash sonrası resume · export · DSPy/GEPA ile 1 node optimizasyonu + before/after · mini eval set · promptfoo injection/regression
+- **COULD:** Ollama profili · thought summaries · skill zip import/export · Go dispatcher span'lerini Langfuse OTLP'ye · human-in-the-loop plan onayı
+- ⚠️ Değerlendirmenin %75'i agent kalitesi, altyapı %15'lik kalemde. Karar: **altyapı kapsamı korunuyor** (bilinçli mühendislik vitrini), agent tarafı LLM yargısının yanına **deterministik heuristic kontrollerle** takviye edilir. Takvim serbest; kesme yapılmıyor. Gerekçe: [`analysis_v1.md`](docs/design/analysis_v1.md) §2.2.
+- 🧰 **Hafif mod** README'de belgelenir: `COMPOSE_PROFILES=` boş → Langfuse'suz, Postgres trace'i + YAML prompt'larıyla tam çalışan kurulum (reviewer makinesi yetmezse çıkış yolu).
 
 ---
 
@@ -62,11 +73,14 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 - [x] Mimari v0.1 → v0.2 (D1–D4) → v0.3 (servis mimarisi) → v0.4 (Go dispatcher, prompt katmanı + skills) → v0.5 (Langfuse self-host: trace + prompt + dataset)
 - [x] 2. tur kararlar (D16, D18, D20, D21)
 - [x] 3. tur kararlar: D26, D27 (Langfuse), D28
-- [ ] Onay bekleyen öneriler: D6, D7, D8, D10, D11, D12, D17, D24, D25, D29
-- [ ] API key'leri temin et: Gemini, OpenAI, Tavily, Brave (Langfuse key'leri headless init ile üretilir)
+- [x] Onay bekleyen öneriler kapatıldı: D6, D7, D8, D10, D11, D12, D17, D24, D25, D29 (+ yeni D30–D33) → `analysis_v1.md`
+- [x] Tasarım denetimi: `docs/design/analysis_v1.md` (bulgu → karar)
+- [x] Repo: `git init`, `.gitignore`, pre-commit (ruff + gitleaks + gofmt/go vet), `pyproject.toml` (ruff/mypy/pytest), GitHub private + `main`
+- [x] README iskeleti (8 Design Question yer tutucuları)
+- [ ] API key'leri: kod + `.env.example` + testler yeşil olduktan sonra `.env`'e eklenecek. Geliştirme `FakeLLM`/`FakeSearchProvider` ile key'siz ilerler (Langfuse key'leri headless init ile üretilir)
 
 ## Faz 1 — Altyapı iskeleti · Per akşam → Cum öğlen
-- [ ] `git init`, `.gitignore`, `uv init`, `pyproject.toml` (ruff, mypy, pytest)
+- [ ] `uv init` + `agent/pyproject.toml` + `uv.lock` (kök `pyproject.toml` tooling ayarları hazır)
 - [ ] `agent/Dockerfile` (Python, 3 entrypoint) + `dispatcher/Dockerfile` (Go multi-stage → distroless) + `docker-compose.yml` (postgres, migrate, api, dispatcher, agent, presidio×2 + `observability` profili: langfuse-web, langfuse-worker, clickhouse, redis, minio; postgres init'te ayrı `langfuse` DB; headless init env'leri; healthcheck'ler)
 - [ ] `contracts/`: `agent-api.openapi.yaml`, `run_states.yaml`, `error_codes.yaml`
 - [ ] `config/*.yaml` + `config/schema.py` (Pydantic, `ui` metadata) + loader + override doğrulama + snapshot/hash
@@ -91,6 +105,7 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 - [ ] Langfuse: callback handler, `mask` redaction, `trace_id` ↔ `run_id`, trace URL; `PromptRegistry` (Langfuse → YAML fallback, şema hash, template değişken kontrolü); `seed_sync` (YAML → Langfuse, skills → `skill/<name>`) + export script
 
 ## Faz 3 — Agent çekirdeği · Cum akşam → Cmt
+- [ ] `cli.py` — `research "soru"` → `report.md` + `trace.jsonl` + `gate_result.json` (D30)
 - [ ] `intake_guard` (doğrulama, dil, PII maskeleme)
 - [ ] `analyze_query` (+ skill seçimi), `plan`, `generate_queries` — signature seed YAML'ları (her şemada `rationale`)
 - [ ] Seed skill'ler: `regulatory-research-tr`, `company-research`, (ops.) `market-sizing`
@@ -103,8 +118,8 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 - [ ] `assess_coverage` + `termination.py` + router
 - [ ] LangGraph wiring + Postgres checkpointer (`thread_id = run_id`)
 - [ ] Çelişki çözüm follow-up'ı
-- [ ] `synthesize` + `verify_citations` (1 kez geri bildirimle yeniden sentez)
-- [ ] `gate/` — G1–G11, sayı/tarih normalizer, deterministik remediation, `gate_result.json`
+- [ ] `synthesize` + `verify_citations` (**batch'li**, 1 kez geri bildirimle yeniden sentez — D34)
+- [ ] `gate/` — G1–G11, sayı/tarih normalizer, **G4 üç kovalı + tolerans (D32)**, deterministik remediation, `gate_result.json`
 - [ ] `render_report` (Summary · Key Findings · Conflicting/Uncertain · Conclusion (+Action Plan) · Known Gaps · Sources · Metadata)
 - [ ] Worker'a bağla: gerçek run uçtan uca compose içinde
 
@@ -114,7 +129,8 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 - [ ] UI: Ayarlar/API key ekranı (Test butonları)
 - [ ] UI: Yeni araştırma + otomatik parametre formu + preset
 - [ ] UI: Canlı run görünümü (iterasyon bazlı zaman çizelgesi, rationale'lar, skorlar, kodlu hatalar, Gate checklist, rapor)
-- [ ] UI: Geçmiş listesi
+- [ ] UI: Geçmiş listesi (`#/runs`)
+- [ ] UI: Maliyet panosu (`#/costs`) — run başına + toplam, model/provider kırılımı, token, latency, cache hit (D33)
 - [ ] UI: **Prompts & Skills** özet sayfası — aktif versiyon/label, kaynak (Langfuse/YAML), şema uyumu, "Langfuse'ta düzenle" linki (düzenleme/diff/terfi/playground Langfuse admin'de)
 - [ ] API: `GET /api/prompts`, `GET /api/skills`
 
@@ -128,7 +144,7 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 ## Faz 7 — Test (Faz 2'den itibaren sürekli)
 - [ ] Unit: URL canonicalization, MinHash, query dedup, query generation
 - [ ] Unit: scoring, facet yeterlilik, contradiction adayları, termination/router
-- [ ] Unit: Gate G1–G11 (ayrı ayrı), sayı/tarih normalizer
+- [ ] Unit: Gate G1–G11 (ayrı ayrı), sayı/tarih normalizer, **G4 üç kova + yanlış pozitif senaryoları** (türetilmiş sayı, yuvarlama, kur, tarih granülaritesi)
 - [ ] Unit: PII redaction + TCKN checksum, secret redaction, structured output repair, config override sınırları
 - [ ] Senaryo: sufficient · stagnation · aynı sorgu · timeout→fallback · invalid JSON · max iteration · gate fail→remediation
 - [ ] Hata izlenebilirliği: her expected hata doğru `ErrorCode`/`decision`/`outcome` üretiyor
@@ -148,7 +164,8 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 - [ ] Temiz clone → `cp .env.example .env` → `docker compose up` → UI'dan run → `docker compose run api pytest` + `go test ./...`
 - [ ] Secret taraması (`.env` repoda yok)
 - [ ] README ↔ kod tutarlılığı son okuma
-- [ ] Repo linki + kısa açıklama ile mail
+- [ ] Repo private + reviewer daveti → link + kısa açıklama ile mail (D31)
+- [ ] Case PDF'in repoda olmadığını doğrula (`git ls-files | grep reference`)
 
 ---
 
