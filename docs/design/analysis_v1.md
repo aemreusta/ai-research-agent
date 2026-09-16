@@ -1,14 +1,15 @@
 # Analiz v1 — Tasarım denetimi ve karar kapanışı
 
-> Tarih: 2026-09-16 · Girdi: `architecture_v0.5.md`, `TODO.md`, case PDF (13 sayfa, s.13 referans mimari görseli)
+> Tarih: 2026-09-16 · Girdi: `architecture_v0.6.md`, `TODO.md`, case PDF (13 sayfa, s.13 referans mimari görseli)
 > Bu doküman bir **denetim kaydıdır**: bulgu → karar → nereye yansıdı. Kararların kanonik listesi `TODO.md` → Karar Günlüğü'nde.
-> Not: Repoda henüz uygulama kodu yok; analiz spesifikasyon + plan + repo hijyeni üzerinedir.
+> Not: Analiz, uygulama kodu yazılmaya başlamadan önce spesifikasyon + plan + repo hijyeni üzerine yapıldı.
+> Mimariye yansıması: `architecture_v0.6.md` (v0.5 → `_archive/`).
 
 ---
 
 ## 1. Gereksinim kapsaması
 
-Case'in 8 fonksiyonel gereksinimi, 7 error-handling senaryosu, 5 deliverable'ı ve 8 Design Question'ının tamamı `architecture_v0.5.md`'de karşılığa sahip. Öne çıkanlar:
+Case'in 8 fonksiyonel gereksinimi, 7 error-handling senaryosu, 5 deliverable'ı ve 8 Design Question'ının tamamı `architecture_v0.6.md`'de karşılığa sahip. Öne çıkanlar:
 
 | Case gereksinimi | Tasarım karşılığı | Not |
 |---|---|---|
@@ -30,7 +31,7 @@ Case'in 8 fonksiyonel gereksinimi, 7 error-handling senaryosu, 5 deliverable'ı 
 |---|---|---|
 | B1 | Planlanan teslim tarihi (14 Eyl) geçti, repoda kod yok | **Kabul edildi, takvim serbest.** Kapsam daraltılmıyor; sistem bütün olarak yazılacak. Gecikmenin karşılığı tamamlanmış ve gerekçelendirilmiş bir sistem olacak |
 | B2 | Provider key'leri temin edilmemiş | Kod + `.env.example` + testler yeşil olduktan sonra key'ler `.env`'e eklenip gerçek run'lar alınacak. Geliştirme `FakeLLM` / `FakeSearchProvider` ile key'siz ilerler → key'ler kritik yolda değil |
-| B3 | Case PDF repoda commit'li; PDF "paylaşılamaz" ibaresi taşıyor | **`docs/reference/` gitignore'a alındı, dosya git'ten çıkarıldı.** Repo private kalıyor, teslim = link + reviewer daveti (D31). Dosya ilk commit'in geçmişinde duruyor; repo private olduğu için kabul edilen risk |
+| B3 | Case PDF repoda commit'li; PDF "paylaşılamaz" ibaresi taşıyor | **`docs/reference/` gitignore'a alındı, dosya git'ten çıkarıldı.** Repo private kalıyor, teslim = link + reviewer daveti (D31). Git geçmişi `filter-branch` ile yeniden yazıldı, blob GC ile silindi ve force-push edildi → **dosya hiçbir commit'te yok**. PDF yalnızca lokalde |
 
 ### 2.2 Kapsam ve altyapı (H1, H2, M5)
 
@@ -85,7 +86,7 @@ Süre ve maliyet kapıları kapalı başlasa da `stop_reason=budget` yolu ve tes
 
 - `.gitignore`'daki `*.csv` / `*.xml` kalıpları ileride eval set veya test fixture'ını sessizce yutabilir → o an hedefli negasyon (`!optimize/evalset.jsonl` benzeri) eklenecek.
 - `mypy strict` doğru seçim; `langgraph`, `langfuse`, `presidio_analyzer` gibi stub'sız paketler için `ignore_missing_imports` override'ı gerekecek.
-- Case PDF ilk commit'in geçmişinde duruyor (repo private → kabul edilen risk). İstenirse geçmiş yeniden yazılabilir.
+- Case PDF git geçmişinden de silindi (history rewrite + GC + force-push, 2026-09-16). GitHub tarafında eski object'ler sunucu GC'sine kadar doğrudan SHA ile erişilebilir kalabilir; repo private olduğu için kabul edilen risk.
 
 ---
 

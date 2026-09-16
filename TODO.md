@@ -1,7 +1,7 @@
 # TODO — Apilex AI Research Agent Case
 
 - **Teslim:** planlanan tarih (Pzt 14 Eyl 2026) geçti. **Takvim serbest** — kapsam daraltılmıyor, sistem bütün olarak yazılıyor. Alıcı: muhammed.bilgin@apilex.ai (D31)
-- **Mimari taslak:** [`docs/design/architecture_v0.5.md`](docs/design/architecture_v0.5.md) (önceki sürümler: `docs/design/_archive/`) · **Denetim + karar kapanışı:** [`docs/design/analysis_v1.md`](docs/design/analysis_v1.md)
+- **Mimari taslak:** [`docs/design/architecture_v0.6.md`](docs/design/architecture_v0.6.md) (önceki sürümler: `docs/design/_archive/`) · **Denetim + karar kapanışı:** [`docs/design/analysis_v1.md`](docs/design/analysis_v1.md)
 - **Case:** `docs/reference/ai-eng-case-i.pdf` — Apilex telifli, **repoda tutulmuyor** (gitignore, D31); lokalde durur
 - **Ana ilkeler:** Kontrol akışı kodda, muhakeme LLM'de · Claim ledger merkezli · Kullanıcıya çıkmadan önce deterministik Gate · Her karar ve hata izlenebilir · Basit ama gerekçeli
 
@@ -70,7 +70,7 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 
 ## Faz 0 — Tasarım · Per 10 Eyl
 - [x] Case'i oku, gereksinimleri çıkar
-- [x] Mimari v0.1 → v0.2 (D1–D4) → v0.3 (servis mimarisi) → v0.4 (Go dispatcher, prompt katmanı + skills) → v0.5 (Langfuse self-host: trace + prompt + dataset)
+- [x] Mimari v0.1 → v0.2 (D1–D4) → v0.3 (servis mimarisi) → v0.4 (Go dispatcher, prompt katmanı + skills) → v0.5 (Langfuse self-host) → **v0.6 (kararların kapanışı + denetim bulguları)**
 - [x] 2. tur kararlar (D16, D18, D20, D21)
 - [x] 3. tur kararlar: D26, D27 (Langfuse), D28
 - [x] Onay bekleyen öneriler kapatıldı: D6, D7, D8, D10, D11, D12, D17, D24, D25, D29 (+ yeni D30–D33) → `analysis_v1.md`
@@ -147,6 +147,7 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 - [ ] Unit: Gate G1–G11 (ayrı ayrı), sayı/tarih normalizer, **G4 üç kova + yanlış pozitif senaryoları** (türetilmiş sayı, yuvarlama, kur, tarih granülaritesi)
 - [ ] Unit: PII redaction + TCKN checksum, secret redaction, structured output repair, config override sınırları
 - [ ] Senaryo: sufficient · stagnation · aynı sorgu · timeout→fallback · invalid JSON · max iteration · gate fail→remediation
+- [ ] Senaryo: **`max_wall_clock` ve `max_cost_usd` açıkken** `stop_reason=budget` (kapılar varsayılan kapalı olduğu için bu yol yalnızca testle korunur — D11)
 - [ ] Hata izlenebilirliği: her expected hata doğru `ErrorCode`/`decision`/`outcome` üretiyor
 - [ ] API: run oluşturma, SSE resume, cancel, **key sızıntısı yok**
 - [ ] Go: watchdog karar tablosu (table-driven), backoff, kapasite seçimi, durum geçişleri ↔ `run_states.yaml`

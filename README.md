@@ -8,7 +8,7 @@ detects duplicates and contradictions, decides for itself whether it knows enoug
 final report through a **deterministic output gate** before a user ever sees it.
 
 > Status: **in development.** Sections marked _TBD_ are filled in as the corresponding phase lands
-> (see [`TODO.md`](TODO.md)). Design rationale: [`docs/design/architecture_v0.5.md`](docs/design/architecture_v0.5.md),
+> (see [`TODO.md`](TODO.md)). Design rationale: [`docs/design/architecture_v0.6.md`](docs/design/architecture_v0.6.md),
 > audit + decisions: [`docs/design/analysis_v1.md`](docs/design/analysis_v1.md).
 
 ---
@@ -55,11 +55,11 @@ docker compose run --rm agent research "Your research question" --out examples/m
 
 ### 3.1 Services
 
-<!-- TBD: Mermaid service diagram — port from architecture_v0.5.md §2 -->
+<!-- TBD: Mermaid service diagram — port from architecture_v0.6.md §2 -->
 
 ### 3.2 Agent workflow
 
-<!-- TBD: Mermaid agent flow — port from architecture_v0.5.md §5 -->
+<!-- TBD: Mermaid agent flow — port from architecture_v0.6.md §5 -->
 
 ### 3.3 The central abstraction: the claim ledger
 
