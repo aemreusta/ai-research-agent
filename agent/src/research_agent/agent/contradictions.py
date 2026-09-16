@@ -1,26 +1,78 @@
 """Rule-based contradiction candidates (architecture v0.6 §10, step 1).
 
 Only candidates are found here; an LLM judge classifies them (true conflict, different time,
-different scope, rounding) in the node. The rule is: the same normalised entity and attribute,
-and values that do not match within the configured tolerance.
+different scope, rounding, consistent) in the node. The rule is: the same entity and attribute,
+the same period when both state one, and values (with their units) that do not match within the
+configured tolerance.
+
+Pairs the rules can settle are not sent to the judge: a 2025 figure next to a 2030 forecast is
+not a conflict, and in live runs such pairs made up most of the judge's work.
 """
 
 from __future__ import annotations
 
+import re
 from collections.abc import Mapping
 from itertools import combinations
 
-from research_agent.agent.clustering import normalise_entity
+from research_agent.agent.clustering import entities_equivalent, entity_contains, value_text
 from research_agent.agent.state import ClaimCluster
 from research_agent.agent.text import fold, token_jaccard, token_set
 from research_agent.config.schema import ContradictionSettings
 from research_agent.gate.numeric import extract_quantities, quantities_match
 
+# Hedges and qualifiers that do not change which property is meant.
+_QUALIFIERS = frozenset(
+    {
+        "projected",
+        "estimated",
+        "expected",
+        "forecast",
+        "forecasted",
+        "anticipated",
+        "current",
+        "total",
+        "overall",
+        "tahmini",
+        "öngörülen",
+        "beklenen",
+        "toplam",
+    }
+)
+_SYNONYMS = {"valuation": "size", "value": "size", "worth": "size", "büyüklüğü": "büyüklük"}
+_YEAR = re.compile(r"\b(?:19|20)\d{2}\b")
+
 
 def _attribute_key(attribute: str | None) -> str | None:
     if not attribute:
         return None
-    return " ".join(fold(attribute).split())
+    words = [
+        _SYNONYMS.get(word, word) for word in fold(attribute).split() if word not in _QUALIFIERS
+    ]
+    return " ".join(words) or None
+
+
+def _periods_differ(left: str | None, right: str | None) -> bool:
+    """Both name a period and they are not the same one (2025 vs 2030, 2023-2030 vs 2025-2030)."""
+    if not left or not right:
+        return False
+    a, b = _YEAR.findall(left), _YEAR.findall(right)
+    if a and b:
+        return a != b
+    if a or b:
+        return False  # "Q3" against "2025": cannot tell
+    return fold(left).split() != fold(right).split()
+
+
+def _same_entity(left: ClaimCluster, right: ClaimCluster) -> bool:
+    if entities_equivalent(left.entity, right.entity):
+        return True
+    # "Europe" and "Europe legal tech market" are the same thing only in the same period.
+    return (
+        left.as_of is not None
+        and left.as_of == right.as_of
+        and entity_contains(left.entity, right.entity)
+    )
 
 
 def _same_attribute(left: str | None, right: str | None) -> bool:
@@ -44,8 +96,8 @@ def _values_differ(
 ) -> bool:
     if not left.value or not right.value:
         return False
-    a = extract_quantities(left.value, language=language)
-    b = extract_quantities(right.value, language=language)
+    a = extract_quantities(value_text(left.value, left.unit), language=language)
+    b = extract_quantities(value_text(right.value, right.unit), language=language)
     if a and b:
         return not any(
             quantities_match(
@@ -76,9 +128,9 @@ def contradiction_candidates(
     for left, right in combinations(ordered, 2):
         if frozenset((left.id, right.id)) in judged:
             continue
-        if normalise_entity(left.entity) != normalise_entity(right.entity):
+        if not _same_entity(left, right):
             continue
-        if left.entity is None:
+        if _periods_differ(left.as_of, right.as_of):
             continue
         if not _same_attribute(left.attribute, right.attribute):
             continue

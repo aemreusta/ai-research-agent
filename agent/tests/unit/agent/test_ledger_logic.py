@@ -8,7 +8,13 @@ from datetime import date
 import pytest
 
 from research_agent.agent.budget import BudgetMeter
-from research_agent.agent.clustering import cluster_claims, normalise_entity
+from research_agent.agent.clustering import (
+    cluster_claims,
+    entities_equivalent,
+    entity_contains,
+    normalise_entity,
+    value_text,
+)
 from research_agent.agent.contradictions import contradiction_candidates
 from research_agent.agent.coverage import assess_facets, update_progress
 from research_agent.agent.state import (
@@ -526,4 +532,178 @@ def test_a_more_detailed_attribute_still_matches() -> None:
     }
     assert contradiction_candidates(clusters, ContradictionSettings(), language="en") == [
         ("k1", "k2")
+    ]
+
+
+# --- findings from live runs (examples/) ----------------------------------------------------------
+
+
+def test_one_text_counts_once_even_if_one_sentence_names_the_speaker() -> None:
+    """A company page said "according to the founders ..." once and then stated the same fact."""
+    a, b = _doc("a", "o1"), _doc("b", "o2")
+    claims = [
+        _claim("c1", a, "Apilex is based in Istanbul", entity="Apilex"),
+        _claim("c2", a, "Apilex is based in Istanbul", entity="Apilex", attributed_to="founders"),
+        _claim("c3", b, "Apilex is based in Istanbul", entity="Apilex"),
+    ]
+    clusters = cluster_claims(
+        {},
+        claims,
+        vectors=None,
+        documents={"a": a, "b": b},
+        settings=DedupSettings(),
+        all_claims={},
+    )
+    cluster = next(iter(clusters.values()))
+    assert len(cluster.doc_ids) == 2
+    assert cluster.support == 2
+
+
+@pytest.mark.parametrize(
+    ("left", "right", "same"),
+    [
+        ("Europe Legal Tech Market", "European legal technology market", True),
+        ("Europe legal technology market", "Europe Legal Tech Market", True),
+        ("Apilex A.Ş.", "apilex", True),
+        ("Germany legal technology market", "Global legal technology market", False),
+        ("Europe", "Europe legal technology market", False),
+        ("legal AI market in Europe", "Europe legal technology market", False),
+        (None, "Europe", False),
+    ],
+)
+def test_entity_equivalence(left: str | None, right: str | None, same: bool) -> None:
+    assert entities_equivalent(left, right) is same
+
+
+@pytest.mark.parametrize(
+    ("value", "unit", "text"),
+    [
+        ("8,624.00", "USD million", "8,624.00 million USD"),
+        ("6.15", "billion USD", "6.15 billion USD"),
+        ("8.43 billion", "USD", "8.43 billion USD"),
+        ("$4.5 billion", "billion USD", "$4.5 billion"),
+        ("12", None, "12"),
+    ],
+)
+def test_value_text_puts_the_scale_next_to_the_number(
+    value: str, unit: str | None, text: str
+) -> None:
+    assert value_text(value, unit) == text
+
+
+def test_only_a_bare_name_is_contained_in_a_longer_one() -> None:
+    assert entity_contains("Europe", "Europe legal technology market")
+    assert not entity_contains("legal tech market", "Germany legal technology market")
+
+
+def _market(
+    cid: str, value: str, unit: str | None, *, entity: str, as_of: str | None, attribute: str
+) -> ClaimCluster:
+    cluster = _cluster(cid, value, entity=entity, attribute=attribute, as_of=as_of)
+    return cluster.model_copy(update={"unit": unit})
+
+
+def test_figures_for_different_periods_are_not_sent_to_the_judge() -> None:
+    """In the legal-tech run 8 of 10 judged pairs were "2025 vs 2030"."""
+    clusters = {
+        "k13": _market(
+            "k13",
+            "6.17",
+            "billion USD",
+            entity="Europe legal technology market",
+            as_of="2025",
+            attribute="market size",
+        ),
+        "k14": _market(
+            "k14",
+            "10.31",
+            "billion USD",
+            entity="Europe legal technology market",
+            as_of="2030",
+            attribute="market size",
+        ),
+        "k15": _market(
+            "k15",
+            "10.81",
+            "%",
+            entity="Europe legal technology market",
+            as_of="2025-2030",
+            attribute="CAGR",
+        ),
+        "k9": _market(
+            "k9",
+            "8.8",
+            "percent",
+            entity="Europe Legal Technology Market",
+            as_of="2023-2030",
+            attribute="CAGR",
+        ),
+    }
+    assert contradiction_candidates(clusters, ContradictionSettings(), language="en") == []
+
+
+def test_the_same_year_is_compared_across_spellings_units_and_scales() -> None:
+    """6.15 bn, 6.17 bn, 8.43 bn and 8,624 mn for "Europe" in 2025 were never compared."""
+    clusters = {
+        "k1": _market(
+            "k1",
+            "6.15",
+            "billion USD",
+            entity="Europe Legal Tech Market",
+            as_of="2025",
+            attribute="market size",
+        ),
+        "k13": _market(
+            "k13",
+            "6.17",
+            "billion USD",
+            entity="Europe legal technology market",
+            as_of="2025",
+            attribute="market size",
+        ),
+        "k20": _market(
+            "k20", "8.43 billion", "USD", entity="Europe", as_of="2025", attribute="market size"
+        ),
+        "k30": _market(
+            "k30",
+            "8,624.00",
+            "USD million",
+            entity="European legal technology market",
+            as_of="2025",
+            attribute="market valuation",
+        ),
+        "k27": _market(
+            "k27",
+            "28.7",
+            "billion USD",
+            entity="Global legal technology market",
+            as_of="2025",
+            attribute="market size",
+        ),
+    }
+    pairs = contradiction_candidates(clusters, ContradictionSettings(), language="en")
+    assert pairs == [("k1", "k20"), ("k1", "k30"), ("k13", "k20"), ("k13", "k30")]
+
+
+def test_a_forecast_and_a_valuation_are_the_same_attribute() -> None:
+    clusters = {
+        "k14": _market(
+            "k14",
+            "10.31",
+            "billion USD",
+            entity="Europe legal technology market",
+            as_of="2030",
+            attribute="market size",
+        ),
+        "k22": _market(
+            "k22",
+            "11.58",
+            "Billion USD",
+            entity="Europe legal technology market",
+            as_of="2030",
+            attribute="projected market valuation",
+        ),
+    }
+    assert contradiction_candidates(clusters, ContradictionSettings(), language="en") == [
+        ("k14", "k22")
     ]

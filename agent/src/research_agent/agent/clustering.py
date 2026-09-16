@@ -18,7 +18,7 @@ import re
 from collections.abc import Mapping
 
 from research_agent.agent.state import Claim, ClaimCluster, ClusterStatus, Document
-from research_agent.agent.text import fold, token_jaccard
+from research_agent.agent.text import fold, token_jaccard, tokens
 from research_agent.config.schema import DedupSettings
 from research_agent.gate.numeric import extract_quantities, quantities_match
 
@@ -42,11 +42,91 @@ def normalise_entity(name: str | None) -> str | None:
     return compact or None
 
 
+# Words that name the kind of thing rather than which one ("Europe legal tech market").
+_GENERIC_ENTITY_WORDS = frozenset(
+    {"market", "markets", "industry", "sector", "pazar", "pazari", "sektor", "sektör", "sektörü"}
+)
+
+
+def entity_words(name: str | None) -> frozenset[str]:
+    if not name:
+        return frozenset()
+    cleaned = _ARTICLES.sub("", fold(name).strip())
+    return frozenset(
+        word
+        for word in tokens(_SUFFIXES.sub("", cleaned.rstrip(",. ")))
+        if word not in _GENERIC_ENTITY_WORDS
+    )
+
+
+def _same_word(left: str, right: str) -> bool:
+    """Equal, or one is a >=4-letter stem of the other (europe/european, tech/technology)."""
+    if left == right:
+        return True
+    shorter, longer = sorted((left, right), key=len)
+    return len(shorter) >= 4 and longer.startswith(shorter)
+
+
+def _covered(small: frozenset[str], large: frozenset[str]) -> bool:
+    return bool(small) and all(any(_same_word(a, b) for b in large) for a in small)
+
+
+def entities_equivalent(left: str | None, right: str | None) -> bool:
+    """The same entity written differently ("Europe Legal Tech Market" ~ "European legal
+    technology market"). Both must name one; qualifiers must match on both sides."""
+    a, b = normalise_entity(left), normalise_entity(right)
+    if a is None or b is None:
+        return False
+    if a == b:
+        return True
+    wa, wb = entity_words(left), entity_words(right)
+    return _covered(wa, wb) and _covered(wb, wa)
+
+
+def entity_contains(left: str | None, right: str | None) -> bool:
+    """A bare one-word name inside the other ("Europe" in "Europe legal tech market").
+
+    Only one word: "legal tech" inside "Germany legal tech" would pair a global figure with a
+    national one.
+    """
+    small, large = sorted((entity_words(left), entity_words(right)), key=len)
+    return len(small) == 1 and _covered(small, large)
+
+
 def _entities_compatible(left: str | None, right: str | None) -> bool:
     a, b = normalise_entity(left), normalise_entity(right)
     if a is None or b is None:
         return True
-    return a == b or a.startswith(b) or b.startswith(a)
+    return a.startswith(b) or b.startswith(a) or entities_equivalent(left, right)
+
+
+_SCALE_WORDS = frozenset(
+    {"thousand", "million", "billion", "trillion", "bn", "mn", "bin", "milyon", "milyar", "trilyon"}
+)
+
+
+_SYMBOLS = {"usd": "$", "dollars": "$", "eur": "€", "euro": "€", "gbp": "£", "try": "₺", "tl": "₺"}
+
+
+def value_text(value: str | None, unit: str | None) -> str:
+    """The value with its unit, scale words next to the number ("8,624 million USD").
+
+    Extractors write the unit in any order ("USD million"); without it 6.15 (billion) and
+    8,624 (million) would be compared as bare numbers.
+    """
+    if not value:
+        return ""
+    if not unit:
+        return value
+    written = set(fold(value).split())
+    words = [
+        word
+        for word in unit.split()
+        if fold(word) not in written and _SYMBOLS.get(fold(word), "\0") not in value
+    ]
+    scale = [w for w in words if fold(w) in _SCALE_WORDS]
+    rest = [w for w in words if fold(w) not in _SCALE_WORDS]
+    return " ".join([value, *scale, *rest])
 
 
 def _cosine(left: list[float], right: list[float]) -> float:
@@ -55,12 +135,16 @@ def _cosine(left: list[float], right: list[float]) -> float:
     return dot / norm if norm else 0.0
 
 
+def _quantity_text(item: Claim | ClaimCluster) -> str:
+    if item.value:
+        return value_text(item.value, item.unit)
+    return item.text if isinstance(item, Claim) else ""
+
+
 def values_conflict(left: Claim | ClaimCluster, right: Claim | ClaimCluster) -> bool:
     """True when both state a quantity and no reading of one matches the other."""
-    a = extract_quantities(left.value or left.text if isinstance(left, Claim) else left.value or "")
-    b = extract_quantities(
-        right.value or right.text if isinstance(right, Claim) else right.value or ""
-    )
+    a = extract_quantities(_quantity_text(left))
+    b = extract_quantities(_quantity_text(right))
     if not a or not b:
         return False
     for first in a:
@@ -160,15 +244,17 @@ def _refresh(
     """Recompute support and confidence from the ledger."""
     members = [claims[cid] for cid in cluster.claim_ids if cid in claims]
     doc_ids = list(dict.fromkeys(claim.doc_id for claim in members))
-    # "According to X ..." makes X the origin, whoever republished it (§8).
-    origins = list(
-        dict.fromkeys(
-            f"said:{normalise_entity(claim.attributed_to)}"
-            if claim.attributed_to
-            else claim.origin_id
-            for claim in members
-        )
-    )
+    # "According to X ..." makes X the origin, whoever republished it (§8). One origin text
+    # counts once, even when one of its sentences names the speaker and the next does not.
+    speaker: dict[str, str] = {}
+    for claim in members:
+        if claim.attributed_to and claim.origin_id not in speaker:
+            speaker[claim.origin_id] = f"said:{normalise_entity(claim.attributed_to)}"
+
+    def origin_key(claim: Claim) -> str:
+        return speaker.get(claim.origin_id, claim.origin_id)
+
+    origins = list(dict.fromkeys(origin_key(claim) for claim in members))
     cluster.doc_ids = doc_ids
     cluster.origin_ids = origins
 
@@ -182,11 +268,7 @@ def _refresh(
         score = document.score.total
         best = max(best, score)
         has_primary = has_primary or document.score.is_primary
-        key = (
-            f"said:{normalise_entity(claim.attributed_to)}"
-            if claim.attributed_to
-            else claim.origin_id
-        )
+        key = origin_key(claim)
         best_by_origin[key] = max(best_by_origin.get(key, 0.0), score)
 
     # Independent evidence combines like independent probabilities.
