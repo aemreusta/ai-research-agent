@@ -230,6 +230,8 @@ class ContradictionKind(StrEnum):
     DIFFERENT_TIME = "different_time"
     DIFFERENT_SCOPE = "different_scope"
     ROUNDING = "rounding"
+    CONSISTENT = "consistent"
+    """Worded differently but saying the same thing - not a disagreement at all."""
 
 
 class Contradiction(_Model):

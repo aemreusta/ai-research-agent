@@ -159,26 +159,36 @@ class PromptRegistry:
             return seed
         if remote is None:
             # Seed on first use: `migrate` may have run before Langfuse was up.
-            create = getattr(self._remote, "create_prompt", None)
-            if callable(create):
-                with best_effort("seeding a prompt into Langfuse", prompt=signature.id):
-                    await create(seed, labels=[self._label, "seed"])
+            await self._publish(seed)
             return seed
         try:
             check_version(remote, signature)
         except PromptProblem as problem:
+            # The code's output contract moved on (a new seed version); publish the seed so the
+            # label points at a compatible version from the next run on.
+            published = await self._publish(seed)
             if events is not None:
                 await events.error(
                     AgentError(
                         code=ErrorCode.PROMPT_SCHEMA_MISMATCH,
                         node=events.node,
-                        decision=f"refuse {signature.id}@{remote.version} and use the repo seed",
+                        decision=f"refuse {signature.id}@{remote.version} and use the repo seed"
+                        + (" (published to Langfuse)" if published else ""),
                         outcome=f"yaml@{seed.version}",
                         cause=str(problem)[:300],
                     )
                 )
             return seed
         return remote
+
+    async def _publish(self, seed: PromptVersion) -> bool:
+        create = getattr(self._remote, "create_prompt", None)
+        if not callable(create):
+            return False
+        with best_effort("seeding a prompt into Langfuse", prompt=seed.id):
+            await create(seed, labels=[self._label, "seed"])
+            return True
+        return False
 
     async def resolve_all(self, events: EventSink | None = None) -> RunPrompts:
         versions = {}

@@ -10,6 +10,7 @@ from research_agent.agent.deps import AgentDeps
 from research_agent.agent.runtime import EventSink
 from research_agent.agent.state import (
     ClusterStatus,
+    ContradictionKind,
     Report,
     ReportSection,
     ReportSentence,
@@ -252,6 +253,7 @@ async def _synthesise(
             "resolved": c.resolved,
         }
         for c in state.contradictions
+        if c.kind is not ContradictionKind.CONSISTENT
     ]
     try:
         result = await deps.predictor(

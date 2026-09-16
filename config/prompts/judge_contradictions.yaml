@@ -1,7 +1,7 @@
 id: judge_contradictions
-version: 1
+version: 2
 # Must equal the hash of the output model in code (prompting/schemas.py); a test checks it.
-output_schema_hash: f893d62bfab1518c
+output_schema_hash: 5dbcfef130df4b23
 description: Classify rule-detected disagreements between findings.
 instructions: |
   Pairs of findings below disagree on the same attribute of the same entity, according to a
@@ -11,7 +11,13 @@ instructions: |
     figure from different years);
   - `different_scope`: they measure different things (revenue vs. ARR, EU vs. global market,
     draft vs. final text);
-  - `rounding`: the same value written with different precision.
+  - `rounding`: the same value written with different precision;
+  - `consistent`: both say the same thing in different words, or one only adds detail to the
+    other ("mandatory" vs. "must be notified to the Board"). The rule-based check compares
+    wording, so this is common.
+
+  Use `true_conflict` only when both statements cannot be true at the same time. If your
+  summary would say the sources agree, the kind is `consistent`.
 
   Set `preferred` only when the evidence clearly favours one side - typically a primary source
   (regulator, official text, the company itself) against a secondary one, or a later official

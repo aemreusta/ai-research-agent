@@ -90,6 +90,33 @@ async def test_an_incompatible_remote_version_falls_back_with_an_event() -> None
     assert events.events[0]["error_code"] == "PROMPT_SCHEMA_MISMATCH"
 
 
+class _PublishingRemote(_Remote):
+    def __init__(self, result: PromptVersion | None) -> None:
+        super().__init__(result)
+        self.published: list[tuple[PromptVersion, list[str]]] = []
+
+    async def create_prompt(self, version: PromptVersion, *, labels: list[str]) -> None:
+        self.published.append((version, labels))
+
+
+async def test_an_outdated_remote_version_is_replaced_by_the_seed() -> None:
+    """After an output model changes, Langfuse gets the new seed so later runs use Langfuse."""
+    seed = PromptRegistry().seed("judge_contradictions")
+    stale = seed.model_copy(
+        update={"source": "langfuse", "version": "1", "output_schema_hash": "f893d62bfab1518c"}
+    )
+    remote = _PublishingRemote(stale)
+    events = MemoryEventSink(uuid.uuid4(), node="prompts")
+    resolved = await PromptRegistry(remote=remote).resolve(
+        SIGNATURES["judge_contradictions"], events
+    )
+    assert resolved.source == "yaml"
+    assert [(v.version, labels) for v, labels in remote.published] == [
+        (seed.version, ["production", "seed"])
+    ]
+    assert "published to Langfuse" in events.events[0]["data"]["decision"]
+
+
 async def test_an_unreachable_registry_degrades_to_the_seed() -> None:
     events = MemoryEventSink(uuid.uuid4(), node="prompts")
     registry = PromptRegistry(remote=_Remote(error=ConnectionError("langfuse down")))

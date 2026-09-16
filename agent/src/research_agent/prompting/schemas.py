@@ -129,7 +129,7 @@ class ExtractionOutput(BaseModel):
 
 class ContradictionJudgement(BaseModel):
     pair_id: str
-    kind: Literal["true_conflict", "different_time", "different_scope", "rounding"]
+    kind: Literal["true_conflict", "different_time", "different_scope", "rounding", "consistent"]
     summary: str = Field(description="What disagrees, in one sentence, in the report language.")
     preferred: Literal["left", "right", "none"] = Field(
         description="The better-supported side if the evidence clearly favours one, else none."
