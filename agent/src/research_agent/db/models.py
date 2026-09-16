@@ -57,6 +57,16 @@ _RUN_STATUS_VALUES = ", ".join(f"'{status.value}'" for status in RunStatus)
 _MONEY = Numeric(14, 6)
 
 
+# Tables in the same database that belong to someone else: LangGraph's checkpointer creates and
+# migrates its own. Alembic must never propose dropping them (see migrations/env.py).
+FOREIGN_TABLE_PREFIXES: tuple[str, ...] = ("checkpoint",)
+
+
+def owned_by_us(name: str | None, type_: str) -> bool:
+    """`include_name` hook for Alembic autogenerate."""
+    return not (type_ == "table" and name is not None and name.startswith(FOREIGN_TABLE_PREFIXES))
+
+
 class Base(DeclarativeBase):
     metadata = MetaData(naming_convention=NAMING_CONVENTION)
 

@@ -1,0 +1,312 @@
+{
+  "question": "What is the EU AI Act implementation timeline?",
+  "language": "en",
+  "title": "Research report",
+  "banner": null,
+  "sections": [
+    {
+      "key": "summary",
+      "title": "Summary",
+      "sentences": [
+        {
+          "text": "The EU AI Act obligations for general-purpose AI models apply from 2 August 2025.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k1"
+          ],
+          "sources": [
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "text": "The AI Act entered into force on 1 August 2024.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k4"
+          ],
+          "sources": [
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "key": "key_findings",
+      "title": "Key Findings",
+      "sentences": [
+        {
+          "text": "The EU AI Act obligations for general-purpose AI models apply from 2 August 2025.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k1"
+          ],
+          "sources": [
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "text": "The AI Act entered into force on 1 August 2024.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k4"
+          ],
+          "sources": [
+            3
+          ]
+        },
+        {
+          "text": "The Commission publishes guidelines to support the application of the AI Act.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k6"
+          ],
+          "sources": [
+            3
+          ]
+        },
+        {
+          "text": "Many startups say the EU AI Act timeline is confusing.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k2"
+          ],
+          "sources": [
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "key": "conflicting_or_uncertain",
+      "title": "Conflicting / Uncertain Information",
+      "sentences": [
+        {
+          "text": "The EU AI Act rules for high-risk AI systems apply from 2 August 2026.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k5"
+          ],
+          "sources": [
+            3
+          ]
+        },
+        {
+          "text": "The EU AI Act rules for high-risk AI systems apply from 2 August 2027 under a proposed delay, according to industry groups.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k3"
+          ],
+          "sources": [
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "key": "conclusion",
+      "title": "Conclusion",
+      "sentences": [
+        {
+          "text": "Overall, this report lists what the sources state.",
+          "kind": "meta",
+          "labels": [],
+          "findings": [],
+          "sources": []
+        }
+      ]
+    },
+    {
+      "key": "known_gaps",
+      "title": "Known Gaps",
+      "sentences": []
+    }
+  ],
+  "sources": [
+    {
+      "number": 1,
+      "doc_id": "d1",
+      "url": "https://techblog.example.com/ai-act-explained",
+      "title": "The AI Act explained",
+      "domain": "techblog.example.com",
+      "score": 0.475
+    },
+    {
+      "number": 2,
+      "doc_id": "d2",
+      "url": "https://reuters.com/technology/eu-ai-act-timeline",
+      "title": "EU sticks to AI Act timeline",
+      "domain": "reuters.com",
+      "score": 0.5975
+    },
+    {
+      "number": 3,
+      "doc_id": "d3",
+      "url": "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai",
+      "title": "AI Act | Shaping Europe's digital future",
+      "domain": "digital-strategy.ec.europa.eu",
+      "score": 0.945
+    }
+  ],
+  "findings": {
+    "k1": {
+      "statement": "The EU AI Act obligations for general-purpose AI models apply from 2 August 2025.",
+      "status": "supported",
+      "support": 3,
+      "confidence": 0.921,
+      "sources": [
+        1,
+        2,
+        3
+      ]
+    },
+    "k2": {
+      "statement": "Many startups say the EU AI Act timeline is confusing.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.38,
+      "sources": [
+        1
+      ]
+    },
+    "k3": {
+      "statement": "The EU AI Act rules for high-risk AI systems apply from 2 August 2027 under a proposed delay, according to industry groups.",
+      "status": "contested",
+      "support": 1,
+      "confidence": 0.478,
+      "sources": [
+        2
+      ]
+    },
+    "k4": {
+      "statement": "The AI Act entered into force on 1 August 2024.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.756,
+      "sources": [
+        3
+      ]
+    },
+    "k5": {
+      "statement": "The EU AI Act rules for high-risk AI systems apply from 2 August 2026.",
+      "status": "contested",
+      "support": 1,
+      "confidence": 0.756,
+      "sources": [
+        3
+      ]
+    },
+    "k6": {
+      "statement": "The Commission publishes guidelines to support the application of the AI Act.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.756,
+      "sources": [
+        3
+      ]
+    }
+  },
+  "metadata": {
+    "config_hash": "57c7723b3b0a196c6079119f743d52fe797082a7d72581d210c2e026764707c8",
+    "models_used": {
+      "reasoning": "simulated:simulated-reasoning",
+      "fast": "simulated:simulated-fast",
+      "embedding": "simulated-embedding"
+    },
+    "prompt_versions": {
+      "analyze_query": {
+        "version": "1",
+        "source": "yaml",
+        "content_hash": "a727cb4344e9"
+      },
+      "assess_coverage": {
+        "version": "1",
+        "source": "yaml",
+        "content_hash": "e846c73d92bf"
+      },
+      "evaluate_sources": {
+        "version": "1",
+        "source": "yaml",
+        "content_hash": "b548bfeecc30"
+      },
+      "extract_claims": {
+        "version": "1",
+        "source": "yaml",
+        "content_hash": "8d6ef06889d9"
+      },
+      "generate_queries": {
+        "version": "1",
+        "source": "yaml",
+        "content_hash": "c529f97cebe9"
+      },
+      "judge_contradictions": {
+        "version": "1",
+        "source": "yaml",
+        "content_hash": "11915ab2e8e8"
+      },
+      "plan": {
+        "version": "1",
+        "source": "yaml",
+        "content_hash": "887f659cc5f7"
+      },
+      "synthesize": {
+        "version": "1",
+        "source": "yaml",
+        "content_hash": "52f2da65ab78"
+      },
+      "verify_citations": {
+        "version": "1",
+        "source": "yaml",
+        "content_hash": "fa025316c88a"
+      }
+    },
+    "search_providers": [
+      "tavily"
+    ],
+    "llm_providers": [
+      "simulated"
+    ],
+    "stop_reason": "sufficient",
+    "stop_detail": "all 1 required sub-questions are answered",
+    "iterations": 2,
+    "budget": {
+      "iteration": 2,
+      "searches": 5,
+      "searches_left": 40,
+      "llm_calls": 14,
+      "tokens_in": 7924,
+      "tokens_out": 1869,
+      "cost_usd": 0.0,
+      "elapsed_seconds": 0.09
+    },
+    "gate_verdict": "pass",
+    "counters": {
+      "fetch_failures": 0,
+      "duplicate_urls": 12,
+      "claims_rejected_quote": 0,
+      "extraction_failures": 0,
+      "claims_rejected_injection": 0,
+      "sentences_dropped_by_verifier": 0
+    },
+    "skills": []
+  }
+}

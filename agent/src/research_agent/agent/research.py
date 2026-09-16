@@ -271,13 +271,13 @@ def artifacts_for(state: ResearchState, metadata: dict[str, Any]) -> dict[str, t
         "report_md": ("text/markdown", render_markdown(state, metadata=metadata)),
         "report_json": (
             "application/json",
-            json.dumps(report_json, ensure_ascii=False, indent=2, default=str),
+            json.dumps(report_json, ensure_ascii=False, indent=2, default=str) + "\n",
         ),
         "gate_result": (
             "application/json",
-            json.dumps(state.gate_result or {}, ensure_ascii=False, indent=2),
+            json.dumps(state.gate_result or {}, ensure_ascii=False, indent=2) + "\n",
         ),
-        "state": ("application/json", state.model_dump_json(indent=2)),
+        "state": ("application/json", state.model_dump_json(indent=2) + "\n"),
     }
 
 

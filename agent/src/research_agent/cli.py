@@ -140,13 +140,18 @@ async def _run(args: argparse.Namespace) -> int:
     metadata = research.metadata_for(deps, effective.settings)
     artifacts = research.artifacts_for(state, metadata)
     out = Path(args.out) if args.out else Path("examples") / _slug(args.question)
+    search_label = (
+        "built-in offline corpus (3 pages)"
+        if args.simulate
+        else ", ".join(metadata["search_providers"])
+    )
     out.mkdir(parents=True, exist_ok=True)
     (out / "input.md").write_text(
         f"# Input\n\n**Question:** {state.question}\n\n"
         f"- Date: {deps.today.isoformat()}\n"
         f"- Mode: {'simulated (offline)' if args.simulate else 'live providers'}\n"
         f"- LLM chain: {', '.join(metadata['llm_providers'])}\n"
-        f"- Search: {', '.join(metadata['search_providers'])}\n"
+        f"- Search: {search_label}\n"
         f"- Overrides: {json.dumps(overrides, ensure_ascii=False) if overrides else 'none'}\n"
         f"- Config hash: `{effective.config_hash}`\n",
         encoding="utf-8",

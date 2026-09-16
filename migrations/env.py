@@ -10,13 +10,18 @@ from __future__ import annotations
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
-from research_agent.db.models import Base
+from research_agent.db.models import Base, owned_by_us
 from research_agent.db.session import sync_database_url
 
 config = context.config
 config.set_main_option("sqlalchemy.url", sync_database_url())
 
 target_metadata = Base.metadata
+
+
+def include_name(name: str | None, type_: str, parent_names: object) -> bool:
+    # LangGraph's checkpoint tables share this database but are not ours to manage.
+    return owned_by_us(name, type_)
 
 
 def run_migrations_offline() -> None:
@@ -27,6 +32,7 @@ def run_migrations_offline() -> None:
         dialect_opts={"paramstyle": "named"},
         compare_type=True,
         compare_server_default=True,
+        include_name=include_name,
     )
     with context.begin_transaction():
         context.run_migrations()
@@ -44,6 +50,7 @@ def run_migrations_online() -> None:
             target_metadata=target_metadata,
             compare_type=True,
             compare_server_default=True,
+            include_name=include_name,
         )
         with context.begin_transaction():
             context.run_migrations()

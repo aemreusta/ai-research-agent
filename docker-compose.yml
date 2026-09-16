@@ -29,7 +29,6 @@ x-app-env: &app-env
   APP_LOG_LEVEL: ${APP_LOG_LEVEL:-INFO}
   APP_LOG_FORMAT: ${APP_LOG_FORMAT:-json}
   PRESIDIO_ANALYZER_URL: http://presidio-analyzer:3000
-  PRESIDIO_ANONYMIZER_URL: http://presidio-anonymizer:3000
   LANGFUSE_HOST: http://langfuse-web:3000
   LANGFUSE_PUBLIC_URL: ${LANGFUSE_PUBLIC_URL:-http://localhost:3000}
   LANGFUSE_PUBLIC_KEY: ${LANGFUSE_INIT_PROJECT_PUBLIC_KEY:-pk-lf-local-research-agent}
@@ -146,15 +145,11 @@ services:
       retries: 20
 
   # --- PII (v0.6 §12) --------------------------------------------------------
-  # Optional at runtime: without them intake degrades to regex masking (PII_ENGINE_DEGRADED).
+  # Optional at runtime: without it intake degrades to regex masking (PII_ENGINE_DEGRADED).
+  # Only the analyzer runs: placeholders are assigned in code, so the same value always gets the
+  # same number (`<TCKN_1>`), which the anonymizer service cannot guarantee (D42).
   presidio-analyzer:
     image: mcr.microsoft.com/presidio-analyzer:latest
-    restart: unless-stopped
-    expose:
-      - "3000"
-
-  presidio-anonymizer:
-    image: mcr.microsoft.com/presidio-anonymizer:latest
     restart: unless-stopped
     expose:
       - "3000"
@@ -212,7 +207,7 @@ services:
     environment:
       <<: *langfuse-env
       NEXTAUTH_SECRET: ${LANGFUSE_NEXTAUTH_SECRET:-local-development-nextauth-secret}
-      LANGFUSE_S3_MEDIA_UPLOAD_ENDPOINT: http://localhost:9090
+      LANGFUSE_S3_MEDIA_UPLOAD_ENDPOINT: http://localhost:${LANGFUSE_MINIO_HOST_PORT:-9090}
       LANGFUSE_S3_MEDIA_UPLOAD_INTERNAL_ENDPOINT: http://minio:9000
       # Headless initialisation: org, project, admin user and API keys exist on first start,
       # so the prompt registry and tracing work without anyone clicking through a setup page.
@@ -256,7 +251,7 @@ services:
       MINIO_ROOT_USER: minio
       MINIO_ROOT_PASSWORD: ${LANGFUSE_MINIO_PASSWORD:-miniosecret}
     ports:
-      - "127.0.0.1:9090:9000"
+      - "127.0.0.1:${LANGFUSE_MINIO_HOST_PORT:-9090}:9000"
     volumes:
       - minio-data:/data
     healthcheck:

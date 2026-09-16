@@ -1,6 +1,6 @@
 # AI Research Agent — Mimari Taslak v0.6
 
-> Durum: **Uygulamaya esas** · Tarih: 2026-09-16
+> Durum: **Uygulandı** (sapmalar ve netleşen kararlar: §22) · Tarih: 2026-09-16
 > v0.6 — v0.5'ten fark: Tüm açık öneriler kapatıldı (D6–D12, D17, D24, D25, D29) ve denetim bulguları mimariye işlendi (D30–D35): **Python 3.13** · bütçe yeniden hesaplandı, **süre/maliyet kapıları kapalı başlıyor** (§7) · **Output Gate G4 üç kovaya ayrıldı** (§11.3) · **prompt injection yapısal savunması** (§11.4) · `verify_citations` batch'li (§5) · **çok ekranlı UI + maliyet panosu** (§15.2, §16) · `research` **CLI** MUST (§17) · kapsam ve takvim notu güncellendi (§21). Denetim kaydı: `analysis_v1.md`.
 > v0.5 — v0.4'ten fark: **Langfuse self-host** artık tracing + prompt management + dataset'lerin tek yeri (D21/D27 revize; self-hosted LangSmith Enterprise lisansı gerektiriyor). DSPy offline derleyici (D26 ✅), skill'ler script'siz (D28 ✅).
 > v0.4 — v0.3'ten fark: **Go dispatcher (control plane) + Python agent (data plane)** (D16), **LangSmith** redacted tracing (D21), D18 ve D20 onaylandı, **DSPy tarzı prompt katmanı + prompt registry + Research Skills** (§20).
@@ -650,3 +650,24 @@ Değerlendirme ağırlığının %75'i agent kalitesinde (orchestration 25, sear
 | **COULD** | `local-llm` (Ollama) profili · provider thought summaries · promptfoo injection/regression suite · skill zip import/export |
 
 > ⚠️ Go dispatcher dar tutulur: dummy agent'la uçtan uca bitirilir, sonrasında yalnızca bug fix. Agent çekirdeği CLI üzerinden paralel geliştirilir.
+
+## 22. Uygulama notları (v0.6 → kod, 2026-09-16)
+
+Mimari uygulanırken bazı kararlar netleşti ya da değişti. Hepsi `TODO.md` karar günlüğünde gerekçesiyle kayıtlı; burada özet ve bu belgedeki ilgili bölüm:
+
+| Karar | Bu belgedeki eski ifade | Uygulamada |
+|---|---|---|
+| D36 (§0, §17) | asyncpg | **psycopg 3 tek sürücü**: SQLAlchemy async, Alembic ve LangGraph checkpointer aynı `DATABASE_URL`'i kullanır; yazım farkları normalize edilir |
+| D37 (§6) | prompt/skill/eval tabloları (Faz 1 listesi) | Tablolar yok (bu belgedeki §6 ile uyumlu); `embedding_cache` eklendi, `runs.event_seq` run başına boşluksuz sıra numarası üretir |
+| D38 (§3) | `.env`'de `APP_SECRET_KEY` | Boşsa `migrate` paylaşılan volume'a bir kez üretir; tüm Langfuse init değerleri lokal varsayılanlarla gelir → kullanıcının tek adımı provider key'leri |
+| D39 (§2) | durum geçişleri | **Her geçiş compare-and-set** (Go tarafında gözlenen heartbeat dahil); requeue backoff'u için `runs.available_at`; ajana ulaşmamış claim denemeyi geri verir |
+| D40 (§0, §16) | gemini-2.5-pro / gpt-5 | `gemini-3.8-flash` / `gemini-3.1-flash-lite`, `gpt-5.6-terra` / `gpt-5.6-luna`, embedding `gemini-embedding-001`; Tavily `basic` + raw content |
+| D41 (§15.2) | — | UI build'siz ES modülleri, `Cache-Control: no-cache`; `research run --simulate --persist` ile anahtarsız çevrimdışı run UI'da görülebilir |
+| D42 (§2, §12) | presidio-anonymizer servisi | Kaldırıldı; placeholder'lar kodda kararlı numarayla atanır, Presidio bulguları regex bulgularıyla birleştirilir |
+| §14 | "LangGraph için Langfuse callback handler" | Self-host **Langfuse v4 eski batch ingestion'ı reddediyor** → izler OTLP/JSON olarak gönderilir (run başına kök span + LLM çağrısı başına generation, prompt adı/sürümü, usage, cost). Prompt'lar ilk kullanımda Langfuse'a seed edilir |
+| §11.4 | 5 maddelik yapısal savunma | 6. madde eklendi: **enjeksiyon tripwire'ı** — modele hitap eden cümle ("önceki talimatları yok say") sayfada yazsa da kanıt sayılmaz |
+| §11.3 | tolerans = bağıl hata eşiği | Tolerans **yazılan hassasiyete yuvarlama** olarak da tanımlı (`$1.23B` → `$1.2B` kabul, `$1.26B` değil); G1 ayrıca "hiç desteklenen bulgu kalmadı" durumunda remediation'sız hata verir |
+| §7 | kontrol sırası: hard limit → başarı | **Başarı önce** kontrol edilir; ikisi birden doğruysa daha bilgilendirici etiket seçilir |
+| §20.3 | skill saklama önerisi | Skill'ler repo `skills/` klasöründen okunur; script içeren ya da tier-3 domain eklemeye çalışan skill yüklenmez. Langfuse'ta `skill/<name>` senkronu henüz yok |
+
+Doğrulama durumu: Python 424 test (Postgres entegrasyon ve çevrimdışı tam graf senaryoları dahil), Go testleri, `mypy --strict`, compose içinde uçtan uca altyapı akışı (kuyruk → dispatcher → agent → SSE), `--scale agent=3`, agent `kill -9` sonrası requeue + resume, Langfuse headless init ve prompt seed, Presidio maskeleme. Gerçek provider anahtarlarıyla uçtan uca run kullanıcı adımıdır (README §1).

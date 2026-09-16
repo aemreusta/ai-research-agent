@@ -64,3 +64,24 @@ fmt: ## format Python and Go
 	uv run ruff check --fix .
 	uv run ruff format .
 	cd dispatcher && gofmt -w .
+
+# The four case examples (D12). Needs provider keys in .env; writes examples/<slug>/.
+EXAMPLE_QUESTIONS := \
+	"kvkk-2026-saas-action-plan|Türkiye'deki SaaS şirketleri için 2026 KVKK uyum aksiyon planı nedir?" \
+	"apilexai-products-partnerships|ApilexAI'ın ürünleri, iş ortaklıkları ve stratejik yönü nedir?" \
+	"eu-ai-act-timeline|What changed in the EU AI Act implementation timeline?" \
+	"legal-tech-market-size|What is the size of the European legal tech market and how fast is it growing?"
+
+.PHONY: examples
+examples: ## run the four example questions with your keys (docker) into examples/
+	@for item in $(EXAMPLE_QUESTIONS); do \
+		slug=$${item%%|*}; question=$${item#*|}; \
+		echo "==> $$slug"; \
+		docker compose run --rm --no-deps --user "$$(id -u):$$(id -g)" \
+			-v "$(CURDIR)/examples:/app/examples" \
+			-e AGENT_RUNNER=graph agent run "$$question" --out "examples/$$slug" --quiet || exit 1; \
+	done
+
+.PHONY: demo
+demo: ## an offline run (no keys) recorded in the database, to explore the UI
+	docker compose run --rm --no-deps agent run "What is the EU AI Act implementation timeline?" --simulate --persist --quiet

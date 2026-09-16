@@ -1,5 +1,6 @@
 # TODO — Apilex AI Research Agent Case
 
+- **Durum (2026-09-16):** sistem uçtan uca çalışıyor — `docker compose up -d` + provider key'leri (README §1). Uygulama notları: mimari §22.
 - **Teslim:** planlanan tarih (Pzt 14 Eyl 2026) geçti. **Takvim serbest** — kapsam daraltılmıyor, sistem bütün olarak yazılıyor. Alıcı: muhammed.bilgin@apilex.ai (D31)
 - **Mimari taslak:** [`docs/design/architecture_v0.6.md`](docs/design/architecture_v0.6.md) (önceki sürümler: `docs/design/_archive/`) · **Denetim + karar kapanışı:** [`docs/design/analysis_v1.md`](docs/design/analysis_v1.md)
 - **Case:** `docs/reference/ai-eng-case-i.pdf` — Apilex telifli, **repoda tutulmuyor** (gitignore, D31); lokalde durur
@@ -61,6 +62,7 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 | D39 | Eşzamanlı yazım | Agent ve watchdog aynı `runs` satırına yazıyor → **her durum geçişi compare-and-set** (Python: `WHERE status = kaynak`; Go: ek olarak gözlenen `heartbeat_at`). Kaybeden taraf sessizce üzerine yazmıyor, `IllegalTransitionError` / `ErrLostRace` alıyor. Requeue backoff'u için `runs.available_at` (migration `0002`); agent'a hiç ulaşmamış claim denemeyi geri veriyor | ✅ |
 | D40 | Model seçimi (2026-09-16 doğrulandı) | reasoning: `gemini-3.8-flash` / `gpt-5.6-terra` / `qwen3:14b` · fast: `gemini-3.1-flash-lite` / `gpt-5.6-luna` / `qwen3:8b` · embedding: `gemini-embedding-001` (metin başına vektör + `SEMANTIC_SIMILARITY`; `-2` girdileri tek vektörde birleştiriyor) / `text-embedding-3-small`. Fiyatlar `models.yaml`'da, Gemini 3.8 Flash tanıtım fiyatı 2026 sonuna kadar. Tavily `basic` derinlik (1 kredi) + raw content: 45 aramalık bütçede 45 vs 90 kredi | ✅ |
 | D41 | UI teslimi | Build'siz ES modülleri + `Cache-Control: no-cache` (ETag ile yeniden doğrulama): sezgisel önbellek, güncellemeden sonra eski modülü sunup UI'ı kırıyordu (Playwright doğrulamasında yakalandı). `research run --simulate --persist` çevrimdışı, sıfır fiyatlı bir run'ı veritabanına yazar (kuyruğa girmez, `agent_id=cli`), UI'da görülebilir | ✅ |
+| D42 | Presidio anonymizer | Kaldırıldı: yalnızca analyzer kullanılıyor; placeholder'lar kodda atanıyor çünkü aynı değerin her seferinde aynı numarayı alması (`<TCKN_1>`) gerekiyor. Presidio sonuçları her zaman regex bulgularıyla birleştiriliyor | ✅ |
 | D35 | Prompt injection | Web içeriği her katmanda untrusted data. Yapısal savunma: enjekte talimat claim'e dönüşemez (verbatim quote doğrulaması), uydurma sayı G4'ü geçemez, Gate LLM içermez. README'de Design Question 6 ile birlikte anlatılır | ✅ |
 
 ---
@@ -169,10 +171,10 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 - [ ] Integration (compose PG): iki dispatcher aynı işi almıyor; agent kill → resume; deadline → cancel
 
 ## Faz 8 — Örnekler & dokümantasyon · Paz akşam
-- [ ] 3+ örnek → `examples/<slug>/{input.md, trace.jsonl, report.md, gate_result.json}`
+- [~] Örnek altyapısı hazır: `make examples` 4 soruyu kullanıcının anahtarlarıyla `examples/<slug>/`'a yazar (input/trace/report/report.json/gate_result/state); `examples/offline-demo-eu-ai-act` çevrimdışı format örneği. Kalan: gerçek anahtarlarla üretim (kullanıcı adımı)
 - [ ] Eşik kalibrasyonu
-- [ ] README (EN): kurulum (`docker compose up`), teknolojiler, servis mimarisi + agent diyagramı (Mermaid), search strategy, source evaluation, duplicate detection, follow-up, termination, contradiction, Output Gate, PII, observability, error handling, design decisions
-- [ ] README: 8 Design Question'a kısa **Türkçe** cevaplar
+- [x] README (EN): kurulum (tek adım: key'ler; hafif mod; port override; demo), teknolojiler, servis + agent diyagramları (Mermaid), claim ledger, search strategy, source evaluation, duplicate detection, follow-up/termination, contradiction, Output Gate (G4 kovaları), PII, observability, error handling + matris, testler, design decisions, bilinen kısıtlar
+- [x] README: 8 Design Question'a **Türkçe** cevaplar
 
 ## Faz 9 — Teslim · Pzt sabah (son: 16:00)
 - [ ] Temiz clone → `cp .env.example .env` → `docker compose up` → UI'dan run → `docker compose run api pytest` + `go test ./...`

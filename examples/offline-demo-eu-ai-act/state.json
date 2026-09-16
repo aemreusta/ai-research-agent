@@ -1,0 +1,1236 @@
+{
+  "run_id": "a047f526-5c6c-4fb7-8a50-9823cb464b25",
+  "question": "What is the EU AI Act implementation timeline?",
+  "language": "en",
+  "as_of": "2026-09-16",
+  "analysis": {
+    "language": "en",
+    "intent": "What is the EU AI Act implementation timeline?",
+    "entities": [
+      "What",
+      "EU AI Act"
+    ],
+    "time_scope": {
+      "start": null,
+      "end": null,
+      "description": ""
+    },
+    "answer_type": "overview",
+    "domain": "general",
+    "source_hints": [
+      "official sources"
+    ],
+    "skills": [],
+    "rationale": "Simulated analysis.",
+    "fallback": false
+  },
+  "plan": [
+    {
+      "id": "s1",
+      "text": "What is the EU AI Act implementation timeline?",
+      "priority": "must",
+      "facets": [
+        {
+          "id": "s1f1",
+          "name": "direct answer",
+          "description": "What is the EU AI Act implementation timeline?",
+          "status": "sufficient"
+        }
+      ],
+      "expected_sources": [
+        "official"
+      ],
+      "status": "sufficient",
+      "queries_tried": [
+        "What is the EU AI Act implementation timeline?",
+        "What is the EU AI Act implementation timeline? official",
+        "What is the EU AI Act implementation timeline? latest",
+        "The EU AI Act rules for high-risk AI systems apply from 2 August 2027 under a proposed delay, according to industry groups. / The EU AI Act rules for high-risk AI systems apply from 2 August 2026. off",
+        "What is the EU AI Act implementation timeline? direct answer"
+      ],
+      "rounds_without_progress": 0,
+      "exhausted_reason": null
+    }
+  ],
+  "queries": [
+    {
+      "id": "q1",
+      "text": "What is the EU AI Act implementation timeline?",
+      "subq_id": "s1",
+      "facet_id": null,
+      "purpose": "initial",
+      "rationale": "simulated",
+      "iteration": 1,
+      "status": "done",
+      "provider": "tavily",
+      "result_count": 3,
+      "cache_hit": false,
+      "error_code": null
+    },
+    {
+      "id": "q2",
+      "text": "What is the EU AI Act implementation timeline? official",
+      "subq_id": "s1",
+      "facet_id": null,
+      "purpose": "initial",
+      "rationale": "simulated",
+      "iteration": 1,
+      "status": "done",
+      "provider": "tavily",
+      "result_count": 3,
+      "cache_hit": false,
+      "error_code": null
+    },
+    {
+      "id": "q3",
+      "text": "What is the EU AI Act implementation timeline? latest",
+      "subq_id": "s1",
+      "facet_id": null,
+      "purpose": "initial",
+      "rationale": "simulated",
+      "iteration": 1,
+      "status": "done",
+      "provider": "tavily",
+      "result_count": 3,
+      "cache_hit": false,
+      "error_code": null
+    },
+    {
+      "id": "q4",
+      "text": "The EU AI Act rules for high-risk AI systems apply from 2 August 2027 under a proposed delay, according to industry groups. / The EU AI Act rules for high-risk AI systems apply from 2 August 2026. off",
+      "subq_id": "s1",
+      "facet_id": null,
+      "purpose": "conflict",
+      "rationale": "simulated",
+      "iteration": 2,
+      "status": "done",
+      "provider": "tavily",
+      "result_count": 3,
+      "cache_hit": false,
+      "error_code": null
+    },
+    {
+      "id": "q5",
+      "text": "What is the EU AI Act implementation timeline? direct answer",
+      "subq_id": "s1",
+      "facet_id": "s1f1",
+      "purpose": "gap",
+      "rationale": "simulated",
+      "iteration": 2,
+      "status": "done",
+      "provider": "tavily",
+      "result_count": 3,
+      "cache_hit": false,
+      "error_code": null
+    }
+  ],
+  "documents": {
+    "d1": {
+      "id": "d1",
+      "url": "https://techblog.example.com/ai-act-explained",
+      "canonical_url": "https://techblog.example.com/ai-act-explained",
+      "domain": "techblog.example.com",
+      "title": "The AI Act explained",
+      "snippet": "The EU AI Act obligations for general-purpose AI models apply from 2 August 2025. Many startups say the EU AI Act timeline is confusing.",
+      "content": "The EU AI Act obligations for general-purpose AI models apply from 2 August 2025. Many startups say the EU AI Act timeline is confusing.",
+      "content_hash": "397613fcf2b8e0526621cc45cdec93155b750a9fca98febc1efbf374b7ac8870",
+      "published_at": "2025-11-05",
+      "provider": "tavily",
+      "subq_ids": [
+        "s1"
+      ],
+      "query_ids": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5"
+      ],
+      "origin_id": "o-d1",
+      "minhash": [
+        235852333,
+        131893158,
+        287791653,
+        114848334,
+        511380890,
+        204922947,
+        240480843,
+        72865454,
+        21110057,
+        274007398,
+        266904943,
+        19923359,
+        18845901,
+        63752150,
+        77768570,
+        250889170,
+        191165982,
+        67762352,
+        89468615,
+        34537333,
+        49602799,
+        72441883,
+        218840438,
+        540804868,
+        58020141,
+        26343939,
+        165842404,
+        130053329,
+        302734570,
+        135225608,
+        84495280,
+        72034541,
+        93324467,
+        1274085,
+        37296950,
+        159387696,
+        875291199,
+        179158791,
+        34312205,
+        133224196,
+        111330076,
+        105240501,
+        460663328,
+        201433082,
+        231240615,
+        121559600,
+        85608340,
+        125409969,
+        450715102,
+        15768950,
+        271117289,
+        2760154,
+        6047423,
+        90687119,
+        7539877,
+        551973246,
+        24783206,
+        82354105,
+        200743149,
+        1140760901,
+        149159550,
+        191861905,
+        443656046,
+        29922941,
+        18258344,
+        44348652,
+        113270494,
+        931810635,
+        448197166,
+        495070420,
+        896888806,
+        361996581,
+        210275320,
+        949943693,
+        88868931,
+        87535873,
+        670443220,
+        235381762,
+        32892870,
+        455513342,
+        154903815,
+        50322384,
+        113921784,
+        274977521,
+        413602116,
+        105611378,
+        57151306,
+        97443932,
+        95313287,
+        102318126,
+        114117451,
+        1279471079,
+        202190545,
+        54944033,
+        154579921,
+        41634236,
+        82775346,
+        15332230,
+        42222556,
+        12820925,
+        464298644,
+        83345618,
+        201023226,
+        565638999,
+        101556981,
+        159342790,
+        90962576,
+        546164538,
+        84331727,
+        286576407,
+        402290560,
+        168930234,
+        218574705,
+        216578760,
+        139569370,
+        71764522,
+        92652727,
+        266362812,
+        138012993,
+        320564991,
+        282006604,
+        123928503,
+        398662355,
+        374204571,
+        222691653,
+        57579103,
+        46318754,
+        162050190
+      ],
+      "fetched": true,
+      "fetch_error": null,
+      "extracted": true,
+      "selected_round": 1,
+      "triage_score": 0.61,
+      "score": {
+        "authority": 0.3,
+        "primary": 0.0,
+        "recency": 0.8,
+        "relevance": 1.0,
+        "total": 0.475,
+        "tier": 3,
+        "is_primary": false,
+        "rationale": "techblog.example.com → 0.47 (T3, secondary, 2025-11, relevance 1.00) - simulated",
+        "llm_scored": true
+      },
+      "first_seen_iteration": 1
+    },
+    "d2": {
+      "id": "d2",
+      "url": "https://www.reuters.com/technology/eu-ai-act-timeline",
+      "canonical_url": "https://reuters.com/technology/eu-ai-act-timeline",
+      "domain": "reuters.com",
+      "title": "EU sticks to AI Act timeline",
+      "snippet": "The EU AI Act obligations for general-purpose AI models apply from 2 August 2025, officials confirmed. The EU AI Act rules for high-risk AI systems apply from 2 August 2027 under a proposed delay, according to industry groups.",
+      "content": "The EU AI Act obligations for general-purpose AI models apply from 2 August 2025, officials confirmed. The EU AI Act rules for high-risk AI systems apply from 2 August 2027 under a proposed delay, according to industry groups.",
+      "content_hash": "26a466584ac1fead716e0db6ee51d89a4fcb62505e99034246dd707a50534dd8",
+      "published_at": "2026-03-02",
+      "provider": "tavily",
+      "subq_ids": [
+        "s1"
+      ],
+      "query_ids": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5"
+      ],
+      "origin_id": "o-d2",
+      "minhash": [
+        93495288,
+        131893158,
+        92684106,
+        253189696,
+        398695303,
+        204922947,
+        110540870,
+        72865454,
+        14264096,
+        172583366,
+        41425429,
+        93878975,
+        282669291,
+        10114606,
+        280144000,
+        183319761,
+        48615080,
+        67762352,
+        51053003,
+        34537333,
+        49602799,
+        70075580,
+        13299315,
+        433386008,
+        12132522,
+        26343939,
+        171402215,
+        130053329,
+        19480987,
+        153058388,
+        69533355,
+        266439388,
+        47715027,
+        1274085,
+        37296950,
+        159387696,
+        36794575,
+        40820384,
+        34312205,
+        941864,
+        82671704,
+        49391188,
+        209722544,
+        75693609,
+        49677163,
+        244899136,
+        85608340,
+        251992518,
+        113630070,
+        15768950,
+        225411518,
+        173294438,
+        167615369,
+        108604091,
+        7539877,
+        259831294,
+        12242814,
+        168782802,
+        200743149,
+        5956108,
+        97160458,
+        177738650,
+        165559376,
+        15945870,
+        54130502,
+        172367064,
+        113270494,
+        63765911,
+        21267941,
+        197945600,
+        4512273,
+        358539792,
+        87654832,
+        18604615,
+        88868931,
+        133398338,
+        31728169,
+        179663118,
+        23187856,
+        227742611,
+        11796705,
+        50322384,
+        113921784,
+        52895643,
+        39933140,
+        105611378,
+        15569105,
+        103456272,
+        218054772,
+        34280210,
+        72343292,
+        41689240,
+        52582410,
+        47314359,
+        54332941,
+        41634236,
+        19589646,
+        15332230,
+        9567712,
+        12820925,
+        235021053,
+        83345618,
+        17082778,
+        307347171,
+        101556981,
+        99559078,
+        215034057,
+        396623,
+        84331727,
+        202380693,
+        116331473,
+        232864123,
+        330321289,
+        143481432,
+        56398310,
+        71764522,
+        5675473,
+        19843623,
+        20472009,
+        181799182,
+        98142892,
+        123928503,
+        38967449,
+        148832709,
+        71805062,
+        69248012,
+        67999331,
+        54943571
+      ],
+      "fetched": true,
+      "fetch_error": null,
+      "extracted": true,
+      "selected_round": 1,
+      "triage_score": 0.715,
+      "score": {
+        "authority": 0.65,
+        "primary": 0.0,
+        "recency": 0.8,
+        "relevance": 1.0,
+        "total": 0.5975,
+        "tier": 2,
+        "is_primary": false,
+        "rationale": "reuters.com → 0.60 (T2, secondary, 2026-03, relevance 1.00) - simulated",
+        "llm_scored": true
+      },
+      "first_seen_iteration": 1
+    },
+    "d3": {
+      "id": "d3",
+      "url": "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai",
+      "canonical_url": "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai",
+      "domain": "digital-strategy.ec.europa.eu",
+      "title": "AI Act | Shaping Europe's digital future",
+      "snippet": "The AI Act entered into force on 1 August 2024. The EU AI Act obligations for general-purpose AI models apply from 2 August 2025. The EU AI Act rules for high-risk AI systems apply from 2 August 2026. The Commission publishes guidelines to support the application of the AI Act.",
+      "content": "The AI Act entered into force on 1 August 2024. The EU AI Act obligations for general-purpose AI models apply from 2 August 2025. The EU AI Act rules for high-risk AI systems apply from 2 August 2026. The Commission publishes guidelines to support the application of the AI Act.",
+      "content_hash": "4d0c29eabe241caf37b361f747d3d7bf3f3b6798b0b0a89cfce2d19a8907c9c2",
+      "published_at": "2026-05-20",
+      "provider": "tavily",
+      "subq_ids": [
+        "s1"
+      ],
+      "query_ids": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5"
+      ],
+      "origin_id": "o-d3",
+      "minhash": [
+        32713642,
+        131893158,
+        19894614,
+        56612655,
+        347468530,
+        86241020,
+        402080943,
+        72865454,
+        19136362,
+        69045545,
+        247371880,
+        9343010,
+        39668900,
+        59332575,
+        280144000,
+        96643787,
+        48615080,
+        67762352,
+        89468615,
+        34537333,
+        28967332,
+        36766165,
+        13299315,
+        56859827,
+        12132522,
+        11080406,
+        77516400,
+        130053329,
+        29113000,
+        53355066,
+        56612549,
+        43625847,
+        47715027,
+        1274085,
+        17599831,
+        159387696,
+        36794575,
+        40820384,
+        34312205,
+        941864,
+        50307114,
+        49391188,
+        101422533,
+        19747403,
+        49677163,
+        56256282,
+        85608340,
+        87513419,
+        175190456,
+        15768950,
+        80068467,
+        53929097,
+        179385487,
+        38932294,
+        7539877,
+        259831294,
+        62486832,
+        142808056,
+        200743149,
+        5956108,
+        149159550,
+        177738650,
+        31127366,
+        15945870,
+        54130502,
+        57233257,
+        113270494,
+        26022117,
+        21267941,
+        1839371,
+        69860381,
+        2576063,
+        15000861,
+        29539402,
+        58206021,
+        104318138,
+        216552231,
+        99030404,
+        32892870,
+        61984368,
+        58864064,
+        50322384,
+        720602,
+        3723081,
+        73245391,
+        105611378,
+        2074586,
+        103456272,
+        131819944,
+        22833605,
+        131025885,
+        39221390,
+        205784284,
+        3777130,
+        38233599,
+        41634236,
+        246204588,
+        15332230,
+        16385353,
+        12820925,
+        26273219,
+        83345618,
+        722612837,
+        12870386,
+        101556981,
+        479867796,
+        215034057,
+        396623,
+        65081767,
+        226180636,
+        116331473,
+        232864123,
+        147517671,
+        16189220,
+        90206329,
+        60335074,
+        5675473,
+        19843623,
+        13171926,
+        92498744,
+        30803942,
+        123928503,
+        38967449,
+        148832709,
+        45657038,
+        63555606,
+        12942107,
+        54943571
+      ],
+      "fetched": true,
+      "fetch_error": null,
+      "extracted": true,
+      "selected_round": 1,
+      "triage_score": 0.7,
+      "score": {
+        "authority": 1.0,
+        "primary": 1.0,
+        "recency": 0.8,
+        "relevance": 0.9,
+        "total": 0.945,
+        "tier": 1,
+        "is_primary": true,
+        "rationale": "digital-strategy.ec.europa.eu → 0.94 (T1, primary, 2026-05, relevance 0.90) - simulated",
+        "llm_scored": true
+      },
+      "first_seen_iteration": 1
+    }
+  },
+  "claims": {
+    "c1": {
+      "id": "c1",
+      "subq_id": "s1",
+      "facet_id": "s1f1",
+      "doc_id": "d1",
+      "origin_id": "o-d1",
+      "text": "The EU AI Act obligations for general-purpose AI models apply from 2 August 2025.",
+      "quote": "The EU AI Act obligations for general-purpose AI models apply from 2 August 2025.",
+      "kind": "number",
+      "entity": "The EU AI Act",
+      "attribute": "obligations general purpose models apply",
+      "value": "2 August 2025",
+      "unit": null,
+      "as_of": null,
+      "attributed_to": null,
+      "iteration": 1
+    },
+    "c2": {
+      "id": "c2",
+      "subq_id": "s1",
+      "facet_id": "s1f1",
+      "doc_id": "d1",
+      "origin_id": "o-d1",
+      "text": "Many startups say the EU AI Act timeline is confusing.",
+      "quote": "Many startups say the EU AI Act timeline is confusing.",
+      "kind": "fact",
+      "entity": "EU AI Act",
+      "attribute": null,
+      "value": null,
+      "unit": null,
+      "as_of": null,
+      "attributed_to": null,
+      "iteration": 1
+    },
+    "c3": {
+      "id": "c3",
+      "subq_id": "s1",
+      "facet_id": "s1f1",
+      "doc_id": "d2",
+      "origin_id": "o-d2",
+      "text": "The EU AI Act obligations for general-purpose AI models apply from 2 August 2025, officials confirmed.",
+      "quote": "The EU AI Act obligations for general-purpose AI models apply from 2 August 2025, officials confirmed.",
+      "kind": "number",
+      "entity": "The EU AI Act",
+      "attribute": "obligations general purpose models apply officials confirmed",
+      "value": "2 August 2025",
+      "unit": null,
+      "as_of": null,
+      "attributed_to": null,
+      "iteration": 1
+    },
+    "c4": {
+      "id": "c4",
+      "subq_id": "s1",
+      "facet_id": "s1f1",
+      "doc_id": "d2",
+      "origin_id": "o-d2",
+      "text": "The EU AI Act rules for high-risk AI systems apply from 2 August 2027 under a proposed delay, according to industry groups.",
+      "quote": "The EU AI Act rules for high-risk AI systems apply from 2 August 2027 under a proposed delay, according to industry groups.",
+      "kind": "number",
+      "entity": "The EU AI Act",
+      "attribute": "rules high risk systems apply under proposed delay according industry groups",
+      "value": "2 August 2027",
+      "unit": null,
+      "as_of": null,
+      "attributed_to": null,
+      "iteration": 1
+    },
+    "c5": {
+      "id": "c5",
+      "subq_id": "s1",
+      "facet_id": "s1f1",
+      "doc_id": "d3",
+      "origin_id": "o-d3",
+      "text": "The AI Act entered into force on 1 August 2024.",
+      "quote": "The AI Act entered into force on 1 August 2024.",
+      "kind": "number",
+      "entity": "The AI Act",
+      "attribute": "entered force",
+      "value": "1 August 2024",
+      "unit": null,
+      "as_of": null,
+      "attributed_to": null,
+      "iteration": 1
+    },
+    "c6": {
+      "id": "c6",
+      "subq_id": "s1",
+      "facet_id": "s1f1",
+      "doc_id": "d3",
+      "origin_id": "o-d3",
+      "text": "The EU AI Act obligations for general-purpose AI models apply from 2 August 2025.",
+      "quote": "The EU AI Act obligations for general-purpose AI models apply from 2 August 2025.",
+      "kind": "number",
+      "entity": "The EU AI Act",
+      "attribute": "obligations general purpose models apply",
+      "value": "2 August 2025",
+      "unit": null,
+      "as_of": null,
+      "attributed_to": null,
+      "iteration": 1
+    },
+    "c7": {
+      "id": "c7",
+      "subq_id": "s1",
+      "facet_id": "s1f1",
+      "doc_id": "d3",
+      "origin_id": "o-d3",
+      "text": "The EU AI Act rules for high-risk AI systems apply from 2 August 2026.",
+      "quote": "The EU AI Act rules for high-risk AI systems apply from 2 August 2026.",
+      "kind": "number",
+      "entity": "The EU AI Act",
+      "attribute": "rules high risk systems apply",
+      "value": "2 August 2026",
+      "unit": null,
+      "as_of": null,
+      "attributed_to": null,
+      "iteration": 1
+    },
+    "c8": {
+      "id": "c8",
+      "subq_id": "s1",
+      "facet_id": "s1f1",
+      "doc_id": "d3",
+      "origin_id": "o-d3",
+      "text": "The Commission publishes guidelines to support the application of the AI Act.",
+      "quote": "The Commission publishes guidelines to support the application of the AI Act.",
+      "kind": "fact",
+      "entity": "The Commission",
+      "attribute": null,
+      "value": null,
+      "unit": null,
+      "as_of": null,
+      "attributed_to": null,
+      "iteration": 1
+    }
+  },
+  "clusters": {
+    "k1": {
+      "id": "k1",
+      "subq_id": "s1",
+      "claim_ids": [
+        "c1",
+        "c3",
+        "c6"
+      ],
+      "doc_ids": [
+        "d1",
+        "d2",
+        "d3"
+      ],
+      "origin_ids": [
+        "o-d1",
+        "o-d2",
+        "o-d3"
+      ],
+      "facet_ids": [
+        "s1f1"
+      ],
+      "statement": "The EU AI Act obligations for general-purpose AI models apply from 2 August 2025.",
+      "entity": "The EU AI Act",
+      "attribute": "obligations general purpose models apply",
+      "value": "2 August 2025",
+      "unit": null,
+      "as_of": null,
+      "kind": "number",
+      "confidence": 0.921,
+      "best_source_score": 0.945,
+      "has_primary": true,
+      "status": "supported"
+    },
+    "k2": {
+      "id": "k2",
+      "subq_id": "s1",
+      "claim_ids": [
+        "c2"
+      ],
+      "doc_ids": [
+        "d1"
+      ],
+      "origin_ids": [
+        "o-d1"
+      ],
+      "facet_ids": [
+        "s1f1"
+      ],
+      "statement": "Many startups say the EU AI Act timeline is confusing.",
+      "entity": "EU AI Act",
+      "attribute": null,
+      "value": null,
+      "unit": null,
+      "as_of": null,
+      "kind": "fact",
+      "confidence": 0.38,
+      "best_source_score": 0.475,
+      "has_primary": false,
+      "status": "single_source"
+    },
+    "k3": {
+      "id": "k3",
+      "subq_id": "s1",
+      "claim_ids": [
+        "c4"
+      ],
+      "doc_ids": [
+        "d2"
+      ],
+      "origin_ids": [
+        "o-d2"
+      ],
+      "facet_ids": [
+        "s1f1"
+      ],
+      "statement": "The EU AI Act rules for high-risk AI systems apply from 2 August 2027 under a proposed delay, according to industry groups.",
+      "entity": "The EU AI Act",
+      "attribute": "rules high risk systems apply under proposed delay according industry groups",
+      "value": "2 August 2027",
+      "unit": null,
+      "as_of": null,
+      "kind": "number",
+      "confidence": 0.478,
+      "best_source_score": 0.5975,
+      "has_primary": false,
+      "status": "contested"
+    },
+    "k4": {
+      "id": "k4",
+      "subq_id": "s1",
+      "claim_ids": [
+        "c5"
+      ],
+      "doc_ids": [
+        "d3"
+      ],
+      "origin_ids": [
+        "o-d3"
+      ],
+      "facet_ids": [
+        "s1f1"
+      ],
+      "statement": "The AI Act entered into force on 1 August 2024.",
+      "entity": "The AI Act",
+      "attribute": "entered force",
+      "value": "1 August 2024",
+      "unit": null,
+      "as_of": null,
+      "kind": "number",
+      "confidence": 0.756,
+      "best_source_score": 0.945,
+      "has_primary": true,
+      "status": "single_source"
+    },
+    "k5": {
+      "id": "k5",
+      "subq_id": "s1",
+      "claim_ids": [
+        "c7"
+      ],
+      "doc_ids": [
+        "d3"
+      ],
+      "origin_ids": [
+        "o-d3"
+      ],
+      "facet_ids": [
+        "s1f1"
+      ],
+      "statement": "The EU AI Act rules for high-risk AI systems apply from 2 August 2026.",
+      "entity": "The EU AI Act",
+      "attribute": "rules high risk systems apply",
+      "value": "2 August 2026",
+      "unit": null,
+      "as_of": null,
+      "kind": "number",
+      "confidence": 0.756,
+      "best_source_score": 0.945,
+      "has_primary": true,
+      "status": "contested"
+    },
+    "k6": {
+      "id": "k6",
+      "subq_id": "s1",
+      "claim_ids": [
+        "c8"
+      ],
+      "doc_ids": [
+        "d3"
+      ],
+      "origin_ids": [
+        "o-d3"
+      ],
+      "facet_ids": [
+        "s1f1"
+      ],
+      "statement": "The Commission publishes guidelines to support the application of the AI Act.",
+      "entity": "The Commission",
+      "attribute": null,
+      "value": null,
+      "unit": null,
+      "as_of": null,
+      "kind": "fact",
+      "confidence": 0.756,
+      "best_source_score": 0.945,
+      "has_primary": true,
+      "status": "single_source"
+    }
+  },
+  "contradictions": [
+    {
+      "id": "x1",
+      "cluster_ids": [
+        "k3",
+        "k5"
+      ],
+      "subq_id": "s1",
+      "kind": "true_conflict",
+      "summary": "The EU AI Act rules for high-risk AI systems apply from 2 August 2027 under a proposed delay, according to industry groups. / The EU AI Act rules for high-risk AI systems apply from 2 August 2026.",
+      "rationale": "simulated",
+      "preferred_cluster_id": null,
+      "resolved": false,
+      "followup_attempted": true,
+      "iteration": 1
+    }
+  ],
+  "iteration": 2,
+  "stop_reason": "sufficient",
+  "stop_detail": "all 1 required sub-questions are answered",
+  "skills": [],
+  "report": {
+    "title": "Research report",
+    "language": "en",
+    "sections": [
+      {
+        "key": "summary",
+        "title": "Summary",
+        "sentences": [
+          {
+            "text": "The EU AI Act obligations for general-purpose AI models apply from 2 August 2025.",
+            "kind": "fact",
+            "cluster_ids": [
+              "k1"
+            ],
+            "finding_refs": [],
+            "labels": []
+          },
+          {
+            "text": "The AI Act entered into force on 1 August 2024.",
+            "kind": "fact",
+            "cluster_ids": [
+              "k4"
+            ],
+            "finding_refs": [],
+            "labels": [
+              "single_source"
+            ]
+          }
+        ]
+      },
+      {
+        "key": "key_findings",
+        "title": "Key Findings",
+        "sentences": [
+          {
+            "text": "The EU AI Act obligations for general-purpose AI models apply from 2 August 2025.",
+            "kind": "fact",
+            "cluster_ids": [
+              "k1"
+            ],
+            "finding_refs": [],
+            "labels": []
+          },
+          {
+            "text": "The AI Act entered into force on 1 August 2024.",
+            "kind": "fact",
+            "cluster_ids": [
+              "k4"
+            ],
+            "finding_refs": [],
+            "labels": [
+              "single_source"
+            ]
+          },
+          {
+            "text": "The Commission publishes guidelines to support the application of the AI Act.",
+            "kind": "fact",
+            "cluster_ids": [
+              "k6"
+            ],
+            "finding_refs": [],
+            "labels": [
+              "single_source"
+            ]
+          },
+          {
+            "text": "Many startups say the EU AI Act timeline is confusing.",
+            "kind": "fact",
+            "cluster_ids": [
+              "k2"
+            ],
+            "finding_refs": [],
+            "labels": [
+              "single_source"
+            ]
+          }
+        ]
+      },
+      {
+        "key": "conflicting_or_uncertain",
+        "title": "Conflicting / Uncertain Information",
+        "sentences": [
+          {
+            "text": "The EU AI Act rules for high-risk AI systems apply from 2 August 2026.",
+            "kind": "fact",
+            "cluster_ids": [
+              "k5"
+            ],
+            "finding_refs": [],
+            "labels": []
+          },
+          {
+            "text": "The EU AI Act rules for high-risk AI systems apply from 2 August 2027 under a proposed delay, according to industry groups.",
+            "kind": "fact",
+            "cluster_ids": [
+              "k3"
+            ],
+            "finding_refs": [],
+            "labels": []
+          }
+        ]
+      },
+      {
+        "key": "conclusion",
+        "title": "Conclusion",
+        "sentences": [
+          {
+            "text": "Overall, this report lists what the sources state.",
+            "kind": "meta",
+            "cluster_ids": [],
+            "finding_refs": [],
+            "labels": []
+          }
+        ]
+      },
+      {
+        "key": "known_gaps",
+        "title": "Known Gaps",
+        "sentences": []
+      },
+      {
+        "key": "sources",
+        "title": "Sources",
+        "sentences": []
+      }
+    ],
+    "sources": [
+      {
+        "number": 1,
+        "doc_id": "d1",
+        "url": "https://techblog.example.com/ai-act-explained",
+        "title": "The AI Act explained",
+        "domain": "techblog.example.com",
+        "score": 0.475
+      },
+      {
+        "number": 2,
+        "doc_id": "d2",
+        "url": "https://reuters.com/technology/eu-ai-act-timeline",
+        "title": "EU sticks to AI Act timeline",
+        "domain": "reuters.com",
+        "score": 0.5975
+      },
+      {
+        "number": 3,
+        "doc_id": "d3",
+        "url": "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai",
+        "title": "AI Act | Shaping Europe's digital future",
+        "domain": "digital-strategy.ec.europa.eu",
+        "score": 0.945
+      }
+    ],
+    "fallback": false
+  },
+  "report_markdown": "",
+  "gate_result": {
+    "verdict": "pass",
+    "rounds": 0,
+    "removed_sentences": 0,
+    "banner": null,
+    "checks": {
+      "G1": {
+        "status": "pass",
+        "description": "Required sections are present.",
+        "found": [],
+        "remaining": []
+      },
+      "G2": {
+        "status": "pass",
+        "description": "Every factual sentence carries at least one citation.",
+        "found": [],
+        "remaining": []
+      },
+      "G3": {
+        "status": "pass",
+        "description": "Every citation id exists in the ledger and in the source list; no uncited source.",
+        "found": [],
+        "remaining": []
+      },
+      "G4": {
+        "status": "pass",
+        "description": "Every number, date, percentage and money amount in a sentence is supported.",
+        "found": [],
+        "remaining": []
+      },
+      "G5": {
+        "status": "pass",
+        "description": "Sentences citing a contested cluster sit in the conflicting section or are hedged.",
+        "found": [],
+        "remaining": []
+      },
+      "G6": {
+        "status": "pass",
+        "description": "Single-source findings are labelled as such.",
+        "found": [],
+        "remaining": []
+      },
+      "G7": {
+        "status": "pass",
+        "description": "Exhausted sub-questions are listed under known gaps.",
+        "found": [],
+        "remaining": []
+      },
+      "G8": {
+        "status": "pass",
+        "description": "Source URLs are valid http(s), canonical and unique.",
+        "found": [],
+        "remaining": []
+      },
+      "G9": {
+        "status": "pass",
+        "description": "No sensitive identifier or secret pattern in the output.",
+        "found": [],
+        "remaining": []
+      },
+      "G10": {
+        "status": "pass",
+        "description": "Report language matches the question language.",
+        "found": [],
+        "remaining": []
+      },
+      "G11": {
+        "status": "pass",
+        "description": "Every recommendation links to at least one finding.",
+        "found": [],
+        "remaining": []
+      }
+    },
+    "remediations": []
+  },
+  "verification": {
+    "checked": 8,
+    "unsupported": 0
+  },
+  "counters": {
+    "fetch_failures": 0,
+    "duplicate_urls": 12,
+    "claims_rejected_quote": 0,
+    "extraction_failures": 0,
+    "claims_rejected_injection": 0,
+    "sentences_dropped_by_verifier": 0
+  },
+  "budget": {
+    "iteration": 2,
+    "searches": 5,
+    "searches_left": 40,
+    "llm_calls": 14,
+    "tokens_in": 7924,
+    "tokens_out": 1869,
+    "cost_usd": 0.0,
+    "elapsed_seconds": 0.09
+  },
+  "started_at": "2026-09-16T10:34:26.172972Z",
+  "pending_hits": [],
+  "round_snapshot": {
+    "s1": [
+      6,
+      3
+    ]
+  },
+  "route": {
+    "stop": true,
+    "reason": "sufficient",
+    "rule": "success",
+    "detail": "all 1 required sub-questions are answered"
+  },
+  "resynthesized": false,
+  "skill_domains": {}
+}
