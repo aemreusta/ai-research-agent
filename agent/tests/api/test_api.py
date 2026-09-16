@@ -11,7 +11,7 @@ from typing import Any
 import httpx
 import pytest
 from cryptography.fernet import Fernet
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from research_agent.api.app import create_api_app
@@ -394,3 +394,141 @@ async def _read_sse(
             received += 1
             if received >= expect:
                 return
+
+
+# --- insights ------------------------------------------------------------------------------
+
+
+async def test_costs_aggregate_llm_and_search_calls(
+    client: httpx.AsyncClient, db_session: AsyncSession
+) -> None:
+    from research_agent.db.models import LlmCall, Run, SearchCall
+
+    created = (await client.post("/api/runs", json={"question": "Market size?"})).json()
+    run_id = uuid.UUID(created["run_id"])
+    db_session.add_all(
+        [
+            LlmCall(
+                run_id=run_id,
+                span_id="s1",
+                node="plan",
+                provider="gemini",
+                model="gemini-3.8-flash",
+                tier="reasoning",
+                tokens_in=100,
+                tokens_out=50,
+                cost_usd=0.002,
+                latency_ms=900,
+                status="ok",
+            ),
+            LlmCall(
+                run_id=run_id,
+                span_id="s2",
+                node="extract_claims",
+                provider="gemini",
+                model="gemini-3.1-flash-lite",
+                tier="fast",
+                tokens_in=1000,
+                tokens_out=200,
+                cost_usd=0.0006,
+                latency_ms=400,
+                status="ok",
+            ),
+            SearchCall(
+                run_id=run_id,
+                span_id="s3",
+                node="search",
+                provider="tavily",
+                query="q",
+                status="ok",
+                result_count=5,
+                latency_ms=300,
+                cache_hit=True,
+            ),
+            SearchCall(
+                run_id=run_id,
+                span_id="s4",
+                node="search",
+                provider="tavily",
+                query="q2",
+                status="ok",
+                result_count=5,
+                latency_ms=300,
+                cache_hit=False,
+            ),
+        ]
+    )
+    await db_session.execute(update(Run).where(Run.id == run_id).values(cost_usd=0.0026))
+    await db_session.commit()
+
+    body = (await client.get("/api/costs")).json()
+    assert body["totals"]["llm_calls"] == 2
+    assert body["totals"]["search_cache_hit_rate"] == 0.5
+    assert body["totals"]["cost_usd"] == pytest.approx(0.0026)
+    models = {row["model"]: row for row in body["by_model"]}
+    assert models["gemini-3.8-flash"]["latency_p50_ms"] == 900
+    assert {row["node"] for row in body["by_node"]} == {"plan", "extract_claims"}
+
+
+async def test_prompts_list_every_signature_with_its_source(
+    client: httpx.AsyncClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.delenv("LANGFUSE_PUBLIC_KEY", raising=False)
+    body = (await client.get("/api/prompts")).json()
+    assert body["langfuse"]["configured"] is False
+    ids = {item["id"] for item in body["prompts"]}
+    assert {"plan", "synthesize", "verify_citations"} <= ids
+    assert all(
+        item["active"]["source"] == "yaml" and item["compatible"] for item in body["prompts"]
+    )
+
+
+async def test_skills_are_listed(client: httpx.AsyncClient) -> None:
+    names = {s["name"] for s in (await client.get("/api/skills")).json()["skills"]}
+    assert "regulatory-research-tr" in names
+
+
+async def test_a_run_ledger_comes_from_its_state_artifact(
+    client: httpx.AsyncClient, db_session: AsyncSession
+) -> None:
+    created = (await client.post("/api/runs", json={"question": "Market size?"})).json()
+    run_id = uuid.UUID(created["run_id"])
+    assert (await client.get(f"/api/runs/{run_id}/ledger")).status_code == 404
+    state = {
+        "question": "Market size?",
+        "documents": {
+            "d1": {
+                "id": "d1",
+                "url": "https://x",
+                "domain": "x",
+                "content": "SECRET FULL TEXT",
+                "score": {"total": 0.5},
+            }
+        },
+        "claims": {},
+        "clusters": {"k1": {"id": "k1", "statement": "s"}},
+        "plan": [],
+    }
+    from research_agent.db.models import RunArtifact
+
+    db_session.add(
+        RunArtifact(
+            run_id=run_id,
+            kind="state",
+            content_type="application/json",
+            content=json.dumps(state),
+            size_bytes=10,
+        )
+    )
+    await db_session.commit()
+    body = (await client.get(f"/api/runs/{run_id}/ledger")).json()
+    assert body["clusters"][0]["id"] == "k1"
+    assert "content" not in body["documents"][0], "page text is not shipped to the browser"
+
+
+async def test_ui_assets_are_revalidated(client: httpx.AsyncClient) -> None:
+    """A stale cached module after an upgrade breaks the whole UI."""
+    for path in ("/", "/static/app.js", "/static/views/run.js"):
+        response = await client.get(path)
+        assert response.status_code == 200
+        assert response.headers["cache-control"] == "no-cache"

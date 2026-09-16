@@ -60,6 +60,7 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 | D38 | Kurulum sürtünmesi | Reviewer'ın tek adımı provider key'leri olmalı: `APP_SECRET_KEY` boşsa `migrate` üretir (paylaşılan volume), Langfuse init değerleri `.env.example`'da lokal-dev varsayılanlarıyla dolu, compose `.env` yoksa da kalkar. Key'ler UI'dan da girilebildiği için `.env` düzenlemek bile opsiyonel | ✅ |
 | D39 | Eşzamanlı yazım | Agent ve watchdog aynı `runs` satırına yazıyor → **her durum geçişi compare-and-set** (Python: `WHERE status = kaynak`; Go: ek olarak gözlenen `heartbeat_at`). Kaybeden taraf sessizce üzerine yazmıyor, `IllegalTransitionError` / `ErrLostRace` alıyor. Requeue backoff'u için `runs.available_at` (migration `0002`); agent'a hiç ulaşmamış claim denemeyi geri veriyor | ✅ |
 | D40 | Model seçimi (2026-09-16 doğrulandı) | reasoning: `gemini-3.8-flash` / `gpt-5.6-terra` / `qwen3:14b` · fast: `gemini-3.1-flash-lite` / `gpt-5.6-luna` / `qwen3:8b` · embedding: `gemini-embedding-001` (metin başına vektör + `SEMANTIC_SIMILARITY`; `-2` girdileri tek vektörde birleştiriyor) / `text-embedding-3-small`. Fiyatlar `models.yaml`'da, Gemini 3.8 Flash tanıtım fiyatı 2026 sonuna kadar. Tavily `basic` derinlik (1 kredi) + raw content: 45 aramalık bütçede 45 vs 90 kredi | ✅ |
+| D41 | UI teslimi | Build'siz ES modülleri + `Cache-Control: no-cache` (ETag ile yeniden doğrulama): sezgisel önbellek, güncellemeden sonra eski modülü sunup UI'ı kırıyordu (Playwright doğrulamasında yakalandı). `research run --simulate --persist` çevrimdışı, sıfır fiyatlı bir run'ı veritabanına yazar (kuyruğa girmez, `agent_id=cli`), UI'da görülebilir | ✅ |
 | D35 | Prompt injection | Web içeriği her katmanda untrusted data. Yapısal savunma: enjekte talimat claim'e dönüşemez (verbatim quote doğrulaması), uydurma sayı G4'ü geçemez, Gate LLM içermez. README'de Design Question 6 ile birlikte anlatılır | ✅ |
 
 ---
@@ -135,15 +136,15 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 - [~] Worker'a bağlandı (`AGENT_RUNNER=graph` varsayılan): compose içinde anahtarsız run `LLM_AUTH` ile anlaşılır mesajla bitiyor, prompt'lar Langfuse'a seed ediliyor. Kalan: gerçek anahtarlarla uçtan uca (kullanıcının adımı)
 
 ## Faz 5 — API & UI · Paz
-- [ ] SSE `/api/runs/{id}/events` (backfill + `Last-Event-ID` + `LISTEN`)
-- [ ] `/api/config/schema`, `/api/presets`, `/api/keys/validate`, `/cancel`, `/export`
-- [ ] UI: Ayarlar/API key ekranı (Test butonları)
-- [ ] UI: Yeni araştırma + otomatik parametre formu + preset
-- [ ] UI: Canlı run görünümü (iterasyon bazlı zaman çizelgesi, rationale'lar, skorlar, kodlu hatalar, Gate checklist, rapor)
-- [ ] UI: Geçmiş listesi (`#/runs`)
-- [ ] UI: Maliyet panosu (`#/costs`) — run başına + toplam, model/provider kırılımı, token, latency, cache hit (D33)
-- [ ] UI: **Prompts & Skills** özet sayfası — aktif versiyon/label, kaynak (Langfuse/YAML), şema uyumu, "Langfuse'ta düzenle" linki (düzenleme/diff/terfi/playground Langfuse admin'de)
-- [ ] API: `GET /api/prompts`, `GET /api/skills`
+- [x] SSE `/api/runs/{id}/events` (backfill + `Last-Event-ID` + `LISTEN`)
+- [x] `/api/config/schema`, `/api/presets`, `/api/keys/validate`, `/cancel`, `/export`, `/api/costs`, `/api/runs/{id}/ledger` (sayfa metni tarayıcıya gönderilmez)
+- [x] UI `#/settings`: sağlayıcı başına alan + Test + durum rozeti, `.env` varsayılanı rozeti, key politikası açıklaması; üst barda "keys ready/missing" rozeti
+- [x] UI `#/new`: soru, 4 örnek soru, key eksikse uyarı, şemadan otomatik gruplu form (sınırlar, kapalı kapılar için boş=disabled), preset seç/kaydet, maskeleme bildirimi
+- [x] UI `#/runs/:id`: canlı sayaçlar, cancel, export, Langfuse linki; sekmeler: Rapor (güvenli markdown, tıklanabilir atıflar, kırmızı banner) · Zaman çizelgesi (SSE, tur gruplaması, rationale, kodlu hatalar, dispatcher ayrı renk, filtreler) · Gate checklist · Plan & sorgular · Kaynaklar (skor bileşenleri, origin kopyaları) · Bulgular (çelişkiler + claim/alıntılar)
+- [x] UI `#/runs` (aktif run varken otomatik yenilenir)
+- [x] UI `#/costs` — toplamlar, model bazında p50/p95 + hata + pay, node bazında, arama sağlayıcıları + cache, run bazında (D33)
+- [x] UI `#/prompts` — aktif sürüm + kaynak (Langfuse/YAML) + içerik hash'i, şema uyumu (reddedilen Langfuse sürümü görünür), girdiler, "Edit in Langfuse"; skill'ler (rehber, eklenen domain'ler, sorgu kalıpları)
+- [x] API: `GET /api/prompts`, `GET /api/skills`
 
 ## Faz 6 — Güvenilirlik & observability · Paz
 - [ ] Hata matrisi uçtan uca (§13.2) — her kod için tetiklenebilir senaryo

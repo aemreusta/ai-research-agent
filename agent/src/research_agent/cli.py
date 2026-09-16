@@ -108,14 +108,15 @@ async def _run(args: argparse.Namespace) -> int:
         marker = {"warn": "! ", "error": "x "}.get(event["level"], "  ")
         print(f"{marker}{line}", flush=True)
 
+    if args.persist:
+        return await _run_persisted(args, effective, overrides, echo)
+
     run_id = uuid.uuid4()
     events = MemoryEventSink(run_id, echo=echo)
     if args.simulate:
-        from research_agent.agent.simulated import simulated_llm, simulated_search
+        from research_agent.agent.simulated import simulated_toolkit
 
-        toolkit = research.Toolkit(
-            llm={"gemini": simulated_llm()}, search={"tavily": simulated_search()}
-        )
+        toolkit = simulated_toolkit()
     else:
         toolkit = await research.default_toolkit(ProviderKeys.resolve())
     try:
@@ -161,6 +162,112 @@ async def _run(args: argparse.Namespace) -> int:
         f"cost=${deps.meter.cost_usd:.4f} -> {out}/",
         file=sys.stderr,
     )
+    return 0
+
+
+async def _run_persisted(
+    args: argparse.Namespace, effective: Any, overrides: dict[str, Any], echo: Any
+) -> int:
+    """Same run, recorded in the database so it shows up in the UI (timeline, costs, ledger).
+
+    The dispatcher's watchdog would requeue a run without a heartbeat, so the CLI beats too.
+    """
+    import asyncio
+
+    from langgraph.checkpoint.memory import InMemorySaver
+
+    from research_agent.agent import research
+    from research_agent.agent.runtime import DbCache, DbCallRecorder
+    from research_agent.contracts import RunStatus
+    from research_agent.db import session as db
+    from research_agent.db.models import RunArtifact
+    from research_agent.db.repository import RunRepository
+    from research_agent.keys import ProviderKeys
+    from research_agent.observability.events import EventWriter
+    from research_agent.pii.masking import RegexMasker
+
+    sessionmaker = db.session_factory()
+    masked = RegexMasker().mask(args.question)
+    async with sessionmaker() as session:
+        run = await RunRepository(session).create_local(
+            question_masked=masked.text,
+            config_snapshot=effective.snapshot,
+            config_hash=effective.config_hash,
+            overrides=overrides,
+        )
+    run_id = run.id
+    events = EventWriter(sessionmaker, run_id=run_id, node="agent")
+
+    async def heartbeat() -> None:
+        while True:
+            await asyncio.sleep(5)
+            async with sessionmaker() as session:
+                await RunRepository(session).heartbeat(run_id)
+
+    beating = asyncio.create_task(heartbeat())
+    if args.simulate:
+        from research_agent.agent.simulated import simulated_toolkit
+
+        toolkit = simulated_toolkit()
+    else:
+        toolkit = await research.default_toolkit(ProviderKeys.resolve())
+    try:
+        deps = await research.build_deps(
+            run_id=run_id,
+            settings=effective.settings,
+            toolkit=toolkit,
+            events=events,
+            recorder=DbCallRecorder(sessionmaker),
+            cache=DbCache(sessionmaker),
+        )
+
+        async def progress(counters: dict[str, Any]) -> None:
+            async with sessionmaker() as session:
+                await RunRepository(session).update_counters(run_id, **counters)
+
+        deps.report_progress = progress
+        state = await research.execute(
+            deps, run_id=run_id, question=masked.text, checkpointer=InMemorySaver()
+        )
+        metadata = research.metadata_for(deps, effective.settings)
+        async with sessionmaker() as session:
+            repository = RunRepository(session)
+            for kind, (content_type, content) in research.artifacts_for(state, metadata).items():
+                session.add(
+                    RunArtifact(
+                        run_id=run_id,
+                        kind=kind,
+                        content_type=content_type,
+                        content=content,
+                        size_bytes=len(content.encode()),
+                    )
+                )
+            await repository.update_metadata(
+                run_id,
+                prompt_versions=metadata["prompt_versions"],
+                models_used=metadata["models_used"],
+                skills_used=state.skills,
+            )
+            await repository.finish(
+                run_id,
+                status=research.outcome_status(state),
+                stop_reason=state.stop_reason.value if state.stop_reason else None,
+                gate_status=(state.gate_result or {}).get("verdict"),
+            )
+    except BaseException as exc:
+        async with sessionmaker() as session:
+            await RunRepository(session).finish(
+                run_id,
+                status=RunStatus.FAILED,
+                error_code="UNEXPECTED_EXCEPTION",
+                error_message=f"{type(exc).__name__}: {exc}"[:500],
+            )
+        raise
+    finally:
+        beating.cancel()
+        await toolkit.aclose()
+        await db.dispose()
+    print(f"\nrecorded as run {run_id}", file=sys.stderr)
     return 0
 
 
@@ -212,6 +319,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="offline: rule-based model and a built-in corpus, no keys needed",
     )
     run.add_argument("--quiet", action="store_true", help="do not print the timeline")
+    run.add_argument(
+        "--persist",
+        action="store_true",
+        help="record the run in the database (DATABASE_URL) so it appears in the UI",
+    )
     run.set_defaults(func=_cmd_run)
 
     serve = sub.add_parser("serve", help="run a service: the browser-facing api or an agent")

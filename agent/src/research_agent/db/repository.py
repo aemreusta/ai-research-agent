@@ -156,6 +156,38 @@ class RunRepository:
         await self._session.commit()
         return run
 
+    async def create_local(
+        self,
+        *,
+        question_masked: str,
+        config_snapshot: dict[str, Any],
+        config_hash: str,
+        overrides: dict[str, Any] | None = None,
+        key_sources: dict[str, str] | None = None,
+    ) -> Run:
+        """A run executed in-process by the CLI: recorded as running, never queued.
+
+        It skips the queue on purpose - otherwise the dispatcher would hand the same question to
+        an agent as well. It still ends through `finish()`, so the state machine applies.
+        """
+        now = datetime.now(UTC)
+        run = Run(
+            question_masked=question_masked,
+            config_snapshot=config_snapshot,
+            config_hash=config_hash,
+            overrides=overrides or {},
+            key_sources=key_sources or {},
+            status=RunStatus.RUNNING.value,
+            agent_id="cli",
+            attempts=1,
+            started_at=now,
+            heartbeat_at=now,
+            dispatched_at=now,
+        )
+        self._session.add(run)
+        await self._session.commit()
+        return run
+
     async def claim(self, *, dispatcher_id: str) -> Run | None:
         """Take the oldest queued run, or return None when the queue is empty."""
         run_id = (await self._session.execute(_CLAIM)).scalar_one_or_none()

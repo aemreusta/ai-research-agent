@@ -122,14 +122,13 @@ def render_markdown(state: ResearchState, *, metadata: dict[str, Any]) -> str:
     gate = state.gate_result or {}
     lines = [f"# {report.title}", ""]
     if gate.get("banner"):
-        lines += [f"> **{gate['banner']}**", ""]
         failed = [
             item["message"]
             for check in gate.get("checks", {}).values()
             for item in check.get("remaining", [])
             if item.get("severity") == "error"
         ]
-        lines += [f"> - {message}" for message in failed[:10]] + [""]
+        lines += [f"> **{gate['banner']}**"] + [f"> - {m}" for m in failed[:10]] + [""]
 
     for section in report.sections:
         if section.key is SectionKey.SOURCES:
@@ -137,6 +136,9 @@ def render_markdown(state: ResearchState, *, metadata: dict[str, Any]) -> str:
         if section.key is SectionKey.KNOWN_GAPS and not section.sentences:
             continue
         lines += [f"## {section.title}", ""]
+        if not section.sentences:
+            lines += [f"_{words['none_found']}_", ""]
+            continue
         if section.key in (SectionKey.KEY_FINDINGS, SectionKey.CONFLICTING, SectionKey.KNOWN_GAPS):
             for sentence in section.sentences:
                 lines.append(f"- {_decorate(sentence, language, numbers)}")

@@ -20,6 +20,7 @@ from research_agent.agent.clustering import normalise_entity
 from research_agent.agent.text import detect_language, overlap_ratio, tokens
 from research_agent.gate.numeric import extract_quantities
 from research_agent.providers.llm.base import Message
+from research_agent.providers.llm.catalog import ModelCatalog, Tier
 from research_agent.providers.llm.fake import FakeLLMProvider
 from research_agent.providers.search.fake import CorpusPage, FakeSearchProvider
 
@@ -282,8 +283,20 @@ _HANDLERS = {
 }
 
 
-def simulated_llm(name: str = "gemini") -> FakeLLMProvider:
+def simulated_llm(name: str = "simulated") -> FakeLLMProvider:
     return FakeLLMProvider(name, default=respond)
+
+
+def simulated_catalog() -> ModelCatalog:
+    """A one-provider chain with zero prices, so an offline run never shows a fake cost."""
+    return ModelCatalog(
+        version=1,
+        chain=("simulated",),
+        tiers={tier: {"simulated": f"simulated-{tier.value}"} for tier in Tier},
+        prices_usd_per_million_tokens={
+            f"simulated-{tier.value}": {"input": 0.0, "output": 0.0} for tier in Tier
+        },
+    )
 
 
 DEMO_CORPUS = [
@@ -328,3 +341,14 @@ def simulated_search(
 
 def entity_key(value: str | None) -> str | None:
     return normalise_entity(value)
+
+
+def simulated_toolkit() -> Any:
+    """Everything `research run --simulate` needs: model, search and a zero-price catalog."""
+    from research_agent.agent.research import Toolkit
+
+    return Toolkit(
+        llm={"simulated": simulated_llm()},
+        search={"tavily": simulated_search()},
+        catalog=simulated_catalog(),
+    )

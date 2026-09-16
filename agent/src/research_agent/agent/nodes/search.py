@@ -132,6 +132,7 @@ def _fallback_queries(target: Target, state: ResearchState) -> list[str]:
 async def generate_queries(state: ResearchState, deps: AgentDeps, events: EventSink) -> None:
     state.iteration += 1
     deps.meter.iteration = state.iteration
+    events.iteration = state.iteration  # this node opens the round it belongs to
     state.round_snapshot = {k: list(v) for k, v in progress_snapshot(state).items()}
     state.pending_hits = []
     await events.info(

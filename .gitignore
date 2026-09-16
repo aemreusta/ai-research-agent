@@ -315,3 +315,4 @@ dispatcher/bin/
 .uv-cache/
 
 # End of https://www.toptal.com/developers/gitignore/api/python,go,macos,data,windows,linux
+.playwright-mcp/

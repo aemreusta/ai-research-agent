@@ -188,10 +188,17 @@ def fallback_report(state: ResearchState) -> Report:
         _label(sentence, state, key)
         return sentence
 
-    framing = {
-        "en": "The findings below are listed directly from the evidence ledger.",
-        "tr": "Aşağıdaki bulgular doğrudan kanıt defterinden listelenmiştir.",
-    }
+    framing = (
+        {
+            "en": "The findings above are listed directly from the evidence ledger.",
+            "tr": "Yukarıdaki bulgular doğrudan kanıt defterinden listelenmiştir.",
+        }
+        if clusters
+        else {
+            "en": "Not enough evidence was found; no answer is given rather than an invented one.",
+            "tr": "Yeterli kanıt bulunamadı; uydurma bir cevap yerine cevap verilmedi.",
+        }
+    )
     empty = {"en": "No supported finding was found.", "tr": "Desteklenen bir bulgu bulunamadı."}
     summary = [fact(c.id, c.statement, SectionKey.SUMMARY) for c in settled[:2]] or [
         ReportSentence(text=empty.get(language, empty["en"]), kind=SentenceKind.META)

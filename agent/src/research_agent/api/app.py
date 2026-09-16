@@ -6,6 +6,7 @@ import os
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from pathlib import Path
+from typing import Any
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
@@ -15,7 +16,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from research_agent import __version__
 from research_agent.api.deps import ApiState
-from research_agent.api.routes import config, health, keys, presets, runs
+from research_agent.api.routes import config, health, insights, keys, presets, runs
 from research_agent.errors import AgentException
 from research_agent.keys import SecretBox
 from research_agent.observability.redaction import redact
@@ -86,10 +87,19 @@ def create_api_app(
             },
         )
 
-    for module in (health, runs, config, presets, keys):
+    for module in (health, runs, config, presets, keys, insights):
         app.include_router(module.router)
 
     app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
+    @app.middleware("http")
+    async def revalidate_static(request: Request, call_next: Any) -> Any:
+        # Without an explicit policy browsers cache ES modules heuristically and keep serving a
+        # stale view after an upgrade. `no-cache` still uses the ETag, so reloads stay cheap.
+        response = await call_next(request)
+        if request.url.path == "/" or request.url.path.startswith("/static/"):
+            response.headers["Cache-Control"] = "no-cache"
+        return response
 
     @app.get("/", include_in_schema=False)
     async def index() -> FileResponse:

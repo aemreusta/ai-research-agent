@@ -50,7 +50,7 @@ from research_agent.prompting.skills import load_skills
 from research_agent.providers.embeddings import Embedder
 from research_agent.providers.fetch import ContentFetcher
 from research_agent.providers.llm.base import LLMProvider
-from research_agent.providers.llm.catalog import catalog
+from research_agent.providers.llm.catalog import ModelCatalog, catalog
 from research_agent.providers.llm.gateway import LLMGateway, Tracer
 from research_agent.providers.llm.gemini import GeminiProvider
 from research_agent.providers.llm.openai_compat import OpenAICompatibleProvider
@@ -121,6 +121,7 @@ class Toolkit:
     http: httpx.AsyncClient | None = None
     tracer: Tracer | None = None
     remote_prompts: RemotePrompts | None = None
+    catalog: ModelCatalog | None = None
     extras: dict[str, Any] = field(default_factory=dict)
 
     async def aclose(self) -> None:
@@ -154,7 +155,7 @@ async def build_deps(
     is_cancelled: Callable[[], Awaitable[bool]] | None = None,
     report_progress: Callable[[dict[str, Any]], Awaitable[None]] | None = None,
 ) -> AgentDeps:
-    models = catalog()
+    models = toolkit.catalog or catalog()
     meter = BudgetMeter(settings.budget)
     llm = LLMGateway(
         providers=toolkit.llm,

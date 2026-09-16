@@ -4,10 +4,32 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AI Research Agent</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='14' cy='14' r='9' fill='none' stroke='%232563eb' stroke-width='4'/><path d='M21 21l7 7' stroke='%232563eb' stroke-width='4' stroke-linecap='round'/></svg>">
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-  <div id="app">Loading…</div>
+  <header class="topbar">
+    <a class="brand" href="#/new">
+      <span class="brand-mark" aria-hidden="true">◎</span>
+      <span>Research Agent</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="#/new" data-route="new">New research</a>
+      <a href="#/runs" data-route="runs">Runs</a>
+      <a href="#/costs" data-route="costs">Costs</a>
+      <a href="#/prompts" data-route="prompts">Prompts &amp; Skills</a>
+      <a href="#/settings" data-route="settings">Settings</a>
+    </nav>
+    <div class="topbar-right">
+      <span id="key-badge" class="badge muted" title="Provider keys">keys: …</span>
+      <a id="langfuse-link" class="button ghost small hidden" target="_blank" rel="noopener">Langfuse ↗</a>
+    </div>
+  </header>
+  <main id="view" class="container" aria-live="polite">Loading…</main>
+  <footer class="footer">
+    <span id="version"></span>
+    <span>Control flow in code, judgement in the model, a deterministic gate before you.</span>
+  </footer>
   <script type="module" src="/static/app.js"></script>
 </body>
 </html>

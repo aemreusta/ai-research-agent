@@ -69,8 +69,9 @@ async def run(
     settings = load_settings(overrides=overrides or {}).settings
     run_id = run_id or uuid.uuid4()
     events = MemoryEventSink(run_id)
+    model = llm or simulated_llm("gemini")
     toolkit = Toolkit(
-        llm={(llm or simulated_llm()).name: llm or simulated_llm()},
+        llm={model.name: model},
         search={p.name: p for p in (search if search is not None else [simulated_search()])},
         fetcher=_offline_fetcher(settings),
     )
@@ -373,7 +374,7 @@ async def test_an_injected_instruction_cannot_become_a_claim() -> None:
 
 
 async def test_pii_in_the_question_is_masked_before_any_provider_sees_it() -> None:
-    llm = simulated_llm()
+    llm = simulated_llm("gemini")
     result = await run("TCKN 10000000146 olan müvekkil için EU AI Act takvimi nedir?", llm=llm)
     assert result.state is not None
     assert "10000000146" not in result.state.question
@@ -433,3 +434,9 @@ async def test_preflight_explains_missing_keys() -> None:
     problem = preflight(deps)
     assert problem is not None and problem.code is ErrorCode.LLM_AUTH
     assert "Settings" in (problem.outcome or "")
+
+
+async def test_round_events_carry_their_round_number() -> None:
+    result = await run()
+    generated = [e for e in result.events.events if e["event_type"] == "queries_generated"]
+    assert generated and all(e["iteration"] for e in generated)
