@@ -16,6 +16,7 @@ import httpx
 
 from research_agent.keys import Provider
 from research_agent.observability.redaction import redact_text
+from research_agent.providers.llm.base import is_auth_failure, short_message
 
 _TIMEOUT = httpx.Timeout(8.0, connect=4.0)
 
@@ -71,12 +72,18 @@ def _explain(provider: Provider, response: httpx.Response) -> ProbeResult:
             models = [model.get("name") for model in response.json().get("models", [])]
             detail = f"reachable - models: {', '.join(models) or 'none pulled yet'}"
         return ProbeResult(provider, True, detail)
-    if code in (401, 403):
-        return ProbeResult(provider, False, f"rejected ({code}): the key is invalid or revoked")
+    if is_auth_failure(code, response.text):
+        return ProbeResult(
+            provider,
+            False,
+            f"rejected ({code}): {short_message(response.text) or 'the key is invalid or revoked'}",
+        )
     if code == 429:
         # The key authenticated; the account is simply out of quota right now.
         return ProbeResult(provider, True, "key accepted, but rate limited (429) at the moment")
-    return ProbeResult(provider, False, f"unexpected response ({code})")
+    return ProbeResult(
+        provider, False, f"unexpected response ({code}): {short_message(response.text)}"
+    )
 
 
 async def probe(
@@ -92,6 +99,10 @@ async def probe(
     except httpx.TimeoutException:
         return ProbeResult(provider, False, "timed out")
     except httpx.HTTPError as exc:
+        if provider is Provider.OLLAMA:
+            return ProbeResult(
+                provider, False, "not reachable - start it with the local-llm compose profile"
+            )
         return ProbeResult(provider, False, redact_text(f"unreachable: {type(exc).__name__}"))
     finally:
         if owned:

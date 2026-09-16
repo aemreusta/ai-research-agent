@@ -93,7 +93,7 @@ def short_message(body: str) -> str:
         data = json.loads(body)
         error = data.get("error", data) if isinstance(data, dict) else {}
         if isinstance(error, dict):
-            message = str(error.get("message") or error.get("detail") or error.get("code") or body)
+            message = str(error.get("message") or error.get("detail") or error.get("code") or "")
         elif isinstance(error, str):
             message = error
     message = re.sub(r"(?:sk|tvly|AIza|BSA)[-_A-Za-z0-9*]{4,}", "<key>", message)

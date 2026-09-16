@@ -78,3 +78,36 @@ async def test_ollama_lists_its_models() -> None:
         result = await probe(Provider.OLLAMA, "http://ollama:11434", client=client)
     assert result.ok
     assert "qwen3:8b" in result.detail
+
+
+async def test_gemini_and_brave_style_invalid_keys_are_reported_as_rejected() -> None:
+    """Real bodies: Gemini answers 400 API_KEY_INVALID, Brave 422 SUBSCRIPTION_TOKEN_INVALID."""
+    bodies = {
+        Provider.GEMINI: (
+            400,
+            {
+                "error": {
+                    "code": 400,
+                    "message": "API key not valid. Please pass a valid API key.",
+                    "details": [{"reason": "API_KEY_INVALID"}],
+                }
+            },
+        ),
+        Provider.BRAVE: (
+            422,
+            {
+                "type": "ErrorResponse",
+                "error": {
+                    "status": 422,
+                    "detail": "The provided API key is invalid.",
+                    "code": "SUBSCRIPTION_TOKEN_INVALID",
+                },
+            },
+        ),
+    }
+    for provider, (status, body) in bodies.items():
+        async with _client(status, body) as client:
+            result = await probe(provider, "whatever-key", client=client)
+        assert not result.ok
+        assert result.detail.startswith(f"rejected ({status})")
+        assert "invalid" in result.detail.lower() or "not valid" in result.detail.lower()
