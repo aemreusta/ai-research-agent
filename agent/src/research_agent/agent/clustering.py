@@ -17,6 +17,7 @@ import math
 import re
 from collections.abc import Mapping
 
+from research_agent.agent.dedup.urls import site_of
 from research_agent.agent.state import Claim, ClaimCluster, ClusterStatus, Document
 from research_agent.agent.text import fold, token_jaccard, tokens
 from research_agent.config.schema import DedupSettings
@@ -244,15 +245,39 @@ def _refresh(
     """Recompute support and confidence from the ledger."""
     members = [claims[cid] for cid in cluster.claim_ids if cid in claims]
     doc_ids = list(dict.fromkeys(claim.doc_id for claim in members))
-    # "According to X ..." makes X the origin, whoever republished it (§8). One origin text
-    # counts once, even when one of its sentences names the speaker and the next does not.
-    speaker: dict[str, str] = {}
+    # Independent = a different text AND a different publisher: copies of one text share an
+    # origin, and four pages of apilex.ai are one voice, not four confirmations.
+    parent: dict[str, str] = {}
+
+    def root(node: str) -> str:
+        while parent.get(node, node) != node:
+            node = parent[node]
+        return node
+
+    def join(left: str, right: str) -> None:
+        a, b = root(left), root(right)
+        if a != b:
+            parent[max(a, b)] = min(a, b)
+
     for claim in members:
-        if claim.attributed_to and claim.origin_id not in speaker:
-            speaker[claim.origin_id] = f"said:{normalise_entity(claim.attributed_to)}"
+        document = documents.get(claim.doc_id)
+        if document is not None and document.domain:
+            join(f"origin:{claim.origin_id}", f"site:{site_of(document.domain)}")
+        else:
+            root(f"origin:{claim.origin_id}")
+
+    # "According to X ..." makes X the origin, whoever republished it (§8). One group counts
+    # once, even when one of its sentences names the speaker and the next does not.
+    group_key: dict[str, str] = {}
+    for claim in sorted(members, key=lambda c: c.origin_id):
+        group = root(f"origin:{claim.origin_id}")
+        if claim.attributed_to:
+            group_key.setdefault(group, f"said:{normalise_entity(claim.attributed_to)}")
+    for claim in sorted(members, key=lambda c: c.origin_id):
+        group_key.setdefault(root(f"origin:{claim.origin_id}"), claim.origin_id)
 
     def origin_key(claim: Claim) -> str:
-        return speaker.get(claim.origin_id, claim.origin_id)
+        return group_key[root(f"origin:{claim.origin_id}")]
 
     origins = list(dict.fromkeys(origin_key(claim) for claim in members))
     cluster.doc_ids = doc_ids

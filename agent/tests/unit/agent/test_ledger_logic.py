@@ -22,6 +22,7 @@ from research_agent.agent.coverage import (
     localised_reason,
     update_progress,
 )
+from research_agent.agent.dedup import site_of
 from research_agent.agent.state import (
     Claim,
     ClaimCluster,
@@ -720,3 +721,40 @@ def test_exhausted_reasons_are_localised_for_turkish_reports() -> None:
     assert localised_reason(reason, "tr").startswith("2 turdur ilerleme yok")
     assert localised_reason("only repeated queries could be generated", "tr").startswith("yalnızca")
     assert localised_reason(None, "tr") == ""
+
+
+def test_pages_of_one_publisher_are_one_confirmation() -> None:
+    """Four apilex.ai pages and two dunya.com articles were counted as six confirmations."""
+    docs = {
+        "d1": _doc("d1", "o1").model_copy(update={"domain": "apilex.ai"}),
+        "d2": _doc("d2", "o2").model_copy(update={"domain": "apilex.ai"}),
+        "d3": _doc("d3", "o3").model_copy(update={"domain": "tr.linkedin.com"}),
+        "d4": _doc("d4", "o4").model_copy(update={"domain": "linkedin.com"}),
+        "d5": _doc("d5", "o5").model_copy(update={"domain": "dunya.com"}),
+    }
+    claims = [
+        _claim(f"c{i}", doc, "Apilex focuses on the French market", entity="Apilex")
+        for i, doc in enumerate(docs.values())
+    ]
+    clusters = cluster_claims(
+        {}, claims, vectors=None, documents=docs, settings=DedupSettings(), all_claims={}
+    )
+    cluster = next(iter(clusters.values()))
+    assert len(cluster.doc_ids) == 5
+    assert cluster.support == 3
+
+
+@pytest.mark.parametrize(
+    ("domain", "site"),
+    [
+        ("tr.linkedin.com", "linkedin.com"),
+        ("medya.barobirlik.org.tr", "barobirlik.org.tr"),
+        ("kvkk.gov.tr", "kvkk.gov.tr"),
+        ("verbis.kvkk.gov.tr", "kvkk.gov.tr"),
+        ("ai-act-service-desk.ec.europa.eu", "europa.eu"),
+        ("bbc.co.uk", "bbc.co.uk"),
+        ("apilex.ai", "apilex.ai"),
+    ],
+)
+def test_site_of(domain: str, site: str) -> None:
+    assert site_of(domain) == site

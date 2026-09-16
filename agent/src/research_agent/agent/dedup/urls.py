@@ -68,3 +68,19 @@ def domain_of(url: str) -> str:
     except ValueError:
         return ""
     return _MOBILE_HOST.sub("", host.lower().removeprefix("www."))
+
+
+# Second-level labels under which organisations register (barobirlik.org.tr, bbc.co.uk).
+_SECOND_LEVEL = frozenset(
+    {"com", "org", "net", "gov", "edu", "gen", "bel", "av", "co", "ac", "k12"}
+)
+
+
+def site_of(domain: str) -> str:
+    """The publisher behind a host: `tr.linkedin.com` -> `linkedin.com`,
+    `medya.barobirlik.org.tr` -> `barobirlik.org.tr`. A heuristic, not the public suffix list."""
+    labels = [label for label in domain.lower().split(".") if label]
+    if len(labels) <= 2:
+        return ".".join(labels)
+    keep = 3 if len(labels[-1]) == 2 and labels[-2] in _SECOND_LEVEL else 2
+    return ".".join(labels[-keep:])

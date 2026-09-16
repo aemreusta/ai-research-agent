@@ -8,12 +8,13 @@
 | L3 | claim embeddings (+ same entity) | one fact phrased differently (`agent.clustering`) |
 | L4 | normalised token Jaccard | the same query generated again |
 
-The rule that ties them together: corroboration counts independent *origins*, never URLs.
+The rule that ties them together: corroboration counts independent *origins*, never URLs - and
+pages of one publisher (`site_of`) are never independent of each other.
 """
 
 from research_agent.agent.dedup.minhash import OriginIndex, minhash_signature
 from research_agent.agent.dedup.queries import QueryDeduplicator, normalise_query
-from research_agent.agent.dedup.urls import canonicalize_url, domain_of
+from research_agent.agent.dedup.urls import canonicalize_url, domain_of, site_of
 
 __all__ = [
     "OriginIndex",
@@ -22,4 +23,5 @@ __all__ = [
     "domain_of",
     "minhash_signature",
     "normalise_query",
+    "site_of",
 ]
