@@ -55,6 +55,8 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 | D32 | Gate G4 kovaları | (1) çıplak olgusal sayı → claim'de normalize eşleşme yok ise `error`, cümle çıkar · (2) ledger'dan türetilmiş sayı (sayım/ordinal/toplam) → Gate **yeniden hesaplar** · (3) tolerans dahilindeki varyant (yuvarlama, birim/kur, tarih granülaritesi) → `warn` + "yaklaşık". Her ihlal `gate_result.json` + trace'e; rapor "N cümle çıkarıldı" satırı olmadan gitmez | ✅ |
 | D33 | Maliyet takibi | `llm_calls` + `runs` toplamı (birincil) **ve** Langfuse generation usage/cost. Fiyatlar `models.yaml`'da tek kaynak, Langfuse model pricing ile hizalı. UI `#/costs`: run başına + toplam maliyet, model/provider kırılımı, token, latency, cache hit oranı | ✅ |
 | D34 | Citation verification maliyeti | `verify_citations` batch'li: tek çağrıda N cümle + atıflı claim'ler, 2–3 batch `asyncio` ile paralel | ✅ |
+| D36 | DB sürücüsü | **psycopg 3 tek sürücü** (`postgresql+psycopg://`). Gerekçe: LangGraph Postgres checkpointer psycopg istiyor; alembic (sync) + SQLAlchemy (async) + `LISTEN/NOTIFY` aynı sürücüyle çalışınca tek bağlantı dizesi yetiyor. asyncpg (D8) yerine bu seçildi; `DATABASE_URL` hangi yazımla verilirse verilsin `db/session.py` normalize ediyor (testli) | ✅ |
+| D37 | Şema kapsamı | Tablolar: `runs` (kuyruk + sayaçlar + `event_seq`), `run_secrets`, `run_events`, `llm_calls`, `search_calls`, `run_artifacts`, `search_cache`, **`embedding_cache`** (D6), `presets`. **prompt/skill/eval tablosu yok** — versiyonlar Langfuse'ta (v0.6 §6). LangGraph checkpoint tablolarını kütüphane kendi açar | ✅ |
 | D35 | Prompt injection | Web içeriği her katmanda untrusted data. Yapısal savunma: enjekte talimat claim'e dönüşemez (verbatim quote doğrulaması), uydurma sayı G4'ü geçemez, Gate LLM içermez. README'de Design Question 6 ile birlikte anlatılır | ✅ |
 
 ---
@@ -90,11 +92,11 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 - [x] `config/loader.py` — YAML < env allowlist < run override; kilitli alan reddi, sınır doğrulaması, `config_hash` (kanonik JSON)
 - [ ] `config/prompts/*.yaml` (signature seed'leri — Faz 2)
 - [x] `.env.example` (sadece secret + altyapı)
-- [ ] alembic: `runs`, `run_secrets`, `run_events`, `llm_calls`, `search_calls`, `run_artifacts`, `search_cache`, `presets`, `prompt_versions`, `skills`, `skill_versions`, `eval_sets`, `eval_runs`
+- [x] `db/models.py` + alembic `0001`: `runs`, `run_secrets`, `run_events`, `llm_calls`, `search_calls`, `run_artifacts`, `search_cache`, `embedding_cache`, `presets` (D37). Model ↔ migration drift testi (`compare_metadata`) yeşil
 - [x] `errors.py` — `ErrorCode`, `ErrorCategory`, `AgentError` (code → decision → outcome), `AgentException`
 - [x] `observability/logging.py` — structlog JSON + contextvar korelasyon + redaction processor
 - [x] `observability/redaction.py` — provider key / bearer / DSN / IBAN / kart (Luhn) / TCKN (checksum) / e-posta / telefon / IP + hassas alan adları; pipeline'dan geçtiği testli
-- [ ] `observability/events.py` — `run_events` writer + `NOTIFY`
+- [x] `observability/events.py` — `run_events` writer (run satırındaki sayaçtan boşluksuz `seq`, kendi bağlantısında commit), `EventType` sözlüğü, `pg_notify` + `listen()` yardımcısı, redaction'dan geçen payload
 - [ ] **Go dispatcher:** `queue` (claim `SKIP LOCKED`, `LISTEN` + polling), `capacity` + agent seçimi, `agentclient` (execute/cancel/healthz), `watchdog` (heartbeat kaybı → requeue, deadline → cancel → failed), `events` (`run_events`'e `node=dispatcher`), `slog` JSON, `dispatcher.yaml`
 - [ ] **Python agent_server:** `POST /v1/runs/{id}/execute` (202), `/cancel`, `/healthz`, `/capacity`; heartbeat döngüsü; node sınırında cancel kontrolü
 - [ ] `api` iskeleti: `/healthz`, `/readyz`, `POST /api/runs`, `GET /api/runs/{id}`

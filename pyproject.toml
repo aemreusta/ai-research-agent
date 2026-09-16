@@ -64,3 +64,6 @@ strict = false
 testpaths = ["agent/tests"]
 asyncio_mode = "auto"
 addopts = "-ra --strict-markers"
+markers = [
+    "integration: needs a real PostgreSQL (TEST_DATABASE_URL); skipped otherwise",
+]
