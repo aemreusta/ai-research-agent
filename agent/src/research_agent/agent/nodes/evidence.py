@@ -8,6 +8,7 @@ from typing import Any
 
 from research_agent.agent.clustering import cluster_claims
 from research_agent.agent.contradictions import contradiction_candidates
+from research_agent.agent.dedup.syndication import merge_syndicated_origins
 from research_agent.agent.deps import AgentDeps
 from research_agent.agent.injection import looks_like_injection
 from research_agent.agent.quotes import verify_quote
@@ -262,6 +263,22 @@ async def cluster_and_corroborate(state: ResearchState, deps: AgentDeps, events:
     new_claims = [c for c in state.claims.values() if c.id not in clustered]
     if not new_claims:
         return
+    dedup = deps.settings.dedup
+    moved = merge_syndicated_origins(
+        state.documents,
+        state.claims,
+        min_shared_quotes=dedup.syndication_min_shared_quotes,
+        min_quote_words=dedup.syndication_min_quote_words,
+    )
+    if moved:
+        copies = sorted(d.domain for d in state.documents.values() if d.origin_id in moved.values())
+        await events.info(
+            EventType.NODE_FINISHED,
+            f"{len(moved)} source(s) republish text already seen; counted once "
+            f"({', '.join(dict.fromkeys(copies))}).",
+            label="Dedup",
+            data={"merged_origins": moved},
+        )
     representatives = [
         state.claims[c.claim_ids[0]]
         for c in state.clusters.values()
@@ -283,7 +300,7 @@ async def cluster_and_corroborate(state: ResearchState, deps: AgentDeps, events:
         new_claims,
         vectors=vectors,
         documents=state.documents,
-        settings=deps.settings.dedup,
+        settings=dedup,
         all_claims=state.claims,
     )
     corroborated = sum(1 for c in state.clusters.values() if c.support >= 2)

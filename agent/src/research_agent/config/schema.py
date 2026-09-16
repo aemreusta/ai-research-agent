@@ -156,6 +156,20 @@ class DedupSettings(_Section):
     query_similarity_threshold: Probability = tunable(
         0.9, group="Deduplication", description="L4 query repetition threshold."
     )
+    syndication_min_shared_quotes: int = tunable(
+        2,
+        group="Deduplication",
+        description="Verbatim quotes two pages must share to count as one origin.",
+        ge=1,
+        le=10,
+    )
+    syndication_min_quote_words: int = tunable(
+        12,
+        group="Deduplication",
+        description="Shortest quote (in words) that counts towards syndication.",
+        ge=5,
+        le=60,
+    )
 
 
 class ScoringWeights(_Section):

@@ -4,6 +4,7 @@
 |---|---|---|
 | L1 | URL canonicalisation + exact match | the same page twice |
 | L2 | normalised-text hash + MinHash (word 5-gram, Jaccard >= 0.8) | syndicated copies |
+| L2b | shared long verbatim quotes (`syndication`) | copies wrapped in different page chrome |
 | L3 | claim embeddings (+ same entity) | one fact phrased differently (`agent.clustering`) |
 | L4 | normalised token Jaccard | the same query generated again |
 

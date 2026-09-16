@@ -40,6 +40,10 @@ dedup:
   # L3 - claim clustering (cosine AND same normalised entity)
   claim_similarity_threshold: 0.86
   claim_lexical_fallback_threshold: 0.7
+  # L2b - pages that share several long verbatim quotes are one origin (a press release
+  # republished with a different header, menu and footer escapes the MinHash check)
+  syndication_min_shared_quotes: 2
+  syndication_min_quote_words: 12
   # L4 - query dedup
   query_similarity_threshold: 0.9
 
