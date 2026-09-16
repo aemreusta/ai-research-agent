@@ -86,7 +86,7 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 - [ ] `agent/Dockerfile` (Python, 3 entrypoint) + `dispatcher/Dockerfile` (Go multi-stage → distroless) + `docker-compose.yml` (postgres, migrate, api, dispatcher, agent, presidio×2 + `observability` profili: langfuse-web, langfuse-worker, clickhouse, redis, minio; postgres init'te ayrı `langfuse` DB; headless init env'leri; healthcheck'ler)
 - [x] `contracts/error_codes.yaml` (30 kod) + `contracts/run_states.yaml` (durum makinesi, `max_attempts`)
 - [x] `research_agent/contracts.py` — YAML → Pydantic; enum ↔ YAML eşitliği ve `dispatcher.yaml` ↔ `run_states.yaml` retry sayısı testli
-- [ ] `contracts/agent-api.openapi.yaml` (execute/cancel/healthz/capacity)
+- [x] `contracts/agent-api.openapi.yaml` (execute/cancel/healthz/capacity) + Python tarafıyla yapısal contract testi (path/method/status/required alan/`additionalProperties: false`)
 - [x] `config/*.yaml` (settings, models, search, domain_tiers, pii, gate, dispatcher)
 - [x] `config/schema.py` — `tunable()` / `locked()`, grup + açıklama, sınırlar; `tunable_fields()` → `/api/config/schema`
 - [x] `config/loader.py` — YAML < env allowlist < run override; kilitli alan reddi, sınır doğrulaması, `config_hash` (kanonik JSON)
@@ -98,7 +98,7 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 - [x] `observability/redaction.py` — provider key / bearer / DSN / IBAN / kart (Luhn) / TCKN (checksum) / e-posta / telefon / IP + hassas alan adları; pipeline'dan geçtiği testli
 - [x] `observability/events.py` — `run_events` writer (run satırındaki sayaçtan boşluksuz `seq`, kendi bağlantısında commit), `EventType` sözlüğü, `pg_notify` + `listen()` yardımcısı, redaction'dan geçen payload
 - [ ] **Go dispatcher:** `queue` (claim `SKIP LOCKED`, `LISTEN` + polling), `capacity` + agent seçimi, `agentclient` (execute/cancel/healthz), `watchdog` (heartbeat kaybı → requeue, deadline → cancel → failed), `events` (`run_events`'e `node=dispatcher`), `slog` JSON, `dispatcher.yaml`
-- [ ] **Python agent_server:** `POST /v1/runs/{id}/execute` (202), `/cancel`, `/healthz`, `/capacity`; heartbeat döngüsü; node sınırında cancel kontrolü
+- [x] **Python agent_server:** `execute` (202) / `cancel` / `healthz` / `capacity`; `RunExecutor` (slot, heartbeat, tek terminal yazım, kooperatif cancel, drain); `db/repository.py` (claim `SKIP LOCKED`, kontratla doğrulanan geçişler, requeue + `max_attempts`, stale/overdue taramaları, `run_secrets` yaşam döngüsü); `keys.py` (Fernet + UI>env çözümleme, `repr` sızdırmıyor)
 - [ ] `api` iskeleti: `/healthz`, `/readyz`, `POST /api/runs`, `GET /api/runs/{id}`
 - [ ] `docker compose up` ile uçtan uca "boş run": api → PG → dispatcher → agent (dummy graph) → event'ler DB'de; agent'ı öldür → heartbeat kaybı → requeue → resume
 - [ ] ⛔ Bu noktadan sonra dispatcher'a yalnızca bug fix

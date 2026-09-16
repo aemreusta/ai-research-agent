@@ -1,0 +1,233 @@
+# The contract between the Go dispatcher (control plane) and the Python agent (data plane).
+#
+# Shape worth understanding before reading (architecture v0.6 §2): `execute` returns 202 and the
+# run proceeds in the background. It is deliberately NOT a long-lived HTTP request - all state is
+# in Postgres, so the dispatcher stays stateless, a dropped connection does not kill a run, and an
+# agent restart loses no work. Progress is observed through `runs.heartbeat_at` and `run_events`,
+# never through this response.
+#
+# Both sides are tested against this file (`agent/tests/contract/`, `dispatcher/internal/...`).
+openapi: 3.1.0
+
+info:
+  title: Research Agent - agent API
+  version: 1.0.0
+  description: |
+    Control-plane to data-plane calls only. No user-facing endpoints, no secrets in payloads:
+    the agent reads provider keys from `run_secrets` itself, so the dispatcher never carries them.
+
+servers:
+  - url: http://agent:8081
+    description: In-cluster address of an agent replica (compose service name).
+
+paths:
+  /healthz:
+    get:
+      operationId: healthz
+      summary: Is this replica alive and able to accept work?
+      description: |
+        Cheap and dependency-light on purpose. The dispatcher polls it before every dispatch, so
+        it must not call out to the database, Presidio or any provider; readiness of those is
+        reported by the `api` service instead.
+      responses:
+        "200":
+          description: Replica is serving.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Health" }
+        "503":
+          description: Replica is shutting down and must not be dispatched to.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Health" }
+
+  /capacity:
+    get:
+      operationId: capacity
+      summary: Free execution slots on this replica.
+      description: |
+        The dispatcher picks the healthy replica with the most free slots. Capacity is per
+        replica; the global `max_concurrent_runs` limit is the dispatcher's own business.
+      responses:
+        "200":
+          description: Current slot usage.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Capacity" }
+
+  /v1/runs/{run_id}/execute:
+    post:
+      operationId: executeRun
+      summary: Start executing an already-claimed run.
+      description: |
+        The dispatcher has claimed the run (`queued -> dispatched`) before calling. The agent
+        takes ownership: it sets `running`, starts its heartbeat, and from then on is responsible
+        for writing the terminal status. If this returns anything other than 202, the dispatcher
+        tries another replica and finally returns the run to the queue (`AGENT_UNREACHABLE`).
+      parameters:
+        - $ref: "#/components/parameters/RunId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ExecuteRequest" }
+      responses:
+        "202":
+          description: Accepted; the run is now this replica's responsibility.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ExecuteAccepted" }
+        "404":
+          description: No such run.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "409":
+          description: |
+            This replica is already executing the run. Idempotent by design: a dispatcher retry
+            after a lost response must not start a second execution.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "503":
+          description: No free slot; the dispatcher should pick another replica.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+
+  /v1/runs/{run_id}/cancel:
+    post:
+      operationId: cancelRun
+      summary: Ask a running run to stop at the next node boundary.
+      description: |
+        Cooperative: the agent checks `runs.cancel_requested` between nodes, so a cancel never
+        interrupts a half-written claim ledger. The dispatcher also sets the flag in the database
+        before calling, which is what makes cancellation work even when this call is lost.
+        Accepting a cancel for a run this replica does not own is still 202 - the flag is the
+        source of truth, not the call.
+      parameters:
+        - $ref: "#/components/parameters/RunId"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CancelRequest" }
+      responses:
+        "202":
+          description: Cancellation acknowledged.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/CancelAccepted" }
+        "404":
+          description: No such run.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+
+components:
+  parameters:
+    RunId:
+      name: run_id
+      in: path
+      required: true
+      description: The run's UUID, identical to the LangGraph `thread_id`.
+      schema:
+        type: string
+        format: uuid
+
+  schemas:
+    Health:
+      type: object
+      additionalProperties: false
+      required: [status, agent_id, version]
+      properties:
+        status:
+          type: string
+          enum: [ok, draining]
+        agent_id:
+          type: string
+          description: Stable identity of this replica; written to `runs.agent_id`.
+          maxLength: 128
+        version:
+          type: string
+          description: Application version, so a mixed-version rollout is visible in the trace.
+
+    Capacity:
+      type: object
+      additionalProperties: false
+      required: [agent_id, slots_total, slots_used, slots_free]
+      properties:
+        agent_id: { type: string, maxLength: 128 }
+        slots_total: { type: integer, minimum: 0 }
+        slots_used: { type: integer, minimum: 0 }
+        slots_free: { type: integer, minimum: 0 }
+        running_run_ids:
+          type: array
+          description: Useful when reconciling after a dispatcher restart.
+          items: { type: string, format: uuid }
+
+    ExecuteRequest:
+      type: object
+      additionalProperties: false
+      required: [attempt]
+      properties:
+        attempt:
+          type: integer
+          minimum: 1
+          description: |
+            Which attempt this is (`runs.attempts`). Above 1 the agent resumes from the LangGraph
+            checkpoint instead of starting over.
+        deadline_at:
+          type: [string, "null"]
+          format: date-time
+          description: |
+            The dispatcher's hard deadline, passed for visibility only. Enforcement stays with the
+            dispatcher so that a stuck agent cannot outlive it (Design Question 2).
+        dispatcher_id:
+          type: string
+          description: Which dispatcher claimed the run; recorded on the timeline.
+          maxLength: 128
+
+    ExecuteAccepted:
+      type: object
+      additionalProperties: false
+      required: [accepted, run_id, agent_id]
+      properties:
+        accepted: { type: boolean, const: true }
+        run_id: { type: string, format: uuid }
+        agent_id: { type: string, maxLength: 128 }
+
+    CancelRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        reason:
+          type: string
+          description: Recorded on the timeline, e.g. `deadline_exceeded` or `user_requested`.
+          maxLength: 256
+
+    CancelAccepted:
+      type: object
+      additionalProperties: false
+      required: [accepted, run_id]
+      properties:
+        accepted: { type: boolean, const: true }
+        run_id: { type: string, format: uuid }
+        was_running:
+          type: boolean
+          description: False when this replica did not own the run; the DB flag still applies.
+
+    Error:
+      type: object
+      additionalProperties: false
+      required: [error_code, message, expected]
+      properties:
+        error_code:
+          type: string
+          description: A code from `contracts/error_codes.yaml`; both languages use the same set.
+        message:
+          type: string
+          description: Redacted, human-readable detail.
+        expected:
+          type: boolean
+          description: False means a bug rather than a handled condition (v0.6 §13).
