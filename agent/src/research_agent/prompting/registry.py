@@ -10,6 +10,11 @@ A version is only accepted if it fits the code:
 A Langfuse version that fails either check is refused (`PROMPT_SCHEMA_MISMATCH`) and the seed is
 used; an unreachable Langfuse degrades to the seed (`PROMPT_REGISTRY_DEGRADED`). Versions are
 resolved once per run, so editing a prompt mid-run never changes that run (v0.6 §20.2).
+
+A Langfuse version that descends from an older repo seed (its config carries `seed_version`) is
+replaced when the repo seed version is bumped, so prompt fixes in the repo reach Langfuse without
+manual steps. Edits made in Langfuse keep that config, so a seed bump wins over them - bump the
+seed only for changes that should.
 """
 
 from __future__ import annotations
@@ -44,6 +49,8 @@ class PromptVersion(BaseModel):
     output_schema_hash: str
     label: str | None = None
     url: str | None = None
+    seed_version: str | None = None
+    """For a Langfuse version created from a repo seed: which seed version it was."""
 
     @property
     def content_hash(self) -> str:
@@ -161,6 +168,11 @@ class PromptRegistry:
             # Seed on first use: `migrate` may have run before Langfuse was up.
             await self._publish(seed)
             return seed
+        if _outdated_seed(remote, seed):
+            # The repo seed moved on and Langfuse still serves a version based on an older
+            # one: publish the new seed and use it.
+            await self._publish(seed)
+            return seed
         try:
             check_version(remote, signature)
         except PromptProblem as problem:
@@ -195,6 +207,15 @@ class PromptRegistry:
         for signature in SIGNATURES.values():
             versions[signature.id] = await self.resolve(signature, events)
         return RunPrompts(versions)
+
+
+def _outdated_seed(remote: PromptVersion, seed: PromptVersion) -> bool:
+    if remote.seed_version is None:
+        return False
+    try:
+        return int(remote.seed_version) < int(seed.version)
+    except ValueError:
+        return False
 
 
 class RunPrompts:

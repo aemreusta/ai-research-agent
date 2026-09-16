@@ -109,6 +109,7 @@ class LangfuseClient:
             demos=config.get("demos") or [],
             output_schema_hash=str(config.get("output_schema_hash", "")),
             label=label,
+            seed_version=str(config["seed_version"]) if config.get("seed_version") else None,
             url=f"{self._settings['public_url']}/project/{self._settings['project']}/prompts/{name}",
         )
 

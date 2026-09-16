@@ -117,6 +117,27 @@ async def test_an_outdated_remote_version_is_replaced_by_the_seed() -> None:
     assert "published to Langfuse" in events.events[0]["data"]["decision"]
 
 
+async def test_a_langfuse_copy_of_an_older_seed_is_replaced() -> None:
+    seed = PromptRegistry().seed("plan").model_copy(update={"version": "3"})
+    copy = seed.model_copy(update={"source": "langfuse", "version": "12", "seed_version": "2"})
+    remote = _PublishingRemote(copy)
+    registry = PromptRegistry(remote=remote)
+    registry._seeds = {**registry._seeds, "plan": seed}
+    resolved = await registry.resolve(SIGNATURES["plan"])
+    assert resolved.source == "yaml" and resolved.version == "3"
+    assert [v.version for v, _ in remote.published] == ["3"]
+
+
+async def test_a_langfuse_copy_of_the_current_seed_is_used() -> None:
+    seed = PromptRegistry().seed("plan")
+    copy = seed.model_copy(
+        update={"source": "langfuse", "version": "12", "seed_version": seed.version}
+    )
+    remote = _PublishingRemote(copy)
+    resolved = await PromptRegistry(remote=remote).resolve(SIGNATURES["plan"])
+    assert resolved.source == "langfuse" and remote.published == []
+
+
 async def test_an_unreachable_registry_degrades_to_the_seed() -> None:
     events = MemoryEventSink(uuid.uuid4(), node="prompts")
     registry = PromptRegistry(remote=_Remote(error=ConnectionError("langfuse down")))
