@@ -1,0 +1,308 @@
+# AI Research Agent - the whole system on one machine.
+#
+#   cp .env.example .env      # optional: provider keys can also be entered in the UI
+#   docker compose up -d      # then open http://localhost:8000
+#
+# Profiles (set COMPOSE_PROFILES in .env):
+#   observability  Langfuse + ClickHouse + Redis + MinIO   (on by default via .env.example)
+#   local-llm      Ollama, the last link of the LLM fallback chain
+#   test           the test suite: `docker compose --profile test run --rm tests`
+#
+# Environment is passed explicitly per service instead of through `env_file`, for two reasons:
+# the control plane must never receive provider keys (the dispatcher refuses to start if it
+# does), and Langfuse reads a variable called DATABASE_URL that must not be ours.
+
+name: research-agent
+
+x-database-url: &database-url postgresql+psycopg://${POSTGRES_USER:-research}:${POSTGRES_PASSWORD:-research}@postgres:5432/${POSTGRES_DB:-research}
+
+x-python-image: &python-image
+  image: research-agent/python:local
+  build:
+    context: .
+    dockerfile: agent/Dockerfile
+    target: runtime
+
+x-app-env: &app-env
+  DATABASE_URL: *database-url
+  APP_SECRET_KEY: ${APP_SECRET_KEY:-}
+  APP_LOG_LEVEL: ${APP_LOG_LEVEL:-INFO}
+  APP_LOG_FORMAT: ${APP_LOG_FORMAT:-json}
+  PRESIDIO_ANALYZER_URL: http://presidio-analyzer:3000
+  PRESIDIO_ANONYMIZER_URL: http://presidio-anonymizer:3000
+  LANGFUSE_HOST: http://langfuse-web:3000
+  LANGFUSE_PUBLIC_URL: ${LANGFUSE_PUBLIC_URL:-http://localhost:3000}
+  LANGFUSE_PUBLIC_KEY: ${LANGFUSE_INIT_PROJECT_PUBLIC_KEY:-pk-lf-local-research-agent}
+  LANGFUSE_SECRET_KEY: ${LANGFUSE_INIT_PROJECT_SECRET_KEY:-sk-lf-local-research-agent}
+  LANGFUSE_ENABLED: ${LANGFUSE_ENABLED:-auto}
+
+x-provider-keys: &provider-keys
+  # Optional defaults. Keys typed into the UI win, and are stored encrypted for one run only.
+  GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+  OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+  TAVILY_API_KEY: ${TAVILY_API_KEY:-}
+  BRAVE_API_KEY: ${BRAVE_API_KEY:-}
+  OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://ollama:11434}
+
+services:
+  # --- data ------------------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-research}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-research}
+      POSTGRES_DB: ${POSTGRES_DB:-research}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./infra/postgres:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "127.0.0.1:${POSTGRES_HOST_PORT:-5433}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  migrate:
+    <<: *python-image
+    command: ["migrate"]
+    restart: "no"
+    environment:
+      <<: *app-env
+    volumes:
+      - app-secrets:/run/app-secrets
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # --- application -----------------------------------------------------------
+  api:
+    <<: *python-image
+    command: ["serve", "api"]
+    restart: unless-stopped
+    environment:
+      <<: [*app-env, *provider-keys]
+      APP_PORT: "8000"
+    volumes:
+      - app-secrets:/run/app-secrets:ro
+    ports:
+      - "${API_HOST_PORT:-8000}:8000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8000/healthz"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  agent:
+    <<: *python-image
+    command: ["serve", "agent"]
+    restart: unless-stopped
+    # Scale with `docker compose up -d --scale agent=3`; the dispatcher finds replicas by DNS.
+    environment:
+      <<: [*app-env, *provider-keys]
+      APP_PORT: "8081"
+      AGENT_SLOTS: ${AGENT_SLOTS:-2}
+      AGENT_RUNNER: ${AGENT_RUNNER:-echo}
+      AGENT_HEARTBEAT_SECONDS: "10"
+    volumes:
+      - app-secrets:/run/app-secrets:ro
+    expose:
+      - "8081"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    # Draining finishes in-flight runs; whatever remains is resumed by the watchdog.
+    stop_grace_period: 30s
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8081/healthz"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  dispatcher:
+    image: research-agent/dispatcher:local
+    build:
+      context: .
+      dockerfile: dispatcher/Dockerfile
+    restart: unless-stopped
+    # Deliberately no provider keys and no APP_SECRET_KEY: the control plane is secret-free.
+    environment:
+      DATABASE_URL: *database-url
+      APP_LOG_LEVEL: ${APP_LOG_LEVEL:-INFO}
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      agent:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "/app/dispatcher", "-healthcheck"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # --- PII (v0.6 §12) --------------------------------------------------------
+  # Optional at runtime: without them intake degrades to regex masking (PII_ENGINE_DEGRADED).
+  presidio-analyzer:
+    image: mcr.microsoft.com/presidio-analyzer:latest
+    restart: unless-stopped
+    expose:
+      - "3000"
+
+  presidio-anonymizer:
+    image: mcr.microsoft.com/presidio-anonymizer:latest
+    restart: unless-stopped
+    expose:
+      - "3000"
+
+  # --- observability profile: self-hosted Langfuse (v0.6 §14) ---------------
+  langfuse-worker:
+    image: docker.langfuse.com/langfuse/langfuse-worker:4
+    profiles: [observability]
+    restart: unless-stopped
+    depends_on: &langfuse-depends-on
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      clickhouse:
+        condition: service_healthy
+    environment: &langfuse-env
+      DATABASE_URL: postgresql://${POSTGRES_USER:-research}:${POSTGRES_PASSWORD:-research}@postgres:5432/langfuse
+      NEXTAUTH_URL: ${LANGFUSE_PUBLIC_URL:-http://localhost:3000}
+      SALT: ${LANGFUSE_SALT:-local-development-salt}
+      ENCRYPTION_KEY: ${LANGFUSE_ENCRYPTION_KEY:-0000000000000000000000000000000000000000000000000000000000000000}
+      TELEMETRY_ENABLED: "false"
+      CLICKHOUSE_MIGRATION_URL: clickhouse://clickhouse:9000
+      CLICKHOUSE_URL: http://clickhouse:8123
+      CLICKHOUSE_USER: clickhouse
+      CLICKHOUSE_PASSWORD: ${LANGFUSE_CLICKHOUSE_PASSWORD:-clickhouse}
+      CLICKHOUSE_CLUSTER_ENABLED: "false"
+      LANGFUSE_S3_EVENT_UPLOAD_BUCKET: langfuse
+      LANGFUSE_S3_EVENT_UPLOAD_REGION: auto
+      LANGFUSE_S3_EVENT_UPLOAD_ACCESS_KEY_ID: minio
+      LANGFUSE_S3_EVENT_UPLOAD_SECRET_ACCESS_KEY: ${LANGFUSE_MINIO_PASSWORD:-miniosecret}
+      LANGFUSE_S3_EVENT_UPLOAD_ENDPOINT: http://minio:9000
+      LANGFUSE_S3_EVENT_UPLOAD_FORCE_PATH_STYLE: "true"
+      LANGFUSE_S3_EVENT_UPLOAD_PREFIX: events/
+      LANGFUSE_S3_MEDIA_UPLOAD_BUCKET: langfuse
+      LANGFUSE_S3_MEDIA_UPLOAD_REGION: auto
+      LANGFUSE_S3_MEDIA_UPLOAD_ACCESS_KEY_ID: minio
+      LANGFUSE_S3_MEDIA_UPLOAD_SECRET_ACCESS_KEY: ${LANGFUSE_MINIO_PASSWORD:-miniosecret}
+      LANGFUSE_S3_MEDIA_UPLOAD_ENDPOINT: http://minio:9000
+      LANGFUSE_S3_MEDIA_UPLOAD_FORCE_PATH_STYLE: "true"
+      LANGFUSE_S3_MEDIA_UPLOAD_PREFIX: media/
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      REDIS_AUTH: ${LANGFUSE_REDIS_PASSWORD:-redissecret}
+
+  langfuse-web:
+    image: docker.langfuse.com/langfuse/langfuse:4
+    profiles: [observability]
+    restart: unless-stopped
+    depends_on: *langfuse-depends-on
+    ports:
+      - "127.0.0.1:${LANGFUSE_HOST_PORT:-3000}:3000"
+    environment:
+      <<: *langfuse-env
+      NEXTAUTH_SECRET: ${LANGFUSE_NEXTAUTH_SECRET:-local-development-nextauth-secret}
+      LANGFUSE_S3_MEDIA_UPLOAD_ENDPOINT: http://localhost:9090
+      LANGFUSE_S3_MEDIA_UPLOAD_INTERNAL_ENDPOINT: http://minio:9000
+      # Headless initialisation: org, project, admin user and API keys exist on first start,
+      # so the prompt registry and tracing work without anyone clicking through a setup page.
+      LANGFUSE_INIT_ORG_ID: research-agent
+      LANGFUSE_INIT_ORG_NAME: Research Agent
+      LANGFUSE_INIT_PROJECT_ID: research-agent
+      LANGFUSE_INIT_PROJECT_NAME: research-agent
+      LANGFUSE_INIT_PROJECT_PUBLIC_KEY: ${LANGFUSE_INIT_PROJECT_PUBLIC_KEY:-pk-lf-local-research-agent}
+      LANGFUSE_INIT_PROJECT_SECRET_KEY: ${LANGFUSE_INIT_PROJECT_SECRET_KEY:-sk-lf-local-research-agent}
+      LANGFUSE_INIT_USER_EMAIL: ${LANGFUSE_INIT_USER_EMAIL:-admin@research.local}
+      LANGFUSE_INIT_USER_NAME: Admin
+      LANGFUSE_INIT_USER_PASSWORD: ${LANGFUSE_INIT_USER_PASSWORD:-research-admin}
+      AUTH_DISABLE_SIGNUP: "true"
+
+  clickhouse:
+    image: clickhouse/clickhouse-server:25.12
+    profiles: [observability]
+    restart: unless-stopped
+    user: "101:101"
+    environment:
+      CLICKHOUSE_DB: default
+      CLICKHOUSE_USER: clickhouse
+      CLICKHOUSE_PASSWORD: ${LANGFUSE_CLICKHOUSE_PASSWORD:-clickhouse}
+    volumes:
+      - clickhouse-data:/var/lib/clickhouse
+      - clickhouse-logs:/var/log/clickhouse-server
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:8123/ping || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 5s
+
+  minio:
+    image: minio/minio:latest
+    profiles: [observability]
+    restart: unless-stopped
+    entrypoint: sh
+    command: -c 'mkdir -p /data/langfuse && minio server --address ":9000" --console-address ":9001" /data'
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: ${LANGFUSE_MINIO_PASSWORD:-miniosecret}
+    ports:
+      - "127.0.0.1:9090:9000"
+    volumes:
+      - minio-data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 2s
+      timeout: 5s
+      retries: 20
+      start_period: 2s
+
+  redis:
+    image: redis:7-alpine
+    profiles: [observability]
+    restart: unless-stopped
+    command: ["--requirepass", "${LANGFUSE_REDIS_PASSWORD:-redissecret}", "--maxmemory-policy", "noeviction"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${LANGFUSE_REDIS_PASSWORD:-redissecret}", "ping"]
+      interval: 3s
+      timeout: 5s
+      retries: 20
+
+  # --- local-llm profile -----------------------------------------------------
+  ollama:
+    image: ollama/ollama:latest
+    profiles: [local-llm]
+    restart: unless-stopped
+    volumes:
+      - ollama-data:/root/.ollama
+    expose:
+      - "11434"
+
+  # --- test profile ----------------------------------------------------------
+  tests:
+    build:
+      context: .
+      dockerfile: agent/Dockerfile
+      target: test
+    profiles: [test]
+    environment:
+      TEST_DATABASE_URL: postgresql://${POSTGRES_USER:-research}:${POSTGRES_PASSWORD:-research}@postgres:5432/research_test
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres-data:
+  app-secrets:
+  clickhouse-data:
+  clickhouse-logs:
+  minio-data:
+  ollama-data:
