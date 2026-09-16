@@ -13,7 +13,13 @@ Each example is one run of `research run`, written as:
 
 ## The four case examples
 
-They need real provider keys, so they are generated on your machine:
+The committed runs were started through the API (the same path as the UI) with Gemini
+(`gemini-3.8-flash` / `gemini-3.1-flash-lite`) and Tavily; each `input.md` records the run id,
+models, config hash and outcome. The UI export writes `report.md`, `trace.jsonl`,
+`gate_result.json` and `state.json` (the structured report is inside `state.json`).
+See [`ANALYSIS.md`](ANALYSIS.md) for what they show and what they changed in the code.
+
+To regenerate them with your own keys:
 
 ```bash
 cp .env.example .env     # add GEMINI_API_KEY (or OPENAI_API_KEY) and TAVILY_API_KEY (or BRAVE_API_KEY)

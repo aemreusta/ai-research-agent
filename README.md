@@ -89,7 +89,7 @@ docker compose run --rm agent config --override budget.max_searches=20
 | PII | Microsoft Presidio analyzer with Turkish ad-hoc recognisers, always unioned with regex rules; stable placeholders assigned in code |
 | Observability | Postgres `run_events` (primary) + self-hosted Langfuse v4 over OTLP (traces, prompt versions, cost) |
 | Frontend | Static HTML + ES modules + Server-Sent Events, no build step |
-| Quality | pytest (437 tests incl. Postgres integration and offline end-to-end graph runs), Go tests (70), ruff, mypy `--strict`, pre-commit with gitleaks |
+| Quality | pytest (476 tests incl. Postgres integration and offline end-to-end graph runs), Go tests (70), ruff, mypy `--strict`, pre-commit with gitleaks |
 
 ## 3. Architecture
 
@@ -209,6 +209,8 @@ Every score is written to the timeline with its components:
 |---|---|---|
 | L1 URL | Canonicalisation: scheme, `www`/`m`/`amp` hosts, AMP suffixes, tracking parameters, sorted query, fragments | The same page twice |
 | L2 Document | Normalised-text hash, then MinHash LSH (word 5-grams, Jaccard ≥ 0.8) → shared `origin_id` | Syndicated press releases, republished articles |
+| L2b Quotes | Pages sharing ≥ 2 verbatim quotes of ≥ 12 words merge their origins | The same press release inside different page chrome (menus, related articles) that keeps MinHash below the threshold |
+| Publisher | Origins on the same site (`tr.linkedin.com` = `linkedin.com`) count once | Four pages of the company's own website presented as four confirmations |
 | L3 Claim | Embedding cosine (one embedding model per run, cached) **and** the same normalised entity; lexical fallback | One fact phrased differently |
 | L4 Query | Normalised token Jaccard ≥ 0.9 | The same query generated again |
 
@@ -241,10 +243,15 @@ gives a report that says so (`no_evidence`), never an invented answer.
 
 ## 8. Contradiction handling
 
-1. **Candidates by rule:** same normalised entity and attribute, values that do not match within
-   tolerance (numbers, money, percentages and dates are normalised - see §9).
-2. **Classification by a judge:** true conflict, different point in time, different scope, or
-   rounding. Only true conflicts mark findings as contested.
+1. **Candidates by rule:** the same entity (spelling variants such as "Europe legal tech" /
+   "European legal technology" match), the same attribute (qualifiers like "projected" and
+   synonyms like "valuation"/"size" are ignored), the same period when both state one, and values
+   that do not match within tolerance - compared with their units and scales (numbers, money,
+   percentages and dates are normalised - see §9). A 2025 figure next to a 2030 forecast never
+   reaches the judge.
+2. **Classification by a judge:** true conflict, different point in time, different scope,
+   rounding, or consistent (the same statement in other words). Only true conflicts mark findings
+   as contested.
 3. **Resolution:** the judge may prefer one side, but the preference only counts if the ledger backs
    it - a primary source that outranks the other side. The conflict is **still reported**.
    Unresolved conflicts get one targeted follow-up query looking for the primary source.
@@ -415,6 +422,14 @@ The full log with alternatives considered is in [`TODO.md`](TODO.md).
   research is only visible through its public summaries.
 - Claim extraction quality is bounded by the fast-tier model; the gate protects numbers and
   citations, not the completeness of what was extracted.
+- Independence is judged by text and publisher: verbatim copies (MinHash, shared quotes) and
+  pages of one site count once. A press release that several outlets **rewrote in their own
+  words** still counts as several sources - the live ApilexAI run shows this.
+- Contradiction candidates need the extractor to name entity, attribute and period consistently;
+  different wordings are normalised, but a conflict between differently framed facts ("most
+  rules apply from 2026" vs. "high-risk rules were postponed") is left to the synthesiser.
+- Runs are not deterministic: the same question can stop after one round or four, depending on
+  what search returns and what the models extract (see [`examples/ANALYSIS.md`](examples/ANALYSIS.md)).
 - No authentication - this is a local, single-user deployment.
 
 ---
