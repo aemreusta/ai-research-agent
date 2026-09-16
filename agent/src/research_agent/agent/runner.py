@@ -81,7 +81,7 @@ class EchoGraphRunner:
 
     async def __call__(self, context: RunContext) -> RunOutcome:
         await context.events.info(
-            EventType.RUN_STARTED,
+            EventType.NODE_STARTED,
             f"Echo runner starting for: {context.question}",
             label="Agent",
         )

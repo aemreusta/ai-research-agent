@@ -3,16 +3,29 @@ version: 1
 
 queue:
   poll_interval_seconds: 5 # backup for LISTEN/NOTIFY
-  claim_batch_size: 1
 
 capacity:
-  max_concurrent_runs: 4
-  slots_per_agent: 2
+  max_concurrent_runs: 4 # across all agent replicas
+  # Agents are discovered by resolving this compose service name, so `--scale agent=N` needs no
+  # configuration change. AGENT_URLS (comma separated) overrides discovery.
+  agent_service_host: agent
+  agent_port: 8081
 
 watchdog:
   tick_seconds: 5
+  # A running run whose heartbeat is older than this is requeued (AGENT_HEARTBEAT_LOST).
   heartbeat_timeout_seconds: 30
-  cancel_grace_seconds: 10
+  # A dispatched run that no agent marked running within this window goes back to the queue.
+  dispatch_timeout_seconds: 30
+  # After the deadline the agent is asked to cancel; after deadline + grace the run is failed.
+  cancel_grace_seconds: 15
+
+deadline:
+  # The outer guarantee: no run outlives this, whatever the agent does (Design Question 2).
+  hard_deadline_seconds: 1800
+  # When a run enables `budget.max_wall_clock_seconds`, its deadline is that plus this margin,
+  # so the agent's own graceful stop always happens before the dispatcher's hard one.
+  wall_clock_margin_seconds: 60
 
 retry:
   max_attempts: 3 # must equal contracts/run_states.yaml max_attempts

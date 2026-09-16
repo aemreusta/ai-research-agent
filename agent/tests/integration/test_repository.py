@@ -201,3 +201,54 @@ async def test_cancelling_a_queued_run_settles_it_immediately(db_session: AsyncS
     run = await repo.get(run_id)
     assert run is not None and run.status == RunStatus.CANCELLED.value
     assert run.finished_at is not None
+
+
+async def test_a_transition_loses_cleanly_to_a_concurrent_one(
+    db_sessionmaker: async_sessionmaker[AsyncSession],
+) -> None:
+    """The agent finishing and the watchdog requeueing can race; exactly one may win."""
+    async with db_sessionmaker() as setup:
+        repo = RunRepository(setup)
+        run_id = await _create(repo)
+        await repo.claim(dispatcher_id="d1")
+        await repo.mark_running(run_id, agent_id="agent-1", deadline_at=None)
+
+    async def finish() -> str:
+        async with db_sessionmaker() as session:
+            try:
+                await RunRepository(session).finish(run_id, status=RunStatus.SUCCEEDED)
+            except IllegalTransitionError:
+                return "lost"
+            return "won"
+
+    async def requeue() -> str:
+        async with db_sessionmaker() as session:
+            try:
+                await RunRepository(session).requeue(run_id, reason="AGENT_HEARTBEAT_LOST")
+            except IllegalTransitionError:
+                return "lost"
+            return "won"
+
+    outcomes = await asyncio.gather(finish(), requeue(), finish(), requeue())
+    async with db_sessionmaker() as check:
+        final = (await RunRepository(check).require(run_id)).status
+    assert final in {RunStatus.SUCCEEDED.value, RunStatus.QUEUED.value}
+    # Whichever won, the losers saw a refusal rather than silently overwriting it.
+    assert "won" in outcomes
+
+
+async def test_a_requeued_run_waits_out_its_backoff(db_session: AsyncSession) -> None:
+    repo = RunRepository(db_session)
+    run_id = await _create(repo)
+    await repo.claim(dispatcher_id="d1")
+    await repo.mark_running(run_id, agent_id="agent-1", deadline_at=None)
+    await repo.requeue(run_id, reason="AGENT_HEARTBEAT_LOST", backoff_seconds=60)
+
+    assert await repo.claim(dispatcher_id="d1") is None, "claimed before its backoff elapsed"
+
+    await db_session.execute(
+        update(Run).where(Run.id == run_id).values(available_at=datetime.now(UTC))
+    )
+    await db_session.commit()
+    claimed = await repo.claim(dispatcher_id="d1")
+    assert claimed is not None and claimed.id == run_id

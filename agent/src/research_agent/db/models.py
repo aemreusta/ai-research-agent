@@ -110,6 +110,8 @@ class Run(Base):
     # Scheduling, owned by the dispatcher.
     agent_id: Mapped[str | None] = mapped_column(String(128))
     attempts: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    # Retry backoff: a requeued run is not claimable before this moment.
+    available_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     cancel_requested: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
     langfuse_trace_url: Mapped[str | None] = mapped_column(Text)

@@ -72,6 +72,7 @@ _CLAIM = text(
      WHERE id = (
             SELECT id FROM runs
              WHERE status = 'queued'
+               AND (available_at IS NULL OR available_at <= now())
              ORDER BY created_at
                FOR UPDATE SKIP LOCKED
              LIMIT 1
@@ -236,7 +237,7 @@ class RunRepository:
         )
         return run
 
-    async def requeue(self, run_id: uuid.UUID, *, reason: str) -> bool:
+    async def requeue(self, run_id: uuid.UUID, *, reason: str, backoff_seconds: float = 0) -> bool:
         """Send a run back to the queue after a lost heartbeat.
 
         Returns True when it was requeued and False when the attempt budget from the contract is
@@ -254,7 +255,12 @@ class RunRepository:
         await self._transition(
             run_id,
             RunStatus.QUEUED,
-            {"agent_id": None, "heartbeat_at": None, "dispatched_at": None},
+            {
+                "agent_id": None,
+                "heartbeat_at": None,
+                "dispatched_at": None,
+                "available_at": datetime.now(UTC) + timedelta(seconds=backoff_seconds),
+            },
         )
         await notify_run_queued(self._session, run_id)
         await self._session.commit()
@@ -317,14 +323,25 @@ class RunRepository:
         *,
         also: Any = None,
     ) -> Run:
+        """Move a run to `target` if, and only if, nobody moved it first.
+
+        The update is conditional on the status the check was made against (compare-and-set),
+        because the agent and the dispatcher's watchdog act on the same row concurrently. A
+        plain read-then-write would let a late `finish` overwrite a requeue, or the reverse.
+        """
         run = await self.require(run_id)
-        machine = run_state_machine()
         source = RunStatus(run.status)
-        if not machine.can_transition(source, target):
+        if not run_state_machine().can_transition(source, target):
             raise IllegalTransitionError(run_id, run.status, target)
-        await self._session.execute(
-            update(Run).where(Run.id == run_id).values(status=target.value, **values)
+        result = await self._session.execute(
+            update(Run)
+            .where(Run.id == run_id, Run.status == source.value)
+            .values(status=target.value, **values)
         )
+        if cast("CursorResult[Any]", result).rowcount != 1:
+            await self._session.rollback()
+            current = await self.require(run_id)
+            raise IllegalTransitionError(run_id, current.status, target)
         if also is not None:
             await also()
         # Status changes wake SSE listeners too; otherwise a run cancelled from the queue would
