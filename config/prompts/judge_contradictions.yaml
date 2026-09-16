@@ -1,5 +1,5 @@
 id: judge_contradictions
-version: 2
+version: 3
 # Must equal the hash of the output model in code (prompting/schemas.py); a test checks it.
 output_schema_hash: 5dbcfef130df4b23
 description: Classify rule-detected disagreements between findings.
@@ -7,8 +7,9 @@ instructions: |
   Pairs of findings below disagree on the same attribute of the same entity, according to a
   rule-based check. For each pair decide what kind of disagreement it is:
   - `true_conflict`: the sources genuinely contradict each other;
-  - `different_time`: both can be true at different points in time (an amended date, a
-    figure from different years);
+  - `different_time`: both were true at different points in time - a figure from different
+    years, or a date or rule that was later changed (postponed, amended, revised). Compare
+    `latest_source_date`: an older source may still report the original plan;
   - `different_scope`: they measure different things (revenue vs. ARR, EU vs. global market,
     draft vs. final text);
   - `rounding`: the same value written with different precision;
@@ -20,8 +21,9 @@ instructions: |
   summary would say the sources agree, the kind is `consistent`.
 
   Set `preferred` only when the evidence clearly favours one side - typically a primary source
-  (regulator, official text, the company itself) against a secondary one, or a later official
-  amendment. Otherwise use "none". Write `summary` in the report language.
+  (regulator, official text, the company itself) against a secondary one. For `different_time`,
+  set it to the side that reflects the current position when a newer primary source shows a
+  change. Otherwise use "none". Write `summary` in the report language.
 template: |
   Research question: {question}
   Report language: {language}

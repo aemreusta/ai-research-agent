@@ -368,6 +368,15 @@ class ResearchState(_Model):
     def subquestion(self, subq_id: str) -> SubQuestion | None:
         return next((subq for subq in self.plan if subq.id == subq_id), None)
 
+    def latest_source_date(self, cluster: ClaimCluster) -> date | None:
+        """Publication date of the newest dated source behind a finding."""
+        dates = [
+            doc.published_at
+            for doc_id in cluster.doc_ids
+            if (doc := self.documents.get(doc_id)) is not None and doc.published_at is not None
+        ]
+        return max(dates, default=None)
+
     def open_subquestions(self) -> list[SubQuestion]:
         return [subq for subq in self.plan if subq.open]
 

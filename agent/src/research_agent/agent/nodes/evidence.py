@@ -16,6 +16,7 @@ from research_agent.agent.runtime import EventSink
 from research_agent.agent.scoring import score_source
 from research_agent.agent.state import (
     Claim,
+    ClaimCluster,
     ClaimKind,
     ClusterStatus,
     Contradiction,
@@ -319,6 +320,34 @@ async def cluster_and_corroborate(state: ResearchState, deps: AgentDeps, events:
 # --- detect_contradictions ---------------------------------------------------------------------
 
 
+def _judge_side(state: ResearchState, cluster: ClaimCluster) -> dict[str, Any]:
+    latest = state.latest_source_date(cluster)
+    return {
+        "id": cluster.id,
+        "statement": cluster.statement,
+        "value": cluster.value,
+        "as_of": cluster.as_of,
+        "support": cluster.support,
+        "primary": cluster.has_primary,
+        "best_source_score": cluster.best_source_score,
+        "latest_source_date": latest.isoformat() if latest else None,
+    }
+
+
+def _backs_preference(state: ResearchState, chosen: ClaimCluster, other: ClaimCluster) -> bool:
+    """The ledger must agree with the judge before a side is preferred (v0.6 §10, step 3).
+
+    A primary source that outranks the other side; for a value that changed over time, a
+    primary source that is not older than the other side's newest source.
+    """
+    if not chosen.has_primary:
+        return False
+    if chosen.best_source_score >= other.best_source_score:
+        return True
+    mine, theirs = state.latest_source_date(chosen), state.latest_source_date(other)
+    return mine is not None and (theirs is None or mine >= theirs)
+
+
 async def detect_contradictions(state: ResearchState, deps: AgentDeps, events: EventSink) -> None:
     judged = {frozenset(c.cluster_ids) for c in state.contradictions}
     pairs = contradiction_candidates(
@@ -332,24 +361,8 @@ async def detect_contradictions(state: ResearchState, deps: AgentDeps, events: E
         payload.append(
             {
                 "pair_id": f"p{index}",
-                "left": {
-                    "id": left.id,
-                    "statement": left.statement,
-                    "value": left.value,
-                    "as_of": left.as_of,
-                    "support": left.support,
-                    "primary": left.has_primary,
-                    "best_source_score": left.best_source_score,
-                },
-                "right": {
-                    "id": right.id,
-                    "statement": right.statement,
-                    "value": right.value,
-                    "as_of": right.as_of,
-                    "support": right.support,
-                    "primary": right.has_primary,
-                    "best_source_score": right.best_source_score,
-                },
+                "left": _judge_side(state, left),
+                "right": _judge_side(state, right),
             }
         )
 
@@ -381,20 +394,20 @@ async def detect_contradictions(state: ResearchState, deps: AgentDeps, events: E
             rationale=verdict.rationale if verdict else "no judge available",
             iteration=state.iteration,
         )
+        preferred = verdict.preferred if verdict else "none"
+        chosen = {"left": left, "right": right}.get(preferred)
+        other = right if chosen is left else left
+        backed = chosen is not None and _backs_preference(state, chosen, other)
         if kind is not ContradictionKind.TRUE_CONFLICT:
             contradiction.resolved = True  # both can be true; nothing to chase
+            if kind is ContradictionKind.DIFFERENT_TIME and backed and chosen is not None:
+                # A postponed deadline or a revised figure: the report states the current one
+                # and mentions the earlier one as earlier.
+                contradiction.preferred_cluster_id = chosen.id
         else:
             left.status = right.status = ClusterStatus.CONTESTED
-            preferred = verdict.preferred if verdict else "none"
-            chosen = {"left": left, "right": right}.get(preferred)
-            other = right if chosen is left else left
-            # The judge's preference counts only if the ledger backs it: a primary source that
-            # outranks the other side (v0.6 §10, step 3). The conflict is still reported.
-            if (
-                chosen is not None
-                and chosen.has_primary
-                and (chosen.best_source_score >= other.best_source_score)
-            ):
+            # The conflict is still reported, with the preferred side marked.
+            if backed and chosen is not None:
                 contradiction.preferred_cluster_id = chosen.id
                 contradiction.resolved = True
         state.contradictions.append(contradiction)

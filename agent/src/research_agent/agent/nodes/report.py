@@ -6,6 +6,7 @@ import asyncio
 import re
 from typing import Any
 
+from research_agent.agent.coverage import localised_reason
 from research_agent.agent.deps import AgentDeps
 from research_agent.agent.runtime import EventSink
 from research_agent.agent.state import (
@@ -70,6 +71,9 @@ def _ledger(state: ResearchState) -> list[dict[str, Any]]:
                 "has_primary_source": cluster.has_primary,
                 "confidence": cluster.confidence,
                 "source_domains": domains,
+                "latest_source_date": latest.isoformat()
+                if (latest := state.latest_source_date(cluster))
+                else None,
             }
         )
     return rows
@@ -83,7 +87,7 @@ def _gaps(state: ResearchState) -> list[tuple[str, str, str]]:
         if subq.status is SubQuestionStatus.SUFFICIENT:
             continue
         if subq.status is SubQuestionStatus.EXHAUSTED:
-            reason = subq.exhausted_reason or reasons["exhausted"]
+            reason = localised_reason(subq.exhausted_reason, state.language) or reasons["exhausted"]
         else:
             missing = ", ".join(f.name for f in subq.missing_facets())
             reason = reasons["open"] + (f" ({missing})" if missing else "")
