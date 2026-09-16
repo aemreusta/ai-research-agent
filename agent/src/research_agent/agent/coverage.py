@@ -10,6 +10,8 @@ sufficient is decided here:
 
 from __future__ import annotations
 
+import re
+
 from research_agent.agent.state import (
     ClusterStatus,
     FacetStatus,
@@ -72,10 +74,24 @@ def update_progress(subq: SubQuestion, *, gain: int, settings: BudgetSettings) -
     subq.rounds_without_progress += 1
     if subq.rounds_without_progress >= settings.stagnation_threshold:
         subq.status = SubQuestionStatus.EXHAUSTED
-        subq.exhausted_reason = (
-            f"no progress for {subq.rounds_without_progress} rounds "
-            "(no new findings or independent sources)"
-        )
+        subq.exhausted_reason = NO_PROGRESS_REASON.format(rounds=subq.rounds_without_progress)
+
+
+NO_PROGRESS_REASON = "no progress for {rounds} rounds (no new findings or independent sources)"
+REPEATED_QUERIES_REASON = "only repeated queries could be generated"
+_NO_PROGRESS = re.compile(r"no progress for (\d+) rounds")
+_TR_REASONS = {
+    REPEATED_QUERIES_REASON: "yalnızca daha önce sorulmuş sorgular üretilebildi",
+}
+
+
+def localised_reason(reason: str | None, language: str) -> str:
+    """Exhausted reasons are stored in English (logs, events); reports show them localised."""
+    if not reason or language != "tr":
+        return reason or ""
+    if (match := _NO_PROGRESS.match(reason)) is not None:
+        return f"{match.group(1)} turdur ilerleme yok (yeni bulgu ya da bağımsız kaynak gelmedi)"
+    return _TR_REASONS.get(reason, reason)
 
 
 def progress_snapshot(state: ResearchState) -> dict[str, tuple[int, int]]:

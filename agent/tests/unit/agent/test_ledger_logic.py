@@ -16,7 +16,12 @@ from research_agent.agent.clustering import (
     value_text,
 )
 from research_agent.agent.contradictions import contradiction_candidates
-from research_agent.agent.coverage import assess_facets, update_progress
+from research_agent.agent.coverage import (
+    NO_PROGRESS_REASON,
+    assess_facets,
+    localised_reason,
+    update_progress,
+)
 from research_agent.agent.state import (
     Claim,
     ClaimCluster,
@@ -707,3 +712,11 @@ def test_a_forecast_and_a_valuation_are_the_same_attribute() -> None:
     assert contradiction_candidates(clusters, ContradictionSettings(), language="en") == [
         ("k14", "k22")
     ]
+
+
+def test_exhausted_reasons_are_localised_for_turkish_reports() -> None:
+    reason = NO_PROGRESS_REASON.format(rounds=2)
+    assert localised_reason(reason, "en") == reason
+    assert localised_reason(reason, "tr").startswith("2 turdur ilerleme yok")
+    assert localised_reason("only repeated queries could be generated", "tr").startswith("yalnızca")
+    assert localised_reason(None, "tr") == ""

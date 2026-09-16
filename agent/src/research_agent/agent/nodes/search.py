@@ -6,7 +6,7 @@ import asyncio
 import re
 from dataclasses import dataclass
 
-from research_agent.agent.coverage import progress_snapshot
+from research_agent.agent.coverage import REPEATED_QUERIES_REASON, progress_snapshot
 from research_agent.agent.dedup import OriginIndex, QueryDeduplicator, canonicalize_url, domain_of
 from research_agent.agent.dedup.minhash import content_hash
 from research_agent.agent.deps import AgentDeps
@@ -227,7 +227,7 @@ async def generate_queries(state: ResearchState, deps: AgentDeps, events: EventS
                 for f in [facet.id for facet in target.subq.facets]
             ):
                 target.subq.status = SubQuestionStatus.EXHAUSTED
-                target.subq.exhausted_reason = "only repeated queries could be generated"
+                target.subq.exhausted_reason = REPEATED_QUERIES_REASON
                 await events.error(
                     AgentError(
                         code=ErrorCode.DUPLICATE_QUERY,

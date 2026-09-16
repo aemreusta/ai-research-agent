@@ -13,6 +13,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
+from research_agent.agent.coverage import localised_reason
 from research_agent.agent.dedup import canonicalize_url
 from research_agent.agent.state import (
     Report,
@@ -222,7 +223,7 @@ def _remediate(
             subq = state.subquestion(v.details["subq_id"])
             if subq is not None:
                 gaps = _ensure_section(report, SectionKey.KNOWN_GAPS, language)
-                reason = subq.exhausted_reason or ""
+                reason = localised_reason(subq.exhausted_reason, language)
                 text = f"{subq.text} - {reason}" if reason else subq.text
                 gaps.sentences.append(
                     ReportSentence(
