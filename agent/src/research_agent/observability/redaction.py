@@ -75,6 +75,8 @@ def is_valid_tckn(value: str) -> bool:
 # `validator` keeps loose numeric patterns honest.
 _RULES: Final[tuple[tuple[str, re.Pattern[str], Callable[[str], bool] | None], ...]] = (
     ("GOOGLE_API_KEY", re.compile(r"\bAIza[0-9A-Za-z_\-]{35}\b"), None),
+    # Newer Google AI Studio keys look like `AQ.` followed by ~50 URL-safe characters.
+    ("GOOGLE_API_KEY", re.compile(r"\bAQ\.[0-9A-Za-z_\-.]{30,}"), None),
     # Langfuse keys are `sk-lf-...`, so they have to be matched before the OpenAI pattern.
     ("LANGFUSE_KEY", re.compile(r"\b(?:pk|sk)-lf-[A-Za-z0-9_\-]{8,}\b"), None),
     ("OPENAI_API_KEY", re.compile(r"\bsk-[A-Za-z0-9_\-]{16,}\b"), None),

@@ -76,3 +76,11 @@ def test_redaction_preserves_non_string_values() -> None:
 def test_clean_text_is_left_alone() -> None:
     message = "[Planner] Created 4 research tasks."
     assert redact_text(message) == message
+
+
+def test_new_style_google_keys_are_redacted() -> None:
+    """Google AI Studio issues `AQ.`-prefixed keys now (seen 2026-09-16)."""
+    fake = "AQ.Ab8RN6" + "x" * 20 + "_" + "Y" * 22
+    out = redact_text(f"calling with {fake} now")
+    assert fake not in out
+    assert "<GOOGLE_API_KEY>" in out

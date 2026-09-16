@@ -96,7 +96,7 @@ def short_message(body: str) -> str:
             message = str(error.get("message") or error.get("detail") or error.get("code") or "")
         elif isinstance(error, str):
             message = error
-    message = re.sub(r"(?:sk|tvly|AIza|BSA)[-_A-Za-z0-9*]{4,}", "<key>", message)
+    message = re.sub(r"(?:sk|tvly|AIza|AQ\.|BSA)[-_.A-Za-z0-9*]{4,}", "<key>", message)
     return redact_text(" ".join(message.split()))[:200]
 
 
