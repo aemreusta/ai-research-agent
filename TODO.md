@@ -181,7 +181,7 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 - [x] Secret taraması: pre-commit gitleaks her commit'te; `.env` gitignore'da
 - [x] README ↔ kod tutarlılığı: README iddiaları testlerle desteklendi (resume, simüle etiket, bellek ölçümü)
 - [ ] Repo private + reviewer daveti → link + kısa açıklama ile mail (D31)
-- [x] Case PDF repoda yok (`git ls-files | grep reference` boş)
+- [x] Case PDF ne çalışma ağacında ne geçmişte var (`git log --all --name-only | grep .pdf` boş)
 
 ---
 
