@@ -440,3 +440,35 @@ async def test_round_events_carry_their_round_number() -> None:
     result = await run()
     generated = [e for e in result.events.events if e["event_type"] == "queries_generated"]
     assert generated and all(e["iteration"] for e in generated)
+
+
+async def test_rejected_keys_stop_the_run_with_a_clear_message() -> None:
+    from research_agent.providers.llm.gateway import LLMKeysRejected
+
+    dead = FakeLLMProvider(
+        "gemini",
+        default=lambda *_: ProviderError(
+            ErrorCode.LLM_AUTH, "gemini", "API key not valid", retryable=False
+        ),
+    )
+    with pytest.raises(LLMKeysRejected) as caught:
+        await run(llm=dead)
+    assert "gemini" in (caught.value.error.outcome or "")
+
+
+def test_an_empty_section_renders_as_none_found() -> None:
+    from research_agent.agent.render import render_markdown
+    from research_agent.agent.state import Report, ReportSection
+
+    state = ResearchState(
+        run_id=uuid.uuid4(),
+        question="q",
+        as_of=TODAY,
+        language="tr",
+        report=Report(
+            title="t",
+            language="tr",
+            sections=[ReportSection(key=SectionKey.KEY_FINDINGS, title="Temel Bulgular")],
+        ),
+    )
+    assert "_Bulunmadı._" in render_markdown(state, metadata={})

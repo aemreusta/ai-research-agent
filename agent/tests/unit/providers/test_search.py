@@ -316,3 +316,60 @@ def test_search_hit_is_immutable() -> None:
     hit = SearchHit(url="u", provider="p", rank=1)
     with pytest.raises(ValidationError):
         hit.url = "v"  # type: ignore[misc]
+
+
+async def test_all_search_keys_rejected_stops_the_run() -> None:
+    from research_agent.providers.search.gateway import SearchKeysRejected
+
+    def rejecting(name: str) -> FakeSearchProvider:
+        return FakeSearchProvider(
+            name,
+            failures=[SearchProviderError(ErrorCode.SEARCH_AUTH, name, "bad key", False, 401)] * 5,
+        )
+
+    tavily, brave = rejecting("tavily"), rejecting("brave")
+    h = Harness(tavily, brave)
+    with pytest.raises(SearchKeysRejected):
+        await h.search()
+    with pytest.raises(SearchKeysRejected):
+        await h.search("another query")
+    assert len(tavily.requests) == 1 and len(brave.requests) == 1
+
+
+@pytest.mark.parametrize(
+    ("status", "body"),
+    [
+        (
+            400,
+            '{"error": {"code": 400, "message": "API key not valid. Please pass a valid API key.", "details": [{"reason": "API_KEY_INVALID"}]}}',
+        ),
+        (
+            422,
+            '{"type":"ErrorResponse","error":{"status":422,"detail":"The provided API key is invalid.","code":"SUBSCRIPTION_TOKEN_INVALID"}}',
+        ),
+        (
+            401,
+            '{"error": {"message": "Incorrect API key provided: sk-inval***alid", "code": "invalid_api_key"}}',
+        ),
+    ],
+)
+def test_real_invalid_key_responses_are_auth_failures(status: int, body: str) -> None:
+    """Bodies captured from the real APIs with invalid keys (2026-09-16)."""
+    from research_agent.providers.llm.base import classify_status
+    from research_agent.providers.search.base import classify_search_status
+
+    llm = classify_status("x", status, body)
+    search = classify_search_status("x", status, body)
+    assert llm.code is ErrorCode.LLM_AUTH and not llm.retryable
+    assert search.code is ErrorCode.SEARCH_AUTH and not search.retryable
+    assert "sk-inval" not in llm.message
+    assert len(llm.message) <= 200
+
+
+def test_an_ordinary_bad_request_is_not_mistaken_for_auth() -> None:
+    from research_agent.providers.llm.base import classify_status
+
+    error = classify_status(
+        "gemini", 400, '{"error": {"message": "Invalid JSON schema: unknown field"}}'
+    )
+    assert error.code is ErrorCode.LLM_PROVIDER_ERROR

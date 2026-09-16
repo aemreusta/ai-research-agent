@@ -15,7 +15,7 @@ providers:
   brave:
     base_url: https://api.search.brave.com/res/v1
     max_results: 8
-    extra_snippets: true
+    extra_snippets: false # only on some Brave plans; enable if yours includes it
 
 cache:
   enabled: true

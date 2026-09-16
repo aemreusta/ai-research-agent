@@ -16,7 +16,7 @@ from typing import Any
 from research_agent.agent.budget import BudgetMeter
 from research_agent.agent.runtime import Cache, CallRecorder, EventSink, SearchCallRecord, cache_key
 from research_agent.config.schema import SearchSettings
-from research_agent.errors import AgentError, ErrorCode
+from research_agent.errors import AgentError, AgentException, ErrorCode
 from research_agent.observability.events import EventType, new_span_id
 from research_agent.observability.logging import best_effort
 from research_agent.providers.search.base import (
@@ -42,6 +42,10 @@ class SearchOutcome:
         return self.error_code is not None and self.error_code is not ErrorCode.SEARCH_EMPTY
 
 
+class SearchKeysRejected(AgentException):
+    """Every configured search provider rejected its key: the run cannot find anything."""
+
+
 class SearchGateway:
     def __init__(
         self,
@@ -63,6 +67,7 @@ class SearchGateway:
         self._meter = meter
         self._cache_enabled = cache_enabled
         self._sleep = sleep
+        self.rejected: dict[str, str] = {}
 
     @property
     def available(self) -> list[str]:
@@ -78,7 +83,9 @@ class SearchGateway:
     ) -> SearchOutcome:
         """Run one logical search. Never raises: failure is an outcome with an error code."""
         self._meter.add_search()
-        order = list(self._chain)
+        order = [name for name in self._chain if name not in self.rejected]
+        if self._chain and not order:
+            raise self._keys_rejected(events)
         if preferred is not None and preferred in order:
             order.remove(preferred)
             order.insert(0, preferred)
@@ -113,6 +120,8 @@ class SearchGateway:
                 hits, latency = await self._call(name, request, events, next_name)
             except SearchProviderError as exc:
                 last_code = exc.code
+                if exc.code is ErrorCode.SEARCH_AUTH:
+                    self.rejected[name] = exc.message
                 await self._record(
                     events, name, request, subquestion_id, "failed", 0, 0, False, exc.code
                 )
@@ -138,7 +147,20 @@ class SearchGateway:
                 )
             )
 
+        if self._chain and all(name in self.rejected for name in self._chain):
+            raise self._keys_rejected(events)
         return SearchOutcome(request.query, [], None, False, last_code)
+
+    def _keys_rejected(self, events: EventSink) -> SearchKeysRejected:
+        names = ", ".join(f"{name} ({reason})" for name, reason in self.rejected.items())
+        return SearchKeysRejected(
+            AgentError(
+                code=ErrorCode.SEARCH_AUTH,
+                node=events.node,
+                decision="stop the run",
+                outcome=f"Every search key was rejected - {names}. Check the keys in Settings.",
+            )
+        )
 
     async def _call(
         self,

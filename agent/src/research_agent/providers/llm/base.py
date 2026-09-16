@@ -2,10 +2,14 @@
 
 from __future__ import annotations
 
+import contextlib
+import json
+import re
 from dataclasses import dataclass, field
 from typing import Any, Literal, Protocol
 
 from research_agent.errors import ErrorCode
+from research_agent.observability.redaction import redact_text
 
 Role = Literal["system", "user", "assistant"]
 
@@ -69,10 +73,37 @@ class LLMProvider(Protocol):
     async def embed(self, *, model: str, texts: list[str], dimensions: int) -> Embeddings: ...
 
 
+# Invalid keys do not always arrive as 401: Gemini answers 400 API_KEY_INVALID, Brave 422
+# SUBSCRIPTION_TOKEN_INVALID. Retrying those would only burn time.
+_AUTH_MARKERS = re.compile(
+    r"API_KEY_INVALID|API key not valid|SUBSCRIPTION_TOKEN_INVALID|invalid[_ ]api[_ ]key|"
+    r"Incorrect API key|invalid.{0,20}(?:token|key)|unauthori[sz]ed",
+    re.IGNORECASE,
+)
+
+
+def is_auth_failure(status: int, body: str) -> bool:
+    return status in (401, 403) or (status in (400, 422) and bool(_AUTH_MARKERS.search(body)))
+
+
+def short_message(body: str) -> str:
+    """The provider's own error message, without echoing request data or partial keys."""
+    message = body
+    with contextlib.suppress(ValueError, AttributeError, TypeError):
+        data = json.loads(body)
+        error = data.get("error", data) if isinstance(data, dict) else {}
+        if isinstance(error, dict):
+            message = str(error.get("message") or error.get("detail") or error.get("code") or body)
+        elif isinstance(error, str):
+            message = error
+    message = re.sub(r"(?:sk|tvly|AIza|BSA)[-_A-Za-z0-9*]{4,}", "<key>", message)
+    return redact_text(" ".join(message.split()))[:200]
+
+
 def classify_status(provider: str, status: int, body: str) -> ProviderError:
     """HTTP status -> coded failure. Shared by every adapter so the mapping is one table."""
-    snippet = body[:300]
-    if status in (401, 403):
+    snippet = short_message(body)
+    if is_auth_failure(status, body):
         return ProviderError(ErrorCode.LLM_AUTH, provider, snippet, retryable=False, status=status)
     if status == 429:
         return ProviderError(

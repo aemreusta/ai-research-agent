@@ -67,6 +67,11 @@ class LLMFailure(AgentException):
     """No provider produced a usable answer. Nodes catch this and use their fallback."""
 
 
+class LLMKeysRejected(AgentException):
+    """Every configured LLM provider rejected its key. Deliberately *not* an `LLMFailure`:
+    no node fallback can help, so the run stops with a message the user can act on."""
+
+
 @dataclass(frozen=True, slots=True)
 class LLMResult[T: BaseModel]:
     value: T
@@ -103,6 +108,8 @@ class LLMGateway:
         self._tracer = tracer
         self._sleep = sleep
         self.models_used: dict[str, str] = {}
+        # Providers whose key was rejected in this run; never asked again (circuit breaker).
+        self.rejected: dict[str, str] = {}
 
     @property
     def available(self) -> list[str]:
@@ -138,11 +145,14 @@ class LLMGateway:
         first = self._chain[0]
         last_error: ProviderError | None = None
 
-        for index, provider_name in enumerate(self._chain):
+        live = [name for name in self._chain if name not in self.rejected]
+        if not live:
+            raise self._keys_rejected(events)
+        for index, provider_name in enumerate(live):
             model = self._catalog.model_for(tier, provider_name)
             if model is None:
                 continue
-            next_provider = self._chain[index + 1] if index + 1 < len(self._chain) else None
+            next_provider = live[index + 1] if index + 1 < len(live) else None
             try:
                 result = await self._with_provider(
                     output,
@@ -159,6 +169,8 @@ class LLMGateway:
                 )
             except ProviderError as exc:
                 last_error = exc
+                if exc.code is ErrorCode.LLM_AUTH:
+                    self.rejected[provider_name] = exc.message
                 continue
 
             self.models_used[tier.value] = f"{provider_name}:{model}"
@@ -174,6 +186,8 @@ class LLMGateway:
                 )
             return result
 
+        if all(name in self.rejected for name in self._chain):
+            raise self._keys_rejected(events)
         code = last_error.code if last_error else ErrorCode.LLM_PROVIDER_ERROR
         failure = AgentError(
             code=code,
@@ -187,6 +201,17 @@ class LLMGateway:
             failure.model_copy(update={"decision": "use the node's deterministic fallback"})
         )
         raise LLMFailure(failure)
+
+    def _keys_rejected(self, events: EventSink) -> LLMKeysRejected:
+        names = ", ".join(f"{name} ({reason})" for name, reason in self.rejected.items())
+        return LLMKeysRejected(
+            AgentError(
+                code=ErrorCode.LLM_AUTH,
+                node=events.node,
+                decision="stop the run",
+                outcome=f"Every LLM key was rejected - {names}. Check the keys in Settings.",
+            )
+        )
 
     async def _with_provider[T: BaseModel](
         self,

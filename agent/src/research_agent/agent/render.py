@@ -28,6 +28,7 @@ LABELS = {
 WORDS = {
     "en": {
         "based_on": "based on",
+        "none_found": "None found.",
         "metadata": "Run metadata",
         "stop": "Stop reason",
         "rounds": "Research rounds",
@@ -53,6 +54,7 @@ WORDS = {
     },
     "tr": {
         "based_on": "dayanak",
+        "none_found": "Bulunmadı.",
         "metadata": "Çalışma bilgileri",
         "stop": "Durma nedeni",
         "rounds": "Araştırma turu",

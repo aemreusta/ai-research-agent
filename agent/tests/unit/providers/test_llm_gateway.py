@@ -29,6 +29,9 @@ def _error(code: ErrorCode, *, retryable: bool, provider: str = "gemini") -> Pro
     return ProviderError(code, provider, "boom", retryable=retryable)
 
 
+AUTH = _error(ErrorCode.LLM_AUTH, retryable=False)
+
+
 class Harness:
     def __init__(self, *providers: FakeLLMProvider, retries: int = 2) -> None:
         self.events = MemoryEventSink(uuid.uuid4(), node="plan", iteration=1)
@@ -156,16 +159,13 @@ async def test_schema_violations_are_quoted_back_to_the_model() -> None:
 
 
 async def test_every_provider_failing_is_one_coded_failure() -> None:
-    gemini = FakeLLMProvider(
-        "gemini", script={"Answer": _error(ErrorCode.LLM_AUTH, retryable=False)}
-    )
-    openai = FakeLLMProvider(
-        "openai", script={"Answer": _error(ErrorCode.LLM_AUTH, retryable=False, provider="openai")}
-    )
+    refused = _error(ErrorCode.LLM_PROVIDER_ERROR, retryable=False)
+    gemini = FakeLLMProvider("gemini", script={"Answer": refused})
+    openai = FakeLLMProvider("openai", script={"Answer": refused})
     h = Harness(gemini, openai)
     with pytest.raises(LLMFailure) as caught:
         await h.ask()
-    assert caught.value.error.code is ErrorCode.LLM_AUTH
+    assert caught.value.error.code is ErrorCode.LLM_PROVIDER_ERROR
     assert caught.value.error.decision == "every provider in the chain failed"
 
 
@@ -189,3 +189,29 @@ async def test_the_llm_call_event_carries_tokens_and_cost() -> None:
     await h.ask()
     call = next(e for e in h.events.events if e["event_type"] == "llm_called")
     assert call["tokens_in"] > 0 and call["cost_usd"] > 0
+
+
+async def test_a_rejected_provider_is_not_asked_again_in_the_same_run() -> None:
+    gemini = FakeLLMProvider("gemini", script={"Answer": AUTH})
+    openai = FakeLLMProvider("openai", script={"Answer": GOOD})
+    h = Harness(gemini, openai)
+    await h.ask()
+    await h.ask()
+    assert len(gemini.calls) == 1, "circuit breaker: the bad key is skipped from now on"
+    assert h.gateway.rejected.keys() == {"gemini"}
+
+
+async def test_all_keys_rejected_stops_the_run_instead_of_degrading() -> None:
+    from research_agent.providers.llm.gateway import LLMKeysRejected
+
+    h = Harness(
+        FakeLLMProvider("gemini", script={"Answer": AUTH}),
+        FakeLLMProvider(
+            "openai",
+            script={"Answer": _error(ErrorCode.LLM_AUTH, retryable=False, provider="openai")},
+        ),
+    )
+    with pytest.raises(LLMKeysRejected) as caught:
+        await h.ask()
+    assert not isinstance(caught.value, LLMFailure), "node fallbacks must not swallow this"
+    assert "Settings" in (caught.value.error.outcome or "")

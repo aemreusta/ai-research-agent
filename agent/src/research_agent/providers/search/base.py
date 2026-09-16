@@ -9,6 +9,7 @@ from typing import Any, Protocol
 from pydantic import BaseModel, ConfigDict, Field
 
 from research_agent.errors import ErrorCode
+from research_agent.providers.llm.base import is_auth_failure, short_message
 
 
 class SearchHit(BaseModel):
@@ -68,8 +69,8 @@ class SearchProvider(Protocol):
 
 
 def classify_search_status(provider: str, status: int, body: str) -> SearchProviderError:
-    snippet = body[:300]
-    if status in (401, 403):
+    snippet = short_message(body)
+    if is_auth_failure(status, body):
         return SearchProviderError(ErrorCode.SEARCH_AUTH, provider, snippet, False, status)
     if status == 429 or status == 432 or status == 433:
         # Tavily uses 432/433 for plan and pay-as-you-go limits.
