@@ -60,6 +60,7 @@ export async function render(root, runId) {
             h("div", { class: "row", style: "margin-bottom:6px" }, statusBadge(run.status), gateBadge(run.gate_status),
               run.stop_reason ? h("span", { class: "badge violet" }, `stop: ${run.stop_reason}`) : null,
               run.attempts > 1 ? h("span", { class: "badge warn" }, `attempt ${run.attempts}`) : null,
+              run.simulated ? h("span", { class: "badge violet", title: "Rule-based stand-in model over a built-in corpus - not a research result" }, "offline demo") : null,
               ...(run.skills_used || []).map((skill) => h("span", { class: "badge info" }, `skill: ${skill}`))),
             h("h1", {}, run.question)),
           h("div", { class: "row" }, cancel,

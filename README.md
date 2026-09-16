@@ -57,7 +57,7 @@ COMPOSE_PROFILES= docker compose up -d      # or set COMPOSE_PROFILES= in .env
 `LANGFUSE_MINIO_HOST_PORT`, `POSTGRES_HOST_PORT`).
 
 **No keys yet?** `make demo` records an offline run (a rule-based stand-in model over a three-page
-built-in corpus) so every screen can be explored. It is labelled as simulated and costs nothing.
+built-in corpus) so every screen can be explored. It is marked "offline demo" in the UI and costs nothing.
 
 <details>
 <summary>More commands</summary>
@@ -89,7 +89,7 @@ docker compose run --rm agent config --override budget.max_searches=20
 | PII | Microsoft Presidio analyzer with Turkish ad-hoc recognisers, always unioned with regex rules; stable placeholders assigned in code |
 | Observability | Postgres `run_events` (primary) + self-hosted Langfuse v4 over OTLP (traces, prompt versions, cost) |
 | Frontend | Static HTML + ES modules + Server-Sent Events, no build step |
-| Quality | pytest (423 tests incl. Postgres integration and offline end-to-end graph runs), Go tests (70), ruff, mypy `--strict`, pre-commit with gitleaks |
+| Quality | pytest (427 tests incl. Postgres integration and offline end-to-end graph runs), Go tests (70), ruff, mypy `--strict`, pre-commit with gitleaks |
 
 ## 3. Architecture
 

@@ -71,6 +71,8 @@ class RunSummary(BaseModel):
     created_at: datetime
     finished_at: datetime | None
     duration_seconds: float | None
+    simulated: bool = False
+    """An offline demo run (`research run --simulate --persist`), not a research result."""
 
 
 class RunDetail(RunSummary):

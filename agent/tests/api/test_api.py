@@ -170,6 +170,7 @@ async def test_fetching_one_run_includes_its_report_when_there_is_one(
     )
 
     body = (await client.get(f"/api/runs/{run_id}")).json()
+    assert body["simulated"] is False
     assert body["status"] == "succeeded"
     assert body["stop_reason"] == "sufficient"
     assert body["gate_status"] == "pass"

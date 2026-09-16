@@ -68,6 +68,7 @@ def _summary(run: Run) -> RunSummary:
         created_at=run.created_at,
         finished_at=run.finished_at,
         duration_seconds=_duration(run),
+        simulated=any(str(v).startswith("simulated:") for v in (run.models_used or {}).values()),
     )
 
 
