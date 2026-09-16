@@ -36,6 +36,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --locked --no-editable
 COPY config ./config
 COPY contracts ./contracts
+COPY skills ./skills
 COPY migrations ./migrations
 COPY alembic.ini ./alembic.ini
 COPY agent/tests ./agent/tests
@@ -61,6 +62,7 @@ WORKDIR /app
 COPY --from=builder --chown=app:app /app/.venv /app/.venv
 COPY --chown=app:app config ./config
 COPY --chown=app:app contracts ./contracts
+COPY --chown=app:app skills ./skills
 COPY --chown=app:app migrations ./migrations
 COPY --chown=app:app alembic.ini ./alembic.ini
 

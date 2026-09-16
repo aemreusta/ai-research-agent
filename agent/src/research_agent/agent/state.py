@@ -14,9 +14,9 @@ stores - no pickles, so a resumed run survives a code change that keeps the sche
 from __future__ import annotations
 
 import uuid
-from datetime import date
+from datetime import date, datetime
 from enum import StrEnum
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -156,12 +156,14 @@ class Document(_Model):
     fetched: bool = False
     fetch_error: str | None = None
     extracted: bool = False
+    selected_round: int | None = None
+    """The round in which triage picked this document for scoring and extraction."""
     triage_score: float = 0.0
     score: SourceScore = Field(default_factory=SourceScore)
     first_seen_iteration: int = 1
 
 
-# --- the ledger ----------------------------------------------------------------------------------
+# --- the ledger --------------------------------------------------------------------------------
 
 
 class ClaimKind(StrEnum):
@@ -243,7 +245,7 @@ class Contradiction(_Model):
     iteration: int = 1
 
 
-# --- report --------------------------------------------------------------------------------------
+# --- report ------------------------------------------------------------------------------------
 
 
 class SentenceKind(StrEnum):
@@ -302,7 +304,15 @@ class Report(_Model):
         return [(section, sentence) for section in self.sections for sentence in section.sentences]
 
 
-# --- the run -------------------------------------------------------------------------------------
+class PendingHit(_Model):
+    """A search result waiting for `process_results` - transient, cleared every round."""
+
+    hit: dict[str, object]
+    query_id: str
+    subq_id: str
+
+
+# --- the run -----------------------------------------------------------------------------------
 
 
 class StopReason(StrEnum):
@@ -312,6 +322,13 @@ class StopReason(StrEnum):
     NO_PROGRESS = "no_progress"
     NO_EVIDENCE = "no_evidence"
     CANCELLED = "cancelled"
+
+
+class RouteRecord(_Model):
+    stop: bool
+    reason: StopReason | None = None
+    rule: str = ""
+    detail: str = ""
 
 
 class ResearchState(_Model):
@@ -332,11 +349,17 @@ class ResearchState(_Model):
     skills: list[str] = Field(default_factory=list)
     report: Report | None = None
     report_markdown: str = ""
-    gate_result: dict[str, object] | None = None
+    gate_result: dict[str, Any] | None = None
     verification: dict[str, object] = Field(default_factory=dict)
     counters: dict[str, int] = Field(default_factory=dict)
     """Dropped claims, rejected quotes, failed fetches... - surfaced in the report metadata."""
     budget: dict[str, float | int] = Field(default_factory=dict)
+    started_at: datetime | None = None
+    pending_hits: list[PendingHit] = Field(default_factory=list)
+    round_snapshot: dict[str, list[int]] = Field(default_factory=dict)
+    route: RouteRecord | None = None
+    resynthesized: bool = False
+    skill_domains: dict[int, list[str]] = Field(default_factory=dict)
 
     # -- helpers used by nodes and the gate --
 

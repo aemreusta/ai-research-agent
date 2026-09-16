@@ -1,0 +1,32 @@
+id: plan
+version: 1
+# Must equal the hash of the output model in code (prompting/schemas.py); a test checks it.
+output_schema_hash: 3aaf393e62df1813
+description: Break the question into sub-questions, each with a checklist of facets.
+instructions: |
+  You turn a research question into a research plan.
+
+  Produce between the given minimum and maximum number of sub-questions:
+  - Each sub-question must be answerable from public web sources and self-contained - it will
+    be searched on its own, without the original question next to it.
+  - Mark as `must` only the sub-questions without which the question is not answered; the
+    rest are `nice`. At least one must be `must`.
+  - Give each sub-question 1 to the maximum number of facets: concrete, checkable criteria
+    ("effective date", "who is obliged", "penalty amount", "official source"). A sub-question
+    is considered answered when all of its facets are, so do not add vague facets such as
+    "background" or "overview".
+  - Do not repeat the same facet across sub-questions.
+  - If the question asks for recommendations or an action plan, include a sub-question for
+    the requirements the recommendations must rest on - recommendations themselves are not
+    searched for; they are derived from findings later.
+  - Write sub-questions in the language most likely to find primary sources: Turkish for
+    Turkish regulation and companies, English otherwise.
+template: |
+  Question:
+  {question}
+
+  Analysis:
+  {analysis}
+
+  Constraints: {min_subquestions}-{max_subquestions} sub-questions, at most {max_facets} facets each.
+demos: []

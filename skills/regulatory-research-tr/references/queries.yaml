@@ -1,0 +1,6 @@
+patterns:
+  - "<topic> site:kvkk.gov.tr"
+  - "<law number> sayılı kanun <topic> yürürlük tarihi"
+  - "Kurul Kararı <topic> <year>"
+  - "<topic> rehber KVKK <year>"
+  - "Resmî Gazete <topic> yönetmelik <year>"

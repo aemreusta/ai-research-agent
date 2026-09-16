@@ -1,0 +1,5 @@
+patterns:
+  - "<market> market size <year> report"
+  - "<market> market forecast CAGR <year>"
+  - "<market> pazar büyüklüğü <year>"
+  - "<market> market size methodology"

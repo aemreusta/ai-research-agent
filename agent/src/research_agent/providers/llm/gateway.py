@@ -175,15 +175,18 @@ class LLMGateway:
             return result
 
         code = last_error.code if last_error else ErrorCode.LLM_PROVIDER_ERROR
-        raise LLMFailure(
-            AgentError(
-                code=code,
-                node=events.node,
-                decision="every provider in the chain failed",
-                outcome=str(last_error) if last_error else None,
-                provider=last_error.provider if last_error else None,
-            )
+        failure = AgentError(
+            code=code,
+            node=events.node,
+            decision="every provider in the chain failed",
+            outcome=str(last_error) if last_error else None,
+            provider=last_error.provider if last_error else None,
         )
+        # The node's own fallback takes over; the timeline says so.
+        await events.error(
+            failure.model_copy(update={"decision": "use the node's deterministic fallback"})
+        )
+        raise LLMFailure(failure)
 
     async def _with_provider[T: BaseModel](
         self,
@@ -313,16 +316,16 @@ class LLMGateway:
                         Message("user", repair_instruction(exc)),
                     ]
                     continue
-                raise LLMFailure(
-                    AgentError(
-                        code=ErrorCode.LLM_REPAIR_FAILED,
-                        node=events.node,
-                        decision="use the node's deterministic fallback",
-                        outcome=str(exc)[:300],
-                        provider=provider_name,
-                        attempt=attempts,
-                    )
-                ) from exc
+                failure = AgentError(
+                    code=ErrorCode.LLM_REPAIR_FAILED,
+                    node=events.node,
+                    decision="use the node's deterministic fallback",
+                    outcome=str(exc)[:300],
+                    provider=provider_name,
+                    attempt=attempts,
+                )
+                await events.error(failure)
+                raise LLMFailure(failure) from exc
 
             await self._record(
                 span_id,

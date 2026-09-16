@@ -1,0 +1,6 @@
+patterns:
+  - "<company> press release <topic>"
+  - "<company> partnership announcement"
+  - "<company> yatırım aldı"
+  - "<company> iş birliği"
+  - "<company> founders CEO"

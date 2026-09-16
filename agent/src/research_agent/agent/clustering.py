@@ -27,10 +27,13 @@ _SUFFIXES = re.compile(
 )
 
 
+_ARTICLES = re.compile(r"^(?:the|a|an)\s+", re.IGNORECASE)
+
+
 def normalise_entity(name: str | None) -> str | None:
     if not name:
         return None
-    cleaned = fold(name).strip().rstrip(",. ")
+    cleaned = _ARTICLES.sub("", fold(name).strip()).rstrip(",. ")
     previous = None
     while previous != cleaned:
         previous = cleaned

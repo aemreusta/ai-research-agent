@@ -112,27 +112,27 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 - [~] `pii/` — **`RegexMasker` hazır** (intake B1: kararlı numaralı placeholder `<TCKN_1>`, checksum/Luhn doğrulamalı, isimler korunuyor, entity kaydı değer taşımıyor; Presidio yokken degrade modu da bu). Kalan: Presidio HTTP client + TR ad-hoc recognizer'lar
 - [x] Key çözümleme: `run_secrets` (Fernet) → `.env` varsayılanı; kaynak metadata'sı. `APP_SECRET_KEY` boşsa `migrate` paylaşılan volume'a bir kez üretir (`APP_SECRET_KEY_FILE`, 0600, asla döndürülmez) — kullanıcı Fernet anahtarı üretmek zorunda değil (D38). Key probe'ları: Tavily `/usage`, OpenAI/Gemini model listesi (key header'da, URL'de değil), Ollama `/api/tags`, Brave 1 arama
 - [~] `FakeLLMProvider` + `FakeSearchProvider` hazır; `agent/runtime.py`: `EventSink` / `CallRecorder` / `Cache` protokolleri — DB ve bellek implementasyonları (agent çekirdeği SQLAlchemy import etmez; CLI ve senaryo testleri aynı kodu koşar). Kalan: `FakePresidio`
-- [ ] `prompting/` — `Signature`, `Predict`/`Reasoned`, registry (YAML seed → DB, aktif versiyon çözümleme, run snapshot), `skills.py` (SKILL.md parse, seçim listesi, enjeksiyon)
-- [ ] Langfuse: callback handler, `mask` redaction, `trace_id` ↔ `run_id`, trace URL; `PromptRegistry` (Langfuse → YAML fallback, şema hash, template değişken kontrolü); `seed_sync` (YAML → Langfuse, skills → `skill/<name>`) + export script
+- [x] `prompting/` — 9 signature (çıktı şeması kodda, her birinde `rationale`), YAML seed'lerde `output_schema_hash` (kod değişip seed güncellenmezse test kırılır), registry (şema hash + şablon değişkenleri **tam eşitlik**: `{ledger}`'ı düşüren prompt reddedilir), run başına sabitleme, `Predictor` (ortak güvenlik önsözü, `<untrusted_source>` çiti — içerik çiti erken kapatamaz), `skills.py` (script'li / tier-3 ekleyen skill reddedilir, en fazla 2 skill)
+- [x] Langfuse **v4**: self-host v4 eski batch ingestion'ı reddettiği için **OTLP/JSON** (`/api/public/otel/v1/traces`, `x-langfuse-ingestion-version: 4`): run başına kök span + her LLM çağrısı için generation (usage/cost/prompt adı+sürümü); payload'lar redaction'dan geçiyor (testli); trace URL `runs`'ta. `PromptRegistry` Langfuse → YAML fallback, **ilk kullanımda seed** (migrate Langfuse'tan önce koştuğu için) — compose içinde 9 prompt `production` etiketiyle oluştu. Kalan: skill'lerin `skill/<name>` olarak senkronu, export script
 
 ## Faz 3 — Agent çekirdeği · Cum akşam → Cmt
-- [~] `cli.py` — `research config` / `research contracts` çalışıyor; `research run "soru"` graph bağlanınca (D30)
-- [ ] `intake_guard` (doğrulama, dil, PII maskeleme)
-- [ ] `analyze_query` (+ skill seçimi), `plan`, `generate_queries` — signature seed YAML'ları (her şemada `rationale`)
-- [ ] Seed skill'ler: `regulatory-research-tr`, `company-research`, (ops.) `market-sizing`
+- [x] `cli.py` — `research run "soru" [--simulate] [--override] [--out]`: servis katmanı olmadan aynı graf (bellek içi event/kayıt/önbellek), zaman çizelgesini case formatında basar, `input.md/report.md/report.json/gate_result.json/state.json/trace.jsonl` yazar; anahtar yoksa `LLM_AUTH` ile anlaşılır çıkış (D30)
+- [x] `intake_guard` (doğrulama, dil, idempotent PII maskeleme, degrade uyarısı)
+- [x] `analyze_query` (+ skill seçimi, skill domain'leri run için tier listesine eklenir), `plan` (normalize: tekrar alt soru/facet ayıklama, cap'ler, en az bir `must`), `generate_queries` (tur genişliği kuralı, bütçeye göre kota, L4 dedup, eksik kalan hedefe şablon sorgu, **sorgu tükenmesi → exhausted**) — hepsinde deterministik fallback
+- [x] Seed skill'ler: `regulatory-research-tr` (+ tier-1 domain'ler), `company-research`, `market-sizing` (+ araştırma firması domain'leri)
 - [x] L1 URL canonicalization (şema, www/m/amp, tracking, AMP son eki, sıralı query) · L2 normalize hash + MinHash LSH → `origin_id` (checkpoint'ten yeniden kurulabilir) · L4 token-Jaccard query dedup · ortak `text.py` (eşleştirme için tüm i-varyantları tek `i`: "ApilexAI" = "apilexaı" sorunu testle yakalandı)
-- [~] `scoring.py` hazır: domain tier (skill eklentili, taban mutasyonsuz), şirketin kendi alanı = primary, kapsam-duyarlı recency, ağırlıklı toplam + tek satır gerekçe; LLM tier bandı içinde en fazla ±0.1 oynatabilir, tier atlatamaz (injection testi). Kalan: node
-- [~] `quotes.py` hazır: exact → fuzzy (±1 kelime pencere, oran ≥ 0.88); **rakam ve sayı-kelimesi (beş/on, five/ten) birebir şart** — testte yakalanan "beş iş günü"→"on iş günü" kaçağı kapandı. Kalan: node
-- [~] `clustering.py` (L3: benzerlik + aynı normalize entity + **farklı değerli iddialar asla birleşmez**; kararlı cluster id; destek = bağımsız origin, "X'e göre" → X origin; güven = bağımsız kanıtların birleşimi) ve `contradictions.py` (aynı entity+attribute, tolerans dışı değer) hazır. Kalan: node'lar + LLM judge
+- [x] `evaluate_sources`: 8'lik batch'ler paralel, LLM relevance/primary/±0.1 düzeltme + `scoring.py` (tier atlatılamaz); LLM yoksa kural skoru; her kaynak için `[Evaluator] domain → skor (T1, primary, tarih, relevance)` satırı
+- [x] `extract_claims`: doküman başına paralel, içerik `<untrusted_source>` içinde; **alıntı doğrulaması** (rakam + sayı kelimesi birebir) + **enjeksiyon tripwire'ı** ("ignore previous instructions" / "önceki talimatları yok say" gibi modele hitap eden cümle kanıt sayılmaz — senaryo testinde yakalandı)
+- [x] `cluster_and_corroborate` (tek embedding modeli, önbellekli; sağlayıcı düşerse run'ın geri kalanı lexical) · `detect_contradictions` (kural adayları + LLM judge; tercih ancak ledger destekliyorsa — birincil ve daha yüksek skor — kabul, çelişki yine raporlanır; judge yoksa muhafazakâr: gerçek çelişki). Eşleştirme düzeltmeleri: baştaki artikel ("The EU AI Act" = "EU AI Act"), attribute için içerme katsayısı
 
 ## Faz 4 — Döngü, sentez, Gate · Cmt
-- [~] `coverage.py` (facet yeterliliği; takip sorgusu denenmiş çelişki artık facet'i bloklamıyor, raporlanıyor) + `termination.py` (başarı → hard limit → durgunluk; **kapalı gelen süre/maliyet kapıları testle açılıp doğrulandı**) hazır. Kalan: node + router bağlantısı
-- [ ] LangGraph wiring + Postgres checkpointer (`thread_id = run_id`)
-- [ ] Çelişki çözüm follow-up'ı
-- [ ] `synthesize` + `verify_citations` (**batch'li**, 1 kez geri bildirimle yeniden sentez — D34)
+- [x] `assess_coverage` (facet'ler kodda; LLM yalnızca eksik facet ekleyebilir + not yazar, `[Research State] Missing information: …`) + router (`[Router] Continue/Stop …`, `BUDGET_EXCEEDED` / `MAX_ITERATIONS` / `NO_EVIDENCE` olayları)
+- [x] LangGraph wiring (durum tek JSON dokümanı → checkpoint'te pickle yok) + Postgres checkpointer (`thread_id = run_id`); her node sınırında cancel kontrolü, kendi span'i, canlı sayaçlar; `recursion_limit` iterasyon sayısından türetilir; resume'da bütçe sayaçları geri yüklenir
+- [x] Çelişki çözüm follow-up'ı (çelişki başına 1 hedefli sorgu, sonra raporlanır)
+- [x] `synthesize` (yalnızca ledger; atıfsız cümle yalnızca açıkça çerçeve cümlesiyse META, değilse FACT kalır ve G2 düşürür; etiketler ledger'dan deterministik; Known Gaps kodda) + `verify_citations` (batch'li, 3 paralel, 1 kez geri bildirimle yeniden sentez, kalan desteksiz cümle düşer — D34); model yoksa ledger'ı doğrudan listeleyen rapor
 - [x] `gate/` — `numeric.py` (TR+EN sayı/para/yüzde/tarih, çoklu okuma, **yazıldığı hassasiyete yuvarlama** toleransı, para birimi farkı = eşleşmez, tarih granülaritesi = kapsama) · `rules.py` G1–G11 (G4: soru bağlamı → B2 ledger'dan yeniden hesap → B1 birebir → B3 tolerans=warn; G1 ayrıca "hiç bulgu kalmadıysa" remediation'sız hata — boş raporun "None" ile temiz görünmesini engeller) · `runner.py` (değerlendir → düzelt → yeniden değerlendir, kaynak listesi her zaman atıflardan türetilir, "N cümle çıkarıldı" notu, fail'de banner, deterministik `to_dict`)
-- [ ] `render_report` (Summary · Key Findings · Conflicting/Uncertain · Conclusion (+Action Plan) · Known Gaps · Sources · Metadata)
-- [ ] Worker'a bağla: gerçek run uçtan uca compose içinde
+- [x] `render.py` (Markdown + JSON: numaralı atıflar, TR/EN etiketler, banner + kalan ihlaller, kaynak skoru/primary/tarih, metadata: durma nedeni, tur, arama, token, maliyet, gate, config hash, modeller, prompt sürümleri)
+- [~] Worker'a bağlandı (`AGENT_RUNNER=graph` varsayılan): compose içinde anahtarsız run `LLM_AUTH` ile anlaşılır mesajla bitiyor, prompt'lar Langfuse'a seed ediliyor. Kalan: gerçek anahtarlarla uçtan uca (kullanıcının adımı)
 
 ## Faz 5 — API & UI · Paz
 - [ ] SSE `/api/runs/{id}/events` (backfill + `Last-Event-ID` + `LISTEN`)
@@ -158,8 +158,8 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 - [x] Unit: scoring, facet yeterlilik, contradiction adayları, termination/router
 - [x] Unit: Gate G1–G11 (ayrı ayrı), sayı/tarih normalizer, **G4 üç kova + yanlış pozitif senaryoları** (türetilmiş sayı, yuvarlama, kur, tarih granülaritesi, soru bağlamı)
 - [ ] Unit: PII redaction + TCKN checksum, secret redaction, structured output repair, config override sınırları
-- [ ] Senaryo: sufficient · stagnation · aynı sorgu · timeout→fallback · invalid JSON · max iteration · gate fail→remediation
-- [~] **`max_wall_clock` ve `max_cost_usd` açıkken** `stop_reason=budget` — router seviyesinde testli (kapalıyken asla durdurmadığı da testli); graph senaryosu node'larla gelecek (D11)
+- [x] Senaryo (`simulated.py` ile çevrimdışı tam graf): sufficient · stagnation/known gaps · max iteration · arama bütçesi · timeout→fallback provider · invalid JSON→repair→fallback plan · birincil LLM ölü→ikinci provider · kanıt yok→NO_EVIDENCE+banner · enjeksiyon · PII sağlayıcıya gitmiyor · cancel · **crash→checkpoint'ten resume (bitmiş node'lar tekrar koşmuyor)** · TR başlıklar · preflight
+- [x] **`max_wall_clock` ve `max_cost_usd` açıkken** `stop_reason=budget` — router seviyesinde **ve tam graf senaryosunda** testli; kapalıyken asla durdurmadığı da testli (D11)
 - [ ] Hata izlenebilirliği: her expected hata doğru `ErrorCode`/`decision`/`outcome` üretiyor
 - [ ] API: run oluşturma, SSE resume, cancel, **key sızıntısı yok**
 - [ ] Go: watchdog karar tablosu (table-driven), backoff, kapasite seçimi, durum geçişleri ↔ `run_states.yaml`

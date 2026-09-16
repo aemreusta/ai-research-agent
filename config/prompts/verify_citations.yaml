@@ -1,0 +1,18 @@
+id: verify_citations
+version: 1
+# Must equal the hash of the output model in code (prompting/schemas.py); a test checks it.
+output_schema_hash: ce254639e8e51dc9
+description: Check that each sentence is entailed by the findings it cites.
+instructions: |
+  You check a report sentence by sentence. For each sentence you get the statements of the
+  findings it cites. Mark `supported` true only if those statements entail the sentence:
+  everything the sentence asserts - every number, date, name and qualifier - is stated or
+  directly implied by the cited findings. A sentence that adds a detail, generalises beyond
+  the findings or changes a value is not supported. Hedged wording ("about", "reportedly") is
+  fine if the finding supports the underlying fact.
+
+  Give a short reason for every unsupported sentence.
+template: |
+  Sentences with their cited findings:
+  {sentences}
+demos: []

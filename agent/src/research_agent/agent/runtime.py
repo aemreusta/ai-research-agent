@@ -26,7 +26,7 @@ from research_agent.errors import AgentError
 from research_agent.observability.events import EventLevel, EventType, new_span_id
 from research_agent.observability.redaction import redact, redact_text
 
-# --- events ----------------------------------------------------------------------------------
+# --- events -------------------------------------------------------------------------------------
 
 
 class EventSink(Protocol):
@@ -45,7 +45,15 @@ class EventSink(Protocol):
         message: str,
         *,
         level: EventLevel = EventLevel.INFO,
-        **kwargs: Any,
+        data: dict[str, Any] | None = None,
+        label: str | None = None,
+        iteration: int | None = None,
+        latency_ms: int | None = None,
+        tokens_in: int | None = None,
+        tokens_out: int | None = None,
+        cost_usd: float | None = None,
+        error_code: str | None = None,
+        expected: bool | None = None,
     ) -> int: ...
 
     async def debug(self, event_type: EventType | str, message: str, **kwargs: Any) -> int: ...
@@ -108,9 +116,22 @@ class MemoryEventSink:
         data: dict[str, Any] | None = None,
         label: str | None = None,
         iteration: int | None = None,
-        **kwargs: Any,
+        latency_ms: int | None = None,
+        tokens_in: int | None = None,
+        tokens_out: int | None = None,
+        cost_usd: float | None = None,
+        error_code: str | None = None,
+        expected: bool | None = None,
     ) -> int:
         payload = dict(data or {})
+        extra = {
+            "latency_ms": latency_ms,
+            "tokens_in": tokens_in,
+            "tokens_out": tokens_out,
+            "cost_usd": cost_usd,
+            "error_code": error_code,
+            "expected": expected,
+        }
         if label:
             payload["display"] = f"[{label}] {message}"
         async with self._timeline.lock:
@@ -126,7 +147,7 @@ class MemoryEventSink:
                 "iteration": self.iteration if iteration is None else iteration,
                 "span_id": self.span_id,
                 "parent_span_id": self.parent_span_id,
-                **{key: value for key, value in kwargs.items() if value is not None},
+                **{key: value for key, value in extra.items() if value is not None},
             }
             self._timeline.events.append(event)
         if self._echo is not None:
@@ -171,7 +192,7 @@ class MemoryEventSink:
         )
 
 
-# --- call records ----------------------------------------------------------------------------
+# --- call records ------------------------------------------------------------------------------
 
 
 @dataclass(frozen=True, slots=True)
@@ -252,7 +273,7 @@ class DbCallRecorder:
             await session.commit()
 
 
-# --- caches ----------------------------------------------------------------------------------
+# --- caches ------------------------------------------------------------------------------------
 
 
 def cache_key(*parts: Any) -> str:

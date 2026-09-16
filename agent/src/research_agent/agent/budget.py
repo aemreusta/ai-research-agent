@@ -24,7 +24,7 @@ class BudgetLimit(StrEnum):
 @dataclass
 class BudgetMeter:
     settings: BudgetSettings
-    clock: object = field(default=time.monotonic, repr=False)
+    clock: object = field(default=None, repr=False)
     started_at: float = field(init=False)
     searches: int = 0
     llm_calls: int = 0
@@ -37,7 +37,9 @@ class BudgetMeter:
         self.started_at = self._now()
 
     def _now(self) -> float:
-        now: float = self.clock()  # type: ignore[operator]
+        # Looked up on every call, so a test can patch `time.monotonic`.
+        clock = self.clock if self.clock is not None else time.monotonic
+        now: float = clock()  # type: ignore[operator]
         return now
 
     @property
@@ -67,6 +69,16 @@ class BudgetMeter:
         if cost is not None and self.cost_usd >= cost:
             return BudgetLimit.COST
         return None
+
+    def restore(self, snapshot: dict[str, float | int]) -> None:
+        """Continue counting after a resume, including the time already spent."""
+        self.searches = int(snapshot.get("searches", 0))
+        self.llm_calls = int(snapshot.get("llm_calls", 0))
+        self.tokens_in = int(snapshot.get("tokens_in", 0))
+        self.tokens_out = int(snapshot.get("tokens_out", 0))
+        self.cost_usd = float(snapshot.get("cost_usd", 0.0))
+        self.iteration = int(snapshot.get("iteration", 0))
+        self.started_at = self._now() - float(snapshot.get("elapsed_seconds", 0.0))
 
     def snapshot(self) -> dict[str, float | int]:
         return {

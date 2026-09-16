@@ -70,6 +70,7 @@ services:
     restart: "no"
     environment:
       <<: *app-env
+      # Seeds the YAML prompts into Langfuse when the observability profile is up.
     volumes:
       - app-secrets:/run/app-secrets
     depends_on:
@@ -106,7 +107,7 @@ services:
       <<: [*app-env, *provider-keys]
       APP_PORT: "8081"
       AGENT_SLOTS: ${AGENT_SLOTS:-2}
-      AGENT_RUNNER: ${AGENT_RUNNER:-echo}
+      AGENT_RUNNER: ${AGENT_RUNNER:-graph}
       AGENT_HEARTBEAT_SECONDS: "10"
     volumes:
       - app-secrets:/run/app-secrets:ro

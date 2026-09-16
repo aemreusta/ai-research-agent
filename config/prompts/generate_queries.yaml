@@ -1,0 +1,33 @@
+id: generate_queries
+version: 1
+# Must equal the hash of the output model in code (prompting/schemas.py); a test checks it.
+output_schema_hash: b0bad5c814db0627
+description: Write diverse web search queries for the open targets of this round.
+instructions: |
+  You write web search queries for a research agent. Each target below is a sub-question
+  (first round) or a specific missing facet or unresolved contradiction (later rounds).
+
+  Rules:
+  - Return at most the given number of queries per target, never more than the overall limit.
+  - Make queries for the same target genuinely different: vary the angle (official source vs.
+    news coverage), the specificity (broad vs. precise terms), and the language (Turkish and
+    English) when the topic has sources in both.
+  - Favour terms that appear in primary sources: the law's number, the regulator's name, the
+    official title of a document, the company's legal name.
+  - For a missing facet, target that facet directly. For a contradiction, look for the primary
+    source that can settle it (the regulation text, the company announcement).
+  - Never repeat or lightly reword a query from the "already tried" list.
+  - Use `site:` only for official domains, and only occasionally.
+  - Use the ids exactly as given for subq_id and facet_id.
+template: |
+  Today is {today}. Research question: {question}
+  Report language: {language}. Round: {round}.
+
+  Targets (with how many queries each may get):
+  {targets}
+
+  Already tried - do not repeat:
+  {tried_queries}
+
+  Overall limit this round: {limit} queries.
+demos: []

@@ -88,7 +88,7 @@ class RunRepository:
     def __init__(self, session: AsyncSession) -> None:
         self._session = session
 
-    # --- reads ---------------------------------------------------------------
+    # --- reads ----------------------------------------------------------------------------------
 
     async def get(self, run_id: uuid.UUID) -> Run | None:
         return await self._session.get(Run, run_id, populate_existing=True)
@@ -126,7 +126,7 @@ class RunRepository:
         )
         return (await self._session.execute(statement)).scalars().all()
 
-    # --- writes --------------------------------------------------------------
+    # --- writes ---------------------------------------------------------------------------------
 
     async def create(
         self,
@@ -212,6 +212,30 @@ class RunRepository:
         await self._session.execute(update(Run).where(Run.id == run_id).values(**values))
         await self._session.commit()
 
+    async def update_metadata(
+        self,
+        run_id: uuid.UUID,
+        *,
+        prompt_versions: dict[str, Any] | None = None,
+        models_used: dict[str, Any] | None = None,
+        skills_used: list[str] | None = None,
+        langfuse_trace_url: str | None = None,
+    ) -> None:
+        """Reproducibility metadata, written as soon as it is known (v0.6 §3)."""
+        values: dict[str, Any] = {
+            key: value
+            for key, value in {
+                "prompt_versions": prompt_versions,
+                "models_used": models_used,
+                "skills_used": skills_used,
+                "langfuse_trace_url": langfuse_trace_url,
+            }.items()
+            if value is not None
+        }
+        if values:
+            await self._session.execute(update(Run).where(Run.id == run_id).values(**values))
+            await self._session.commit()
+
     async def finish(
         self,
         run_id: uuid.UUID,
@@ -273,7 +297,7 @@ class RunRepository:
         )
         await self._session.commit()
 
-    # --- provider keys -------------------------------------------------------
+    # --- provider keys --------------------------------------------------------------------------
 
     async def store_secrets(self, run_id: uuid.UUID, ciphertexts: dict[Provider, str]) -> None:
         """Write Fernet ciphertexts that expire with the run; deleted again in `finish`."""
@@ -313,7 +337,7 @@ class RunRepository:
         # the general `Result`, which does not know that.
         return int(cast("CursorResult[Any]", result).rowcount or 0)
 
-    # --- internals -----------------------------------------------------------
+    # --- internals ------------------------------------------------------------------------------
 
     async def _transition(
         self,

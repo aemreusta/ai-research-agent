@@ -65,14 +65,103 @@ def _cmd_contracts(_args: argparse.Namespace) -> int:
     return 0
 
 
+def _slug(text: str) -> str:
+    import re
+    import unicodedata
+
+    ascii_text = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode()
+    return re.sub(r"[^a-z0-9]+", "-", ascii_text.lower()).strip("-")[:60] or "run"
+
+
 def _cmd_run(args: argparse.Namespace) -> int:
-    del args
+    import asyncio
+
+    return asyncio.run(_run(args))
+
+
+async def _run(args: argparse.Namespace) -> int:
+    """The agent core without the service layer: in-memory events, no database (D30)."""
+    import uuid
+    from pathlib import Path
+
+    from langgraph.checkpoint.memory import InMemorySaver
+
+    from research_agent.agent import research
+    from research_agent.agent.runtime import MemoryCache, MemoryCallRecorder, MemoryEventSink
+    from research_agent.keys import ProviderKeys
+    from research_agent.observability.logging import configure_logging
+
+    overrides = dict(args.override or [])
+    try:
+        effective = load_settings(overrides=overrides)
+    except ConfigError as exc:
+        print(f"{exc.error.code.value}: {exc.error.cause or exc.error.decision}", file=sys.stderr)
+        return 2
+    configure_logging(
+        effective.settings.logging.model_copy(update={"level": "WARNING"}), service="cli"
+    )
+
+    def echo(event: dict[str, Any]) -> None:
+        if args.quiet or event["level"] == "debug":
+            return
+        line = event["data"].get("display") or f"[{event['node']}] {event['message']}"
+        marker = {"warn": "! ", "error": "x "}.get(event["level"], "  ")
+        print(f"{marker}{line}", flush=True)
+
+    run_id = uuid.uuid4()
+    events = MemoryEventSink(run_id, echo=echo)
+    if args.simulate:
+        from research_agent.agent.simulated import simulated_llm, simulated_search
+
+        toolkit = research.Toolkit(
+            llm={"gemini": simulated_llm()}, search={"tavily": simulated_search()}
+        )
+    else:
+        toolkit = await research.default_toolkit(ProviderKeys.resolve())
+    try:
+        deps = await research.build_deps(
+            run_id=run_id,
+            settings=effective.settings,
+            toolkit=toolkit,
+            events=events,
+            recorder=MemoryCallRecorder(),
+            cache=MemoryCache(),
+        )
+        if (problem := research.preflight(deps)) is not None:
+            print(f"{problem.code.value}: {problem.outcome}", file=sys.stderr)
+            return 1
+        state = await research.execute(
+            deps, run_id=run_id, question=args.question, checkpointer=InMemorySaver()
+        )
+    finally:
+        await toolkit.aclose()
+
+    metadata = research.metadata_for(deps, effective.settings)
+    artifacts = research.artifacts_for(state, metadata)
+    out = Path(args.out) if args.out else Path("examples") / _slug(args.question)
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "input.md").write_text(
+        f"# Input\n\n**Question:** {state.question}\n\n"
+        f"- Date: {deps.today.isoformat()}\n"
+        f"- Mode: {'simulated (offline)' if args.simulate else 'live providers'}\n"
+        f"- LLM chain: {', '.join(metadata['llm_providers'])}\n"
+        f"- Search: {', '.join(metadata['search_providers'])}\n"
+        f"- Overrides: {json.dumps(overrides, ensure_ascii=False) if overrides else 'none'}\n"
+        f"- Config hash: `{effective.config_hash}`\n",
+        encoding="utf-8",
+    )
+    (out / "report.md").write_text(artifacts["report_md"][1], encoding="utf-8")
+    (out / "report.json").write_text(artifacts["report_json"][1], encoding="utf-8")
+    (out / "gate_result.json").write_text(artifacts["gate_result"][1], encoding="utf-8")
+    (out / "state.json").write_text(artifacts["state"][1], encoding="utf-8")
+    (out / "trace.jsonl").write_text(events.jsonl(), encoding="utf-8")
+    verdict = (state.gate_result or {}).get("verdict")
     print(
-        "the agent graph is not wired yet - it lands with the nodes in Faz 3.\n"
-        "`research config` and `research contracts` already work.",
+        f"\nstop_reason={state.stop_reason} gate={verdict} "
+        f"cost=${deps.meter.cost_usd:.4f} -> {out}/",
         file=sys.stderr,
     )
-    return 3
+    return 0
 
 
 def _cmd_serve(args: argparse.Namespace) -> int:
@@ -107,9 +196,22 @@ def build_parser() -> argparse.ArgumentParser:
     contracts = sub.add_parser("contracts", help="show the run state machine and error codes")
     contracts.set_defaults(func=_cmd_contracts)
 
-    run = sub.add_parser("run", help="run a research question end to end")
+    run = sub.add_parser("run", help="run a research question end to end, without the services")
     run.add_argument("question")
-    run.add_argument("--out", help="directory for report.md, trace.jsonl, gate_result.json")
+    run.add_argument("--out", help="output directory (default: examples/<slug>)")
+    run.add_argument(
+        "--override",
+        action="append",
+        type=_parse_override,
+        metavar="PATH=VALUE",
+        help="per-run override, e.g. budget.max_iterations=2",
+    )
+    run.add_argument(
+        "--simulate",
+        action="store_true",
+        help="offline: rule-based model and a built-in corpus, no keys needed",
+    )
+    run.add_argument("--quiet", action="store_true", help="do not print the timeline")
     run.set_defaults(func=_cmd_run)
 
     serve = sub.add_parser("serve", help="run a service: the browser-facing api or an agent")

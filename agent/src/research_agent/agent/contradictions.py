@@ -12,7 +12,7 @@ from itertools import combinations
 
 from research_agent.agent.clustering import normalise_entity
 from research_agent.agent.state import ClaimCluster
-from research_agent.agent.text import fold, token_jaccard
+from research_agent.agent.text import fold, token_jaccard, token_set
 from research_agent.config.schema import ContradictionSettings
 from research_agent.gate.numeric import extract_quantities, quantities_match
 
@@ -24,10 +24,19 @@ def _attribute_key(attribute: str | None) -> str | None:
 
 
 def _same_attribute(left: str | None, right: str | None) -> bool:
+    """Same property, allowing one description to be a more detailed version of the other.
+
+    Overlap relative to the shorter phrase ("rules high risk apply" inside "rules high risk
+    apply under a proposed delay") - these are only candidates, the judge filters them.
+    """
     a, b = _attribute_key(left), _attribute_key(right)
     if a is None or b is None:
         return False
-    return a == b or token_jaccard(a, b) >= 0.6
+    if a == b or token_jaccard(a, b) >= 0.6:
+        return True
+    ta, tb = token_set(a), token_set(b)
+    shorter = min(len(ta), len(tb))
+    return shorter >= 2 and len(ta & tb) / shorter >= 0.75
 
 
 def _values_differ(

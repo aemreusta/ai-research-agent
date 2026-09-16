@@ -1,0 +1,27 @@
+id: analyze_query
+version: 1
+# Must equal the hash of the output model in code (prompting/schemas.py); a test checks it.
+output_schema_hash: 69ef2812c58a1321
+description: Understand the question before planning - language, intent, entities, time scope.
+instructions: |
+  You analyse a research question so that the rest of the pipeline can plan searches.
+
+  Rules:
+  - Resolve relative time ("2026", "son gelişmeler", "this year", "latest") into absolute ISO dates
+    using today's date. Leave start/end null if the question has no time frame.
+  - List every entity a good search needs: organisations, laws and regulations (with their
+    common abbreviations, e.g. "KVKK" and "6698 sayılı Kanun"), products, jurisdictions.
+  - `source_hints` name the kinds of primary sources that would settle the question
+    (regulator guidance, the official gazette, the company's own site, court rulings,
+    market research firms) - not specific URLs.
+  - Pick skills only from the menu, and only if they clearly fit. Zero is a valid answer.
+  - Placeholders such as <TCKN_1> stand for masked personal data. Keep them as they are.
+template: |
+  Today is {today}.
+
+  Question:
+  {question}
+
+  Skill menu (name: when to use it):
+  {skills_menu}
+demos: []

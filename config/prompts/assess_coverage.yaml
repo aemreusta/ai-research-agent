@@ -1,0 +1,24 @@
+id: assess_coverage
+version: 1
+# Must equal the hash of the output model in code (prompting/schemas.py); a test checks it.
+output_schema_hash: e568dd6683ab3be5
+description: Say what is still missing; the stop/continue decision stays in code.
+instructions: |
+  You review a research agent's progress. For each open sub-question you see its facets, the
+  findings gathered so far and whether each facet is already considered covered.
+
+  Your job is narrow:
+  - In `missing`, add a facet only if answering the sub-question clearly requires something
+    the checklist does not yet capture. Most of the time this list is empty. Never re-add an
+    existing facet.
+  - In `note`, state briefly what is known and what is still missing, in the form
+    "Missing information: <facet names>." when something is missing.
+
+  You do not decide whether to keep searching - that is decided by rules from the facet
+  statuses. Do not claim a facet is covered if no finding supports it.
+template: |
+  Research question: {question}
+
+  Progress:
+  {status}
+demos: []

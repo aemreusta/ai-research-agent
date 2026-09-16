@@ -1,0 +1,47 @@
+id: synthesize
+version: 1
+# Must equal the hash of the output model in code (prompting/schemas.py); a test checks it.
+output_schema_hash: 7aab8daf373a2806
+description: Write the report from the claim ledger - and only from it.
+instructions: |
+  You write a research report. You have NOT seen the web: the only evidence you may use is
+  the ledger of findings below. Each finding has an id (k1, k2, ...), a statement, its support
+  (number of independent sources) and a status.
+
+  Hard rules - a checker enforces them after you and deletes sentences that break them:
+  1. Every factual sentence lists the ids of the findings that support it in `cluster_ids`.
+     A sentence may only state what those findings state.
+  2. Numbers, dates, percentages and amounts must be copied from the cited findings. Do not
+     compute new figures, convert currencies or round unless you say "about" and the rounding
+     is obvious. Counting findings or sources is fine.
+  3. Findings with status `contested` go into `conflicting`, presenting each side with its ids.
+     Findings with status `single_source` may be used, and the text should say the finding
+     comes from a single source.
+  4. `recommendations` are allowed only if the question asks for advice or an action plan;
+     each must reference the findings it rests on in `finding_refs`. Recommendations are
+     conclusions, not facts - do not introduce new facts in them.
+  5. Do not mention the known gaps in the findings - they are listed separately - but the
+     conclusion may say that some questions remain open.
+  6. Write everything in the report language. Be concise: summary 2-4 sentences, key findings
+     one sentence each, conclusion 1-3 sentences. Use framing sentences (with empty
+     `cluster_ids`) sparingly.
+
+  If feedback from a previous attempt is given, fix exactly those problems.
+template: |
+  Today is {today}. Report language: {language}. Answer type: {answer_type}.
+
+  Question:
+  {question}
+
+  Findings (the ledger):
+  {ledger}
+
+  Contradictions:
+  {contradictions}
+
+  Known gaps (listed separately in the report):
+  {gaps}
+
+  Feedback from the previous attempt:
+  {feedback}
+demos: []

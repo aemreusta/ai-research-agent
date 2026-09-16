@@ -55,11 +55,12 @@ def serve_agent() -> None:
     from research_agent.agent_server.executor import RunExecutor
 
     _configure("agent")
+    sessionmaker = db.session_factory()
     executor = RunExecutor(
-        db.session_factory(),
+        sessionmaker,
         agent_id=agent_id_from_environment(),
         slots=int(os.environ.get("AGENT_SLOTS", "2")),
-        runner=build_runner(),
+        runner=build_runner(sessionmaker=sessionmaker, dsn=db.libpq_dsn()),
         heartbeat_interval_seconds=float(os.environ.get("AGENT_HEARTBEAT_SECONDS", "10")),
         secret_box=SecretBox(),
     )
@@ -85,5 +86,13 @@ def migrate() -> None:
     config.set_main_option("script_location", str(root / "migrations"))
     command.upgrade(config, "head")
     log.info("schema at head")
+
+    from research_agent.observability.langfuse import sync_seed_prompts
+
+    try:
+        created = asyncio.run(sync_seed_prompts())
+        log.info("prompt seeds synced to langfuse", created=created)
+    except Exception as exc:
+        log.warning("prompt seed sync skipped", error=str(exc)[:200])
 
     asyncio.run(db.dispose())

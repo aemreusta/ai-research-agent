@@ -93,7 +93,7 @@ class RunExecutor:
         self._tasks: dict[uuid.UUID, asyncio.Task[None]] = {}
         self._draining = False
 
-    # --- state the dispatcher polls ------------------------------------------
+    # --- state the dispatcher polls -------------------------------------------------------------
 
     @property
     def draining(self) -> bool:
@@ -126,7 +126,7 @@ class RunExecutor:
             "running_run_ids": [str(run_id) for run_id in self._tasks],
         }
 
-    # --- lifecycle -----------------------------------------------------------
+    # --- lifecycle ------------------------------------------------------------------------------
 
     def begin_draining(self) -> None:
         """Stop accepting work. In-flight runs continue until they finish or are cancelled."""
@@ -190,7 +190,7 @@ class RunExecutor:
         with contextlib.suppress(TimeoutError):
             await asyncio.wait(pending, timeout=_SHUTDOWN_GRACE_SECONDS)
 
-    # --- the run itself ------------------------------------------------------
+    # --- the run itself -------------------------------------------------------------------------
 
     async def _execute(self, run_id: uuid.UUID, *, attempt: int, dispatcher_id: str | None) -> None:
         span_id = new_span_id()

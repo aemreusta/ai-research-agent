@@ -75,7 +75,7 @@ def _addressed(report: Report) -> Iterable[tuple[SectionKey, int, ReportSentence
             yield section.key, index, sentence
 
 
-# --- G1: required sections -----------------------------------------------------------------------
+# --- G1: required sections ---------------------------------------------------------------------
 
 
 def g1_sections(report: Report, state: ResearchState, config: GateConfig) -> list[Violation]:
@@ -112,7 +112,7 @@ def g1_sections(report: Report, state: ResearchState, config: GateConfig) -> lis
     return violations
 
 
-# --- G2 / G3: citations --------------------------------------------------------------------------
+# --- G2 / G3: citations ------------------------------------------------------------------------
 
 
 def g2_citations(report: Report, state: ResearchState, config: GateConfig) -> list[Violation]:
@@ -182,7 +182,7 @@ def g3_ledger(report: Report, state: ResearchState, config: GateConfig) -> list[
     return violations
 
 
-# --- G4: numbers ---------------------------------------------------------------------------------
+# --- G4: numbers -------------------------------------------------------------------------------
 
 
 def _quantities(text: str) -> list[Quantity]:
@@ -317,7 +317,7 @@ def g4_numbers(report: Report, state: ResearchState, config: GateConfig) -> list
     return violations
 
 
-# --- G5 / G6 / G7: labelling ---------------------------------------------------------------------
+# --- G5 / G6 / G7: labelling -------------------------------------------------------------------
 
 
 def g5_contested(report: Report, state: ResearchState, config: GateConfig) -> list[Violation]:
@@ -381,7 +381,7 @@ def g7_known_gaps(report: Report, state: ResearchState, config: GateConfig) -> l
     ]
 
 
-# --- G8 / G9 / G10 / G11 -------------------------------------------------------------------------
+# --- G8 / G9 / G10 / G11 -----------------------------------------------------------------------
 
 
 def g8_urls(report: Report, state: ResearchState, config: GateConfig) -> list[Violation]:

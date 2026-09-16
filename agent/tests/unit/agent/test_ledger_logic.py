@@ -67,6 +67,7 @@ def _state(**kwargs: object) -> ResearchState:
 def test_entity_normalisation() -> None:
     assert normalise_entity("Apilex A.Ş.") == normalise_entity("apilex") == "apilex"
     assert normalise_entity("OpenAI, Inc.") == "openai"
+    assert normalise_entity("The EU AI Act") == normalise_entity("EU AI Act")
     assert normalise_entity(None) is None
 
 
@@ -514,3 +515,15 @@ def test_a_contradiction_that_was_followed_up_stops_blocking_its_facet() -> None
     )
     assess_facets(state, ScoringSettings())
     assert state.plan[0].facets[0].status is FacetStatus.SUFFICIENT
+
+
+def test_a_more_detailed_attribute_still_matches() -> None:
+    clusters = {
+        "k1": _cluster("k1", "2 August 2026", attribute="rules high risk systems apply"),
+        "k2": _cluster(
+            "k2", "2 August 2027", attribute="rules high risk systems apply under proposed delay"
+        ),
+    }
+    assert contradiction_candidates(clusters, ContradictionSettings(), language="en") == [
+        ("k1", "k2")
+    ]
