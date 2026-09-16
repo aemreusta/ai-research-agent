@@ -149,26 +149,26 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 - [x] API: `GET /api/prompts`, `GET /api/skills`
 
 ## Faz 6 — Güvenilirlik & observability · Paz
-- [ ] Hata matrisi uçtan uca (§13.2) — her kod için tetiklenebilir senaryo
-- [ ] Langfuse payload'ında secret/PII olmadığını doğrula; Langfuse kapalıyken (hafif mod) sistemin tam çalıştığını doğrula
+- [~] Hata matrisi: kodların büyük kısmı senaryo/unit testlerle tetikleniyor; gerçek API'lere geçersiz anahtarla canlı doğrulama yapıldı (auth gövdeden tanınıyor, devre kesici, hepsi reddedilince fail-fast). Kalan: `DEADLINE_EXCEEDED`'in compose içinde canlı gösterimi (watchdog tablo testli)
+- [x] Langfuse payload'ında secret/PII olmadığı testli; hafif modda sistem kalkıyor ve çalışıyor (compose, `COMPOSE_PROFILES=`)
 - [ ] (SHOULD) `optimize/`: DSPy 3.x + GEPA job'ı (kilitli bağımlılıklar, ayrı profil), eval set → Langfuse dataset, koşu → experiment, `generate_queries` veya `extract_claims` için 1 optimizasyon → `candidate` + before/after metrik tablosu
-- [ ] Worker crash → lease → resume denemesi
-- [ ] Prompt'ları gözden geçir (TR/EN, web içeriğini "untrusted data" olarak işaretle — prompt injection)
+- [x] Worker crash → heartbeat → requeue → resume: lokal süreçlerle canlı, graf seviyesinde Postgres checkpointer ile entegrasyon testi
+- [x] Prompt'lar: ortak güvenlik önsözü, `<untrusted_source>` çiti, çıkarıcıda "talimatları izleme" kuralı, enjeksiyon tripwire'ı
 
 ## Faz 7 — Test (Faz 2'den itibaren sürekli)
 - [x] Unit: kontrat eşitliği, config loader + override sınırları + kilitli alanlar + `config_hash` kararlılığı, redaction + TCKN checksum, log pipeline (40 test yeşil)
 - [x] Unit: URL canonicalization, MinHash, query dedup (query generation node ile gelecek)
 - [x] Unit: scoring, facet yeterlilik, contradiction adayları, termination/router
 - [x] Unit: Gate G1–G11 (ayrı ayrı), sayı/tarih normalizer, **G4 üç kova + yanlış pozitif senaryoları** (türetilmiş sayı, yuvarlama, kur, tarih granülaritesi, soru bağlamı)
-- [ ] Unit: PII redaction + TCKN checksum, secret redaction, structured output repair, config override sınırları
+- [x] Unit: PII redaction + TCKN checksum (+Presidio), secret redaction, structured output repair, config override sınırları
 - [x] Senaryo (`simulated.py` ile çevrimdışı tam graf): sufficient · stagnation/known gaps · max iteration · arama bütçesi · timeout→fallback provider · invalid JSON→repair→fallback plan · birincil LLM ölü→ikinci provider · kanıt yok→NO_EVIDENCE+banner · enjeksiyon · PII sağlayıcıya gitmiyor · cancel · **crash→checkpoint'ten resume (bitmiş node'lar tekrar koşmuyor)** · TR başlıklar · preflight
 - [x] **`max_wall_clock` ve `max_cost_usd` açıkken** `stop_reason=budget` — router seviyesinde **ve tam graf senaryosunda** testli; kapalıyken asla durdurmadığı da testli (D11)
-- [ ] Hata izlenebilirliği: her expected hata doğru `ErrorCode`/`decision`/`outcome` üretiyor
-- [ ] API: run oluşturma, SSE resume, cancel, **key sızıntısı yok**
-- [ ] Go: watchdog karar tablosu (table-driven), backoff, kapasite seçimi, durum geçişleri ↔ `run_states.yaml`
-- [ ] Contract: Python agent server + Go client ↔ OpenAPI + `error_codes.yaml`
-- [ ] Prompt/skill: versiyon çözümleme, UI'dan şema değişmez, skill seçimi + enjeksiyon, skill bütçe/Gate'i değiştiremez, YAML round-trip
-- [ ] Integration (compose PG): iki dispatcher aynı işi almıyor; agent kill → resume; deadline → cancel
+- [x] Hata izlenebilirliği: gateway/arama/node testleri `ErrorCode` + `decision` + `outcome` zincirini doğruluyor
+- [x] API: run oluşturma, SSE backfill/resume/canlı, cancel, export, maliyet, **key sızıntısı yok**
+- [x] Go: watchdog karar tablosu, backoff, kapasite seçimi + DNS keşfi, durum geçişleri ↔ `run_states.yaml`, store (Postgres)
+- [x] Contract: Python agent server + Go client ↔ OpenAPI + `error_codes.yaml`
+- [x] Prompt/skill: versiyon çözümleme + run başına sabitleme, uyumsuz Langfuse sürümü reddi, skill seçimi + rehber enjeksiyonu, script'li/tier-3 skill reddi, Langfuse seed round-trip
+- [x] Integration (PG): eşzamanlı claim'de çift alım yok (Python + Go); CAS yarışları; agent servis yolu uçtan uca; checkpoint'ten resume; deadline kararları (Go tablo testi)
 
 ## Faz 8 — Örnekler & dokümantasyon · Paz akşam
 - [~] Örnek altyapısı hazır: `make examples` 4 soruyu kullanıcının anahtarlarıyla `examples/<slug>/`'a yazar (input/trace/report/report.json/gate_result/state); `examples/offline-demo-eu-ai-act` çevrimdışı format örneği. Kalan: gerçek anahtarlarla üretim (kullanıcı adımı)
@@ -177,11 +177,11 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 - [x] README: 8 Design Question'a **Türkçe** cevaplar
 
 ## Faz 9 — Teslim · Pzt sabah (son: 16:00)
-- [ ] Temiz clone → `cp .env.example .env` → `docker compose up` → UI'dan run → `docker compose run api pytest` + `go test ./...`
-- [ ] Secret taraması (`.env` repoda yok)
-- [ ] README ↔ kod tutarlılığı son okuma
+- [x] Temiz clone → `cp .env.example .env` → `docker compose up -d` → tüm servisler sağlıklı → UI → anahtarsız/geçersiz anahtarlı run'lar anlaşılır mesajla biter → `docker compose --profile test run tests` yeşil. Geçerli anahtarla run: kullanıcı adımı
+- [x] Secret taraması: pre-commit gitleaks her commit'te; `.env` gitignore'da
+- [x] README ↔ kod tutarlılığı: README iddiaları testlerle desteklendi (resume, simüle etiket, bellek ölçümü)
 - [ ] Repo private + reviewer daveti → link + kısa açıklama ile mail (D31)
-- [ ] Case PDF'in repoda olmadığını doğrula (`git ls-files | grep reference`)
+- [x] Case PDF repoda yok (`git ls-files | grep reference` boş)
 
 ---
 

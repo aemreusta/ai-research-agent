@@ -89,7 +89,7 @@ docker compose run --rm agent config --override budget.max_searches=20
 | PII | Microsoft Presidio analyzer with Turkish ad-hoc recognisers, always unioned with regex rules; stable placeholders assigned in code |
 | Observability | Postgres `run_events` (primary) + self-hosted Langfuse v4 over OTLP (traces, prompt versions, cost) |
 | Frontend | Static HTML + ES modules + Server-Sent Events, no build step |
-| Quality | pytest (427 tests incl. Postgres integration and offline end-to-end graph runs), Go tests (70), ruff, mypy `--strict`, pre-commit with gitleaks |
+| Quality | pytest (437 tests incl. Postgres integration and offline end-to-end graph runs), Go tests (70), ruff, mypy `--strict`, pre-commit with gitleaks |
 
 ## 3. Architecture
 
