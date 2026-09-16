@@ -75,3 +75,35 @@ def clear_context() -> None:
 def get_logger(name: str | None = None) -> structlog.stdlib.BoundLogger:
     logger: structlog.stdlib.BoundLogger = structlog.get_logger(name)
     return logger
+
+
+class best_effort:
+    """Run a side job whose failure must not affect the caller - but say so in the log.
+
+    For telemetry and caching: a Langfuse outage or a cache write error is worth a warning,
+    never a failed run. A class rather than `@contextmanager` so type checkers know that
+    exceptions are swallowed (`__exit__` returns `bool`).
+    """
+
+    def __init__(self, what: str, **fields: Any) -> None:
+        self._what = what
+        self._fields = fields
+
+    def __enter__(self) -> None:
+        return None
+
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc: BaseException | None,
+        traceback: object,
+    ) -> bool:
+        if exc is None or not isinstance(exc, Exception):
+            return False
+        get_logger("best_effort").warning(
+            f"{self._what} failed",
+            error_type=type(exc).__name__,
+            error=str(exc)[:200],
+            **self._fields,
+        )
+        return True

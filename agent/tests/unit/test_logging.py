@@ -55,3 +55,23 @@ def test_level_filter_drops_quieter_records(capsys: pytest.CaptureFixture[str]) 
     configure_logging(LoggingSettings(level="WARNING", format="json"), service="agent")
     structlog.get_logger().info("not interesting")
     assert capsys.readouterr().out == ""
+
+
+def test_best_effort_swallows_and_reports(capsys: pytest.CaptureFixture[str]) -> None:
+    from research_agent.observability.logging import best_effort
+
+    configure_logging(LoggingSettings(level="INFO", format="json"), service="test")
+    with best_effort("writing the cache", key="k"):
+        raise RuntimeError("disk full")
+    line = json.loads(capsys.readouterr().out.strip().splitlines()[-1])
+    assert line["event"] == "writing the cache failed"
+    assert line["error_type"] == "RuntimeError"
+
+
+def test_best_effort_does_not_swallow_cancellation() -> None:
+    import asyncio
+
+    from research_agent.observability.logging import best_effort
+
+    with pytest.raises(asyncio.CancelledError), best_effort("anything"):
+        raise asyncio.CancelledError

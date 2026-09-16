@@ -169,7 +169,7 @@ class RunExecutor:
             await RunRepository(session).request_cancel(run_id)
         return run_id in self._tasks
 
-    async def wait_for(self, run_id: uuid.UUID, *, timeout: float = 60.0) -> None:  # noqa: ASYNC109
+    async def wait_for(self, run_id: uuid.UUID, *, timeout: float = 60.0) -> None:
         """Await one in-flight run. Used by shutdown and by tests; nothing polls in production."""
         task = self._tasks.get(run_id)
         if task is not None:

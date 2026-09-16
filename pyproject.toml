@@ -45,7 +45,10 @@ select = [
     "S",        # bandit
     "RUF",
 ]
-ignore = ["S101"]  # assert is fine in tests
+ignore = [
+    "S101",      # assert is fine in tests
+    "ASYNC109",  # provider calls take a per-request timeout and hand it to httpx on purpose
+]
 
 [tool.ruff.lint.per-file-ignores]
 "agent/tests/**" = ["S", "B008"]

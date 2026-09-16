@@ -1,4 +1,5 @@
 # Search providers. Tavily is primary, Brave adds fallback and result diversity (D3).
+# Checked against the provider docs on 2026-09-16.
 version: 1
 
 chain: [tavily, brave]
@@ -6,13 +7,15 @@ chain: [tavily, brave]
 providers:
   tavily:
     base_url: https://api.tavily.com
-    search_depth: advanced
-    include_raw_content: true # avoids a separate fetch when available (D7)
-    max_results: 10
+    # `basic` costs 1 credit per search, `advanced` 2. With a 45-search budget the difference is
+    # 45 vs 90 credits per run; basic plus raw content is the better trade here (Design Q7).
+    search_depth: basic
+    include_raw_content: markdown # full page text in the same call - often no fetch needed (D7)
+    max_results: 8
   brave:
     base_url: https://api.search.brave.com/res/v1
-    max_results: 10
-    freshness: null
+    max_results: 8
+    extra_snippets: true
 
 cache:
   enabled: true

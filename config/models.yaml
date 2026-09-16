@@ -1,32 +1,53 @@
-# Provider chain, tier -> model mapping and token prices (used for cost tracking, D33).
-# Model ids are verified against provider docs when the keys are wired up (Faz 2); prices are
-# USD per 1M tokens and are kept aligned with the Langfuse model pricing definitions.
+# Provider chain, tier -> model mapping, per-tier call parameters and token prices.
+#
+# Model ids and prices were checked against the provider docs on 2026-09-16:
+#   https://ai.google.dev/gemini-api/docs/models  ·  https://ai.google.dev/gemini-api/docs/pricing
+#   https://developers.openai.com/api/docs/models ·  model pages list prices per 1M tokens
+# Prices are USD per 1M tokens; output prices include reasoning/thinking tokens, which is how
+# both providers bill them. They are the single source for cost tracking (D33) and are mirrored
+# into Langfuse model pricing so both dashboards show the same number.
 version: 1
 
+# Tried in order; a provider without a key is skipped, not failed.
 chain: [gemini, openai, ollama]
 
 tiers:
   reasoning: # analyze_query, plan, assess_coverage, synthesize
-    gemini: gemini-2.5-pro
-    openai: gpt-5
+    gemini: gemini-3.8-flash
+    openai: gpt-5.6-terra
     ollama: qwen3:14b
   fast: # generate_queries, evaluate_sources, extract_claims, contradiction judge, entailment
-    gemini: gemini-2.5-flash
-    openai: gpt-5-mini
+    gemini: gemini-3.1-flash-lite
+    openai: gpt-5.6-luna
     ollama: qwen3:8b
   embedding: # one model per run (D6)
-    gemini: gemini-embedding-001
+    gemini: gemini-embedding-001 # per-text vectors + SEMANTIC_SIMILARITY task type
     openai: text-embedding-3-small
     ollama: nomic-embed-text
 
+# Provider-specific knobs per tier. The fast tier trades depth for latency on purpose: its jobs
+# are extraction and classification, where long thinking buys little and costs a lot.
+params:
+  reasoning:
+    gemini: { thinking_level: medium, temperature: 1.0 }
+    openai: { reasoning_effort: medium }
+    ollama: { temperature: 0.2 }
+  fast:
+    gemini: { thinking_level: low, temperature: 1.0 }
+    openai: { reasoning_effort: low }
+    ollama: { temperature: 0.1 }
+
+embedding_dimensions: 768
+
 prices_usd_per_million_tokens:
-  gemini-2.5-pro: { input: 1.25, output: 10.0 }
-  gemini-2.5-flash: { input: 0.30, output: 2.50 }
+  # Gemini 3.8 Flash: introductory price through 2026-12-31 ($1.50 / $7.50 from 2027-01-01).
+  gemini-3.8-flash: { input: 0.75, output: 3.75 }
+  gemini-3.1-flash-lite: { input: 0.25, output: 1.50 }
   gemini-embedding-001: { input: 0.15, output: 0.0 }
-  gpt-5: { input: 1.25, output: 10.0 }
-  gpt-5-mini: { input: 0.25, output: 2.0 }
+  gpt-5.6-terra: { input: 2.00, output: 12.00 }
+  gpt-5.6-luna: { input: 0.20, output: 1.20 }
   text-embedding-3-small: { input: 0.02, output: 0.0 }
-  # Local models are free; kept explicit so the cost dashboard shows 0 instead of "unknown".
+  # Local models are free; listed so the cost dashboard shows 0 instead of "unknown".
   qwen3:14b: { input: 0.0, output: 0.0 }
   qwen3:8b: { input: 0.0, output: 0.0 }
   nomic-embed-text: { input: 0.0, output: 0.0 }
