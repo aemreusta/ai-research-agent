@@ -32,7 +32,7 @@ from research_agent.observability.events import EventType, new_span_id
 from research_agent.observability.logging import best_effort
 from research_agent.providers.llm.base import Completion, LLMProvider, Message, ProviderError
 from research_agent.providers.llm.catalog import ModelCatalog, Tier
-from research_agent.providers.llm.schema import strict_json_schema
+from research_agent.providers.llm.schema import inline_refs, strict_json_schema
 from research_agent.providers.llm.structured import (
     OutputParseError,
     parse_output,
@@ -133,7 +133,7 @@ class LLMGateway:
                 )
             )
 
-        schema = strict_json_schema(output)
+        schema = inline_refs(strict_json_schema(output))
         messages = [Message("system", system), Message("user", user)]
         first = self._chain[0]
         last_error: ProviderError | None = None

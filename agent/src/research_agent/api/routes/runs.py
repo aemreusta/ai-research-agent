@@ -100,7 +100,7 @@ async def create_run(request: CreateRunRequest, api: Api) -> CreateRunResponse |
             return _error(exc, status.HTTP_400_BAD_REQUEST)
 
         # Boundary B1: mask before anything is written or sent anywhere (v0.6 §12).
-        masked = api.masker.mask(request.question)
+        masked = await api.masker.amask(request.question)
 
         known = {provider.value for provider in Provider}
         supplied = {Provider(name): value for name, value in request.keys.items() if name in known}

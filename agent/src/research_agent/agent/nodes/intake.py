@@ -54,7 +54,7 @@ async def intake_guard(state: ResearchState, deps: AgentDeps, events: EventSink)
             )
         )
 
-    masked = deps.masker.mask(question)
+    masked = await deps.masker.amask(question)
     if masked.degraded:
         await events.error(
             AgentError(

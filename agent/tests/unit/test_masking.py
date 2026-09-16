@@ -83,3 +83,83 @@ def test_summary_is_what_the_timeline_shows(masker: RegexMasker) -> None:
 
 def test_an_empty_result_summarises_to_nothing(masker: RegexMasker) -> None:
     assert MaskResult(text="x", entities=[], degraded=False).summary() == {}
+
+
+# --- Presidio --------------------------------------------------------------------------------------
+
+import httpx  # noqa: E402
+
+from research_agent.pii.masking import PresidioMasker  # noqa: E402
+
+
+def _presidio(handler: object) -> PresidioMasker:
+    client = httpx.AsyncClient(transport=httpx.MockTransport(handler))  # type: ignore[arg-type]
+    return PresidioMasker("http://presidio-analyzer:3000", client=client)
+
+
+async def test_presidio_findings_are_masked_and_checksums_still_apply() -> None:
+    text = "Call Ayşe at +44 20 7946 0958, TCKN 12345678901, IBAN issue."
+    seen: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen.append(request)
+        start = text.index("+44")
+        return httpx.Response(
+            200,
+            json=[
+                {"entity_type": "PHONE_NUMBER", "start": start, "end": start + 16, "score": 0.75},
+                # Presidio's pattern hit on an invalid national id must not be masked.
+                {
+                    "entity_type": "TR_TCKN",
+                    "start": text.index("1234"),
+                    "end": text.index("1234") + 11,
+                    "score": 0.6,
+                },
+            ],
+        )
+
+    result = await _presidio(handler).amask(text)
+    assert result.engine == "presidio" and not result.degraded
+    assert "<PHONE_1>" in result.text
+    assert "12345678901" in result.text, "checksum failed, so it is not a national id"
+    assert "Ayşe" in result.text, "names are kept unless configured otherwise"
+    body = seen[0].read()
+    assert b"TR_TCKN" in body and b"ad_hoc_recognizers" in body
+
+
+async def test_presidio_can_only_add_to_the_regex_findings() -> None:
+    result = await _presidio(lambda _: httpx.Response(200, json=[])).amask(
+        "mail me at ali@example.com"
+    )
+    assert "<EMAIL_1>" in result.text
+
+
+async def test_an_unreachable_presidio_degrades_to_regex() -> None:
+    def down(request: httpx.Request) -> httpx.Response:
+        raise httpx.ConnectError("refused", request=request)
+
+    result = await _presidio(down).amask("TCKN 10000000146")
+    assert result.degraded and result.engine == "regex"
+    assert "<TCKN_1>" in result.text
+
+
+async def test_overlapping_findings_are_replaced_once() -> None:
+    text = "card 4111 1111 1111 1111 here"
+    start = text.index("4111")
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(
+            200,
+            json=[
+                {"entity_type": "CREDIT_CARD", "start": start, "end": start + 19, "score": 1.0},
+                {
+                    "entity_type": "PHONE_NUMBER",
+                    "start": start + 5,
+                    "end": start + 14,
+                    "score": 0.4,
+                },
+            ],
+        )
+
+    result = await _presidio(handler).amask(text)
+    assert result.text == "card <CREDIT_CARD_1> here"

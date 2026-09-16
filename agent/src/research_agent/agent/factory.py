@@ -28,8 +28,12 @@ def build_runner(
             raise ValueError("the graph runner needs a database (sessionmaker and dsn)")
         from research_agent.agent.research import ResearchGraphRunner
         from research_agent.observability.langfuse import langfuse_toolkit_factory
+        from research_agent.services import build_masker
 
         return ResearchGraphRunner(
-            sessionmaker, dsn=dsn, toolkit_factory=langfuse_toolkit_factory()
+            sessionmaker,
+            dsn=dsn,
+            masker=build_masker(),
+            toolkit_factory=langfuse_toolkit_factory(),
         )
     raise ValueError(f"unknown AGENT_RUNNER {choice!r}; expected 'graph' or 'echo'")

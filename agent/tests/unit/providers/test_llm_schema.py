@@ -100,3 +100,48 @@ def test_cost_arithmetic() -> None:
     # gemini-3.1-flash-lite: $0.25 in / $1.50 out per million
     assert abs(models.cost("gemini-3.1-flash-lite", 1_000_000, 1_000_000) - 1.75) < 1e-9
     assert models.cost("unknown-model", 10, 10) == 0.0
+
+
+def test_every_signature_schema_is_provider_ready() -> None:
+    """What actually goes on the wire: no refs, and only keywords both providers accept."""
+    import json
+
+    from research_agent.prompting.signatures import SIGNATURES
+    from research_agent.providers.llm.schema import inline_refs
+
+    allowed = {
+        "type",
+        "properties",
+        "required",
+        "additionalProperties",
+        "items",
+        "enum",
+        "description",
+        "title",
+        "anyOf",
+        "minimum",
+        "maximum",
+    }
+
+    def walk(node: Any, path: str) -> None:
+        if isinstance(node, dict):
+            if "properties" in node:
+                for name, child in node["properties"].items():
+                    walk(child, f"{path}.{name}")
+                rest = {k: v for k, v in node.items() if k != "properties"}
+            else:
+                rest = node
+            unexpected = set(rest) - allowed
+            assert not unexpected, f"{path}: {unexpected}"
+            for key, value in rest.items():
+                if key in {"items", "anyOf"}:
+                    walk(value, f"{path}.{key}")
+        elif isinstance(node, list):
+            for item in node:
+                walk(item, path)
+
+    for signature in SIGNATURES.values():
+        schema = inline_refs(strict_json_schema(signature.output))
+        assert "$ref" not in json.dumps(schema)
+        assert schema["type"] == "object"
+        walk(schema, signature.id)

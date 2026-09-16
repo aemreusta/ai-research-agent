@@ -75,3 +75,27 @@ def schema_hash(model: type[BaseModel]) -> str:
     """Stable fingerprint of an output contract."""
     canonical = json.dumps(strict_json_schema(model), sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(canonical.encode()).hexdigest()[:16]
+
+
+def inline_refs(schema: dict[str, Any]) -> dict[str, Any]:
+    """Replace every `$ref` with its definition - the most portable form for both providers.
+
+    The output models are not recursive, so this always terminates; a recursive model would
+    raise here rather than loop.
+    """
+    definitions = schema.get("$defs", {})
+
+    def resolve(node: Any, trail: tuple[str, ...]) -> Any:
+        if isinstance(node, list):
+            return [resolve(item, trail) for item in node]
+        if not isinstance(node, dict):
+            return node
+        if "$ref" in node:
+            name = node["$ref"].rsplit("/", 1)[-1]
+            if name in trail:
+                raise ValueError(f"recursive schema through {name}")
+            return resolve(definitions[name], (*trail, name))
+        return {key: resolve(value, trail) for key, value in node.items() if key != "$defs"}
+
+    resolved: dict[str, Any] = resolve(schema, ())
+    return resolved

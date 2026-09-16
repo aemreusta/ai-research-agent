@@ -16,6 +16,7 @@ from research_agent.config.loader import load_settings
 from research_agent.db import session as db
 from research_agent.keys import SecretBox, ensure_secret_key_file
 from research_agent.observability.logging import configure_logging, get_logger
+from research_agent.pii.masking import Masker, PresidioMasker, RegexMasker
 
 
 def _configure(service: str) -> None:
@@ -36,6 +37,20 @@ def _uvicorn(app: object, *, port: int) -> None:
     )
 
 
+def build_masker() -> Masker:
+    """Presidio when configured (always unioned with the regex rules), regex otherwise."""
+    settings = load_settings().settings.pii
+    url = os.environ.get("PRESIDIO_ANALYZER_URL")
+    if not url:
+        return RegexMasker()
+    return PresidioMasker(
+        url,
+        mask_person_names=settings.mask_question_person_names,
+        score_threshold=settings.score_threshold,
+        timeout=float(settings.presidio_timeout_seconds),
+    )
+
+
 def serve_api() -> None:
     from research_agent.api.app import create_api_app
 
@@ -44,6 +59,7 @@ def serve_api() -> None:
         sessionmaker=db.session_factory(),
         secret_box=SecretBox(),
         dsn=db.libpq_dsn(),
+        masker=build_masker(),
         on_shutdown=[db.dispose],
     )
     _uvicorn(app, port=8000)
