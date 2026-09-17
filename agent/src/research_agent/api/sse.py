@@ -86,42 +86,26 @@ async def stream_events(
     """Yield SSE frames for one run until it reaches a terminal state."""
     cursor = last_event_id
     machine = run_state_machine()
-    status: str | None = None
-
-    # Subscribe before reading, so nothing written during the backfill is lost.
+    # Observe status before fetching. A terminal observation must be followed by a drain,
+    # so events committed immediately before the terminal write cannot fall between reads.
     async with listen(EVENTS_CHANNEL, dsn=dsn) as notifications:
         while True:
             async with sessionmaker() as session:
-                batch = await _fetch(session, run_id, cursor)
                 status = await _status(session, run_id)
+                batch = await _fetch(session, run_id, cursor)
             for event in batch:
                 cursor = event.seq
                 yield _frame(event)
-            if len(batch) < _BATCH:
-                break
-
-        if status is None:
-            yield _control("error", {"error_code": "NOT_FOUND", "run_id": str(run_id)})
-            return
-        if machine.is_terminal(RunStatus(status)):
-            yield _control("run_closed", {"run_id": str(run_id), "status": status})
-            return
-
-        while True:
+            if len(batch) == _BATCH:
+                continue
+            if status is None:
+                yield _control("error", {"error_code": "NOT_FOUND", "run_id": str(run_id)})
+                return
+            if machine.is_terminal(RunStatus(status)):
+                yield _control("run_closed", {"run_id": str(run_id), "status": status})
+                return
             try:
                 async with asyncio.timeout(KEEPALIVE_SECONDS):
                     await anext(notifications)
             except TimeoutError:
-                # Proxies close idle connections; a comment frame is invisible to EventSource.
                 yield ": keepalive\n\n"
-
-            async with sessionmaker() as session:
-                batch = await _fetch(session, run_id, cursor)
-                status = await _status(session, run_id)
-            for event in batch:
-                cursor = event.seq
-                yield _frame(event)
-
-            if status is not None and machine.is_terminal(RunStatus(status)):
-                yield _control("run_closed", {"run_id": str(run_id), "status": status})
-                return

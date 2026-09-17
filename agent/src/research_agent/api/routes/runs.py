@@ -305,7 +305,12 @@ async def export_run(
                 headers={"Content-Disposition": f'attachment; filename="trace-{run_id}.jsonl"'},
             )
 
-        kinds = {"report": "report_md", "state": "state", "gate": "gate_result"}
+        kinds = {
+            "report": "report_md",
+            "report_json": "report_json",
+            "state": "state",
+            "gate": "gate_result",
+        }
         kind = kinds.get(artifact)
         if kind is None:
             return JSONResponse(

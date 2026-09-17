@@ -15,8 +15,9 @@ from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from research_agent.api.app import create_api_app
+from research_agent.api.sse import stream_events
 from research_agent.contracts import RunStatus
-from research_agent.db.models import RunSecret
+from research_agent.db.models import Run, RunEvent, RunSecret
 from research_agent.db.repository import RunRepository
 from research_agent.db.session import libpq_dsn
 from research_agent.keys import SecretBox
@@ -307,6 +308,45 @@ async def test_live_events_arrive_while_a_run_executes(
     assert events[0]["message"] == "Received 8 results."
 
 
+async def test_live_stream_drains_all_pages_before_closing(
+    db_session: AsyncSession,
+    db_sessionmaker: async_sessionmaker[AsyncSession],
+    migrated_database: str,
+) -> None:
+    repo = RunRepository(db_session)
+    run = await repo.create(question_masked="SSE backlog", config_snapshot={}, config_hash="test")
+    await repo.claim(dispatcher_id="d1")
+    await repo.mark_running(run.id, agent_id="a1", deadline_at=None)
+    writer = EventWriter(db_sessionmaker, run_id=run.id, node="search")
+    await writer.info(EventType.RUN_STARTED, "Started")
+    stream = stream_events(db_sessionmaker, run_id=run.id, dsn=libpq_dsn(migrated_database))
+    async with asyncio.timeout(5):
+        first = await anext(stream)  # establish a live subscriber before the backlog exists
+        assert first.startswith("id: 1\n")
+        db_session.add_all(
+            [
+                RunEvent(
+                    run_id=run.id,
+                    seq=i,
+                    level="info",
+                    node="search",
+                    event_type="node_finished",
+                    message=f"step {i}",
+                    data={},
+                )
+                for i in range(2, 252)
+            ]
+        )
+        await db_session.execute(update(Run).where(Run.id == run.id).values(event_seq=251))
+        await db_session.commit()
+        await repo.finish(run.id, status=RunStatus.SUCCEEDED)
+        rest = [frame async for frame in stream]
+    frames = [first, *rest]
+    ids = [int(frame.splitlines()[0][4:]) for frame in frames if frame.startswith("id:")]
+    assert ids == list(range(1, 252))
+    assert frames[-1].startswith("event: run_closed\n")
+
+
 # --- config schema, presets, export -----------------------------------------
 
 
@@ -358,6 +398,22 @@ async def test_export_returns_the_report_and_the_trace(
     writer = EventWriter(db_sessionmaker, run_id=run_id, node="plan")
     await writer.info(EventType.PLAN_CREATED, "Created 4 research tasks.")
 
+    repo = RunRepository(db_session)
+    await repo.claim(dispatcher_id="test")
+    await repo.mark_running(run_id, agent_id="test", deadline_at=None)
+    await repo.finish(
+        run_id,
+        status=RunStatus.SUCCEEDED,
+        artifacts={
+            "report_json": ("application/json", '{"title": "Research report"}'),
+            "report_md": ("text/markdown", "# Research report"),
+        },
+    )
+    structured = await client.get(f"/api/runs/{run_id}/export?artifact=report_json")
+    markdown = await client.get(f"/api/runs/{run_id}/export?artifact=report")
+    assert structured.status_code == markdown.status_code == 200
+    assert structured.json()["title"] == "Research report"
+    assert markdown.text == "# Research report"
     trace = await client.get(f"/api/runs/{run_id}/export?artifact=trace")
     assert trace.status_code == 200
     lines = [json.loads(line) for line in trace.text.strip().splitlines()]
