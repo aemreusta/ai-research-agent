@@ -13,6 +13,24 @@ from research_agent.agent.state import Claim, Document, ResearchState, SourceSco
     "url,primary,text,held",
     [
         (
+            "https://firm.example/verbis",
+            False,
+            "Şirketler kriterleri sağladığında 30 gün içinde kayıt olmak zorundadır.",
+            True,
+        ),
+        (
+            "https://kvkk.gov.tr/Icerik/8858/2024-728",
+            True,
+            "Güvenlik yükümlülüğünün ihlalinde 15.000 TL idari para cezası uygulanır.",
+            True,
+        ),
+        (
+            "https://kvkk.gov.tr/Icerik/8145/2026-ceza-tutarlari",
+            True,
+            "2026 yılında 256.357 TL idari para cezası uygulanır.",
+            False,
+        ),
+        (
             "https://firm.example/saas",
             False,
             "Processors must report breaches within 24 hours.",
