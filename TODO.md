@@ -1,5 +1,6 @@
 # TODO — Apilex AI Research Agent Case
 
+- **Güncelleme (2026-09-17):** model seçimi, H1–H6, lease ile worker sahipliği, G12 ve yeni canlı örnekler tamamlandı. Kanıt ve kalan sınırlar: [evaluation v3](docs/review/evaluation_v3.md). Eski faz notları tarihsel kayıttır.
 - **Durum (2026-09-16):** sistem uçtan uca çalışıyor — `docker compose up -d` + provider key'leri (README §1). Uygulama notları: mimari §22.
 - **Teslim:** planlanan tarih (Pzt 14 Eyl 2026) geçti. **Takvim serbest** — kapsam daraltılmıyor, sistem bütün olarak yazılıyor. Alıcı: muhammed.bilgin@apilex.ai (D31)
 - **Mimari taslak:** [`docs/design/architecture_v0.6.md`](docs/design/architecture_v0.6.md) (önceki sürümler: `docs/design/_archive/`) · **Denetim + karar kapanışı:** [`docs/design/analysis_v1.md`](docs/design/analysis_v1.md)
@@ -210,3 +211,23 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 | 6 | Desteklenmeyen claim final cevaba nasıl girmiyor? | §11 (defense in depth + Output Gate G2/G4) |
 | 7 | Search sayısı / latency / token dengesi? | §16, §2 paralelizm |
 | 8 | Production'a taşırken ne değişir? | §19 |
+
+
+## 2026-09-17 — Denetim sonrası uygulama kararları
+
+| # | Karar | Kanıt |
+|---|---|---|
+| D44 | Her dispatch yeni lease alır; tüm worker yazımları ve checkpoint bu lease ile sınırlı; terminal sonuç atomik | PG yarış testleri, gerçek SIGKILL → attempt 2 → tek terminal olay |
+| D45 | Alıntı eşleşmesi yeterli değil: koşullar, kaynak desteği, güncellik ayrı doğrulanır; G12 uygun olmayan atfı çıkarır | 20 vakalı eval + canlı yasal vakalardaki başarısız tekrarlar korunur |
+| D46 | Kullanıcı reasoning ve fast modelini ayrı seçer; fallback açık/kapalı; istenen/kullanılan modeller kaydedilir | Gemini Pro UI run; 2.5 Pro canlı test; OpenAI seçimi 429 kredi engelinde |
+| D47 | H1–H6 plan/kanıt kontrol adımları UI ve trace içinde; pass doğruluk garantisi değildir | Heuristic checks ekranı, unit ve graph testleri |
+| D48 | Hukuki yükümlülük için şirket blogu veya resmi özet sayfası yeterli değil; birincil hüküm/ayrıntılı rehber aranır | Otorite politikası regresyonları ve ayrı son canlı tekrar |
+| D49 | Doğrulama sırası make verify ile tekrarlanabilir; CI ücretli key gerektirmez | lint → PG suite → Go race → offline fixture kontrolü |
+
+- [x] Kullanıcının istediği Conventional Commits ile mantıksal gruplar halinde commit.
+- [x] Model seçimi ve araştırma içi sezgisel kontrol adımları.
+- [x] Sekiz farklı soru, gerçek crash/resume, model seçimi ve yasal regresyon tekrarları.
+- [x] Maliyet/süre, başarısız örnekler ve eksik retrieval açıkça belgeli.
+- [ ] Harici teslim/reviewer daveti/mail: bu oturumda istenmedi, gönderilmedi.
+- [ ] Daha geniş, değişiklik sırasında görülmemiş bir hukuk değerlendirme seti ve eşik kalibrasyonu.
+- [ ] OpenAI hesap kredisi olduğunda tam canlı model karşılaştırması.

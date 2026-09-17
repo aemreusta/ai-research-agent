@@ -1,6 +1,6 @@
 # AI Research Agent - the whole system on one machine.
 #
-#   cp .env.example .env      # optional: provider keys can also be entered in the UI
+#   cp .env.example .env      # required for default profiles; keys can also use the UI
 #   docker compose up -d      # then open http://localhost:8000
 #
 # Profiles (set COMPOSE_PROFILES in .env):

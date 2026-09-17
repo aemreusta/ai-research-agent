@@ -21,8 +21,8 @@ Requirements: Docker with Compose v2. The full stack uses about 4 GB of memory o
 (Langfuse, ClickHouse and Presidio are the heavy parts); lightweight mode about 1.5 GB.
 
 ```bash
-cp .env.example .env         # optional: put your keys here - or enter them in the UI
-docker compose up -d         # first start pulls images and builds (a few minutes)
+cp .env.example .env         # required for the documented observability profile; keys can use the UI
+docker compose up -d --build # first start pulls images and builds (a few minutes)
 open http://localhost:8000   # the app
 ```
 
@@ -76,6 +76,44 @@ docker compose run --rm agent config --override budget.max_searches=20
 ```
 </details>
 
+
+### Choose models and review the checks
+
+In **New research → Models**, choose **Planning & verification** and **Extraction & search** independently. Options include Gemini 3.1 Pro (preview), Gemini 2.5 Pro,
+Gemini Flash, OpenAI GPT-6 Astra / GPT-5.6 Sol, Terra and Luna, and local Ollama Qwen3 models.
+The dropdowns come from [`config/models.yaml`](config/models.yaml); account access and quotas
+still apply. OpenAI models use an OpenAI API key and API billing.
+
+**Automatic** uses the configured Gemini → OpenAI → Ollama chain. An explicit choice tries that
+model first. **Allow provider fallback** controls whether another provider may take over;
+disable it for strict model comparisons. Missing credentials for an explicitly selected model
+are rejected before queuing. The run header and exports show requested and actually used models;
+presets preserve both selections and the fallback setting. Embeddings retain their separate chain.
+
+The same controls work through the API's `overrides` object or the CLI:
+
+```bash
+docker compose run --rm agent run "Your question" \
+  --override llm.reasoning_model=gemini-3.1-pro-preview \
+  --override llm.fast_model=gemini-3.1-flash-lite \
+  --override llm.allow_fallback=false --out examples/pro-run
+```
+
+Every new run has a **Heuristic checks** tab and corresponding timeline steps:
+
+| Step | Check |
+|---|---|
+| H1 | Comparison entities remain represented in the plan |
+| H2 | Old or undated mutable claims are withheld pending current confirmation |
+| H3 | Candidates without affirmative source support are withheld |
+| H4 | Detected applicability restrictions are represented in the claim |
+| H5 | Findings relying on a single independent origin are visible |
+| H6 | Citation and numeric integrity before gate remediation |
+
+A pass means that particular heuristic found no issue; it is not a factual-accuracy certificate.
+The gate records final structural checks after remediation. For developer acceptance, run
+`make verify` and follow the [manual review steps](evals/README.md#manual-heuristic-review).
+
 ## 2. Technologies
 
 | Layer | Choice |
@@ -89,7 +127,7 @@ docker compose run --rm agent config --override budget.max_searches=20
 | PII | Microsoft Presidio analyzer with Turkish ad-hoc recognisers, always unioned with regex rules; stable placeholders assigned in code |
 | Observability | Postgres `run_events` (primary) + self-hosted Langfuse v4 over OTLP (traces, prompt versions, cost) |
 | Frontend | Static HTML + ES modules + Server-Sent Events, no build step |
-| Quality | pytest (476 tests incl. Postgres integration and offline end-to-end graph runs), Go tests (70), ruff, mypy `--strict`, pre-commit with gitleaks |
+| Quality | pytest (538 tests incl. Postgres integration and offline end-to-end graph runs), Go tests with the race detector, ruff, mypy `--strict`, pre-commit with gitleaks |
 
 ## 3. Architecture
 
@@ -113,10 +151,11 @@ flowchart LR
 
 The **dispatcher** only schedules: it claims queued runs with `SKIP LOCKED`, hands them to the
 agent replica with the most free slots (`202 Accepted`, not a long request), requeues runs whose
-heartbeat stops, and enforces a hard deadline no agent bug can outlive. It holds no run state and
+heartbeat stops, and enforces a database deadline whose terminal write ignores intervening heartbeats. It holds no run state and
 refuses to start if given a provider key. The **agent** runs the graph, heartbeats every 10 s,
-checkpoints every node, and writes the terminal status itself. Every status write on either side is
-a compare-and-set checked against the shared state machine in [`contracts/`](contracts/).
+checkpoints every node, and writes the terminal status itself. Every dispatch receives a unique lease. Worker progress, events, checkpoints and completion
+are fenced by that lease; terminal status, counters, artifacts and final events commit together.
+Every status write on either side is a compare-and-set checked against the shared state machine in [`contracts/`](contracts/).
 
 A killed agent is recovered like this (verified): heartbeat stale after 30 s →
 `AGENT_HEARTBEAT_LOST` → requeued with backoff → another replica resumes from the LangGraph
@@ -129,7 +168,8 @@ flowchart TD
     Q([question]) --> IG[intake_guard<br/>validate · mask PII · language]
     IG --> A[analyze_query<br/>intent · entities · time scope · skills]
     A --> P[plan<br/>sub-questions + facet checklist]
-    P --> G[generate_queries<br/>round width · L4 dedup]
+    P --> HP[check_plan<br/>entity coverage heuristic]
+    HP --> G[generate_queries<br/>round width · L4 dedup]
     G --> S[search<br/>parallel · cached · fallback]
     S --> R[process_results<br/>L1 URLs · triage · top-K fetch · L2 origins]
     R --> E[evaluate_sources<br/>weighted score + rationale]
@@ -140,15 +180,15 @@ flowchart TD
     V -- gaps and budget left --> G
     V -- sufficient · budget · no progress --> Y[synthesize<br/>ledger only]
     Y --> Z[verify_citations<br/>batched entailment]
-    Z --> GT{output_gate<br/>G1–G11, no LLM}
+    Z --> HE[review_evidence<br/>five evidence heuristics]
+    HE --> GT{output_gate<br/>G1–G12, no LLM}
     GT --> O([report])
 ```
 
 Every LLM step returns a Pydantic object with a short `rationale`, which the run timeline shows -
-the auditable reason for a decision, not hidden chain of thought. Every LLM step also has a
-deterministic fallback (heuristic analysis, single-question plan, template queries, rule-based
-scores, a report that lists the ledger), so a provider outage degrades the answer instead of
-failing the run.
+the auditable reason for a decision, not hidden chain of thought. Planning and synthesis have deterministic fallbacks (heuristic analysis, a single-question plan,
+template queries, rule-based scores, a ledger report). Claim and citation verification fail closed:
+missing verdicts withhold evidence. If every provider is unavailable, a run can fail explicitly.
 
 ### 3.3 The central abstraction: the claim ledger
 
@@ -199,6 +239,11 @@ score = 0.35·authority + 0.25·primary + 0.15·recency + 0.25·relevance
 - **Recency** relative to the question's time scope: in-scope and fresh scores high, older than the
   scope is penalised, undated is slightly below neutral.
 - **Relevance** is judged by the model (with a token-overlap fallback).
+
+Claim admission is a separate check: source entailment, conditions, effective dates and the
+question’s time scope are retained in the ledger. Mutable old/undated values cannot close a
+current facet. Regulatory rule claims additionally need a primary rule or detailed guidance;
+commentary and identified official overview/press pages trigger a targeted follow-up.
 
 Every score is written to the timeline with its components:
 `[Evaluator] kvkk.gov.tr → 0.91 (T1, primary, 2026-03, relevance 0.85)`.
@@ -260,7 +305,7 @@ gives a report that says so (`no_evidence`), never an invented answer.
 
 ## 9. The output gate
 
-Nothing reaches the user without passing eleven deterministic rules ([`config/gate.yaml`](config/gate.yaml)).
+Every report is evaluated against twelve deterministic rules ([`config/gate.yaml`](config/gate.yaml)).
 No LLM call: the same report and ledger always give the same verdict - which also means a prompt
 injection or a hallucinating model cannot argue with it.
 
@@ -277,6 +322,7 @@ injection or a hallucinating model cannot argue with it.
 | G9 | No sensitive identifier or secret in the output | Masked |
 | G10 | Report language = question language | Flagged |
 | G11 | Every recommendation rests on a finding | Removed |
+| G12 | Cited claims remain eligible after support and freshness checks | Removed |
 
 **G4 sorts every quantity into a bucket** before judging it, because "the number must appear in a
 cited claim" alone would delete correct sentences:
@@ -291,7 +337,8 @@ cited claim" alone would delete correct sentences:
 The gate evaluates, remediates deterministically, and evaluates again. If an error survives, the
 report is still delivered - with a red "insufficient evidence" banner and the list of problems.
 Whenever a sentence was removed, the report says how many. The full result is in
-`gate_result.json` and in the run's **Gate** tab.
+`gate_result.json` and in the run's **Gate** tab. `max_remediation_rounds=0` evaluates without
+changing the report; positive limits run at most that many remediation rounds.
 
 ## 10. PII handling
 
@@ -372,12 +419,22 @@ See [`examples/`](examples/). The four case examples are generated with your key
 | 3 | What changed in the EU AI Act implementation timeline? | Conflicting dates → contradiction handling |
 | 4 | What is the size of the European legal tech market and how fast is it growing? | Numeric disagreement → G4, conflicting section |
 
-Each example contains `input.md`, `trace.jsonl`, `report.md`, `report.json`, `gate_result.json`
-and `state.json`. Runs from the UI export the same files.
+New exports contain `input.md`, `trace.jsonl`, `report.md`, `report.json`, `gate_result.json`
+and `state.json` (large committed snapshots are losslessly compressed as `state.json.gz`).
+The four original September 16 directories predate report JSON export and do not contain it.
+The UI exports Markdown, report JSON, state, gate result and trace; the CLI and batch harness
+also write `input.md`. See the [September 17 results index](examples/2026-09-17-RESULTS.md) for
+eight distinct questions, model-selection evidence, legal reruns and the preserved failures.
+
+The eight repeat cases took **50–306 seconds** and **$0.024–$0.700** in recorded LLM cost per run.
+These are measurements from this machine, not a latency guarantee. Costs use token estimates
+and exclude search-provider credits, infrastructure and unrecorded usage when a process dies.
+The Gemini Pro browser case used one research round: **94 seconds / $0.208**.
 
 ## 14. Tests
 
 ```bash
+make verify             # lint, full suite, Go race tests, offline evidence fixtures
 make test               # unit + contract tests, Python and Go, no database
 make test-integration   # adds Postgres integration tests (starts a throwaway container)
 make test-docker        # the Python suite inside the compose network
@@ -420,11 +477,13 @@ The full log with alternatives considered is in [`TODO.md`](TODO.md).
   default for this reason and because they are the subject of research.
 - Market-size and similar questions depend heavily on what search providers return; paywalled
   research is only visible through its public summaries.
-- Claim extraction quality is bounded by the fast-tier model; the gate protects numbers and
-  citations, not the completeness of what was extracted.
+- Model validation and deterministic checks reduce errors; they do not establish factual truth.
+  Source errors, omitted exceptions and missing retrieval remain possible. The legal policy
+  withholds rule-bearing claims from commentary and identified overview pages; its domain, URL
+  and wording heuristics can miss cases or reject useful evidence. Read [evaluation v3](docs/review/evaluation_v3.md).
 - Independence is judged by text and publisher: verbatim copies (MinHash, shared quotes) and
   pages of one site count once. A press release that several outlets **rewrote in their own
-  words** still counts as several sources - the live ApilexAI run shows this.
+  words** can still count separately if the common attribution was not extracted.
 - Contradiction candidates need the extractor to name entity, attribute and period consistently;
   different wordings are normalised, but a conflict between differently framed facts ("most
   rules apply from 2026" vs. "high-risk rules were postponed") is left to the synthesiser.
@@ -489,8 +548,8 @@ bulgulara atıf yapan diğer cümleler "belirsiz" olarak işaretlenir.
 
 ### 6. LLM tarafından üretilmiş fakat hiçbir kaynak tarafından desteklenmeyen bir claim'in final cevaba girmesini nasıl engelliyorsunuz?
 
-Derinlemesine savunma: (1) her iddianın sayfada **birebir** geçen bir alıntısı olmalı — rakamlar ve
-yazıyla yazılmış sayılar dahil — yoksa iddia atılır; modele hitap eden cümleler ("önceki talimatları
+Derinlemesine savunma: (1) her iddianın alıntısı sayfa metnine eşleşmelidir (birebir, normalize
+veya eşikli fuzzy eşleşme; sayı tutarlılığı ayrıca denetlenir); eşleşmeyen iddia atılır; modele hitap eden cümleler ("önceki talimatları
 yok say") kanıt sayılmaz; (2) sentez modeli web'i hiç görmez, yalnızca ID'li bulgu defterini görür ve
 her olgusal cümle bulgu ID'si taşımak zorundadır; (3) ayrı bir doğrulama adımı her cümlenin atıf
 yaptığı bulgularca desteklenip desteklenmediğini batch'ler halinde kontrol eder, bir kez geri
@@ -504,7 +563,7 @@ kanıt" uyarısıyla döner. Gate'te LLM olmadığı için prompt injection da o
 Bütçenin asıl kontrolü tur genişliği: ilk tur geniş, sonraki turlar yalnızca eksiklere. Snippet-first
 triage ile yalnızca alt soru başına ilk birkaç kaynak tam okunur; Tavily sayfa metnini aramayla
 birlikte döndürdüğü için ayrıca fetch nadiren gerekir, ve `basic` derinlik arama başına 1 kredi harcar.
-İki model katmanı var: planlama/sentez gibi yargı adımları `reasoning`, çıkarma/sınıflandırma gibi
+İki model katmanı var: planlama/sentez ve iddia/atıf doğrulama gibi yargı adımları `reasoning`, çıkarma/sınıflandırma gibi
 yüksek hacimli adımlar ucuz `fast` modelde, düşük düşünme seviyesiyle. Arama, çıkarma ve doğrulama
 paralel ve semaphore'la sınırlı; atıf doğrulama cümle başına değil batch'ler halinde. Arama ve
 embedding sonuçları Postgres'te önbelleklenir. Token, maliyet ve süre sayaçları her zaman çalışır ve

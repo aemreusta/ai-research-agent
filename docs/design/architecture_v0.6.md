@@ -1,5 +1,7 @@
 # AI Research Agent — Mimari Taslak v0.6
 
+> 2026-09-17 implementation update: dispatch leases fence writes/checkpoints; completion is atomic; model selection, H1–H6 and G12 are implemented. Conditions, freshness and primary legal authority affect claim admission. See [evaluation v3](../review/evaluation_v3.md) and README for current behavior; the dated design below preserves its original rationale.
+
 > Durum: **Uygulandı** (sapmalar ve netleşen kararlar: §22) · Tarih: 2026-09-16
 > v0.6 — v0.5'ten fark: Tüm açık öneriler kapatıldı (D6–D12, D17, D24, D25, D29) ve denetim bulguları mimariye işlendi (D30–D35): **Python 3.13** · bütçe yeniden hesaplandı, **süre/maliyet kapıları kapalı başlıyor** (§7) · **Output Gate G4 üç kovaya ayrıldı** (§11.3) · **prompt injection yapısal savunması** (§11.4) · `verify_citations` batch'li (§5) · **çok ekranlı UI + maliyet panosu** (§15.2, §16) · `research` **CLI** MUST (§17) · kapsam ve takvim notu güncellendi (§21). Denetim kaydı: `analysis_v1.md`.
 > v0.5 — v0.4'ten fark: **Langfuse self-host** artık tracing + prompt management + dataset'lerin tek yeri (D21/D27 revize; self-hosted LangSmith Enterprise lisansı gerektiriyor). DSPy offline derleyici (D26 ✅), skill'ler script'siz (D28 ✅).

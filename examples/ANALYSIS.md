@@ -1,5 +1,7 @@
 # Live runs: what they showed and what changed
 
+> Historical September 16 analysis. The later [September 17 results](2026-09-17-RESULTS.md) preserve follow-up failures and current verification; “final” below refers only to the September 16 snapshot.
+
 All runs on 2026-09-16 used Gemini (`gemini-3.8-flash` reasoning, `gemini-3.1-flash-lite` fast,
 `gemini-embedding-001`) and Tavily. Each was started through the API (the same path as the UI),
 with default settings and two agent replicas. The four questions were run three times:
