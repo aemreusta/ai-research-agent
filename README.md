@@ -21,12 +21,12 @@ Microsoft Presidio and self-hosted Langfuse. The only thing you bring is API key
 <details>
 <summary>More screenshots of the running system</summary>
 
-| | |
-|---|---|
-| **New research** - question, model choice per stage, advanced limits<br>![New research](docs/screenshots/01-new-research.png) | **Runs** - status, stop reason, gate verdict, cost and duration<br>![Runs](docs/screenshots/02-runs.png) |
-| **Timeline** - every dispatcher and agent step, live over SSE<br>![Timeline](docs/screenshots/04-run-timeline.png) | **Output gate** - deterministic G1-G12 checks with removed sentences<br>![Gate](docs/screenshots/05-run-gate.png) |
-| **Findings** - contradictions and the claim ledger<br>![Findings](docs/screenshots/06-run-findings.png) | **Costs** - per model, node and search provider<br>![Costs](docs/screenshots/07-costs.png) |
-| **Prompts & Skills** - signatures, active prompt versions, schema hashes<br>![Prompts](docs/screenshots/08-prompts-skills.png) | **Settings** - provider keys, kept in the browser tab<br>![Settings](docs/screenshots/09-settings.png) |
+|                                                                                                                                |                                                                                                                   |
+| ------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| **New research** - question, model choice per stage, advanced limits<br>![New research](docs/screenshots/01-new-research.png)  | **Runs** - status, stop reason, gate verdict, cost and duration<br>![Runs](docs/screenshots/02-runs.png)          |
+| **Timeline** - every dispatcher and agent step, live over SSE<br>![Timeline](docs/screenshots/04-run-timeline.png)             | **Output gate** - deterministic G1-G12 checks with removed sentences<br>![Gate](docs/screenshots/05-run-gate.png) |
+| **Findings** - contradictions and the claim ledger<br>![Findings](docs/screenshots/06-run-findings.png)                        | **Costs** - per model, node and search provider<br>![Costs](docs/screenshots/07-costs.png)                        |
+| **Prompts & Skills** - signatures, active prompt versions, schema hashes<br>![Prompts](docs/screenshots/08-prompts-skills.png) | **Settings** - provider keys, kept in the browser tab<br>![Settings](docs/screenshots/09-settings.png)            |
 
 </details>
 
@@ -45,10 +45,10 @@ open http://localhost:8000   # the app
 
 **The one manual step: API keys.** You need one LLM key and one search key:
 
-| Kind | Providers (either works; both give the agent a fallback) |
-|---|---|
-| LLM | [Google Gemini](https://aistudio.google.com/apikey) · [OpenAI](https://platform.openai.com/api-keys) |
-| Search | [Tavily](https://app.tavily.com) · [Brave Search](https://api-dashboard.search.brave.com) |
+| Kind   | Providers (either works; both give the agent a fallback)                                             |
+| ------ | ---------------------------------------------------------------------------------------------------- |
+| LLM    | [Google Gemini](https://aistudio.google.com/apikey) · [OpenAI](https://platform.openai.com/api-keys) |
+| Search | [Tavily](https://app.tavily.com) · [Brave Search](https://api-dashboard.search.brave.com)            |
 
 Either paste them into **Settings** in the app (kept in the browser tab, encrypted per run on the
 server, deleted when the run ends) or put them in `.env` as `GEMINI_API_KEY`, `OPENAI_API_KEY`,
@@ -56,12 +56,12 @@ server, deleted when the run ends) or put them in `.env` as `GEMINI_API_KEY`, `O
 working local default - the database password, the encryption key (generated on first start),
 and Langfuse's admin user and API keys (created headlessly).
 
-| URL | What |
-|---|---|
-| http://localhost:8000 | The app: new research, live runs, reports, costs, prompts, settings |
-| http://localhost:3000 | Langfuse - log in with `admin@research.local` / `research-admin` |
-| http://localhost:8000/docs | OpenAPI docs of the REST API |
-| http://localhost:8000/readyz | Which dependencies answer |
+| URL                          | What                                                                |
+| ---------------------------- | ------------------------------------------------------------------- |
+| http://localhost:8000        | The app: new research, live runs, reports, costs, prompts, settings |
+| http://localhost:3000        | Langfuse - log in with `admin@research.local` / `research-admin`    |
+| http://localhost:8000/docs   | OpenAPI docs of the REST API                                        |
+| http://localhost:8000/readyz | Which dependencies answer                                           |
 
 **Lightweight mode** - no Langfuse, ClickHouse, Redis or MinIO. The system stays fully functional:
 traces come from Postgres, prompts from the repo YAML seeds.
@@ -93,8 +93,8 @@ docker compose run --rm --no-deps --user "$(id -u):$(id -g)" \
 # Add --simulate to that command for an offline run with no keys.
 docker compose run --rm agent config --override budget.max_searches=20
 ```
-</details>
 
+</details>
 
 ### Choose models and review the checks
 
@@ -121,14 +121,14 @@ docker compose run --rm --no-deps --user "$(id -u):$(id -g)" \
 
 Every new run has a **Heuristic checks** tab and corresponding timeline steps:
 
-| Step | Check |
-|---|---|
-| H1 | Comparison entities remain represented in the plan |
-| H2 | Old or undated mutable claims are withheld pending current confirmation |
-| H3 | Candidates without affirmative source support are withheld |
-| H4 | Detected applicability restrictions are represented in the claim |
-| H5 | Findings relying on a single independent origin are visible |
-| H6 | Citation and numeric integrity before gate remediation |
+| Step | Check                                                                   |
+| ---- | ----------------------------------------------------------------------- |
+| H1   | Comparison entities remain represented in the plan                      |
+| H2   | Old or undated mutable claims are withheld pending current confirmation |
+| H3   | Candidates without affirmative source support are withheld              |
+| H4   | Detected applicability restrictions are represented in the claim        |
+| H5   | Findings relying on a single independent origin are visible             |
+| H6   | Citation and numeric integrity before gate remediation                  |
 
 A pass means that particular heuristic found no issue; it is not a factual-accuracy certificate.
 The gate records final structural checks after remediation. For developer acceptance, run
@@ -136,18 +136,18 @@ The gate records final structural checks after remediation. For developer accept
 
 ## 2. Technologies
 
-| Layer | Choice |
-|---|---|
-| Orchestration | LangGraph `StateGraph` - nodes are plain async functions, routing and termination are plain Python; Postgres checkpointer |
-| LLM | Gemini → OpenAI → Ollama fallback chain over REST (no vendor SDKs); `reasoning` and `fast` tiers; strict JSON-schema structured output |
-| Search | Tavily (primary, returns page text) + Brave (fallback and diversity); `trafilatura` for pages that need fetching |
-| Runtime | Python 3.13, uv, FastAPI, Pydantic v2, SQLAlchemy 2 + Alembic, psycopg 3, httpx, structlog, datasketch |
-| Control plane | Go 1.27 dispatcher - queue claim, capacity, heartbeat watchdog, hard deadline, cancel, retry; distroless image |
-| Storage | PostgreSQL 16 - run queue (`FOR UPDATE SKIP LOCKED` + `LISTEN/NOTIFY`), event store, checkpoints, caches, presets |
-| PII | Microsoft Presidio analyzer with Turkish ad-hoc recognisers, always unioned with regex rules; stable placeholders assigned in code |
-| Observability | Postgres `run_events` (primary) + self-hosted Langfuse v4 over OTLP (traces, prompt versions, cost) |
-| Frontend | Static HTML + ES modules + Server-Sent Events, no build step |
-| Quality | pytest (548 tests incl. Postgres integration and offline end-to-end graph runs), Go tests with the race detector, ruff, mypy `--strict`, pre-commit with gitleaks |
+| Layer         | Choice                                                                                                                                                            |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Orchestration | LangGraph `StateGraph` - nodes are plain async functions, routing and termination are plain Python; Postgres checkpointer                                         |
+| LLM           | Gemini → OpenAI → Ollama fallback chain over REST (no vendor SDKs); `reasoning` and `fast` tiers; strict JSON-schema structured output                            |
+| Search        | Tavily (primary, returns page text) + Brave (fallback and diversity); `trafilatura` for pages that need fetching                                                  |
+| Runtime       | Python 3.13, uv, FastAPI, Pydantic v2, SQLAlchemy 2 + Alembic, psycopg 3, httpx, structlog, datasketch                                                            |
+| Control plane | Go 1.27 dispatcher - queue claim, capacity, heartbeat watchdog, hard deadline, cancel, retry; distroless image                                                    |
+| Storage       | PostgreSQL 16 - run queue (`FOR UPDATE SKIP LOCKED` + `LISTEN/NOTIFY`), event store, checkpoints, caches, presets                                                 |
+| PII           | Microsoft Presidio analyzer with Turkish ad-hoc recognisers, always unioned with regex rules; stable placeholders assigned in code                                |
+| Observability | Postgres `run_events` (primary) + self-hosted Langfuse v4 over OTLP (traces, prompt versions, cost)                                                               |
+| Frontend      | Static HTML + ES modules + Server-Sent Events, no build step                                                                                                      |
+| Quality       | pytest (548 tests incl. Postgres integration and offline end-to-end graph runs), Go tests with the race detector, ruff, mypy `--strict`, pre-commit with gitleaks |
 
 ## 3. Architecture
 
@@ -218,17 +218,17 @@ SearchHit → Document (score, origin) → Claim (+ verbatim quote) → ClaimClu
 
 The system reasons about **claims**, not documents. One data model answers four requirements:
 
-| Requirement | In the ledger |
-|---|---|
-| Duplicates | Near-identical pages share one `origin`; the same fact in different words is one cluster |
-| Corroboration | A cluster's support is its number of **independent origins** - never its URL count |
-| Contradictions | Two clusters with the same entity and attribute but different values |
-| Citations | The synthesiser may only cite cluster ids; each id already knows its claims, quotes and sources |
+| Requirement    | In the ledger                                                                                   |
+| -------------- | ----------------------------------------------------------------------------------------------- |
+| Duplicates     | Near-identical pages share one `origin`; the same fact in different words is one cluster        |
+| Corroboration  | A cluster's support is its number of **independent origins** - never its URL count              |
+| Contradictions | Two clusters with the same entity and attribute but different values                            |
+| Citations      | The synthesiser may only cite cluster ids; each id already knows its claims, quotes and sources |
 
 ## 4. Search strategy
 
 - **Decomposition.** The planner writes 3-6 self-contained sub-questions, each with 1-5 checkable
-  *facets* ("effective date", "penalty amount"). A sub-question is answered when all its facets are.
+  _facets_ ("effective date", "penalty amount"). A sub-question is answered when all its facets are.
 - **Round width is the budget control.** Round 1: up to 3 queries per open sub-question. Later
   rounds: one query per missing facet or unresolved contradiction, at most 8 per round. Four
   rounds therefore fit the 45-search budget.
@@ -270,14 +270,14 @@ Every score is written to the timeline with its components:
 
 ## 6. Duplicate detection
 
-| Layer | Method | Catches |
-|---|---|---|
-| L1 URL | Canonicalisation: scheme, `www`/`m`/`amp` hosts, AMP suffixes, tracking parameters, sorted query, fragments | The same page twice |
-| L2 Document | Normalised-text hash, then MinHash LSH (word 5-grams, Jaccard ≥ 0.8) → shared `origin_id` | Syndicated press releases, republished articles |
-| L2b Quotes | Pages sharing ≥ 2 verbatim quotes of ≥ 12 words merge their origins | The same press release inside different page chrome (menus, related articles) that keeps MinHash below the threshold |
-| Publisher | Origins on the same site (`tr.linkedin.com` = `linkedin.com`) count once | Four pages of the company's own website presented as four confirmations |
-| L3 Claim | Embedding cosine (one embedding model per run, cached) **and** the same normalised entity; lexical fallback | One fact phrased differently |
-| L4 Query | Normalised token Jaccard ≥ 0.9 | The same query generated again |
+| Layer       | Method                                                                                                      | Catches                                                                                                              |
+| ----------- | ----------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| L1 URL      | Canonicalisation: scheme, `www`/`m`/`amp` hosts, AMP suffixes, tracking parameters, sorted query, fragments | The same page twice                                                                                                  |
+| L2 Document | Normalised-text hash, then MinHash LSH (word 5-grams, Jaccard ≥ 0.8) → shared `origin_id`                   | Syndicated press releases, republished articles                                                                      |
+| L2b Quotes  | Pages sharing ≥ 2 verbatim quotes of ≥ 12 words merge their origins                                         | The same press release inside different page chrome (menus, related articles) that keeps MinHash below the threshold |
+| Publisher   | Origins on the same site (`tr.linkedin.com` = `linkedin.com`) count once                                    | Four pages of the company's own website presented as four confirmations                                              |
+| L3 Claim    | Embedding cosine (one embedding model per run, cached) **and** the same normalised entity; lexical fallback | One fact phrased differently                                                                                         |
+| L4 Query    | Normalised token Jaccard ≥ 0.9                                                                              | The same query generated again                                                                                       |
 
 Two rules make the layers matter: **corroboration counts origins** (five sites carrying one press
 release are one confirmation; a claim attributed to someone - "according to the ministry" - takes
@@ -334,20 +334,20 @@ Every report is evaluated against twelve deterministic rules ([`config/gate.yaml
 No LLM call: the same report and ledger always give the same verdict - which also means a prompt
 injection or a hallucinating model cannot argue with it.
 
-| Rule | Checks | If violated |
-|---|---|---|
-| G1 | Required sections present; at least one supported finding | Section added / **fail** |
-| G2 | Every factual sentence cites a finding | Sentence removed |
-| G3 | Citations exist in the ledger; source list matches citations | Citation dropped, list rebuilt |
-| G4 | Every number, date, percentage and amount is supported | By bucket, below |
-| G5 | Contested findings are hedged | Labelled uncertain |
-| G6 | Single-source findings are labelled | Labelled |
-| G7 | Exhausted sub-questions are in Known Gaps | Added |
-| G8 | Source URLs valid, canonical, unique | Fixed or dropped |
-| G9 | No sensitive identifier or secret in the output | Masked |
-| G10 | Report language = question language; a Turkish report uses Turkish letters | Flagged (synthesis already rewrote an ASCII-only Turkish draft once) |
-| G11 | Every recommendation rests on a finding | Removed |
-| G12 | Cited claims remain eligible after support and freshness checks | Removed |
+| Rule | Checks                                                                     | If violated                                                          |
+| ---- | -------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| G1   | Required sections present; at least one supported finding                  | Section added / **fail**                                             |
+| G2   | Every factual sentence cites a finding                                     | Sentence removed                                                     |
+| G3   | Citations exist in the ledger; source list matches citations               | Citation dropped, list rebuilt                                       |
+| G4   | Every number, date, percentage and amount is supported                     | By bucket, below                                                     |
+| G5   | Contested findings are hedged                                              | Labelled uncertain                                                   |
+| G6   | Single-source findings are labelled                                        | Labelled                                                             |
+| G7   | Exhausted sub-questions are in Known Gaps                                  | Added                                                                |
+| G8   | Source URLs valid, canonical, unique                                       | Fixed or dropped                                                     |
+| G9   | No sensitive identifier or secret in the output                            | Masked                                                               |
+| G10  | Report language = question language; a Turkish report uses Turkish letters | Flagged (synthesis already rewrote an ASCII-only Turkish draft once) |
+| G11  | Every recommendation rests on a finding                                    | Removed                                                              |
+| G12  | Cited claims remain eligible after support and freshness checks            | Removed                                                              |
 
 **G4 sorts every quantity into a bucket** before judging it, because "the number must appear in a
 cited claim" alone would delete correct sentences:
@@ -411,26 +411,26 @@ SEARCH_TIMEOUT (tavily, 2/3) → retry in 2s → fallback->brave → Received 7 
 
 Unexpected ones (`UNEXPECTED_EXCEPTION`) fail the run with a redacted stack trace and an event id.
 
-| Situation | Code | Behaviour |
-|---|---|---|
-| Search timeout / 5xx / 429 | `SEARCH_TIMEOUT` · `SEARCH_PROVIDER_ERROR` · `SEARCH_RATE_LIMIT` | Retry with backoff → other provider → query marked failed, run continues |
-| Rejected search key | `SEARCH_AUTH` | No retry → other provider |
-| Empty result | `SEARCH_EMPTY` | Other provider; one broadened query |
-| LLM timeout / 5xx / 429 | `LLM_TIMEOUT` · `LLM_PROVIDER_ERROR` · `LLM_RATE_LIMIT` | Retry → next provider (`LLM_FALLBACK_USED`) → node fallback |
-| Rejected LLM key | `LLM_AUTH` | Next provider; none left → run fails with a message naming the missing key |
-| Invalid structured output | `LLM_INVALID_OUTPUT` → `LLM_REPAIR_FAILED` | One repair turn with the validation error → node fallback |
-| Quote not in the page | `EXTRACT_QUOTE_NOT_FOUND` | Claim discarded |
-| Page fetch fails | `FETCH_FAILED` | Continue with the snippet |
-| Embeddings unavailable | `EMBEDDING_UNAVAILABLE` | Lexical similarity for the rest of the run |
-| Repeated queries | `DUPLICATE_QUERY` | Sub-question exhausted |
-| Budget / rounds used | `BUDGET_EXCEEDED` · `MAX_ITERATIONS` | Controlled stop, Known Gaps |
-| No evidence | `NO_EVIDENCE` | "No sufficient evidence" report |
-| Presidio down | `PII_ENGINE_DEGRADED` | Regex masking only |
-| Langfuse down / prompt incompatible | `PROMPT_REGISTRY_DEGRADED` · `PROMPT_SCHEMA_MISMATCH` | Repo YAML prompt |
-| Gate | `GATE_REMEDIATED` · `GATE_FAILED` | Fixes / report with banner |
-| Agent unreachable / crashed | `AGENT_UNREACHABLE` · `AGENT_HEARTBEAT_LOST` | Other replica / requeue and resume (≤ 3 attempts) |
-| Hard deadline | `DEADLINE_EXCEEDED` | Agent asked to stop, then failed after a grace period |
-| Invalid settings | `CONFIG_INVALID` | Rejected before the run exists |
+| Situation                           | Code                                                             | Behaviour                                                                  |
+| ----------------------------------- | ---------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| Search timeout / 5xx / 429          | `SEARCH_TIMEOUT` · `SEARCH_PROVIDER_ERROR` · `SEARCH_RATE_LIMIT` | Retry with backoff → other provider → query marked failed, run continues   |
+| Rejected search key                 | `SEARCH_AUTH`                                                    | No retry → other provider                                                  |
+| Empty result                        | `SEARCH_EMPTY`                                                   | Other provider; one broadened query                                        |
+| LLM timeout / 5xx / 429             | `LLM_TIMEOUT` · `LLM_PROVIDER_ERROR` · `LLM_RATE_LIMIT`          | Retry → next provider (`LLM_FALLBACK_USED`) → node fallback                |
+| Rejected LLM key                    | `LLM_AUTH`                                                       | Next provider; none left → run fails with a message naming the missing key |
+| Invalid structured output           | `LLM_INVALID_OUTPUT` → `LLM_REPAIR_FAILED`                       | One repair turn with the validation error → node fallback                  |
+| Quote not in the page               | `EXTRACT_QUOTE_NOT_FOUND`                                        | Claim discarded                                                            |
+| Page fetch fails                    | `FETCH_FAILED`                                                   | Continue with the snippet                                                  |
+| Embeddings unavailable              | `EMBEDDING_UNAVAILABLE`                                          | Lexical similarity for the rest of the run                                 |
+| Repeated queries                    | `DUPLICATE_QUERY`                                                | Sub-question exhausted                                                     |
+| Budget / rounds used                | `BUDGET_EXCEEDED` · `MAX_ITERATIONS`                             | Controlled stop, Known Gaps                                                |
+| No evidence                         | `NO_EVIDENCE`                                                    | "No sufficient evidence" report                                            |
+| Presidio down                       | `PII_ENGINE_DEGRADED`                                            | Regex masking only                                                         |
+| Langfuse down / prompt incompatible | `PROMPT_REGISTRY_DEGRADED` · `PROMPT_SCHEMA_MISMATCH`            | Repo YAML prompt                                                           |
+| Gate                                | `GATE_REMEDIATED` · `GATE_FAILED`                                | Fixes / report with banner                                                 |
+| Agent unreachable / crashed         | `AGENT_UNREACHABLE` · `AGENT_HEARTBEAT_LOST`                     | Other replica / requeue and resume (≤ 3 attempts)                          |
+| Hard deadline                       | `DEADLINE_EXCEEDED`                                              | Agent asked to stop, then failed after a grace period                      |
+| Invalid settings                    | `CONFIG_INVALID`                                                 | Rejected before the run exists                                             |
 
 ## 13. Examples
 
@@ -441,16 +441,16 @@ keys through the API, each with `input.md`, `trace.jsonl`, `report.md`, `report.
 [results index](examples/2026-09-17-RESULTS.md) lists every batch with duration, cost, searches,
 gate verdict, stop reason and what was still wrong; nothing was rewritten after the fact.
 
-| # | Question | Why this one |
-|---|---|---|
-| 1 | Türkiye'deki SaaS şirketleri için 2026 KVKK uyum aksiyon planı nedir? | Turkish regulation, action plan tied to findings |
-| 2 | ApilexAI'ın ürünleri, iş ortaklıkları ve stratejik yönü nedir? | Thin coverage → Known Gaps |
-| 3 | What changed in the EU AI Act implementation timeline? | Conflicting dates → contradiction handling |
-| 4 | What is the size of the European legal tech market and how fast is it growing? | Numeric disagreement → G4, conflicting section |
-| 5 | GDPR vs. KVKK breach notification (asked in English about Türkiye) | Report language follows the question, not the topic |
-| 6 | PostgreSQL 17 vs. 18 from official release notes | A technical domain, primary sources |
-| 7 | Shopify vs. Wix full-year 2025 revenue | Both comparison entities must stay in the plan (H1) |
-| 8 | A made-up company and product | Honest abstention: `no_evidence`, gate `fail` by design |
+| #   | Question                                                                       | Why this one                                            |
+| --- | ------------------------------------------------------------------------------ | ------------------------------------------------------- |
+| 1   | Türkiye'deki SaaS şirketleri için 2026 KVKK uyum aksiyon planı nedir?          | Turkish regulation, action plan tied to findings        |
+| 2   | ApilexAI'ın ürünleri, iş ortaklıkları ve stratejik yönü nedir?                 | Thin coverage → Known Gaps                              |
+| 3   | What changed in the EU AI Act implementation timeline?                         | Conflicting dates → contradiction handling              |
+| 4   | What is the size of the European legal tech market and how fast is it growing? | Numeric disagreement → G4, conflicting section          |
+| 5   | GDPR vs. KVKK breach notification (asked in English about Türkiye)             | Report language follows the question, not the topic     |
+| 6   | PostgreSQL 17 vs. 18 from official release notes                               | A technical domain, primary sources                     |
+| 7   | Shopify vs. Wix full-year 2025 revenue                                         | Both comparison entities must stay in the plan (H1)     |
+| 8   | A made-up company and product                                                  | Honest abstention: `no_evidence`, gate `fail` by design |
 
 `make examples` regenerates the four case questions with your keys; a run started in the UI can be
 exported in the same format. The four top-level folders are the first live runs (2026-09-16);
@@ -480,23 +480,23 @@ make test-docker        # the Python suite inside the compose network
 make lint               # ruff, mypy --strict, gofmt, go vet
 ```
 
-| Layer | Covers |
-|---|---|
-| Unit | Contracts, config bounds and locked settings, redaction, masking (+Presidio), key handling, URL canonicalisation, MinHash, query dedup, scoring, quote verification, injection tripwire, clustering, contradiction candidates, facet sufficiency, router, number/date normalisation, every gate rule, providers (request shapes, error mapping, retry, fallback, repair), schemas on the wire, prompt registry and skills, Langfuse export |
-| Scenario | The whole graph offline: success in one round, stagnation, max rounds, search budget, wall-clock and cost budgets switched on, search and LLM provider fallback, repair failure, no evidence, prompt injection, PII never reaching a provider, cancellation, **crash and resume from checkpoint**, Turkish reports, the CLI |
-| API | Run creation with masking, encryption and override validation, SSE backfill / resume / live, cancel, export, costs, prompts, no key in any response |
-| Integration | Migrations match the models; events are gap-free under concurrency; concurrent claims never double-claim; compare-and-set races; requeue budget; secrets deleted on finish; agent server behaviour against real Postgres |
-| Go | Watchdog decision table, dispatch and fallback, capacity ranking and DNS discovery, agent client ↔ OpenAPI contract, state machine ↔ contract, store against Postgres (concurrent claims, CAS races, deadlines, backoff), NOTIFY listener |
+| Layer       | Covers                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Unit        | Contracts, config bounds and locked settings, redaction, masking (+Presidio), key handling, URL canonicalisation, MinHash, query dedup, scoring, quote verification, injection tripwire, clustering, contradiction candidates, facet sufficiency, router, number/date normalisation, every gate rule, providers (request shapes, error mapping, retry, fallback, repair), schemas on the wire, prompt registry and skills, Langfuse export |
+| Scenario    | The whole graph offline: success in one round, stagnation, max rounds, search budget, wall-clock and cost budgets switched on, search and LLM provider fallback, repair failure, no evidence, prompt injection, PII never reaching a provider, cancellation, **crash and resume from checkpoint**, Turkish reports, the CLI                                                                                                                |
+| API         | Run creation with masking, encryption and override validation, SSE backfill / resume / live, cancel, export, costs, prompts, no key in any response                                                                                                                                                                                                                                                                                        |
+| Integration | Migrations match the models; events are gap-free under concurrency; concurrent claims never double-claim; compare-and-set races; requeue budget; secrets deleted on finish; agent server behaviour against real Postgres                                                                                                                                                                                                                   |
+| Go          | Watchdog decision table, dispatch and fallback, capacity ranking and DNS discovery, agent client ↔ OpenAPI contract, state machine ↔ contract, store against Postgres (concurrent claims, CAS races, deadlines, backoff), NOTIFY listener                                                                                                                                                                                                  |
 
 Direct entry points for the case's requested critical components:
 
-| Component | Tests |
-|---|---|
-| Duplicate detection | [URL, document and query dedup](agent/tests/unit/agent/test_dedup.py), [syndication](agent/tests/unit/agent/test_syndication.py) |
-| Query generation | [Quota enforcement, duplicates, fallback, gap-only follow-up and exhaustion](agent/tests/unit/agent/test_query_generation.py) |
-| Source scoring | [Weights, primary sources, recency and authority bounds](agent/tests/unit/agent/test_scoring_and_quotes.py) |
-| State transitions | [Shared state contract](agent/tests/unit/test_contracts.py), [lease and stale-worker integration](agent/tests/integration/test_leases.py) |
-| Termination logic | [Coverage, stagnation and stop rules](agent/tests/unit/agent/test_ledger_logic.py), [whole-graph scenarios](agent/tests/scenario/test_research_graph.py) |
+| Component           | Tests                                                                                                                                                    |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Duplicate detection | [URL, document and query dedup](agent/tests/unit/agent/test_dedup.py), [syndication](agent/tests/unit/agent/test_syndication.py)                         |
+| Query generation    | [Quota enforcement, duplicates, fallback, gap-only follow-up and exhaustion](agent/tests/unit/agent/test_query_generation.py)                            |
+| Source scoring      | [Weights, primary sources, recency and authority bounds](agent/tests/unit/agent/test_scoring_and_quotes.py)                                              |
+| State transitions   | [Shared state contract](agent/tests/unit/test_contracts.py), [lease and stale-worker integration](agent/tests/integration/test_leases.py)                |
+| Termination logic   | [Coverage, stagnation and stop rules](agent/tests/unit/agent/test_ledger_logic.py), [whole-graph scenarios](agent/tests/scenario/test_research_graph.py) |
 
 ## 15. Design decisions
 
@@ -550,9 +550,6 @@ The full log with alternatives considered is in [`TODO.md`](TODO.md).
 ---
 
 ## 16. Design Questions
-
-> Bu bölümün cevapları Türkçedir (case gereği). Her cevabın ayrıntısı İngilizce bölümlerde:
-> durma §7, kaynak skoru §5, tekrar tespiti §6, çelişkiler §8, çıktı kontrolü §9, maliyet §13.
 
 ### 1. Agent araştırmayı ne zaman sonlandırıyor?
 
@@ -627,11 +624,12 @@ Birbirinden bağımsız katmanlarla. Biri çalışmasa bile diğeri durdurur.
 
   Model otoriteyi en fazla ±0.1 oynatabilir ama kademe değiştiremez; bir blog kendini regülatör
   yapamaz. Adı resmî bir kuruma benzeyen siteler (ör. `kvkkuyum.com`) de birincil sayılmaz.
+
 - **Birincillik:** bilgiyi ilk kez yayımlayan kaynak birincildir: regülatör, resmî gazete ya da
   şirketin kendisiyle ilgili iddialarda kendi sitesi.
 - **Güncellik**, sorunun zaman kapsamına göre hesaplanır. Kapsamdan eski kaynak cezalandırılır,
   tarihsiz kaynak nötrün biraz altında kalır.
-- **İlgililik**i model değerlendirir. Model yanıt vermezse kelime örtüşmesine göre hesaplanır.
+- **İlgililik** model tarafından değerlendirilir. Model yanıt vermezse kelime örtüşmesine göre hesaplanır.
 
 Kaynak skoru tek başına bir bilgiyi doğrulamaz. Her iddia ayrıca şu kontrollerden geçer:
 
@@ -651,15 +649,15 @@ Temel kural: bir bilginin desteği URL sayısıyla değil, **bağımsız kaynak*
 
 Aynı kaynaktan gelen sayfalar şu katmanlarla bulunur:
 
-| Katman | Yöntem | Yakaladığı |
-|---|---|---|
-| L1 | URL normalizasyonu (şema, `www`/`m`/AMP, takip parametreleri, parça) | Aynı sayfanın farklı adresleri |
-| L2 | Normalize metin hash'i ve MinHash (kelime 5-gram, Jaccard ≥ 0.8) | Birebir ya da neredeyse aynı kopyalar, sendikasyon |
-| L2b | En az 2 ortak, en az 12 kelimelik birebir alıntı | Aynı bülten, sitelerin farklı menü ve kenar içerikleri yüzünden MinHash eşiğini geçemediğinde |
-| Yayıncı | Aynı sitenin sayfaları tek kaynak (`tr.linkedin.com` = `linkedin.com`) | Şirketin kendi sitesindeki dört sayfanın dört doğrulama sayılması |
-| Atıf | "X'in açıklamasına göre" diyen iddiada X kaynak kabul edilir | Aynı açıklamayı aktaran farklı haberler |
-| L3 | Embedding benzerliği ve aynı varlık | Aynı olgunun farklı ifadelerini tek bulguda toplamak |
-| L4 | Sorgu benzerliği | Aynı aramanın tekrar yapılması |
+| Katman  | Yöntem                                                                 | Yakaladığı                                                                                    |
+| ------- | ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| L1      | URL normalizasyonu (şema, `www`/`m`/AMP, takip parametreleri, parça)   | Aynı sayfanın farklı adresleri                                                                |
+| L2      | Normalize metin hash'i ve MinHash (kelime 5-gram, Jaccard ≥ 0.8)       | Birebir ya da neredeyse aynı kopyalar, sendikasyon                                            |
+| L2b     | En az 2 ortak, en az 12 kelimelik birebir alıntı                       | Aynı bülten, sitelerin farklı menü ve kenar içerikleri yüzünden MinHash eşiğini geçemediğinde |
+| Yayıncı | Aynı sitenin sayfaları tek kaynak (`tr.linkedin.com` = `linkedin.com`) | Şirketin kendi sitesindeki dört sayfanın dört doğrulama sayılması                             |
+| Atıf    | "X'in açıklamasına göre" diyen iddiada X kaynak kabul edilir           | Aynı açıklamayı aktaran farklı haberler                                                       |
+| L3      | Embedding benzerliği ve aynı varlık                                    | Aynı olgunun farklı ifadelerini tek bulguda toplamak                                          |
+| L4      | Sorgu benzerliği                                                       | Aynı aramanın tekrar yapılması                                                                |
 
 - **Farklı değerleri olan iddialar asla birleştirilmez.** Birleştirilirlerse çelişki gizlenir.
 - **Bu yaklaşım canlı verilerle ayarlandı.** İlk canlı denemelerde aynı bülten üç ayrı sitede
@@ -684,6 +682,7 @@ Aynı kaynaktan gelen sayfalar şu katmanlarla bulunur:
 
    Hakem her iki tarafın en yeni kaynak tarihini görür. Yalnızca gerçek çelişki bulguları
    "tartışmalı" yapar.
+
 3. **Tercih ancak kanıt destekliyorsa kabul edilir.** Hakem bir tarafı tercih edebilir. Tercih
    ancak o tarafın birincil kaynağı varsa ve karşı taraftan skorca ya da kaynak tarihçe geride
    değilse kabul edilir. Bu durumda bile çelişki **raporlanır**. Değişmiş bir tarihte güncel taraf "şimdiki
@@ -748,11 +747,11 @@ olduğunu kanıtlamaz (bkz. Known limitations).
 
 **Ölçülen denge (bu makinede):**
 
-| Denemeler | Süre | LLM maliyeti | Not |
-|---|---|---|---|
-| İlk canlı denemeler | 100–140 sn | $0.08–0.20 | Aynı dört soru |
-| Sıkılaştırılmış kanıt kurallarıyla (sekiz soru) | 50–306 sn | $0.02–0.70 | Çoğu 4 turun sonunda durdu |
-| Hukuki soruların birincil kaynak kuralından sonraki tekrarı | 330–360 sn | ~$1 | En pahalı durum |
+| Denemeler                                                   | Süre       | LLM maliyeti | Not                        |
+| ----------------------------------------------------------- | ---------- | ------------ | -------------------------- |
+| İlk canlı denemeler                                         | 100–140 sn | $0.08–0.20   | Aynı dört soru             |
+| Sıkılaştırılmış kanıt kurallarıyla (sekiz soru)             | 50–306 sn  | $0.02–0.70   | Çoğu 4 turun sonunda durdu |
+| Hukuki soruların birincil kaynak kuralından sonraki tekrarı | 330–360 sn | ~$1          | En pahalı durum            |
 
 Daha sıkı doğrulama bazı hatalı iddiaları dışarıda bıraktı; maliyeti ve süreyi artırırken bazı
 sorularda cevap kapsamını daralttı. Bunu bilinçli bir tercih olarak kabul ediyoruz. Daha düşük
