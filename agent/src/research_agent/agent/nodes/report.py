@@ -106,12 +106,30 @@ def _is_framing(text: str) -> bool:
     return not re.search(r"\d", text) and bool(_FRAMING.search(text)) and len(text.split()) <= 30
 
 
+def _inline_ledger_refs(text: str) -> tuple[str, list[str]]:
+    """Models sometimes print ledger IDs as well as returning the structured citation field."""
+    ids: list[str] = []
+
+    def collect(match: re.Match[str]) -> str:
+        ids.extend(re.findall(r"k\d+", match.group()))
+        return ""
+
+    clean = re.sub(r"\[\s*k\d+(?:\s*,\s*k\d+)*\s*\]", collect, text)
+    clean = re.sub(r"[ \t]+([.,;:])", r"\1", clean)
+    return " ".join(clean.split()), ids
+
+
 def _sentence(item: SentenceOut, known: set[str]) -> ReportSentence:
-    ids = [cid for cid in dict.fromkeys(item.cluster_ids) if cid in known or cid.startswith("k")]
-    if not ids and _is_framing(item.text):
-        return ReportSentence(text=item.text.strip(), kind=SentenceKind.META)
+    text, inline = _inline_ledger_refs(item.text)
+    ids = [
+        cid
+        for cid in dict.fromkeys([*item.cluster_ids, *inline])
+        if cid in known or cid.startswith("k")
+    ]
+    if not ids and _is_framing(text):
+        return ReportSentence(text=text, kind=SentenceKind.META)
     # Uncited non-framing sentences stay FACT so that the gate (G2) removes and records them.
-    return ReportSentence(text=item.text.strip(), kind=SentenceKind.FACT, cluster_ids=ids)
+    return ReportSentence(text=text, kind=SentenceKind.FACT, cluster_ids=ids)
 
 
 def _label(sentence: ReportSentence, state: ResearchState, section: SectionKey) -> None:
@@ -151,9 +169,11 @@ def build_report(output: SynthesisOutput, state: ResearchState) -> Report:
                 title=section_title(SectionKey.RECOMMENDATIONS, language),
                 sentences=[
                     ReportSentence(
-                        text=r.text.strip(),
+                        text=_inline_ledger_refs(r.text)[0],
                         kind=SentenceKind.RECOMMENDATION,
-                        finding_refs=[f for f in r.finding_refs if f in known],
+                        finding_refs=list(
+                            dict.fromkeys([*r.finding_refs, *_inline_ledger_refs(r.text)[1]])
+                        ),
                     )
                     for r in output.recommendations
                     if r.text.strip()

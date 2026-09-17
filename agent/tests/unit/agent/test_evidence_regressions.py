@@ -241,6 +241,17 @@ def test_gate_rejects_a_stale_finding_even_if_a_synthesizer_cites_it() -> None:
     assert g12_evidence_eligibility(report, s, GateConfig.load())
 
 
+def test_inline_ledger_ids_become_verifiable_citations_not_raw_report_text() -> None:
+    from research_agent.agent.nodes.report import _sentence
+    from research_agent.prompting.schemas import SentenceOut
+
+    sentence = _sentence(
+        SentenceOut(text="Revenue rose 30% [k1, k999].", cluster_ids=["k1"]), {"k1"}
+    )
+    assert sentence.text == "Revenue rose 30%."
+    assert sentence.cluster_ids == ["k1", "k999"], "unknown references must reach the gate"
+
+
 @pytest.mark.parametrize(
     "text,want",
     [
