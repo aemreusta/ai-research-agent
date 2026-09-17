@@ -1,0 +1,1370 @@
+{
+  "question": "Türkiye'deki SaaS şirketleri için 2026 KVKK uyum aksiyon planı nedir?",
+  "language": "tr",
+  "title": "Türkiye'deki SaaS Şirketleri İçin 2026 KVKK Uyum Aksiyon Planı",
+  "banner": null,
+  "sections": [
+    {
+      "key": "summary",
+      "title": "Özet",
+      "sentences": [
+        {
+          "text": "SaaS şirketleri, kendi son kullanıcı verileri açısından 'veri sorumlusu', B2B müşterilerinin platformdaki verileri açısından ise 'veri işleyen' şeklinde çift role sahiptir.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k1"
+          ],
+          "sources": [
+            1
+          ]
+        },
+        {
+          "text": "2026 yılında KVKK idari para cezaları yüzde 25,49 oranında yeniden değerleme artışına tabi tutulmuştur.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k6",
+            "k11",
+            "k75"
+          ],
+          "sources": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "text": "Tek bir kaynağa dayanan bulgulara göre, yurt dışı veri aktarımında kullanılan standart sözleşmelerin 5 iş günü içinde Kuruma bildirilmemesi ve veri güvenliği ihlalleri 2026 yılında yüksek tutarlı idari para cezalarına yol açmaktadır.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k12",
+            "k88",
+            "k96",
+            "k97",
+            "k68"
+          ],
+          "sources": [
+            6,
+            7,
+            8,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "key": "key_findings",
+      "title": "Temel Bulgular",
+      "sentences": [
+        {
+          "text": "Tek bir kaynağa göre, KVKK Madde 9'daki yurt dışına veri aktarımına ilişkin değişiklikler 01.06.2024 tarihinde yürürlüğe girmiştir.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k78"
+          ],
+          "sources": [
+            10
+          ]
+        },
+        {
+          "text": "Yeterlilik kararının bulunmadığı yurt dışı aktarımlarda imzalanan standart sözleşmelerin 5 iş günü içerisinde dijital modül üzerinden Kuruma bildirilmesi zorunlu olup bildirimin yapılmaması 2026 yılı için 90.308 TL ile 1.806.177 TL arasında idari para cezası gerektirir.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k7",
+            "k12",
+            "k88",
+            "k91",
+            "k96"
+          ],
+          "sources": [
+            3,
+            6,
+            7,
+            8,
+            11
+          ]
+        },
+        {
+          "text": "Tek bir kaynağa göre, B2B SaaS şirketlerinin müşterilerine Veri İşleme Eki (DPA) sunması zorunlu olup sunulmaması veri güvenliği ihlali sayılarak 256.357 TL ile 17.092.242 TL arasında ceza doğurabilmektedir.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k2",
+            "k3"
+          ],
+          "sources": [
+            1
+          ]
+        },
+        {
+          "text": "Tek bir kaynağa göre, veri ihlali durumunda Kişisel Verileri Koruma Kuruluna 72 saat içinde bildirim yapılması zorunludur ve B2B SaaS şirketlerinin müşterilerine bildirimi en geç 24 saat içinde yapması önerilmektedir.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k4",
+            "k65",
+            "k82"
+          ],
+          "sources": [
+            1,
+            12,
+            13
+          ]
+        },
+        {
+          "text": "Tek bir kaynağa göre, yıllık çalışan sayısı 50'den fazla veya yıllık mali bilançosu 100 milyon TL'den fazla olan veri sorumluları için VERBİS kaydı zorunlu olup değişikliklerin 7 gün içinde güncellenmesi gerekmektedir.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k36",
+            "k38",
+            "k71",
+            "k83"
+          ],
+          "sources": [
+            14,
+            15,
+            16
+          ]
+        },
+        {
+          "text": "Tek bir kaynağa göre, 2026 yılında VERBİS kayıt ve bildirim yükümlülüğünün ihlali 341.809 TL ile 17.092.242 TL arasında idari para cezasına tabidir.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k13",
+            "k81",
+            "k95"
+          ],
+          "sources": [
+            6,
+            13,
+            17
+          ]
+        }
+      ]
+    },
+    {
+      "key": "conflicting_or_uncertain",
+      "title": "Çelişkili / Belirsiz Bilgiler",
+      "sentences": []
+    },
+    {
+      "key": "recommendations",
+      "title": "Öneriler / Aksiyon Planı",
+      "sentences": [
+        {
+          "text": "Yurt dışına veri aktarımı içeren standart sözleşmeler imzalandıktan sonra en geç 5 iş günü içerisinde KVKK'nın dijital bildirim modülü üzerinden Kuruma bildirilmelidir.",
+          "kind": "recommendation",
+          "labels": [],
+          "findings": [
+            "k7",
+            "k12",
+            "k88",
+            "k96"
+          ],
+          "sources": [
+            3,
+            6,
+            7,
+            8
+          ]
+        },
+        {
+          "text": "Veri ihlali süreçlerinde Kurulun 72 saatlik bildirim sınırını karşılayabilmek adına B2B müşterilerine yönelik 24 saatlik ihlal bildirim prosedürü yürürlüğe konmalıdır.",
+          "kind": "recommendation",
+          "labels": [],
+          "findings": [
+            "k4",
+            "k65",
+            "k82"
+          ],
+          "sources": [
+            1,
+            12,
+            13
+          ]
+        },
+        {
+          "text": "B2B SaaS hizmet sözleşmelerine yazılı Veri İşleme Eki (DPA) entegre edilmeli ve veri işleyen sorumlulukları mevzuata uygun şekilde tanımlanmalıdır.",
+          "kind": "recommendation",
+          "labels": [],
+          "findings": [
+            "k1",
+            "k2",
+            "k3",
+            "k45"
+          ],
+          "sources": [
+            1,
+            18
+          ]
+        },
+        {
+          "text": "Çalışan sayısı 50'yi veya yıllık mali bilançosu 100 milyon TL'yi aşan SaaS işletmeleri için VERBİS kaydı tamamlanmalı ve sicildeki değişiklikler en geç 7 gün içinde güncellenmelidir.",
+          "kind": "recommendation",
+          "labels": [],
+          "findings": [
+            "k36",
+            "k38",
+            "k71",
+            "k83"
+          ],
+          "sources": [
+            14,
+            15,
+            16
+          ]
+        },
+        {
+          "text": "İlgili kişilerden gelen veri koruma taleplerine yasal azami süre olan 30 gün içinde yanıt verecek operasyonel süreç işletilmelidir.",
+          "kind": "recommendation",
+          "labels": [],
+          "findings": [
+            "k64"
+          ],
+          "sources": [
+            12
+          ]
+        }
+      ]
+    },
+    {
+      "key": "conclusion",
+      "title": "Sonuç",
+      "sentences": [
+        {
+          "text": "2026 yılında SaaS sağlayıcılarının veri sorumlusu ve veri işleyen rollerini ayrıştırarak standart sözleşme bildirimleri ile VERBİS yükümlülüklerini takvime bağlaması gerekmektedir.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k1",
+            "k7",
+            "k36",
+            "k88"
+          ],
+          "sources": [
+            1,
+            3,
+            7,
+            14
+          ]
+        },
+        {
+          "text": "Tek bir kaynağa göre, birden fazla yükümlülüğün ihlal edildiği durumlarda Kurul tarafından birikimli idari para cezaları uygulanabilmektedir.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k70"
+          ],
+          "sources": [
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "key": "known_gaps",
+      "title": "Bilinen Eksikler",
+      "sentences": [
+        {
+          "text": "6698 sayılı KVKK Madde 9 kapsamında SaaS şirketlerini etkileyen yurt dışına kişisel veri aktarımı kuralları ve standart sözleşme bildirim şartları nelerdir? - yeterli bağımsız ya da birincil kaynak bulunamadı (yurtdisi_aktarim_mekanizmalari)",
+          "kind": "meta",
+          "labels": [
+            "gap:s1"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "52 aday iddia kullanılmadı: kaynak desteği, koşulları veya güncel geçerliliği doğrulanamadı; ayrıntılar kanıt defterindedir.",
+          "kind": "meta",
+          "labels": [],
+          "findings": [],
+          "sources": []
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "number": 1,
+      "doc_id": "d1",
+      "url": "https://gunespartners.com/makale/saas-sirketleri-kvkk-rehberi",
+      "title": "SaaS Şirketleri İçin KVKK Uyum Rehberi: Veri Sorumlusu vs. Veri İşleyen Karmaşası (2026) | Güneş Partners Hukuk ve Danışmanlık",
+      "domain": "gunespartners.com",
+      "score": 0.4075
+    },
+    {
+      "number": 2,
+      "doc_id": "d10",
+      "url": "https://veriyikoru.com/post/2026-y%C4%B1l%C4%B1nda-uygulanacak-kvkk-i-dari-para-cezalar%C4%B1-g%C3%BCcellendi",
+      "title": "2026 Yılında Uygulanacak KVKK İdari Para Cezaları Gücellendi!",
+      "domain": "veriyikoru.com",
+      "score": 0.26
+    },
+    {
+      "number": 3,
+      "doc_id": "d11",
+      "url": "https://mondaq.com/turkey/data-protection/1726256/2026-y%C4%B1l%C4%B1-kvkk-%C4%B0dari-para-cezalar%C4%B1-g%C3%BCncel-tutarlar-ve-uyar%C4%B1lar",
+      "title": "2026 Yılı KVKK İdari Para Cezaları: Güncel Tutarlar ve Uyarılar - Data Protection - Turkey",
+      "domain": "mondaq.com",
+      "score": 0.375
+    },
+    {
+      "number": 4,
+      "doc_id": "d15",
+      "url": "https://esin.av.tr/tr/2026/01/12/kisisel-verilerin-korunmasi-kanununda-ongorulen-idari-para-cezalari-guncellendi",
+      "title": "Kişisel Verilerin Korunması Kanunu’nda Öngörülen İdari Para Cezaları Güncellendi",
+      "domain": "esin.av.tr",
+      "score": 0.275
+    },
+    {
+      "number": 5,
+      "doc_id": "d14",
+      "url": "https://lexology.com/library/detail.aspx?g=f276fe30-465b-4a00-a5be-1649f71464c2",
+      "title": "2026 Yılında KVKK Kapsamındaki İdari Para Cezası ...",
+      "domain": "lexology.com",
+      "score": 0.24
+    },
+    {
+      "number": 6,
+      "doc_id": "d16",
+      "url": "https://koksalpartners.com/tr/kvkk-cezalari",
+      "title": "KVKK İdari Para Cezaları 2026 — Güncel Ceza Tutarları | Köksal & Partners",
+      "domain": "koksalpartners.com",
+      "score": 0.3775
+    },
+    {
+      "number": 7,
+      "doc_id": "d145",
+      "url": "https://demiraydinhukuk.com/post/yillara-gore-kvkk-idari-para-cezalari",
+      "title": "Yıllara Göre KVKK İdari Para Cezaları (2026 - 2016)",
+      "domain": "demiraydinhukuk.com",
+      "score": 0.365
+    },
+    {
+      "number": 8,
+      "doc_id": "d150",
+      "url": "https://mondaq.com/turkey/privacy-protection/1740066/kvkk-yurt-d%C4%B1%C5%9F%C4%B1na-veri-aktar%C4%B1m%C4%B1-rehberi-2026-g%C3%BCncel-d%C3%BCzenlemeler",
+      "title": "KVKK Yurt Dışına Veri Aktarımı Rehberi (2026 Güncel ...",
+      "domain": "mondaq.com",
+      "score": 0.45
+    },
+    {
+      "number": 9,
+      "doc_id": "d13",
+      "url": "https://dijilegal.com/blog/kvkk-cezalari-2026",
+      "title": "KVKK Cezaları 2026: Güncel Tablo ve Tüm Detaylar | DijiLegal",
+      "domain": "dijilegal.com",
+      "score": 0.4375
+    },
+    {
+      "number": 10,
+      "doc_id": "d140",
+      "url": "https://kvkk.gov.tr/Icerik/2053/Yurtdisina-Aktarim",
+      "title": "Yurt Dışına Aktarım | Kişisel Verileri Koruma Kurumu",
+      "domain": "kvkk.gov.tr",
+      "score": 0.8675
+    },
+    {
+      "number": 11,
+      "doc_id": "d146",
+      "url": "https://kvkkuyum.com/2026-kvkk-idari-para-cezalari-guncel-tutarlar-ve-artis-oranlari",
+      "title": "2026 KVKK İdari Para Cezaları: Güncel Tutarlar ve Artış Oranları",
+      "domain": "kvkkuyum.com",
+      "score": 0.6
+    },
+    {
+      "number": 12,
+      "doc_id": "d91",
+      "url": "https://ovocrm.com/blog/kvkk-tam-uyum-rehberi-2026",
+      "title": "KVKK Tam Uyum Rehberi 2026: KOBİ Yol Haritası",
+      "domain": "ovocrm.com",
+      "score": 0.315
+    },
+    {
+      "number": 13,
+      "doc_id": "d56",
+      "url": "https://hukukcularevi.com/kvkk-veri-ihlali-bildirim-72-saat-6698-12-madde",
+      "title": "KVKK Veri İhlali Bildirim: 72 Saat Kuralı - 6698 SK m.12 ...",
+      "domain": "hukukcularevi.com",
+      "score": 0.405
+    },
+    {
+      "number": 14,
+      "doc_id": "d106",
+      "url": "https://kvkkuyum.com/verbis-beyannamesine-yeni-faaliyet-nasil-eklenir-2026",
+      "title": "VERBİS Beyannamesine Yeni Faaliyet Nasıl Eklenir? 2026",
+      "domain": "kvkkuyum.com",
+      "score": 0.54
+    },
+    {
+      "number": 15,
+      "doc_id": "d132",
+      "url": "https://harbiyehukuk.com/verbis-nedir",
+      "title": "VERBİS Nedir? Güncel Rehber (2026)",
+      "domain": "harbiyehukuk.com",
+      "score": 0.35
+    },
+    {
+      "number": 16,
+      "doc_id": "d81",
+      "url": "https://dijilegal.com/blog/verbis-kayit-yukumlulugu-2026",
+      "title": "VERBİS Kayıt Yükümlülüğü 2026: Eşikler ve Muafiyetler | DijiLegal",
+      "domain": "dijilegal.com",
+      "score": 0.4075
+    },
+    {
+      "number": 17,
+      "doc_id": "d148",
+      "url": "https://organikhaberlesme.com/blog/19",
+      "title": "2026 Yılı Güncel KVKK İdari Para Cezaları ve Uyum Rehberi | Organik Haberleşme",
+      "domain": "organikhaberlesme.com",
+      "score": 0.275
+    },
+    {
+      "number": 18,
+      "doc_id": "d41",
+      "url": "https://ikarusbilisim.com/kisisel-veri-guvenligi-rehberi",
+      "title": "Kişisel Veri Güvenliği Rehberi - Kvkk , ıys, Verbis, İkarus Bilişim",
+      "domain": "ikarusbilisim.com",
+      "score": 0.1675
+    }
+  ],
+  "findings": {
+    "k1": {
+      "statement": "SaaS şirketleri KVKK kapsamında çift role sahiptir: kendi son kullanıcı verileri için 'veri sorumlusu', B2B müşterilerinin platformda işlediği veriler için ise 'veri işleyen' sıfatını taşırlar.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.326,
+      "sources": [
+        1
+      ]
+    },
+    "k2": {
+      "statement": "B2B SaaS şirketlerinin müşterilerine Veri İşleme Eki (DPA) sunması zorunludur ve bu ekin SaaS sözleşmesinin parçası olması gerekir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.326,
+      "sources": [
+        1
+      ]
+    },
+    "k3": {
+      "statement": "DPA sunulmaması durumu KVKK madde 12 kapsamında veri güvenliği ihlali teşkil eder ve 2026 yılı için belirlenen cezai yaptırım aralığı 256.357 TL ile 17.092.242 TL arasındadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.326,
+      "sources": [
+        1
+      ]
+    },
+    "k4": {
+      "statement": "SaaS şirketlerinin veri ihlalini veri sorumlusu olan müşteriye bildirme süresi, müşterinin Kurul'a karşı 72 saatlik bildirim yükümlülüğünü yönetebilmesi adına pratikte en geç 24 saat olarak belirlenmelidir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.326,
+      "sources": [
+        1
+      ]
+    },
+    "k5": {
+      "statement": "B2C SaaS şirketleri veri sorumlusu sıfatıyla VERBİS kaydı yapmakla yükümlüdür (eşikler sağlanıyorsa).",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.326,
+      "sources": [
+        1
+      ]
+    },
+    "k6": {
+      "statement": "2026 yılı için uygulanacak yeniden değerleme oranı yüzde 25,49 olarak belirlenmiştir.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.4456,
+      "sources": [
+        2,
+        3
+      ]
+    },
+    "k7": {
+      "statement": "Yurt dışına veri aktarımı için kullanılan standart sözleşmelerin Kişisel Verileri Koruma Kurumu'na bildirilmesi zorunludur.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.3,
+      "sources": [
+        3
+      ]
+    },
+    "k8": {
+      "statement": "2026 yılında veri güvenliği ihlalleri için öngörülen idari para cezası üst sınırı 17.092.242 TL'dir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.3,
+      "sources": [
+        3
+      ]
+    },
+    "k9": {
+      "statement": "VERBİS kayıt yükümlülüğünün ihlali durumunda 17 milyon TL'yi aşan bir idari para cezası riski bulunmaktadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.3,
+      "sources": [
+        3
+      ]
+    },
+    "k10": {
+      "statement": "KVKK kapsamındaki idari para cezaları, her yıl Hazine ve Maliye Bakanlığı tarafından Vergi Usul Kanunu uyarınca belirlenen yeniden değerleme oranında artırılmaktadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.22,
+      "sources": [
+        4
+      ]
+    },
+    "k11": {
+      "statement": "1 Ocak 2026'dan itibaren geçerli olmak üzere, KVKK'da öngörülen idari para cezası tutarları %25,49 oranında artırılmıştır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.22,
+      "sources": [
+        4
+      ]
+    },
+    "k12": {
+      "statement": "Standart sözleşmelerin 5 iş günü içerisinde Kurum'a bildirilmemesi halinde 2026 yılı için uygulanacak idari para cezası alt limiti 90.308 TL, üst limiti ise 1.806.177 TL'dir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.302,
+      "sources": [
+        6
+      ]
+    },
+    "k13": {
+      "statement": "VERBİS'e kayıt ve bildirim yükümlülüğüne aykırı hareket edilmesi durumunda 2026 yılı için uygulanacak idari para cezası alt limiti 341.809 TL, üst limiti 17.092.242 TL'dir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.302,
+      "sources": [
+        6
+      ]
+    },
+    "k14": {
+      "statement": "Veri güvenliğine ilişkin yükümlülüklerin yerine getirilmemesi durumunda 2026 yılı için uygulanacak idari para cezası alt limiti 256.357 TL, üst limiti 17.092.242 TL'dir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.302,
+      "sources": [
+        6
+      ]
+    },
+    "k15": {
+      "statement": "6698 sayılı KVKK 18. madde kapsamındaki idari para cezaları, 5326 sayılı Kabahatler Kanunu 17/7 maddesi ve 213 sayılı Vergi Usul Kanunu mükerrer 298. maddesi uyarınca her takvim yılı başında yeniden değerleme oranında artırılarak tespit ve ilan edilir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.584,
+      "sources": []
+    },
+    "k16": {
+      "statement": "Veri sorumlusu; kişisel verilerin işleme amaçlarını ve vasıtalarını belirleyen, veri kayıt sisteminin kurulmasında ve yönetilmesinden sorumlu gerçek veya tüzel kişidir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.588,
+      "sources": []
+    },
+    "k17": {
+      "statement": "Veri işleyen; veri sorumlusunun verdiği yetkiye dayanarak veri sorumlusu adına kişisel verileri işleyen gerçek veya tüzel kişidir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.588,
+      "sources": []
+    },
+    "k18": {
+      "statement": "Kurum tarafından kişisel verilerin güvenliğini sağlamak için sızma testleri, bilgi güvenliği olay yönetimi ve erişim/yetki matrisi gibi teknik tedbirler uygulanmaktadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.588,
+      "sources": []
+    },
+    "k19": {
+      "statement": "Kurum tarafından, personelin eğitimi, gizlilik sözleşmeleri ve kişisel veri işleme envanterinin hazırlanması gibi idari tedbirler uygulanmaktadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.588,
+      "sources": []
+    },
+    "k20": {
+      "statement": "Kişisel Verileri Koruma Kurulu'nun 2025/1072 sayılı ilke kararı, ürün ve hizmet sunumu sırasında SMS ile doğrulama kodu gönderilmesi ve bu süreçte ticari elektronik ileti onayı alınması işlemlerine ilişkin kuralları belirlemektedir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.564,
+      "sources": []
+    },
+    "k21": {
+      "statement": "Veri sorumluları, SMS ile doğrulama kodu gönderilerek üyelik onaylanması ve ticari elektronik ileti onayı alınması gibi farklı işleme faaliyetlerini tek bir eylemle birleştiremez; bu faaliyetler için ayrı ayrı açık rıza almalıdır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.564,
+      "sources": []
+    },
+    "k22": {
+      "statement": "Kurul, bu ilke kararında belirtilen SMS doğrulama ve onay süreçlerine ilişkin yükümlülüklerin, 6698 sayılı Kanun'un 12'nci maddesi uyarınca veri sorumlularının alması gereken idari ve teknik tedbirler kapsamında olduğunu belirtmiştir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.564,
+      "sources": []
+    },
+    "k23": {
+      "statement": "Standart sözleşmeler, 6698 sayılı KVKK'nın 9. maddesi uyarınca veri sorumluları ve veri işleyenlerin yurt dışına kişisel veri aktarımında başvurabileceği bir uygun güvence sağlama yöntemidir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.584,
+      "sources": []
+    },
+    "k24": {
+      "statement": "Yurt dışına kişisel veri aktarımına ilişkin imzalanan standart sözleşmelerin, imzaların tamamlanmasından itibaren 5 iş günü içinde Kuruma bildirilmesi zorunludur.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.584,
+      "sources": []
+    },
+    "k25": {
+      "statement": "Standart sözleşmeler fiziki olarak, kayıtlı elektronik posta (KEP) adresi ile veya Standart Sözleşme Bildirim Modülü vasıtasıyla Kuruma bildirilebilir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.584,
+      "sources": []
+    },
+    "k26": {
+      "statement": "Standart sözleşmelerde imzaların geçerli kabul edilebilmesi için, tarafların veya yetkililerin attığı imzaların 6098 sayılı Türk Borçlar Kanunu’nun imzaya ilişkin düzenlemelerine uygun olması gerekir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.584,
+      "sources": []
+    },
+    "k27": {
+      "statement": "Standart sözleşmelerde geriye dönük yürürlük tarihi ibarelerine (yürürlük tarihi:…) yer verilmemelidir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.584,
+      "sources": []
+    },
+    "k28": {
+      "statement": "Standart sözleşme metinleri üzerinde, Kurul tarafından ilan edilen seçimlik veya alternatif içerikli maddeler dışında herhangi bir ekleme, çıkarma veya değişiklik yapılmamalıdır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.584,
+      "sources": []
+    },
+    "k29": {
+      "statement": "Veri işleyenler, kişisel verilerin güvenliğinin sağlanması konusunda veri sorumlusuyla müştereken sorumludur.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.6,
+      "sources": []
+    },
+    "k30": {
+      "statement": "Veri sorumlusu ile veri işleyen arasındaki sözleşmenin yazılı olması, veri işleyenin sadece veri sorumlusunun talimatları doğrultusunda hareket edeceğini içermesi ve süresiz sır saklama yükümlülüğünü barındırması önerilmektedir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.6,
+      "sources": []
+    },
+    "k31": {
+      "statement": "Bulutta depolanan kişisel veriler için iki kademeli kimlik doğrulama, kriptografik yöntemlerle şifreleme ve her bulut çözümü için ayrı şifreleme anahtarları kullanımı önerilmektedir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.6,
+      "sources": []
+    },
+    "k32": {
+      "statement": "Kişisel verilerin bulutta depolanması durumunda, veri sorumlusu bulut hizmet sağlayıcısının aldığı güvenlik önlemlerinin yeterliliğini değerlendirmeli ve kriptografik yöntemlerle şifreleme ve iki kademeli kimlik doğrulama gibi tedbirler almalıdır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.164,
+      "sources": []
+    },
+    "k33": {
+      "statement": "Bir bulut bilişim hizmeti sağlayıcısı, kendi çalışanlarının verileri için veri sorumlusu, müşterisi olan şirketlerin verileri için veri işleyen sıfatıyla hareket eder.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.648,
+      "sources": []
+    },
+    "k34": {
+      "statement": "Bir bulut hizmeti sağlayıcısı, veri sorumlusu kamu kuruluşu ile yaptığı sözleşme kapsamında sadece talimatlara uygun saklama yapıyorsa ve kendi amaçları için veri kullanmıyorsa veri işleyen statüsündedir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.648,
+      "sources": []
+    },
+    "k35": {
+      "statement": "Veri sorumlusu, kişisel veri işleme sözleşmesi yaparak teknik sistemler, güvenlik önlemleri, saklama ve imha yöntemleri konusunda karar verme yetkisini veri işleyene devredebilir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.648,
+      "sources": []
+    },
+    "k36": {
+      "statement": "Türkiye'de yerleşik olup 50'den fazla çalışanı veya 100 milyon TL'den fazla yıllık mali bilançosu bulunan veri sorumluları VERBİS'e kayıt olmak zorundadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.432,
+      "sources": [
+        14
+      ]
+    },
+    "k37": {
+      "statement": "10'dan az çalışanı olan ve 10 milyon TL'den az yıllık mali bilançoya sahip küçük ölçekli sağlık kuruluşları VERBİS kayıt yükümlülüğünden istisna tutulmuştur.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.432,
+      "sources": [
+        14
+      ]
+    },
+    "k38": {
+      "statement": "Sicile kayıtlı bilgilerde değişiklik olması durumunda, bu değişiklikler en geç 7 gün içinde güncellenmelidir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.432,
+      "sources": [
+        14
+      ]
+    },
+    "k39": {
+      "statement": "VERBİS yükümlülüklerinin yerine getirilmemesi veya güncellemelerin zamanında yapılmaması durumunda 9,4 milyon TL'ye kadar idari para cezası uygulanabilir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.432,
+      "sources": [
+        14
+      ]
+    },
+    "k40": {
+      "statement": "Veri sorumlusu, kişisel verilerin hukuka aykırı olarak işlenmesini ve erişilmesini önlemek ve muhafazasını sağlamak amacıyla her türlü teknik ve idari tedbiri almak zorundadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.55,
+      "sources": []
+    },
+    "k41": {
+      "statement": "Kişisel verileri işleyen gerçek ve tüzel kişiler Veri Sorumluları Siciline kayıt olmak zorundadır, ancak Kurul tarafından belirlenecek objektif kriterler çerçevesinde istisna getirilebilir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.55,
+      "sources": []
+    },
+    "k42": {
+      "statement": "Veri Sorumluları Siciline kayıt ve bildirim yükümlülüğüne aykırı hareket eden veri sorumluları hakkında 20.000 Türk lirasından 1.000.000 Türk lirasına kadar idari para cezası uygulanır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.55,
+      "sources": []
+    },
+    "k43": {
+      "statement": "2026 yılı için yeniden değerleme oranı %25,49 olarak belirlenmiştir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.154,
+      "sources": []
+    },
+    "k44": {
+      "statement": "Cumhurbaşkanının KVKK kapsamında uygulanan idari para cezalarının yeniden değerleme oranını yüzde 50 oranında azaltma veya yüzde 50 oranında artırma yetkisi bulunmaktadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.154,
+      "sources": []
+    },
+    "k45": {
+      "statement": "Veri sorumluları ile veri işleyenler arasında imzalanacak sözleşmelerin yazılı olması, veri işleyenin yalnızca veri sorumlusunun talimatları doğrultusunda ve KVKK mevzuatına uygun hareket etmesini içermesi önerilmektedir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.134,
+      "sources": [
+        18
+      ]
+    },
+    "k46": {
+      "statement": "Veri sorumluları, kişisel veri ihlalini öğrendikleri tarihten itibaren en geç 72 saat içinde Kurul'a bildirimde bulunmakla yükümlüdür.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.624,
+      "sources": []
+    },
+    "k47": {
+      "statement": "Veri işleyenler, bünyelerindeki kişisel verilerin kanuni olmayan yollarla başkaları tarafından elde edilmesi halinde durumu gecikmeksizin veri sorumlusuna bildirmelidir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.624,
+      "sources": []
+    },
+    "k48": {
+      "statement": "Veri sorumluları, olası bir veri ihlali durumunda yapılacak bildirimleri, raporlamayı ve olası sonuçların değerlendirilmesini içeren bir veri ihlali müdahale planı hazırlamak ve belirli aralıklarla gözden geçirmekle yükümlüdür.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.624,
+      "sources": []
+    },
+    "k49": {
+      "statement": "Türkiye'de sunulan ürün ve hizmetlerden faydalanan kişileri etkileyen bir veri ihlali, yurtdışında yerleşik veri sorumlusu tarafından da Kurul'a bildirilmelidir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.624,
+      "sources": []
+    },
+    "k50": {
+      "statement": "Veri sorumlusu, kişisel verilerin hukuka aykırı işlenmesini ve erişilmesini önlemek, muhafazasını sağlamak amacıyla gerekli teknik ve idari tedbirleri almak zorundadır.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.864,
+      "sources": []
+    },
+    "k51": {
+      "statement": "Kurul, işlenen kişisel verinin niteliği, sayısı, veri işlemenin kanundan kaynaklanması veya üçüncü kişilere aktarılma durumu gibi objektif kriterleri göz önüne alarak Veri Sorumluları Siciline kayıt zorunluluğuna istisna getirebilir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.688,
+      "sources": []
+    },
+    "k52": {
+      "statement": "KVKK, 29.04.2026 tarihli ve 2026/921 sayılı 'Mesai Takibi Amacıyla Biyometrik Veri İşlenmesi Hakkında İlke Kararı'na ilişkin görüş talepleri hakkında kamuoyu duyurusu yayınlamıştır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.7,
+      "sources": []
+    },
+    "k53": {
+      "statement": "KVKK, sadakat kart üyeliği bulunan bir kişinin verilerinin üçüncü kişi tarafından kullanımı hakkındaki ilke kararında veri sorumluları için öngörülen uyum süresinin uzatıldığını duyurmuştur.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.7,
+      "sources": []
+    },
+    "k54": {
+      "statement": "Veri sorumluları ve veri işleyenler, yurt dışına veri aktarımı için akdedilen standart sözleşmeleri, imzalandıktan itibaren beş iş günü içerisinde Kurum'a bildirmekle yükümlüdür.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.604,
+      "sources": []
+    },
+    "k55": {
+      "statement": "Standart sözleşmeler, kişisel verilerin yurt dışına aktarımında veri sorumluları ve veri işleyenlerin kullanabileceği bir uygun güvence sağlama yöntemidir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.604,
+      "sources": []
+    },
+    "k56": {
+      "statement": "Yıllık mali bilanço istisna kriteri 100 milyon TL olarak güncellenmiştir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.648,
+      "sources": []
+    },
+    "k57": {
+      "statement": "31.12.2021 tarihinden sonra kayıt yükümlüsü haline gelen veri sorumlularının, kayıt yükümlüsü oldukları tarihten itibaren 30 gün içinde sicile kayıt yaptırmaları gerekmektedir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.648,
+      "sources": []
+    },
+    "k58": {
+      "statement": "Ana faaliyet konusu özel nitelikli kişisel veri işleme olmayan veri sorumlularından, yıllık çalışan sayısı 50'den az ve yıllık mali bilanço toplamı 100 milyon Türk Lirasından az olanlar VERBİS'e kayıt yükümlülüğünden istisnadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.584,
+      "sources": []
+    },
+    "k59": {
+      "statement": "Ana faaliyet konusu özel nitelikli kişisel veri işleme olan veri sorumlularından, yıllık çalışan sayısı 10'dan az ve yıllık mali bilanço toplamı 10 milyon Türk Lirasından az olanlar VERBİS'e kayıt yükümlülüğünden istisnadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.584,
+      "sources": []
+    },
+    "k60": {
+      "statement": "Veri ihlali bildirimini yapmama durumunda uygulanan ceza 120.000 TL ile 1.800.000 TL arasındadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.252,
+      "sources": [
+        12
+      ]
+    },
+    "k61": {
+      "statement": "Veri güvenliği önlemlerinin eksik olması durumunda uygulanan ceza 120.000 TL ile 2.500.000 TL arasındadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.252,
+      "sources": [
+        12
+      ]
+    },
+    "k62": {
+      "statement": "VERBİS siciline kayıt zorunluluğu için yıllık çalışan sayısı 50 ve üzeri olanlar veya yıllık cirosu 100 milyon TL üzerinde olanlar kapsama girmektedir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.252,
+      "sources": [
+        12
+      ]
+    },
+    "k63": {
+      "statement": "VERBİS kayıt yükümlülüğü ihmali durumunda uygulanan ceza 80.000 TL ile 4.000.000 TL arasındadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.252,
+      "sources": [
+        12
+      ]
+    },
+    "k64": {
+      "statement": "İlgili kişinin başvurularına cevap verme süresi 30 gündür.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.252,
+      "sources": [
+        12
+      ]
+    },
+    "k65": {
+      "statement": "Veri ihlali durumunda KVKK Kurulu'na bildirim süresi 72 saattir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.252,
+      "sources": [
+        12
+      ]
+    },
+    "k66": {
+      "statement": "Kişisel verilerin veri sorumlusu adına başka bir gerçek veya tüzel kişi tarafından işlendiği durumlarda, veri işleyen kişi veya kurumlar, güvenlik tedbirlerinin alınması konusunda veri sorumlusu ile müştereken sorumludur.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.564,
+      "sources": []
+    },
+    "k67": {
+      "statement": "Veri sorumluları, işlenen kişisel verilerin kanuni olmayan yollarla başkaları tarafından elde edilmesi halinde, durumu en kısa sürede ilgili kişiye ve Kurula bildirmekle yükümlüdür.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.564,
+      "sources": []
+    },
+    "k68": {
+      "statement": "2026 yılında veri güvenliği yükümlülüğü ihlalleri (Madde 12) için uygulanan idari para cezası alt sınırı 256.357 TL, üst sınırı ise 17.092.242 TL'dir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.35,
+      "sources": [
+        9
+      ]
+    },
+    "k69": {
+      "statement": "2026 yılında VERBİS kayıt ve bildirim ihlalleri (Madde 16) için uygulanan idari para cezası alt sınırı 341.810 TL, üst sınırı ise 17.092.242 TL'dir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.35,
+      "sources": [
+        9
+      ]
+    },
+    "k70": {
+      "statement": "Tek bir veri ihlali olayında birden fazla yükümlülüğün ihlal edildiği durumlarda Kurul tarafından her bir ihlal için ayrı ayrı (birikimli) ceza uygulanabilmektedir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.35,
+      "sources": [
+        9
+      ]
+    },
+    "k71": {
+      "statement": "Türkiye'de yerleşik olup 50'den fazla çalışanı olan veya yıllık mali bilanço toplamı 2026 yılı için 100 milyon TL'yi aşan gerçek ve tüzel kişi veri sorumluları için VERBİS kaydı zorunludur.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.28,
+      "sources": [
+        15
+      ]
+    },
+    "k72": {
+      "statement": "Ana faaliyet konusu özel nitelikli kişisel veri işlemek olan veri sorumluları (örneğin sağlık kuruluşları), çalışan sayısı veya mali bilanço kriterlerine bakılmaksızın VERBİS'e kaydolmak zorundadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.28,
+      "sources": [
+        15
+      ]
+    },
+    "k73": {
+      "statement": "Yurt dışında yerleşik olup Türkiye'de veri işleyen veri sorumluları, Türkiye'de bir veri sorumlusu temsilcisi atayarak sicile kayıt yaptırmak zorundadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.28,
+      "sources": [
+        15
+      ]
+    },
+    "k74": {
+      "statement": "VERBİS'e kayıt ve bildirim yükümlülüğüne aykırı hareket edenler hakkında 6698 sayılı Kanun'un 18. maddesinin (ç) bendi uyarınca idari para cezası uygulanır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.28,
+      "sources": [
+        15
+      ]
+    },
+    "k75": {
+      "statement": "2026 yılında KVKK kapsamındaki idari para cezalarının hesaplanmasında esas alınan yeniden değerleme oranı %25,49'dur.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.192,
+      "sources": [
+        5
+      ]
+    },
+    "k76": {
+      "statement": "Yurt dışına kişisel veri aktarımı üç aşamalı bir rejime tabidir: ülkenin yeterlilik kararının bulunması, uygun güvencelerin sağlanması veya istisnai hallerin mevcudiyeti.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.694,
+      "sources": [
+        10
+      ]
+    },
+    "k77": {
+      "statement": "Standart sözleşme metinleri kullanılarak kişisel verilerin yurt dışına aktarılması durumunda Kurul'a bildirim yapılması zorunludur.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.694,
+      "sources": [
+        10
+      ]
+    },
+    "k78": {
+      "statement": "KVKK Madde 9'da yapılan yurt dışına veri aktarımına ilişkin değişiklikler 01.06.2024 tarihinde yürürlüğe girmiştir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.694,
+      "sources": [
+        10
+      ]
+    },
+    "k79": {
+      "statement": "2026 yılında, KVKK m.12 kapsamındaki veri güvenliği yükümlülüklerinin veya 72 saatlik bildirim yükümlülüğünün yerine getirilmemesi durumunda uygulanacak idari para cezası 256.357 TL ile 17.092.242 TL arasındadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.324,
+      "sources": [
+        13
+      ]
+    },
+    "k80": {
+      "statement": "Veri ihlali bildirim yükümlülüğü, VERBİS siciline kayıt zorunluluğu istisnalarından bağımsız olarak tüm veri sorumluları için geçerlidir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.324,
+      "sources": [
+        13
+      ]
+    },
+    "k81": {
+      "statement": "2026 yılında, VERBİS kayıt ve bildirim yükümlülüğünün yerine getirilmemesi (m.16) halinde uygulanacak idari para cezası 341.809 TL ile 17.092.242 TL arasındadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.324,
+      "sources": [
+        13
+      ]
+    },
+    "k82": {
+      "statement": "Kişisel veri ihlali durumunda Kişisel Verileri Koruma Kuruluna yapılacak bildirimin azami süresi, ihlalin öğrenildiği andan itibaren 72 saattir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.324,
+      "sources": [
+        13
+      ]
+    },
+    "k83": {
+      "statement": "Genel sektörler için 2026 yılı VERBİS kayıt zorunluluğu, yıllık çalışan sayısı 50'den fazla veya yıllık mali bilanço toplamı 100 milyon TL'den fazla olan veri sorumluları için geçerlidir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.326,
+      "sources": [
+        16
+      ]
+    },
+    "k84": {
+      "statement": "Ana faaliyeti özel nitelikli veri işlemek olan veri sorumluları için 2026 yılı VERBİS kayıt zorunluluğu eşiği, 10 çalışan veya 10 milyon TL mali bilanço toplamıdır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.326,
+      "sources": [
+        16
+      ]
+    },
+    "k85": {
+      "statement": "Yurt dışında yerleşik veri sorumluları için herhangi bir çalışan veya bilanço eşiği aranmaksızın VERBİS kayıt zorunluluğu bulunmaktadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.326,
+      "sources": [
+        16
+      ]
+    },
+    "k86": {
+      "statement": "Serbest muhasebeci mali müşavirler, yeminli mali müşavirler, noterler ve avukatlar, mesleki faaliyetleri kapsamındaki veri işlemeleri için VERBİS kayıt yükümlülüğünden muaftır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.326,
+      "sources": [
+        16
+      ]
+    },
+    "k87": {
+      "statement": "2026 yılı için VERBİS kayıt yükümlülüğü ihlalinin idari para cezası 341.810 TL ile 17.092.242 TL aralığındadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.326,
+      "sources": [
+        16
+      ]
+    },
+    "k88": {
+      "statement": "Yeterlilik kararının bulunmadığı durumlarda yurt dışına veri aktarımı için imzalanan standart sözleşmelerin, imzalanmasından itibaren beş iş günü içinde Kurum'a bildirilmesi zorunludur.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.292,
+      "sources": [
+        7
+      ]
+    },
+    "k89": {
+      "statement": "Madde 9/5 uyarınca standart sözleşme bildirim yükümlülüğünün ihlali durumunda 2026 yılı için uygulanacak en düşük idari para cezası 90.308 TL'dir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.292,
+      "sources": [
+        7
+      ]
+    },
+    "k90": {
+      "statement": "Madde 9/5 uyarınca standart sözleşme bildirim yükümlülüğünün ihlali durumunda 2026 yılı için uygulanacak en yüksek idari para cezası 1.806.177 TL'dir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.292,
+      "sources": [
+        7
+      ]
+    },
+    "k91": {
+      "statement": "Standart sözleşme bildirim yükümlülüğünün ihlali halinde uygulanacak idari para cezasının 2026 yılı alt sınırı 90.308 TL, üst sınırı ise 1.806.177 TL'dir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.48,
+      "sources": [
+        11
+      ]
+    },
+    "k92": {
+      "statement": "Standart sözleşme bildirim yükümlülüğünün yerine getirilmemesi halinde uygulanacak idari para cezası 2026 yılı için 90.308 TL ile 1.806.177 TL arasındadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.22,
+      "sources": [
+        17
+      ]
+    },
+    "k93": {
+      "statement": "Aydınlatma yükümlülüğünün yerine getirilmemesi durumunda 2026 yılı için 85.437 TL ile 1.709.200 TL arasında idari para cezası uygulanır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.22,
+      "sources": [
+        17
+      ]
+    },
+    "k94": {
+      "statement": "Veri güvenliğine ilişkin yükümlülüklerin yerine getirilmemesi halinde 2026 yılı için 256.357 TL ile 17.092.242 TL arasında idari para cezası uygulanır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.22,
+      "sources": [
+        17
+      ]
+    },
+    "k95": {
+      "statement": "VERBİS'e kayıt ve bildirim yükümlülüğüne aykırı hareket edilmesi durumunda 2026 yılı için 341.809 TL ile 17.092.242 TL arasında idari para cezası uygulanır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.22,
+      "sources": [
+        17
+      ]
+    },
+    "k96": {
+      "statement": "Standart sözleşmeler imzalandıktan sonra 5 iş günü içerisinde KVKK'nın dijital bildirim modülü üzerinden Kuruma iletilmelidir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.36,
+      "sources": [
+        8
+      ]
+    },
+    "k97": {
+      "statement": "2026 yılındaki denetimlerde, standart sözleşme bildirim sürelerinin kaçırılması en sık karşılaşılan ceza sebeplerinden biridir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.36,
+      "sources": [
+        8
+      ]
+    },
+    "k98": {
+      "statement": "Yeterlilik kararı bulunmayan ülkelere kişisel veri aktarımında, uygun güvencelerden biri olan standart sözleşmelerin imzalanması, ek bir izin gerektirmeden veri aktarımına olanak tanımaktadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.728,
+      "sources": []
+    },
+    "k99": {
+      "statement": "Standart sözleşmelerin, sözleşmedeki imzaların tamamlanmasından itibaren beş iş günü içinde veri sorumlusu veya veri işleyen tarafından Kurum'a bildirilmesi zorunludur.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.728,
+      "sources": []
+    }
+  },
+  "metadata": {
+    "config_hash": "489c5300e6b5b6ebc534e9056dad55767be79449c78e05dcdebfd962b3a2c072",
+    "models_used": {
+      "fast": "gemini:gemini-3.1-flash-lite",
+      "reasoning": "gemini:gemini-3.8-flash",
+      "embedding": "gemini-embedding-001"
+    },
+    "prompt_versions": {
+      "analyze_query": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "a727cb4344e9",
+        "label": "production"
+      },
+      "assess_coverage": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "e846c73d92bf",
+        "label": "production"
+      },
+      "evaluate_sources": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "b548bfeecc30",
+        "label": "production"
+      },
+      "extract_claims": {
+        "version": "4",
+        "source": "langfuse",
+        "content_hash": "7bb08d1d31b9",
+        "label": "production"
+      },
+      "generate_queries": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "c529f97cebe9",
+        "label": "production"
+      },
+      "judge_contradictions": {
+        "version": "5",
+        "source": "langfuse",
+        "content_hash": "726f52b7aa1e",
+        "label": "production"
+      },
+      "plan": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "1ec8bb17ccf2",
+        "label": "production"
+      },
+      "synthesize": {
+        "version": "3",
+        "source": "langfuse",
+        "content_hash": "94db375c9234",
+        "label": "production"
+      },
+      "validate_claims": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "68ed4e47da0e",
+        "label": "production"
+      },
+      "verify_citations": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "32456e1a0b5a",
+        "label": "production"
+      }
+    },
+    "search_providers": [
+      "tavily"
+    ],
+    "llm_providers": [
+      "gemini",
+      "openai"
+    ],
+    "stop_reason": "max_iterations",
+    "stop_detail": "max_iterations=4 reached",
+    "iterations": 4,
+    "budget": {
+      "iteration": 4,
+      "searches": 20,
+      "searches_left": 25,
+      "llm_calls": 100,
+      "tokens_in": 651030,
+      "tokens_out": 161056,
+      "cost_usd": 0.699446,
+      "elapsed_seconds": 242.55
+    },
+    "gate_verdict": "pass",
+    "counters": {
+      "fetch_failures": 1,
+      "duplicate_urls": 24,
+      "claims_need_fresh_confirmation": 47,
+      "claims_validation_unsupported": 12,
+      "claims_rejected_quote": 10,
+      "extraction_failures": 0,
+      "claims_rejected_injection": 0,
+      "sentences_dropped_by_verifier": 0
+    },
+    "skills": [
+      "regulatory-research-tr"
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "source_run": "6587bd2a-b781-40c6-89b8-3cecc46b16d8",
+  "mode": "deterministic regression replay, not a new full research run",
+  "cases": [
+    {
+      "claim_id": "c90",
+      "text": "KVKK madde 12 uyarınca veri güvenliğine ilişkin yükümlülükleri yerine getirmeyenlere 15.000 TL ile 1.000.000 TL arasında idari para cezası uygulanabilir.",
+      "previous_status": "supported",
+      "new_admission": "withheld",
+      "reason": "Legal authority: an earlier enforcement decision does not establish the current penalty range; retrieve the applicable year's official penalty schedule."
+    },
+    {
+      "claim_id": "c119",
+      "text": "VERBİS kayıt kriterlerini (çalışan sayısı veya bilanço eşiği) sonradan sağlayan şirketler, kriterlerin sağlandığı tarihten itibaren 30 gün içinde VERBİS'e kayıt olmak zorundadır.",
+      "previous_status": "supported",
+      "new_admission": "withheld",
+      "reason": "Legal authority: retrieve the primary rule or regulator guidance; commentary alone is insufficient."
+    }
+  ],
+  "passed": true
+}

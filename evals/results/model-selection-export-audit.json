@@ -1,0 +1,19 @@
+[
+  {
+    "case": "gemini-pro-postgresql-uuid",
+    "claims": 15,
+    "cited_documents": 5,
+    "quote_methods": {
+      "exact": 15
+    },
+    "invalid_quotes": 0,
+    "dangling_references": 0,
+    "source_list_mismatch": 0,
+    "undated_cited_documents": 0,
+    "numeric_violations_replay": 0,
+    "numeric_warnings_replay": 0,
+    "ineligible_citations_replay": 0,
+    "stop_reason": "max_iterations",
+    "gate_verdict": "pass"
+  }
+]

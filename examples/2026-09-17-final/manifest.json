@@ -1,0 +1,154 @@
+{
+  "apilexai-products-partnerships": {
+    "run_id": "9312cf64-69bb-4df3-888e-dcbb74b55772",
+    "question": "ApilexAI'ın ürünleri, iş ortaklıkları ve stratejik yönü nedir?",
+    "started": 1789630144.26191,
+    "status": "succeeded_with_warnings",
+    "elapsed_seconds": 190.65,
+    "gate_status": "pass_with_warnings",
+    "stop_reason": "max_iterations",
+    "metrics": {
+      "cost_usd": 0.37579,
+      "tokens_in": 429192,
+      "tokens_out": 87199,
+      "searches_used": 17,
+      "iteration": 4,
+      "duration_seconds": 187.018396
+    },
+    "error_code": null,
+    "exported": true
+  },
+  "kvkk-2026-saas-action-plan": {
+    "run_id": "6fe9b874-b70e-44e6-8c75-547d4e9e6a8b",
+    "question": "Türkiye'deki SaaS şirketleri için 2026 KVKK uyum aksiyon planı nedir?",
+    "started": 1789630144.263983,
+    "status": "succeeded_with_warnings",
+    "elapsed_seconds": 306.04,
+    "gate_status": "pass",
+    "stop_reason": "max_iterations",
+    "metrics": {
+      "cost_usd": 0.699446,
+      "tokens_in": 651030,
+      "tokens_out": 161056,
+      "searches_used": 20,
+      "iteration": 4,
+      "duration_seconds": 219.751886
+    },
+    "error_code": null,
+    "exported": true
+  },
+  "eu-ai-act-timeline": {
+    "run_id": "4c111baa-f774-4383-a88c-62405f4e1c94",
+    "question": "What changed in the EU AI Act implementation timeline?",
+    "started": 1789630335.0153039,
+    "status": "succeeded_with_warnings",
+    "elapsed_seconds": 255.78,
+    "gate_status": "pass",
+    "stop_reason": "max_iterations",
+    "metrics": {
+      "cost_usd": 0.650795,
+      "tokens_in": 595454,
+      "tokens_out": 143748,
+      "searches_used": 20,
+      "iteration": 4,
+      "duration_seconds": 253.522079
+    },
+    "error_code": null,
+    "exported": true
+  },
+  "legal-tech-market-size": {
+    "run_id": "ca25fcc2-96a5-4340-8a36-0b46a43d5b7c",
+    "question": "What is the size of the European legal tech market and how fast is it growing?",
+    "started": 1789630450.3835788,
+    "status": "succeeded_with_warnings",
+    "elapsed_seconds": 185.61,
+    "gate_status": "pass_with_warnings",
+    "stop_reason": "max_iterations",
+    "metrics": {
+      "cost_usd": 0.368293,
+      "tokens_in": 438159,
+      "tokens_out": 74870,
+      "searches_used": 29,
+      "iteration": 4,
+      "duration_seconds": 181.42968
+    },
+    "error_code": null,
+    "exported": true
+  },
+  "turkiye-english-gdpr-kvkk": {
+    "run_id": "d1590e22-c385-4212-acb4-e4c4692d9d28",
+    "question": "As of September 2026, how do GDPR and Türkiye's KVKK differ on personal data breach notification timing, affected parties and exceptions? Answer in English, and distinguish regulator notification from notifying affected people.",
+    "started": 1789630590.882895,
+    "status": "succeeded_with_warnings",
+    "elapsed_seconds": 250.99,
+    "gate_status": "pass_with_warnings",
+    "stop_reason": "max_iterations",
+    "metrics": {
+      "cost_usd": 0.588446,
+      "tokens_in": 712410,
+      "tokens_out": 124278,
+      "searches_used": 33,
+      "iteration": 4,
+      "duration_seconds": 248.380452
+    },
+    "error_code": null,
+    "exported": true
+  },
+  "postgresql-version-comparison": {
+    "run_id": "0635baf2-40d1-46f9-a1cb-6b70988d8494",
+    "question": "Compare PostgreSQL 17 and PostgreSQL 18 using official release notes: which performance, developer and operational features changed, and what should a small SaaS team verify before upgrading?",
+    "started": 1789630636.0966249,
+    "status": "succeeded_with_warnings",
+    "elapsed_seconds": 205.77,
+    "gate_status": "pass_with_warnings",
+    "stop_reason": "max_iterations",
+    "metrics": {
+      "cost_usd": 0.490029,
+      "tokens_in": 588349,
+      "tokens_out": 104465,
+      "searches_used": 20,
+      "iteration": 4,
+      "duration_seconds": 203.119483
+    },
+    "error_code": null,
+    "exported": true
+  },
+  "fictional-company-evidence-limit": {
+    "run_id": "84bdf837-d9f0-4701-9fd2-95ad307b6bd0",
+    "question": "Is there credible public evidence that Zorynth Quantum Legal launched a product called AuroraLex in 2026? Verify the premise before describing any products, partnerships or market position.",
+    "started": 1789630841.9911602,
+    "status": "succeeded_with_warnings",
+    "elapsed_seconds": 50.18,
+    "gate_status": "fail",
+    "stop_reason": "no_evidence",
+    "metrics": {
+      "cost_usd": 0.024335,
+      "tokens_in": 23093,
+      "tokens_out": 7914,
+      "searches_used": 13,
+      "iteration": 2,
+      "duration_seconds": 46.728387
+    },
+    "error_code": null,
+    "exported": true
+  },
+  "revenue-comparison-primary": {
+    "run_id": "1db49a9b-f048-4512-985a-c7f3b139e112",
+    "question": "Compare Shopify and Wix actual full-year 2025 revenue and year-over-year growth using their primary earnings releases. Keep fiscal periods, reporting currencies and actual results separate from forecasts.",
+    "started": 1789630841.9950988,
+    "status": "succeeded_with_warnings",
+    "elapsed_seconds": 135.45,
+    "gate_status": "pass",
+    "stop_reason": "max_iterations",
+    "metrics": {
+      "cost_usd": 0.152995,
+      "tokens_in": 262353,
+      "tokens_out": 31068,
+      "searches_used": 24,
+      "iteration": 4,
+      "duration_seconds": 132.554104
+    },
+    "error_code": null,
+    "exported": true
+  }
+}

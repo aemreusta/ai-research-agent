@@ -1,0 +1,846 @@
+{
+  "question": "What is the size of the European legal tech market and how fast is it growing?",
+  "language": "en",
+  "title": "European Legal Tech Market Size and Growth Forecast",
+  "banner": null,
+  "sections": [
+    {
+      "key": "summary",
+      "title": "Summary",
+      "sentences": [
+        {
+          "text": "The European legal tech market is projected to grow at a compound annual growth rate (CAGR) of 10.78% from 2026 to 2034.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k3"
+          ],
+          "sources": [
+            1,
+            2
+          ]
+        },
+        {
+          "text": "According to a single source, the European legal tech market is estimated to be worth USD 6.81 billion in 2026.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k2"
+          ],
+          "sources": [
+            1
+          ]
+        },
+        {
+          "text": "The United Kingdom, Germany, and France collectively represent the dominant regional markets for legal technology in Europe.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k16"
+          ],
+          "sources": [
+            3,
+            4
+          ]
+        },
+        {
+          "text": "1 sentence(s) removed for insufficient evidence - see gate_result.json",
+          "kind": "meta",
+          "labels": [
+            "gate_note"
+          ],
+          "findings": [],
+          "sources": []
+        }
+      ]
+    },
+    {
+      "key": "key_findings",
+      "title": "Key Findings",
+      "sentences": [
+        {
+          "text": "The European legal tech market is projected to grow at a compound annual growth rate (CAGR) of 10.78% from 2026 to 2034.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k3"
+          ],
+          "sources": [
+            1,
+            2
+          ]
+        },
+        {
+          "text": "According to a single source, the European legal tech market is estimated to be worth USD 6.81 billion in 2026.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k2"
+          ],
+          "sources": [
+            1
+          ]
+        },
+        {
+          "text": "A single source reports that the European legal technology market is projected to grow at a compound annual growth rate of approximately 9.5% between 2025 and 2030.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k13"
+          ],
+          "sources": [
+            3
+          ]
+        },
+        {
+          "text": "A single source estimates that the European legal technology market is projected to expand at a CAGR of 12% from 2026 to 2035.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k38"
+          ],
+          "sources": [
+            5
+          ]
+        },
+        {
+          "text": "The United Kingdom, Germany, and France collectively represent the dominant regional markets for legal technology in Europe.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k16"
+          ],
+          "sources": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "key": "conflicting_or_uncertain",
+      "title": "Conflicting / Uncertain Information",
+      "sentences": [
+        {
+          "text": "Projections for the 2026 European legal technology market size differ: one estimate projects USD 9.02 billion, whereas another places it at USD 9,658.88 million.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k11",
+            "k37"
+          ],
+          "sources": [
+            5,
+            6
+          ]
+        },
+        {
+          "text": "Valuations of the European legal services market in 2026 conflict, with one forecast citing USD 265.67 billion and another valuing the market at $187.4 billion.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k31",
+            "k52"
+          ],
+          "sources": [
+            7,
+            8
+          ]
+        }
+      ]
+    },
+    {
+      "key": "conclusion",
+      "title": "Conclusion",
+      "sentences": [
+        {
+          "text": "The European legal tech market is projected to grow at a CAGR of 10.78% from 2026 to 2034, with the United Kingdom, Germany, and France representing the primary regional markets.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k3",
+            "k16"
+          ],
+          "sources": [
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "key": "known_gaps",
+      "title": "Known Gaps",
+      "sentences": [
+        {
+          "text": "What is the current estimated market size of the legal tech industry in Europe? - not enough independent or primary sources were found (base year valuation, valuation metric, geographic scope definition)",
+          "kind": "meta",
+          "labels": [
+            "gap:s1"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "What are the forecast market size and compound annual growth rate (CAGR) projections for the European legal tech market? - not enough independent or primary sources were found (forecast horizon, projected terminal valuation, primary growth drivers)",
+          "kind": "meta",
+          "labels": [
+            "gap:s2"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "How is the European legal tech market segmented across key countries and solution categories? - not enough independent or primary sources were found (deployment model split)",
+          "kind": "meta",
+          "labels": [
+            "gap:s3"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "46 candidate claim(s) withheld: source support, conditions or current applicability could not be confirmed; see the evidence ledger.",
+          "kind": "meta",
+          "labels": [],
+          "findings": [],
+          "sources": []
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "number": 1,
+      "doc_id": "d11",
+      "url": "https://marketdataforecast.com/market-reports/europe-legal-tech-market",
+      "title": "Europe Legal Tech Market Size, Share & Trends, 2034",
+      "domain": "marketdataforecast.com",
+      "score": 0.48
+    },
+    {
+      "number": 2,
+      "doc_id": "d13",
+      "url": "https://mordorintelligence.com/industry-reports/europe-legal-technology-market",
+      "title": "Europe Legal Technology Market Size & Share Analysis",
+      "domain": "mordorintelligence.com",
+      "score": 0.4375
+    },
+    {
+      "number": 3,
+      "doc_id": "d15",
+      "url": "https://hub.claight.com/statistics/europe-legal-technology-market",
+      "title": "Europe Legal Technology Market Statistics, Analysis 2030 | Claight",
+      "domain": "hub.claight.com",
+      "score": 0.425
+    },
+    {
+      "number": 4,
+      "doc_id": "d21",
+      "url": "https://researchnester.com/reports/legal-technology-market/6215",
+      "title": "Legal Technology Market Size, Growth Analysis 2036",
+      "domain": "researchnester.com",
+      "score": 0.32
+    },
+    {
+      "number": 5,
+      "doc_id": "d12",
+      "url": "https://precedenceresearch.com/databook/europe-legal-technology-market",
+      "title": "Europe Legal Technology Market Size to Reach USD 26,784.83 Million by 2035",
+      "domain": "precedenceresearch.com",
+      "score": 0.48
+    },
+    {
+      "number": 6,
+      "doc_id": "d14",
+      "url": "https://fortunebusinessinsights.com/legal-technology-market-109527",
+      "title": "Legal Technology Market Size, Share & Growth Report, 2034",
+      "domain": "fortunebusinessinsights.com",
+      "score": 0.2475
+    },
+    {
+      "number": 7,
+      "doc_id": "d1",
+      "url": "https://finance.yahoo.com/news/europe-legal-services-market-2026-113600290.html",
+      "title": "Europe Legal Services Market 2026-2031: Cybersecurity Threats Escalate for European Law Firms Amid Rising Data Breach Risks",
+      "domain": "finance.yahoo.com",
+      "score": 0.2575
+    },
+    {
+      "number": 8,
+      "doc_id": "d30",
+      "url": "https://markwideresearch.com/europe-legal-services-market",
+      "title": "Europe Legal Services Market Size, Share, and Industry Trends Forecast 2026-2036 | MarkWide Research",
+      "domain": "markwideresearch.com",
+      "score": 0.3075
+    }
+  ],
+  "findings": {
+    "k1": {
+      "statement": "The European legal tech market was valued at USD 6.15 billion in 2025.",
+      "status": "contested",
+      "support": 4,
+      "confidence": 0.7992,
+      "sources": [
+        1,
+        2,
+        3
+      ]
+    },
+    "k2": {
+      "statement": "The European legal tech market is estimated to be worth USD 6.81 billion in 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.384,
+      "sources": [
+        1
+      ]
+    },
+    "k3": {
+      "statement": "The European legal tech market is projected to grow at a compound annual growth rate (CAGR) of 10.78% from 2026 to 2034.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.5996,
+      "sources": [
+        1,
+        2
+      ]
+    },
+    "k4": {
+      "statement": "The European legal tech market is projected to reach USD 15.45 billion by 2034.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.5318,
+      "sources": [
+        1
+      ]
+    },
+    "k5": {
+      "statement": "Market size and forecast figures in this report are generated using Mordor Intelligence’s proprietary estimation framework, updated as of January 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.35,
+      "sources": [
+        2
+      ]
+    },
+    "k6": {
+      "statement": "The European legal technology market is projected to reach a value of USD 10.31 billion by 2030.",
+      "status": "contested",
+      "support": 1,
+      "confidence": 0.35,
+      "sources": [
+        2
+      ]
+    },
+    "k7": {
+      "statement": "The United Kingdom captured 29.76% of the European legal technology market share in 2024.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.35,
+      "sources": [
+        2
+      ]
+    },
+    "k8": {
+      "statement": "eDiscovery solutions held a 44.87% market share of the European legal technology market in 2024.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.35,
+      "sources": [
+        2
+      ]
+    },
+    "k9": {
+      "statement": "Cloud-based deployment models accounted for a 64.92% share of the European legal technology market size in 2024.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.35,
+      "sources": [
+        2
+      ]
+    },
+    "k10": {
+      "statement": "The European legal technology market was valued at USD 8.43 billion in 2025.",
+      "status": "contested",
+      "support": 1,
+      "confidence": 0.198,
+      "sources": [
+        6
+      ]
+    },
+    "k11": {
+      "statement": "The European legal technology market is projected to reach USD 9.02 billion in 2026.",
+      "status": "contested",
+      "support": 1,
+      "confidence": 0.198,
+      "sources": [
+        6
+      ]
+    },
+    "k12": {
+      "statement": "The European legal technology market contributed 24.80% to the global market revenue in 2025.",
+      "status": "contested",
+      "support": 1,
+      "confidence": 0.198,
+      "sources": [
+        6
+      ]
+    },
+    "k13": {
+      "statement": "The European legal technology market is projected to grow at a compound annual growth rate of approximately 9.5% between 2025 and 2030.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.34,
+      "sources": [
+        3
+      ]
+    },
+    "k14": {
+      "statement": "The forecast market size for the European legal technology market is $9.7 billion by 2030.",
+      "status": "contested",
+      "support": 1,
+      "confidence": 0.34,
+      "sources": [
+        3
+      ]
+    },
+    "k15": {
+      "statement": "Practice management and billing software represents the largest segment by revenue within the European legal technology market.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.34,
+      "sources": [
+        3
+      ]
+    },
+    "k16": {
+      "statement": "The United Kingdom, Germany, and France collectively represent the dominant regional markets for legal technology in Europe.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.509,
+      "sources": [
+        3,
+        4
+      ]
+    },
+    "k17": {
+      "statement": "The European Commission adopted the DigitalJustice2030 strategy in November 2025 to accelerate the digitalization of justice systems across the region.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.256,
+      "sources": [
+        4
+      ]
+    },
+    "k18": {
+      "statement": "The European legal technology market had an estimated value of USD 6.38 billion in 2023.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.5622,
+      "sources": []
+    },
+    "k19": {
+      "statement": "The European legal technology market is projected to grow at a compound annual growth rate (CAGR) of 8.9% from 2024 to 2030.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.24,
+      "sources": []
+    },
+    "k20": {
+      "statement": "The European legal technology market is anticipated to reach a valuation of USD 11.58 billion by 2030.",
+      "status": "contested",
+      "support": 2,
+      "confidence": 0.5622,
+      "sources": []
+    },
+    "k21": {
+      "statement": "The software segment held the largest revenue share of 74.8% in the European legal technology market in 2023.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.24,
+      "sources": []
+    },
+    "k22": {
+      "statement": "The UK dominated the European legal technology market with a revenue share of 22.0% in 2023.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.5622,
+      "sources": []
+    },
+    "k23": {
+      "statement": "The European legal technology market is projected to grow at a CAGR of 8.9% from 2024 to 2030.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.424,
+      "sources": []
+    },
+    "k24": {
+      "statement": "Regulatory compliance requirements, particularly data protection regulations like GDPR, are a major driver of growth for the European legal technology market.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.424,
+      "sources": []
+    },
+    "k25": {
+      "statement": "The software segment of the European legal technology market held the largest revenue share of 74.8% in 2023.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.424,
+      "sources": []
+    },
+    "k26": {
+      "statement": "Europe represents 28% of the global legal tech market.",
+      "status": "contested",
+      "support": 1,
+      "confidence": 0.158,
+      "sources": []
+    },
+    "k27": {
+      "statement": "The global legal tech market was valued at USD 24.11 billion in 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.158,
+      "sources": []
+    },
+    "k28": {
+      "statement": "The global legal tech market is projected to grow at a CAGR of 14.7% from 2025 to 2035.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.158,
+      "sources": []
+    },
+    "k29": {
+      "statement": "The legal tech industry, or LawTech, is defined as the use of technology and software to provide legal services and support the legal industry, excluding specific HR-services (HR-tech) and software purely for archiving or searching legal documents/contracts (legal-software).",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.318,
+      "sources": []
+    },
+    "k30": {
+      "statement": "The European legal services market size in 2025 was USD 257.48 billion.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.206,
+      "sources": [
+        7
+      ]
+    },
+    "k31": {
+      "statement": "The European legal services market is forecast to reach USD 265.67 billion in 2026.",
+      "status": "contested",
+      "support": 1,
+      "confidence": 0.206,
+      "sources": [
+        7
+      ]
+    },
+    "k32": {
+      "statement": "The European legal services market is projected to reach USD 310.68 billion by 2031.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.206,
+      "sources": [
+        7
+      ]
+    },
+    "k33": {
+      "statement": "The European legal services market is expected to grow at a CAGR of 3.18% over the period 2026-2031.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.206,
+      "sources": [
+        7
+      ]
+    },
+    "k34": {
+      "statement": "Large enterprises contributed 36.12% of the European legal services market revenue in 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.206,
+      "sources": [
+        7
+      ]
+    },
+    "k35": {
+      "statement": "Corporate, financial, and commercial law segments represented 30.55% of the European legal services market in 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.206,
+      "sources": [
+        7
+      ]
+    },
+    "k36": {
+      "statement": "The European legal technology market was valued at USD 8,624.00 million in 2025.",
+      "status": "contested",
+      "support": 1,
+      "confidence": 0.384,
+      "sources": [
+        5
+      ]
+    },
+    "k37": {
+      "statement": "The European legal technology market size is estimated at USD 9,658.88 million in 2026.",
+      "status": "contested",
+      "support": 1,
+      "confidence": 0.384,
+      "sources": [
+        5
+      ]
+    },
+    "k38": {
+      "statement": "The European legal technology market is projected to expand at a CAGR of 12% from 2026 to 2035.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.384,
+      "sources": [
+        5
+      ]
+    },
+    "k39": {
+      "statement": "The European legal technology market is projected to reach USD 26,784.83 million by 2035.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.384,
+      "sources": [
+        5
+      ]
+    },
+    "k40": {
+      "statement": "In 2025, the European legal technology market by solution was divided into Software (65%) and Services (35%).",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.384,
+      "sources": [
+        5
+      ]
+    },
+    "k41": {
+      "statement": "The European legal technology market is projected to grow at a CAGR of 8.8% between 2023 and 2030.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.26,
+      "sources": []
+    },
+    "k42": {
+      "statement": "Germany was the dominant market for legal technology in Europe in 2022.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.26,
+      "sources": []
+    },
+    "k43": {
+      "statement": "The German legal technology market is projected to reach a value of $2,893.2 million by 2030.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.26,
+      "sources": []
+    },
+    "k44": {
+      "statement": "The UK legal technology market is projected to grow at a CAGR of 7.9% from 2023 to 2030.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.26,
+      "sources": []
+    },
+    "k45": {
+      "statement": "The French legal technology market is projected to grow at a CAGR of 9.7% from 2023 to 2030.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.26,
+      "sources": []
+    },
+    "k46": {
+      "statement": "The European Legal Services Market is estimated to be USD 190.42 billion in 2024.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.166,
+      "sources": []
+    },
+    "k47": {
+      "statement": "The European Legal Services Market is projected to reach USD 234.69 billion by 2029.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.166,
+      "sources": []
+    },
+    "k48": {
+      "statement": "The European Legal Services Market is projected to grow at a CAGR of 4.27% during the period 2024-2029.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.166,
+      "sources": []
+    },
+    "k49": {
+      "statement": "The global legaltech artificial intelligence market is projected to reach $11.06 billion in 2030 at a compound annual growth rate (CAGR) of 31.5%.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.206,
+      "sources": []
+    },
+    "k50": {
+      "statement": "The market value for the legaltech artificial intelligence market includes revenues from services such as e-Discovery, legal research, due diligence, litigation analysis, and compliance monitoring, as well as the value of related goods and sales of high-core count CPUs, GPUs, and storage systems.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.206,
+      "sources": []
+    },
+    "k51": {
+      "statement": "The European legal tech market is expected to hold more than 22% of the global market share by 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.24,
+      "sources": []
+    },
+    "k52": {
+      "statement": "The Europe Legal Services Market is valued at $187.4 billion in 2026.",
+      "status": "contested",
+      "support": 1,
+      "confidence": 0.246,
+      "sources": [
+        8
+      ]
+    },
+    "k53": {
+      "statement": "The Europe Legal Services Market is projected to grow at a CAGR of 4.80% between 2026 and 2036.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.246,
+      "sources": [
+        8
+      ]
+    },
+    "k54": {
+      "statement": "The Europe Legal Services Market is forecast to reach a market size of $285.77 billion by 2035.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.246,
+      "sources": [
+        8
+      ]
+    },
+    "k55": {
+      "statement": "The Europe Legal Services Market is segmented by service types including Corporate Law, Intellectual Property, Litigation, and Tax Law.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.246,
+      "sources": [
+        8
+      ]
+    }
+  },
+  "metadata": {
+    "config_hash": "489c5300e6b5b6ebc534e9056dad55767be79449c78e05dcdebfd962b3a2c072",
+    "models_used": {
+      "reasoning": "gemini:gemini-3.8-flash",
+      "fast": "gemini:gemini-3.1-flash-lite",
+      "embedding": "gemini-embedding-001"
+    },
+    "prompt_versions": {
+      "analyze_query": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "a727cb4344e9",
+        "label": "production"
+      },
+      "assess_coverage": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "e846c73d92bf",
+        "label": "production"
+      },
+      "evaluate_sources": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "b548bfeecc30",
+        "label": "production"
+      },
+      "extract_claims": {
+        "version": "4",
+        "source": "langfuse",
+        "content_hash": "7bb08d1d31b9",
+        "label": "production"
+      },
+      "generate_queries": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "c529f97cebe9",
+        "label": "production"
+      },
+      "judge_contradictions": {
+        "version": "5",
+        "source": "langfuse",
+        "content_hash": "726f52b7aa1e",
+        "label": "production"
+      },
+      "plan": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "1ec8bb17ccf2",
+        "label": "production"
+      },
+      "synthesize": {
+        "version": "3",
+        "source": "langfuse",
+        "content_hash": "94db375c9234",
+        "label": "production"
+      },
+      "validate_claims": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "68ed4e47da0e",
+        "label": "production"
+      },
+      "verify_citations": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "32456e1a0b5a",
+        "label": "production"
+      }
+    },
+    "search_providers": [
+      "tavily"
+    ],
+    "llm_providers": [
+      "gemini",
+      "openai"
+    ],
+    "stop_reason": "max_iterations",
+    "stop_detail": "max_iterations=4 reached",
+    "iterations": 4,
+    "budget": {
+      "iteration": 4,
+      "searches": 29,
+      "searches_left": 16,
+      "llm_calls": 78,
+      "tokens_in": 438159,
+      "tokens_out": 74870,
+      "cost_usd": 0.368293,
+      "elapsed_seconds": 181.25
+    },
+    "gate_verdict": "pass_with_warnings",
+    "counters": {
+      "fetch_failures": 0,
+      "duplicate_urls": 147,
+      "claims_need_fresh_confirmation": 46,
+      "claims_rejected_quote": 1,
+      "extraction_failures": 0,
+      "claims_rejected_injection": 0,
+      "sentences_dropped_by_verifier": 0
+    },
+    "skills": [
+      "market-sizing"
+    ]
+  }
+}

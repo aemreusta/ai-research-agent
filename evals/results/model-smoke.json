@@ -1,0 +1,38 @@
+[
+  {
+    "requested": "gemini-3.1-pro-preview",
+    "actual": "gemini-3.1-pro-preview",
+    "provider": "gemini",
+    "passed": true,
+    "cost_usd": 0.000654,
+    "elapsed_seconds": 2.73
+  },
+  {
+    "requested": "gemini-2.5-pro",
+    "passed": false,
+    "error_code": "LLM_PROVIDER_ERROR",
+    "detail": "LLM_PROVIDER_ERROR from gemini (HTTP 400): Thinking level is not supported for this model.",
+    "elapsed_seconds": 0.39
+  },
+  {
+    "requested": "gpt-5.6-sol",
+    "passed": false,
+    "error_code": "LLM_RATE_LIMIT",
+    "detail": "LLM_RATE_LIMIT from openai (HTTP 429): You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
+    "elapsed_seconds": 2.01
+  },
+  {
+    "requested": "gpt-5.6-terra",
+    "passed": false,
+    "error_code": "LLM_RATE_LIMIT",
+    "detail": "LLM_RATE_LIMIT from openai (HTTP 429): You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
+    "elapsed_seconds": 0.75
+  },
+  {
+    "requested": "gpt-5.6-luna",
+    "passed": false,
+    "error_code": "LLM_RATE_LIMIT",
+    "detail": "LLM_RATE_LIMIT from openai (HTTP 429): You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
+    "elapsed_seconds": 0.72
+  }
+]

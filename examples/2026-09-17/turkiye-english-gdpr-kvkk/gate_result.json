@@ -1,0 +1,99 @@
+{
+  "verdict": "pass_with_warnings",
+  "rounds": 1,
+  "removed_sentences": 1,
+  "banner": null,
+  "checks": {
+    "G1": {
+      "status": "pass",
+      "description": "Required sections are present.",
+      "found": [],
+      "remaining": []
+    },
+    "G2": {
+      "status": "pass",
+      "description": "Every factual sentence carries at least one citation.",
+      "found": [],
+      "remaining": []
+    },
+    "G3": {
+      "status": "pass",
+      "description": "Every citation id exists in the ledger and in the source list; no uncited source.",
+      "found": [],
+      "remaining": []
+    },
+    "G4": {
+      "status": "remediated",
+      "description": "Every number, date, percentage and money amount in a sentence is supported.",
+      "found": [
+        {
+          "rule": "G4",
+          "severity": "error",
+          "message": "'6698' is not supported by any cited claim",
+          "section": "summary",
+          "sentence": 0,
+          "bucket": "bare_fact",
+          "value": "6698",
+          "text": "According to single-source findings, both the GDPR and KVKK under Law No. 6698 and Board Decision No. 2019/10 require data controllers to report personal data b"
+        }
+      ],
+      "remaining": []
+    },
+    "G5": {
+      "status": "pass",
+      "description": "Sentences citing a contested cluster sit in the conflicting section or are hedged.",
+      "found": [],
+      "remaining": []
+    },
+    "G6": {
+      "status": "pass",
+      "description": "Single-source findings are labelled as such.",
+      "found": [],
+      "remaining": []
+    },
+    "G7": {
+      "status": "pass",
+      "description": "Exhausted sub-questions are listed under known gaps.",
+      "found": [],
+      "remaining": []
+    },
+    "G8": {
+      "status": "pass",
+      "description": "Source URLs are valid http(s), canonical and unique.",
+      "found": [],
+      "remaining": []
+    },
+    "G9": {
+      "status": "pass",
+      "description": "No sensitive identifier or secret pattern in the output.",
+      "found": [],
+      "remaining": []
+    },
+    "G10": {
+      "status": "pass",
+      "description": "Report language matches the question language.",
+      "found": [],
+      "remaining": []
+    },
+    "G11": {
+      "status": "pass",
+      "description": "Every recommendation links to at least one finding.",
+      "found": [],
+      "remaining": []
+    },
+    "G12": {
+      "status": "pass",
+      "description": "Cited findings have validated evidence and confirmed temporal applicability.",
+      "found": [],
+      "remaining": []
+    }
+  },
+  "remediations": [
+    {
+      "rule": "drop",
+      "action": "drop_sentence",
+      "section": "summary",
+      "text": "According to single-source findings, both the GDPR and KVKK under Law No. 6698 and Board Decision No. 2019/10 require data controllers to report personal data b"
+    }
+  ]
+}

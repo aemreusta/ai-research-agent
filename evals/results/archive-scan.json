@@ -1,0 +1,33 @@
+{
+  "date": "2026-09-17",
+  "scope": "all uncompressed examples before archive compression",
+  "tool": "gitleaks dir --redact",
+  "configured_provider_key_occurrences": 0,
+  "reviewed_false_positives": [
+    {
+      "pattern": "CommunityKey URL parameter",
+      "publisher": "www.uniformlaws.org",
+      "occurrences": 2,
+      "classification": "public community identifier in article URL"
+    },
+    {
+      "pattern": "dockey URL parameter",
+      "publisher": "markets.ft.com",
+      "occurrences": 2,
+      "classification": "public company announcement document identifier"
+    },
+    {
+      "pattern": "key, SQL example literal",
+      "publisher": "bucardo.org",
+      "occurrences": 1,
+      "classification": "PostgreSQL release notes SQL sample"
+    },
+    {
+      "pattern": "redir_token URL parameter",
+      "publisher": "youtube.com",
+      "occurrences": 1,
+      "classification": "public anonymous video-page redirect token, not a provider API credential"
+    }
+  ],
+  "compression": "gzip with mtime=0; decompression checked byte-for-byte"
+}

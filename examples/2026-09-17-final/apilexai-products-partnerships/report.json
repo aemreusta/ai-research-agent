@@ -1,0 +1,880 @@
+{
+  "question": "ApilexAI'ın ürünleri, iş ortaklıkları ve stratejik yönü nedir?",
+  "language": "tr",
+  "title": "ApilexAI Urun Portfoyu, Is Birlikleri ve Stratejik Yonu",
+  "banner": null,
+  "sections": [
+    {
+      "key": "summary",
+      "title": "Özet",
+      "sentences": [
+        {
+          "text": "Apilex.ai, temel hedef kitlesi hukukcular olan ve yasal kaynaklara dayali guvenilir sonuclar sunmak icin hukuka ozel kapali devre modeller kullanan bir yapay zeka platformudur.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k3",
+            "k7",
+            "k21"
+          ],
+          "sources": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14
+          ]
+        },
+        {
+          "text": "Dava dosyalari icin proje ve dosya yonetim sistemi sunan platform, Turkiye, Fransa ve Almanya'da hukuk profesyonellerine aktif olarak hizmet vermektedir.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k12",
+            "k27"
+          ],
+          "sources": [
+            6,
+            10,
+            12,
+            13,
+            15,
+            16
+          ]
+        },
+        {
+          "text": "Sirket yil sonuna kadar bir yatirim turuna cikmayi planlarken, tek bir kaynakta bugune kadar dis yatirim almadan tamamen oz sermaye ile buyudugu aktarilmaktadir.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k37",
+            "k38"
+          ],
+          "sources": [
+            13,
+            16
+          ]
+        },
+        {
+          "text": "Kanıt yetersizliği nedeniyle 1 cümle çıkarıldı - ayrıntılar gate_result.json'da",
+          "kind": "meta",
+          "labels": [
+            "gate_note"
+          ],
+          "findings": [],
+          "sources": []
+        }
+      ]
+    },
+    {
+      "key": "key_findings",
+      "title": "Temel Bulgular",
+      "sentences": [
+        {
+          "text": "Apilex.ai, genel amacli yapay zekalarin aksine hukuka ozel kapali devre modeller uzerine kurulu bir altyapi ile yasal mevzuata dayali dogrulanabilir sonuclar uretmeyi amaclamaktadir.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k3",
+            "k21"
+          ],
+          "sources": [
+            1,
+            2,
+            3,
+            8,
+            13,
+            14
+          ]
+        },
+        {
+          "text": "Platform dava dosyalarini yonetmek amaciyla proje ve dosya yonetim sistemi sunmaktadir.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k12"
+          ],
+          "sources": [
+            6,
+            12
+          ]
+        },
+        {
+          "text": "Sirket Turkiye, Fransa ve Almanya'da aktif olarak hizmet vermekte olup 2026 yili itibariyla Almanya, Fransa, İspanya ve İtalya pazarlarina acilmayi planlamistir.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k4",
+            "k27"
+          ],
+          "sources": [
+            1,
+            10,
+            13,
+            15,
+            16,
+            17
+          ]
+        },
+        {
+          "text": "Sirketin yil sonuna kadar bir yatirim turuna cikmayi planladigi bildirilmektedir.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k37"
+          ],
+          "sources": [
+            13,
+            16
+          ]
+        },
+        {
+          "text": "Tek bir kaynaga gore platform UYAP, Microsoft Word ve Google Drive ile entegrasyon destegine sahiptir.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k24"
+          ],
+          "sources": [
+            9
+          ]
+        },
+        {
+          "text": "Tek bir kaynakta, sirketin barindirma ve yapay zeka analiz surecleri icin ucuncu taraf teknoloji is ortaklariyla calistigi belirtilmektedir.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k17"
+          ],
+          "sources": [
+            7
+          ]
+        },
+        {
+          "text": "Tek bir kaynaga gore platform Karar Arama kapsaminda 12 milyondan fazla guncel karara erisim ile 'Agent' ve 'Auto Summary' gibi araclar sunmaktadir.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k20",
+            "k23",
+            "k26"
+          ],
+          "sources": [
+            8,
+            9,
+            10
+          ]
+        },
+        {
+          "text": "Tek bir kaynakta, sirketin piyasaya suruldukten dokuz ay sonra 8 milyon dolar yillik tekrarlayan gelire (ARR) ulastigi ve ekibini 120 kisiye cikardigi ifade edilmektedir.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k36",
+            "k39"
+          ],
+          "sources": [
+            13
+          ]
+        }
+      ]
+    },
+    {
+      "key": "conflicting_or_uncertain",
+      "title": "Çelişkili / Belirsiz Bilgiler",
+      "sentences": []
+    },
+    {
+      "key": "conclusion",
+      "title": "Sonuç",
+      "sentences": [
+        {
+          "text": "ApilexAI, hukuka ozel kapali devre modeller ve entegre dosya yonetim araclariyla uluslararasi pazarlarda buyumeyi hedefleyen bir strateji izlemektedir.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k3",
+            "k12",
+            "k27"
+          ],
+          "sources": [
+            1,
+            2,
+            3,
+            6,
+            10,
+            12,
+            13,
+            15,
+            16
+          ]
+        }
+      ]
+    },
+    {
+      "key": "known_gaps",
+      "title": "Bilinen Eksikler",
+      "sentences": [
+        {
+          "text": "ApilexAI'ın kamuoyuna duyurduğu resmi iş ortaklıkları ve ekosistem iş birlikleri nelerdir? - 2 turdur ilerleme yok (yeni bulgu ya da bağımsız kaynak gelmedi)",
+          "kind": "meta",
+          "labels": [
+            "gap:s2"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "18 aday iddia kullanılmadı: kaynak desteği, koşulları veya güncel geçerliliği doğrulanamadı; ayrıntılar kanıt defterindedir.",
+          "kind": "meta",
+          "labels": [],
+          "findings": [],
+          "sources": []
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "number": 1,
+      "doc_id": "d10",
+      "url": "https://halktv.com.tr/tanitim-bulteni/apilex-ai-global-legal-tech-arenasina-cikiyor-turkiyenin-lider-yapay-zeka-hukuk-asistani-2026da-avrupaya-aciliyor-993170h",
+      "title": "Apilex.ai Global Legal-Tech arenasına çıkıyor: Türkiye’nin lider yapay zekâ hukuk asistanı 2026’da Avrupa’ya açılıyor",
+      "domain": "halktv.com.tr",
+      "score": 0.4675
+    },
+    {
+      "number": 2,
+      "doc_id": "d12",
+      "url": "https://apilex.ai/tr/blog/hukukcular-icin-yapay-zeka-apilex-ai",
+      "title": "Hukukçular İçin Yapay Zeka, Apilex AI ile Hukuki ...",
+      "domain": "apilex.ai",
+      "score": 0.7
+    },
+    {
+      "number": 3,
+      "doc_id": "d50",
+      "url": "https://youtube.com/watch?v=d6S5W-JKKq8",
+      "title": "Apilex AI İncelemesi",
+      "domain": "youtube.com",
+      "score": 0.325
+    },
+    {
+      "number": 4,
+      "doc_id": "d11",
+      "url": "https://apilex.ai/tr/kurucudan-mesaj",
+      "title": "Kurucudan Mesaj: Vizyon ve Hikaye | Apilex",
+      "domain": "apilex.ai",
+      "score": 0.675
+    },
+    {
+      "number": 5,
+      "doc_id": "d13",
+      "url": "https://apilex.ai/tr",
+      "title": "Apilex - AI for Legal",
+      "domain": "apilex.ai",
+      "score": 0.55
+    },
+    {
+      "number": 6,
+      "doc_id": "d14",
+      "url": "https://apilex.ai/tr/blog/turkiye-hukuk-sistemine-uygun-yapay-zeka",
+      "title": "Türkiye Hukuk Sistemine Uygun Yapay Zeka: Avukatların Yeni Aracı | Apilex Blog",
+      "domain": "apilex.ai",
+      "score": 0.65
+    },
+    {
+      "number": 7,
+      "doc_id": "d15",
+      "url": "https://apilex.ai/tr/gizlilik-politikasi",
+      "title": "Gizlilik Politikası",
+      "domain": "apilex.ai",
+      "score": 0.705
+    },
+    {
+      "number": 8,
+      "doc_id": "d27",
+      "url": "https://apilex.ai/en/assistant",
+      "title": "AI-Powered Legal Assistant",
+      "domain": "apilex.ai",
+      "score": 0.7125
+    },
+    {
+      "number": 9,
+      "doc_id": "d36",
+      "url": "https://apilex.ai/tr/platform",
+      "title": "Yapay Zeka Hukuk Platformu | Apilex",
+      "domain": "apilex.ai",
+      "score": 0.7125
+    },
+    {
+      "number": 10,
+      "doc_id": "d48",
+      "url": "https://apilex.ai/en",
+      "title": "Apilex - AI for Legal",
+      "domain": "apilex.ai",
+      "score": 0.7125
+    },
+    {
+      "number": 11,
+      "doc_id": "d49",
+      "url": "https://linkedin.com/posts/apilex_legaltech-ai-innovation-activity-7460344546317623296-0liR",
+      "title": "Apilex Revolutionizes Legal Research with AI - LinkedIn",
+      "domain": "linkedin.com",
+      "score": 0.2825
+    },
+    {
+      "number": 12,
+      "doc_id": "d51",
+      "url": "https://youtube.com/watch?v=RgWvh_b5AEs",
+      "title": "APİLEX - HUKUK YAPAY ZEKA ASİSTANI",
+      "domain": "youtube.com",
+      "score": 0.325
+    },
+    {
+      "number": 13,
+      "doc_id": "d26",
+      "url": "https://pulse2.com/apilex-surpasses-8-million-arr-nine-months-after-launch",
+      "title": "Apilex Surpasses $8 Million ARR Nine Months After Launch",
+      "domain": "pulse2.com",
+      "score": 0.4975
+    },
+    {
+      "number": 14,
+      "doc_id": "d118",
+      "url": "https://dunya.com/sirketler/hukukta-yapay-zeka-donum-noktasinda-apilexai-4-ayda-yuzde-800-buyudu-haberi-810052",
+      "title": "Hukukta yapay zekâ dönüm noktasında: Apilex.ai 4 ayda yüzde 800 büyüdü - Dünya Gazetesi",
+      "domain": "dunya.com",
+      "score": 0.4725
+    },
+    {
+      "number": 15,
+      "doc_id": "d22",
+      "url": "https://tr.investing.com/news/world-news/yapay-zeka-hukuk-asistan-apilexai-2026da-almanya-fransa-ispanya-ve-italya-pazarlarna-aclmaya-hazrlanyor-3678912",
+      "title": "Yapay zeka hukuk asistanı Apilex.ai, 2026'da Almanya ...",
+      "domain": "tr.investing.com",
+      "score": 0.24
+    },
+    {
+      "number": 16,
+      "doc_id": "d121",
+      "url": "https://egirisim.com/2026/06/23/yerli-yapay-zeka-hukuk-girisimi-apilex-yayina-alinisinin-9-ayinda-8-milyon-dolar-arri-gecti",
+      "title": "Yerli yapay zeka hukuk girişimi Apilex, yayına alınışının 9. ayında 8 milyon dolar ARR’ı geçti - egirişim",
+      "domain": "egirisim.com",
+      "score": 0.4725
+    },
+    {
+      "number": 17,
+      "doc_id": "d116",
+      "url": "https://oyakyatirim.com.tr/haberler/20251212151234/yapay-zeka-hukuk-asistani-apilex-ai-2026da-almanya-fransa-ispanya-ve-italya-pazarlarina-acilmaya-hazirlaniyor-fnc-news",
+      "title": "OYAK Yatırım - 20251212151234",
+      "domain": "oyakyatirim.com.tr",
+      "score": 0.4
+    }
+  ],
+  "findings": {
+    "k1": {
+      "statement": "Apilex.ai, avukatlar ve hukuk profesyonelleri için geliştirilmiş, yapay zeka tabanlı bir hukuk asistanıdır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.374,
+      "sources": [
+        1
+      ]
+    },
+    "k2": {
+      "statement": "Apilex.ai platformu, avukatlara semantik arama, belge üretimi, risk analizi ve çok katmanlı doğrulama gibi yetenekler sunmaktadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.374,
+      "sources": [
+        1
+      ]
+    },
+    "k3": {
+      "statement": "Apilex.ai genel amaçlı yapay zekaların aksine, hukuka özel kapalı devre modeller üzerine kurulu bir altyapı kullanmaktadır.",
+      "status": "supported",
+      "support": 3,
+      "confidence": 0.7962,
+      "sources": [
+        1,
+        2,
+        3
+      ]
+    },
+    "k4": {
+      "statement": "Apilex.ai, 2026 yılı itibarıyla Almanya, Fransa, İspanya ve İtalya pazarlarına açılmayı planlamaktadır.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.5743,
+      "sources": [
+        1,
+        17
+      ]
+    },
+    "k5": {
+      "statement": "Apilex.ai'ın kurucu ekibi Av. Cebrail Ergül, Kemal Tamer ve Batuhan İpek'ten oluşmaktadır.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.4817,
+      "sources": [
+        1
+      ]
+    },
+    "k6": {
+      "statement": "Av. Cebrail Ergül, Apilex'in Kurucu Ortağı ve CEO'sudur.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.54,
+      "sources": [
+        4
+      ]
+    },
+    "k7": {
+      "statement": "Apilex'in temel hedef kitlesi hukukçulardır.",
+      "status": "supported",
+      "support": 3,
+      "confidence": 0.7537,
+      "sources": [
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ]
+    },
+    "k8": {
+      "statement": "Apilex'in stratejik vizyonu, hukukçuların teknolojiyi kullanarak mesleki evrim geçirmelerini ve verimliliklerini artırmalarını sağlamaktır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.56,
+      "sources": [
+        2,
+        4
+      ]
+    },
+    "k9": {
+      "statement": "Apilex'in kurucu ortağı Av. Cebrail Ergül'dür.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.57,
+      "sources": [
+        5,
+        10
+      ]
+    },
+    "k10": {
+      "statement": "Apilex, Yargıtay, Danıştay, resmi mevzuat ve 11 milyondan fazla içtihat verisiyle eğitilmiştir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.57,
+      "sources": [
+        6,
+        10
+      ]
+    },
+    "k11": {
+      "statement": "Apilex'in arama motoru, anahtar kelime yerine kavramsal ve bağlamsal analiz yapan semantik arama teknolojisi kullanır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.52,
+      "sources": [
+        6
+      ]
+    },
+    "k12": {
+      "statement": "Apilex, dava dosyalarını yönetmek için proje ve dosya yönetim sistemi sunar.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.6448,
+      "sources": [
+        6,
+        12
+      ]
+    },
+    "k13": {
+      "statement": "Apilex; multi-tenancy, single-tenancy (dedicated server) ve on-premise veri barındırma seçenekleri sunar.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.52,
+      "sources": [
+        6
+      ]
+    },
+    "k14": {
+      "statement": "Şirketin resmi unvanı APİLEX TEKNOLOJİ ANONİM ŞİRKETİ'dir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.564,
+      "sources": [
+        7
+      ]
+    },
+    "k15": {
+      "statement": "Şirket merkezi İstanbul Esenyurt'taki Altınbaş Teknopark'ta yer almaktadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.564,
+      "sources": [
+        7
+      ]
+    },
+    "k16": {
+      "statement": "ApilexAI, platforma yüklenen içerik ve hukuki veriler için 'sıfır veri saklama' stratejisi uygulamaktadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.564,
+      "sources": [
+        7
+      ]
+    },
+    "k17": {
+      "statement": "Şirket, hizmetlerinin barındırılması ve yapay zeka analiz süreçleri için üçüncü taraf teknoloji iş ortaklarıyla çalışmaktadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.564,
+      "sources": [
+        7
+      ]
+    },
+    "k18": {
+      "statement": "Apilex Teknoloji A.Ş. şirketinin adresi Şişli/İstanbul olarak belirtilmiştir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.246,
+      "sources": []
+    },
+    "k19": {
+      "statement": "Apilex Teknoloji A.Ş. bünyesinde Ece MERT iletişim sorumlusu olarak belirtilmiştir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.246,
+      "sources": []
+    },
+    "k20": {
+      "statement": "ApilexAI, daha derin yasal araştırma ve detaylı belge üretimi için 'Agent' adında daha gelişmiş bir teknoloji sunmaktadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.57,
+      "sources": [
+        8
+      ]
+    },
+    "k21": {
+      "statement": "ApilexAI, genel yapay zeka modellerinden farklı olarak yasal kaynaklara, mevzuata ve mahkeme kararlarına dayalı güvenilir ve kaynak gösterilebilir sonuçlar sunmayı amaçlamaktadır.",
+      "status": "supported",
+      "support": 3,
+      "confidence": 0.839,
+      "sources": [
+        8,
+        13,
+        14
+      ]
+    },
+    "k22": {
+      "statement": "Apilex, avukatlar için özel olarak geliştirilmiş bir hukuk yapay zekası platformudur.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.57,
+      "sources": [
+        9
+      ]
+    },
+    "k23": {
+      "statement": "Apilex, Karar Arama özelliği kapsamında 12 milyondan fazla güncel karara erişim sunmaktadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.57,
+      "sources": [
+        9
+      ]
+    },
+    "k24": {
+      "statement": "Apilex platformu UYAP, Microsoft Word ve Google Drive ile entegrasyon desteğine sahiptir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.57,
+      "sources": [
+        9
+      ]
+    },
+    "k25": {
+      "statement": "Apilex, kullanıcı verilerinin model eğitiminde kullanılmayacağını taahhüt etmektedir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.57,
+      "sources": [
+        9
+      ]
+    },
+    "k26": {
+      "statement": "ApilexAI'ın 'Auto Summary' aracı, belgelerin toplu özetlerini çıkarmaya ve karşılaştırmalı tablolar oluşturmaya olanak tanır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.57,
+      "sources": [
+        10
+      ]
+    },
+    "k27": {
+      "statement": "ApilexAI, Türkiye, Fransa ve Almanya'da hukuk profesyonellerine aktif olarak hizmet vermektedir.",
+      "status": "supported",
+      "support": 4,
+      "confidence": 0.8699,
+      "sources": [
+        10,
+        13,
+        15,
+        16
+      ]
+    },
+    "k28": {
+      "statement": "Apilex performs data-heavy research by relying on verified case law and literature.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.226,
+      "sources": [
+        11
+      ]
+    },
+    "k29": {
+      "statement": "Apilex, karmaşık evrakları inceleyip analiz eden ve içeriğe uygun şekilde yeniden adlandıran bir özelliğe sahiptir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.172,
+      "sources": []
+    },
+    "k30": {
+      "statement": "Apilex, uluslararası büyüme stratejisi kapsamında Fransa pazarına odaklanmaktadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.172,
+      "sources": []
+    },
+    "k31": {
+      "statement": "Apilex'in veri gizliliği stratejisi; verileri model eğitiminde yeniden kullanmamayı, Avrupa Birliği içerisinde veri barındırmayı ve Avrupa uyumluluğunu esas almaktadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.172,
+      "sources": []
+    },
+    "k32": {
+      "statement": "Apilex, avukatlar için geliştirilmiş, dava dilekçesi yazabilen, Yargıtay kararlarını analiz edebilen, emsal gösteren ve karşı tarafın iddialarına göre savunma öneren bir yapay zeka asistanıdır.",
+      "status": "supported",
+      "support": 3,
+      "confidence": 0.5429,
+      "sources": [
+        15,
+        17
+      ]
+    },
+    "k33": {
+      "statement": "Apilex'in abonelik paketleri 6 aylık 25.000 TL, yıllık ise 40.000 TL olarak fiyatlandırılmıştır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.168,
+      "sources": []
+    },
+    "k34": {
+      "statement": "Apilex'in Türkiye'de en hızlı büyüyen teknoloji şirketlerinden biri olduğu iddia edilmektedir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.168,
+      "sources": []
+    },
+    "k35": {
+      "statement": "Apilex'in neredeyse bütün barolar tarafından önerildiği iddia edilmektedir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.168,
+      "sources": []
+    },
+    "k36": {
+      "statement": "ApilexAI, piyasaya sürüldükten dokuz ay sonra 8 milyon dolar yıllık tekrarlayan gelire (ARR) ulaştığını duyurdu.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.398,
+      "sources": [
+        13
+      ]
+    },
+    "k37": {
+      "statement": "Şirket, yıl sonuna kadar bir yatırım turuna çıkmayı planlamaktadır.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.6256,
+      "sources": [
+        13,
+        16
+      ]
+    },
+    "k38": {
+      "statement": "Şirket, bugüne kadar dış yatırım almadan tamamen öz sermaye (bootstrapped) ile büyümüştür.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.398,
+      "sources": [
+        13
+      ]
+    },
+    "k39": {
+      "statement": "Şirket, ekibini 120 kişiye çıkarmıştır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.398,
+      "sources": [
+        13
+      ]
+    },
+    "k40": {
+      "statement": "Apilex.ai, 2026 hedefleri doğrultusunda Ocak ayı itibarıyla İtalya, İspanya, Almanya ve Fransa pazarlarına açılmayı planlamaktadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.378,
+      "sources": [
+        14
+      ]
+    },
+    "k41": {
+      "statement": "Kurucu ortak Kemal Tamer, avukatların gerçek ihtiyaçlarını derin teknolojiyle çözen yapay zeka asistanlarının ayakta kalacağını öngörmektedir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.378,
+      "sources": [
+        14
+      ]
+    },
+    "k42": {
+      "statement": "Apilex, mevcut pazarlarındaki büyümeyi Brezilya, İspanya ve İtalya'ya taşımayı hedeflemektedir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.378,
+      "sources": [
+        16
+      ]
+    }
+  },
+  "metadata": {
+    "config_hash": "489c5300e6b5b6ebc534e9056dad55767be79449c78e05dcdebfd962b3a2c072",
+    "models_used": {
+      "reasoning": "gemini:gemini-3.8-flash",
+      "fast": "gemini:gemini-3.1-flash-lite",
+      "embedding": "gemini-embedding-001"
+    },
+    "prompt_versions": {
+      "analyze_query": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "a727cb4344e9",
+        "label": "production"
+      },
+      "assess_coverage": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "e846c73d92bf",
+        "label": "production"
+      },
+      "evaluate_sources": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "b548bfeecc30",
+        "label": "production"
+      },
+      "extract_claims": {
+        "version": "3",
+        "source": "yaml",
+        "content_hash": "7bb08d1d31b9"
+      },
+      "generate_queries": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "c529f97cebe9",
+        "label": "production"
+      },
+      "judge_contradictions": {
+        "version": "5",
+        "source": "langfuse",
+        "content_hash": "726f52b7aa1e",
+        "label": "production"
+      },
+      "plan": {
+        "version": "2",
+        "source": "yaml",
+        "content_hash": "1ec8bb17ccf2"
+      },
+      "synthesize": {
+        "version": "3",
+        "source": "langfuse",
+        "content_hash": "94db375c9234",
+        "label": "production"
+      },
+      "validate_claims": {
+        "version": "4",
+        "source": "yaml",
+        "content_hash": "68ed4e47da0e"
+      },
+      "verify_citations": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "32456e1a0b5a",
+        "label": "production"
+      }
+    },
+    "search_providers": [
+      "tavily"
+    ],
+    "llm_providers": [
+      "gemini",
+      "openai"
+    ],
+    "stop_reason": "max_iterations",
+    "stop_detail": "max_iterations=4 reached",
+    "iterations": 4,
+    "budget": {
+      "iteration": 4,
+      "searches": 17,
+      "searches_left": 28,
+      "llm_calls": 73,
+      "tokens_in": 429192,
+      "tokens_out": 87199,
+      "cost_usd": 0.37579,
+      "elapsed_seconds": 186.85
+    },
+    "gate_verdict": "pass_with_warnings",
+    "counters": {
+      "fetch_failures": 2,
+      "duplicate_urls": 22,
+      "claims_validation_unsupported": 5,
+      "claims_need_fresh_confirmation": 13,
+      "claims_rejected_quote": 12,
+      "extraction_failures": 0,
+      "claims_rejected_injection": 0,
+      "sentences_dropped_by_verifier": 0
+    },
+    "skills": [
+      "company-research"
+    ]
+  }
+}

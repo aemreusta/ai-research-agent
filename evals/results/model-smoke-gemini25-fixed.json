@@ -1,0 +1,10 @@
+[
+  {
+    "requested": "gemini-2.5-pro",
+    "actual": "gemini-2.5-pro",
+    "provider": "gemini",
+    "passed": true,
+    "cost_usd": 0.00322875,
+    "elapsed_seconds": 3.69
+  }
+]

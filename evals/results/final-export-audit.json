@@ -1,0 +1,143 @@
+[
+  {
+    "case": "apilexai-products-partnerships",
+    "claims": 87,
+    "cited_documents": 17,
+    "quote_methods": {
+      "exact": 80,
+      "fuzzy": 7
+    },
+    "invalid_quotes": 0,
+    "dangling_references": 0,
+    "source_list_mismatch": 0,
+    "undated_cited_documents": 1,
+    "numeric_violations_replay": 0,
+    "numeric_warnings_replay": 0,
+    "ineligible_citations_replay": 0,
+    "stop_reason": "max_iterations",
+    "gate_verdict": "pass_with_warnings"
+  },
+  {
+    "case": "eu-ai-act-timeline",
+    "claims": 144,
+    "cited_documents": 12,
+    "quote_methods": {
+      "exact": 143,
+      "fuzzy": 1
+    },
+    "invalid_quotes": 0,
+    "dangling_references": 0,
+    "source_list_mismatch": 0,
+    "undated_cited_documents": 0,
+    "numeric_violations_replay": 0,
+    "numeric_warnings_replay": 0,
+    "ineligible_citations_replay": 0,
+    "stop_reason": "max_iterations",
+    "gate_verdict": "pass"
+  },
+  {
+    "case": "fictional-company-evidence-limit",
+    "claims": 0,
+    "cited_documents": 0,
+    "quote_methods": {},
+    "invalid_quotes": 0,
+    "dangling_references": 0,
+    "source_list_mismatch": 0,
+    "undated_cited_documents": 0,
+    "numeric_violations_replay": 0,
+    "numeric_warnings_replay": 0,
+    "ineligible_citations_replay": 0,
+    "stop_reason": "no_evidence",
+    "gate_verdict": "fail"
+  },
+  {
+    "case": "kvkk-2026-saas-action-plan",
+    "claims": 115,
+    "cited_documents": 18,
+    "quote_methods": {
+      "exact": 106,
+      "fuzzy": 9
+    },
+    "invalid_quotes": 0,
+    "dangling_references": 0,
+    "source_list_mismatch": 0,
+    "undated_cited_documents": 3,
+    "numeric_violations_replay": 0,
+    "numeric_warnings_replay": 0,
+    "ineligible_citations_replay": 0,
+    "stop_reason": "max_iterations",
+    "gate_verdict": "pass"
+  },
+  {
+    "case": "legal-tech-market-size",
+    "claims": 67,
+    "cited_documents": 8,
+    "quote_methods": {
+      "exact": 66,
+      "fuzzy": 1
+    },
+    "invalid_quotes": 0,
+    "dangling_references": 0,
+    "source_list_mismatch": 0,
+    "undated_cited_documents": 1,
+    "numeric_violations_replay": 0,
+    "numeric_warnings_replay": 0,
+    "ineligible_citations_replay": 0,
+    "stop_reason": "max_iterations",
+    "gate_verdict": "pass_with_warnings"
+  },
+  {
+    "case": "postgresql-version-comparison",
+    "claims": 124,
+    "cited_documents": 10,
+    "quote_methods": {
+      "exact": 101,
+      "fuzzy": 23
+    },
+    "invalid_quotes": 0,
+    "dangling_references": 0,
+    "source_list_mismatch": 0,
+    "undated_cited_documents": 1,
+    "numeric_violations_replay": 0,
+    "numeric_warnings_replay": 0,
+    "ineligible_citations_replay": 0,
+    "stop_reason": "max_iterations",
+    "gate_verdict": "pass_with_warnings"
+  },
+  {
+    "case": "revenue-comparison-primary",
+    "claims": 9,
+    "cited_documents": 4,
+    "quote_methods": {
+      "exact": 8,
+      "fuzzy": 1
+    },
+    "invalid_quotes": 0,
+    "dangling_references": 0,
+    "source_list_mismatch": 0,
+    "undated_cited_documents": 0,
+    "numeric_violations_replay": 0,
+    "numeric_warnings_replay": 0,
+    "ineligible_citations_replay": 0,
+    "stop_reason": "max_iterations",
+    "gate_verdict": "pass"
+  },
+  {
+    "case": "turkiye-english-gdpr-kvkk",
+    "claims": 92,
+    "cited_documents": 11,
+    "quote_methods": {
+      "exact": 86,
+      "fuzzy": 6
+    },
+    "invalid_quotes": 0,
+    "dangling_references": 0,
+    "source_list_mismatch": 0,
+    "undated_cited_documents": 2,
+    "numeric_violations_replay": 0,
+    "numeric_warnings_replay": 0,
+    "ineligible_citations_replay": 0,
+    "stop_reason": "max_iterations",
+    "gate_verdict": "pass_with_warnings"
+  }
+]

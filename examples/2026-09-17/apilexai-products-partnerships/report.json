@@ -1,0 +1,183 @@
+{
+  "question": "ApilexAI'ın ürünleri, iş ortaklıkları ve stratejik yönü nedir?",
+  "language": "tr",
+  "title": "ApilexAI'ın ürünleri, iş ortaklıkları ve stratejik yönü nedir?",
+  "banner": "Yetersiz kanıt: Bu rapor çıktı kontrollerinden geçemedi. Kısmi bir taslak olarak değerlendirin ve listelenen sorunları inceleyin.",
+  "sections": [
+    {
+      "key": "summary",
+      "title": "Özet",
+      "sentences": [
+        {
+          "text": "Desteklenen bir bulgu bulunamadı.",
+          "kind": "meta",
+          "labels": [],
+          "findings": [],
+          "sources": []
+        }
+      ]
+    },
+    {
+      "key": "key_findings",
+      "title": "Temel Bulgular",
+      "sentences": []
+    },
+    {
+      "key": "conflicting_or_uncertain",
+      "title": "Çelişkili / Belirsiz Bilgiler",
+      "sentences": []
+    },
+    {
+      "key": "conclusion",
+      "title": "Sonuç",
+      "sentences": [
+        {
+          "text": "Yeterli kanıt bulunamadı; uydurma bir cevap yerine cevap verilmedi.",
+          "kind": "meta",
+          "labels": [],
+          "findings": [],
+          "sources": []
+        }
+      ]
+    },
+    {
+      "key": "known_gaps",
+      "title": "Bilinen Eksikler",
+      "sentences": [
+        {
+          "text": "ApilexAI nedir, kurucuları kimlerdir ve sunduğu temel ürün ile hizmetler nelerdir? - 2 turdur ilerleme yok (yeni bulgu ya da bağımsız kaynak gelmedi)",
+          "kind": "meta",
+          "labels": [
+            "gap:s1"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "ApilexAI'ın resmi olarak duyurduğu iş ortaklıkları, müşteri referansları ve teknolojik entegrasyonları nelerdir? - 2 turdur ilerleme yok (yeni bulgu ya da bağımsız kaynak gelmedi)",
+          "kind": "meta",
+          "labels": [
+            "gap:s2"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "ApilexAI'ın kamuoyuna açıkladığı stratejik yol haritası, küresel büyüme hedefleri ve gelecek vizyonu nedir? - 2 turdur ilerleme yok (yeni bulgu ya da bağımsız kaynak gelmedi)",
+          "kind": "meta",
+          "labels": [
+            "gap:s3"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "ApilexAI bugüne kadar hangi yatırım turlarını tamamlamış, hangi yatırımcılardan ne kadar fon almıştır? - 2 turdur ilerleme yok (yeni bulgu ya da bağımsız kaynak gelmedi)",
+          "kind": "meta",
+          "labels": [
+            "gap:s4"
+          ],
+          "findings": [],
+          "sources": []
+        }
+      ]
+    }
+  ],
+  "sources": [],
+  "findings": {},
+  "metadata": {
+    "config_hash": "489c5300e6b5b6ebc534e9056dad55767be79449c78e05dcdebfd962b3a2c072",
+    "models_used": {
+      "reasoning": "gemini:gemini-3.8-flash",
+      "fast": "gemini:gemini-3.1-flash-lite",
+      "embedding": "gemini-embedding-001"
+    },
+    "prompt_versions": {
+      "analyze_query": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "a727cb4344e9",
+        "label": "production"
+      },
+      "assess_coverage": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "e846c73d92bf",
+        "label": "production"
+      },
+      "evaluate_sources": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "b548bfeecc30",
+        "label": "production"
+      },
+      "extract_claims": {
+        "version": "2",
+        "source": "yaml",
+        "content_hash": "b57eae087863"
+      },
+      "generate_queries": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "c529f97cebe9",
+        "label": "production"
+      },
+      "judge_contradictions": {
+        "version": "5",
+        "source": "langfuse",
+        "content_hash": "726f52b7aa1e",
+        "label": "production"
+      },
+      "plan": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "887f659cc5f7",
+        "label": "production"
+      },
+      "synthesize": {
+        "version": "3",
+        "source": "yaml",
+        "content_hash": "94db375c9234"
+      },
+      "validate_claims": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "b0e8cb2651a3",
+        "label": "production"
+      },
+      "verify_citations": {
+        "version": "2",
+        "source": "yaml",
+        "content_hash": "32456e1a0b5a"
+      }
+    },
+    "search_providers": [
+      "tavily"
+    ],
+    "llm_providers": [
+      "gemini",
+      "openai"
+    ],
+    "stop_reason": "no_evidence",
+    "stop_detail": "no open sub-questions left (remaining ones are exhausted)",
+    "iterations": 2,
+    "budget": {
+      "iteration": 2,
+      "searches": 19,
+      "searches_left": 26,
+      "llm_calls": 11,
+      "tokens_in": 34453,
+      "tokens_out": 6994,
+      "cost_usd": 0.026134,
+      "elapsed_seconds": 43.62
+    },
+    "gate_verdict": "fail",
+    "counters": {
+      "fetch_failures": 4,
+      "duplicate_urls": 34
+    },
+    "skills": [
+      "company-research"
+    ]
+  }
+}

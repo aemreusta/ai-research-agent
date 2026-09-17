@@ -1,0 +1,99 @@
+{
+  "verdict": "fail",
+  "rounds": 0,
+  "removed_sentences": 0,
+  "banner": "Insufficient evidence: this report did not pass the output checks. Treat it as a partial draft and review the listed issues.",
+  "checks": {
+    "G1": {
+      "status": "fail",
+      "description": "Required sections are present.",
+      "found": [
+        {
+          "rule": "G1",
+          "severity": "error",
+          "message": "no supported finding remains: insufficient evidence",
+          "section": "key_findings",
+          "sentence": null,
+          "remediable": false
+        }
+      ],
+      "remaining": [
+        {
+          "rule": "G1",
+          "severity": "error",
+          "message": "no supported finding remains: insufficient evidence",
+          "section": "key_findings",
+          "sentence": null,
+          "remediable": false
+        }
+      ]
+    },
+    "G2": {
+      "status": "pass",
+      "description": "Every factual sentence carries at least one citation.",
+      "found": [],
+      "remaining": []
+    },
+    "G3": {
+      "status": "pass",
+      "description": "Every citation id exists in the ledger and in the source list; no uncited source.",
+      "found": [],
+      "remaining": []
+    },
+    "G4": {
+      "status": "pass",
+      "description": "Every number, date, percentage and money amount in a sentence is supported.",
+      "found": [],
+      "remaining": []
+    },
+    "G5": {
+      "status": "pass",
+      "description": "Sentences citing a contested cluster sit in the conflicting section or are hedged.",
+      "found": [],
+      "remaining": []
+    },
+    "G6": {
+      "status": "pass",
+      "description": "Single-source findings are labelled as such.",
+      "found": [],
+      "remaining": []
+    },
+    "G7": {
+      "status": "pass",
+      "description": "Exhausted sub-questions are listed under known gaps.",
+      "found": [],
+      "remaining": []
+    },
+    "G8": {
+      "status": "pass",
+      "description": "Source URLs are valid http(s), canonical and unique.",
+      "found": [],
+      "remaining": []
+    },
+    "G9": {
+      "status": "pass",
+      "description": "No sensitive identifier or secret pattern in the output.",
+      "found": [],
+      "remaining": []
+    },
+    "G10": {
+      "status": "pass",
+      "description": "Report language matches the question language.",
+      "found": [],
+      "remaining": []
+    },
+    "G11": {
+      "status": "pass",
+      "description": "Every recommendation links to at least one finding.",
+      "found": [],
+      "remaining": []
+    },
+    "G12": {
+      "status": "pass",
+      "description": "Cited findings have validated evidence and confirmed temporal applicability.",
+      "found": [],
+      "remaining": []
+    }
+  },
+  "remediations": []
+}

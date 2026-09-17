@@ -1,0 +1,1162 @@
+{
+  "question": "Compare PostgreSQL 17 and PostgreSQL 18 using official release notes: which performance, developer and operational features changed, and what should a small SaaS team verify before upgrading?",
+  "language": "en",
+  "title": "PostgreSQL 17 vs. PostgreSQL 18: Feature Comparison and SaaS Upgrade Considerations",
+  "banner": null,
+  "sections": [
+    {
+      "key": "summary",
+      "title": "Summary",
+      "sentences": [
+        {
+          "text": "PostgreSQL 17 introduced incremental backups, JSON to relational table transformations, and query optimizations for CTEs and UNION queries.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k1",
+            "k2",
+            "k3"
+          ],
+          "sources": [
+            1,
+            2
+          ]
+        },
+        {
+          "text": "PostgreSQL 18 introduces asynchronous input/output capabilities, native UUIDv7 support via the uuidv7() function, and requires matching checksum configurations during pg_upgrade.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k29",
+            "k43",
+            "k49"
+          ],
+          "sources": [
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        },
+        {
+          "text": "According to single sources, SaaS teams preparing for PostgreSQL 18 must verify extension compatibility, adjust to deprecated MD5 authentication, and account for default data checksums.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k34",
+            "k40",
+            "k48"
+          ],
+          "sources": [
+            4,
+            5,
+            8,
+            9
+          ]
+        },
+        {
+          "text": "1 sentence(s) removed for insufficient evidence - see gate_result.json",
+          "kind": "meta",
+          "labels": [
+            "gate_note"
+          ],
+          "findings": [],
+          "sources": []
+        }
+      ]
+    },
+    {
+      "key": "key_findings",
+      "title": "Key Findings",
+      "sentences": [
+        {
+          "text": "PostgreSQL 17 added support for incremental backups to capture only changes made since the prior backup, as well as query optimizations leveraging statistics for CTEs and UNION queries.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k1",
+            "k3"
+          ],
+          "sources": [
+            1,
+            2
+          ]
+        },
+        {
+          "text": "PostgreSQL 17 introduced functionality to transform JSON data into relational tables within SQL environments.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k2"
+          ],
+          "sources": [
+            1,
+            2
+          ]
+        },
+        {
+          "text": "According to single sources, PostgreSQL 17 reduced VACUUM memory consumption by up to 20x and achieved up to 2x better write throughput in high concurrency workloads.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k4",
+            "k5"
+          ],
+          "sources": [
+            10
+          ]
+        },
+        {
+          "text": "PostgreSQL 18 introduces asynchronous input/output capabilities across operations such as sequential scans, bitmap heap scans, and vacuum.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k32",
+            "k49"
+          ],
+          "sources": [
+            6,
+            7,
+            8
+          ]
+        },
+        {
+          "text": "PostgreSQL 18 introduces native support for UUIDv7 via the uuidv7() function.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k29"
+          ],
+          "sources": [
+            3,
+            4
+          ]
+        },
+        {
+          "text": "According to single sources, PostgreSQL 18 enables data checksums by default in initdb and deprecates MD5 password authentication in favor of SCRAM-SHA-256.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k34",
+            "k40",
+            "k56"
+          ],
+          "sources": [
+            4,
+            5,
+            7,
+            8
+          ]
+        },
+        {
+          "text": "When upgrading with pg_upgrade in PostgreSQL 18, data checksum settings must match between the source and target clusters.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k43",
+            "k47"
+          ],
+          "sources": [
+            5,
+            6,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "key": "conflicting_or_uncertain",
+      "title": "Conflicting / Uncertain Information",
+      "sentences": []
+    },
+    {
+      "key": "conclusion",
+      "title": "Conclusion",
+      "sentences": [
+        {
+          "text": "While PostgreSQL 17 focused on incremental backups, JSON transformations, and query execution optimizations, PostgreSQL 18 expands foundational performance through asynchronous I/O, UUIDv7, and stricter security and integrity defaults.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k1",
+            "k2",
+            "k3",
+            "k29",
+            "k40",
+            "k49"
+          ],
+          "sources": [
+            1,
+            2,
+            3,
+            4,
+            6,
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "key": "known_gaps",
+      "title": "Known Gaps",
+      "sentences": [
+        {
+          "text": "What breaking changes, removed features, and deprecated behaviors exist between PostgreSQL 17 and PostgreSQL 18? - not enough independent or primary sources were found (removed configuration parameters)",
+          "kind": "meta",
+          "labels": [
+            "gap:s3"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "25 candidate claim(s) withheld: source support, conditions or current applicability could not be confirmed; see the evidence ledger.",
+          "kind": "meta",
+          "labels": [],
+          "findings": [],
+          "sources": []
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "number": 1,
+      "doc_id": "d11",
+      "url": "https://enterprisedb.com/blog/exploring-postgresql-17-new-features-enhancements",
+      "title": "Exploring PostgreSQL 17: Overview of New Features & Enhancements",
+      "domain": "enterprisedb.com",
+      "score": 0.3075
+    },
+    {
+      "number": 2,
+      "doc_id": "d14",
+      "url": "https://finance.yahoo.com/news/edb-contributions-postgresql-17-help-130000691.html",
+      "title": "EDB Contributions to PostgreSQL® 17 Help Enterprises Unlock Greater Performance for Complex Workloads",
+      "domain": "finance.yahoo.com",
+      "score": 0.26
+    },
+    {
+      "number": 3,
+      "doc_id": "d3",
+      "url": "https://medium.com/towardsdev/postgresql-18-a-comprehensive-guide-to-new-features-for-dbas-and-developers-b355e48023bf",
+      "title": "PostgreSQL 18: A Comprehensive Guide to New Features ...",
+      "domain": "medium.com",
+      "score": 0.365
+    },
+    {
+      "number": 4,
+      "doc_id": "d5",
+      "url": "https://postgresql.org/docs/current/release-18.html",
+      "title": "Documentation: 18: E.6. Release 18 - PostgreSQL",
+      "domain": "postgresql.org",
+      "score": 0.755
+    },
+    {
+      "number": 5,
+      "doc_id": "d6",
+      "url": "https://postgresql.org/docs/release/18.0",
+      "title": "PostgreSQL 18.0 Release Notes",
+      "domain": "postgresql.org",
+      "score": 0.7125
+    },
+    {
+      "number": 6,
+      "doc_id": "d22",
+      "url": "https://postgrespro.com/blog/pgsql/5972351",
+      "title": "PostgreSQL 18: part 5 or CommitFest 2025-03",
+      "domain": "postgrespro.com",
+      "score": 0.375
+    },
+    {
+      "number": 7,
+      "doc_id": "d38",
+      "url": "https://neon.com/postgresql/18-new-features",
+      "title": "PostgreSQL 18 New Features: What's New and Why It Matters - Neon",
+      "domain": "neon.com",
+      "score": 0.37
+    },
+    {
+      "number": 8,
+      "doc_id": "d4",
+      "url": "https://postgresql.org/about/news/postgresql-18-released-3142",
+      "title": "PostgreSQL 18 Released!",
+      "domain": "postgresql.org",
+      "score": 0.7125
+    },
+    {
+      "number": 9,
+      "doc_id": "d8",
+      "url": "https://severalnines.com/blog/postgresql-18-upgrades-for-ai-era-workloads-and-operations",
+      "title": "PostgreSQL 18 Upgrades for AI-Era Workloads and Operations",
+      "domain": "severalnines.com",
+      "score": 0.4
+    },
+    {
+      "number": 10,
+      "doc_id": "d12",
+      "url": "https://postgresql.org/about/news/postgresql-17-released-2936",
+      "title": "PostgreSQL: PostgreSQL 17 Released!",
+      "domain": "postgresql.org",
+      "score": 0.705
+    }
+  ],
+  "findings": {
+    "k1": {
+      "statement": "PostgreSQL 17 introduces support for incremental backups, which captures only the changes made since the last backup rather than a full database copy.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.4028,
+      "sources": [
+        1,
+        2
+      ]
+    },
+    "k2": {
+      "statement": "PostgreSQL 17 includes functionality to transform JSON data into relational tables, simplifying JSON processing within SQL environments.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.4028,
+      "sources": [
+        1,
+        2
+      ]
+    },
+    "k3": {
+      "statement": "PostgreSQL 17 improves query performance for Common Table Expressions (CTEs) and UNION queries by leveraging statistics from earlier parts of the query in the execution plan.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.4028,
+      "sources": [
+        1,
+        2
+      ]
+    },
+    "k4": {
+      "statement": "PostgreSQL 17 includes a new internal memory structure for the vacuum process that consumes up to 20x less memory.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.564,
+      "sources": [
+        10
+      ]
+    },
+    "k5": {
+      "statement": "High concurrency workloads in PostgreSQL 17 may see up to 2x better write throughput due to improvements with write-ahead log (WAL) processing.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.564,
+      "sources": [
+        10
+      ]
+    },
+    "k6": {
+      "statement": "PostgreSQL 17 adds AVX-512 SIMD support for the bit_count function.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.564,
+      "sources": [
+        10
+      ]
+    },
+    "k7": {
+      "statement": "PostgreSQL 17 introduces the JSON_TABLE command to convert JSON data into a standard PostgreSQL table.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.564,
+      "sources": [
+        10
+      ]
+    },
+    "k8": {
+      "statement": "PostgreSQL 17 introduced a built-in, immutable collation provider that uses UTF-8 encoding.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.564,
+      "sources": [
+        10
+      ]
+    },
+    "k9": {
+      "statement": "Upgrades from PostgreSQL 17 allow users to retain logical replication slots, avoiding the need to re-synchronize data.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.564,
+      "sources": [
+        10
+      ]
+    },
+    "k10": {
+      "statement": "PostgreSQL 17 introduces the pg_createsubscriber tool to speed up the initial data copy process for logical replication.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.3807,
+      "sources": [
+        2
+      ]
+    },
+    "k11": {
+      "statement": "PostgreSQL 17 introduced a new memory management system for VACUUM that reduces memory consumption and improves vacuuming performance.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.632,
+      "sources": []
+    },
+    "k12": {
+      "statement": "The COPY command in PostgreSQL 17 includes a new option, ON_ERROR ignore, allowing operations to continue despite errors.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.632,
+      "sources": []
+    },
+    "k13": {
+      "statement": "PostgreSQL 17 introduced pg_createsubscriber, a utility to create logical replicas from physical standbys.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.632,
+      "sources": []
+    },
+    "k14": {
+      "statement": "PostgreSQL 17 added support for incremental backups via pg_basebackup.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.632,
+      "sources": []
+    },
+    "k15": {
+      "statement": "PostgreSQL 17 provides query performance improvements for sequential reads using streaming I/O and write throughput under high concurrency.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.632,
+      "sources": []
+    },
+    "k16": {
+      "statement": "PostgreSQL 17 overhauled vacuum memory management, reducing memory usage by up to 20x.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.276,
+      "sources": []
+    },
+    "k17": {
+      "statement": "PostgreSQL 17 supports up to 2x higher write throughput for high-concurrency workloads due to WAL improvements.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.276,
+      "sources": []
+    },
+    "k18": {
+      "statement": "PostgreSQL 17 introduced the JSON_TABLE function to transform JSON data into relational tables on the fly.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.276,
+      "sources": []
+    },
+    "k19": {
+      "statement": "PostgreSQL 17 added logical replication failover support, allowing replication to continue automatically during primary failover.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.276,
+      "sources": []
+    },
+    "k20": {
+      "statement": "PostgreSQL 17 introduced the pg_maintain role and MAINTAIN privilege to allow non-superusers to perform maintenance tasks.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.276,
+      "sources": []
+    },
+    "k21": {
+      "statement": "Preserved logical replication slots in PostgreSQL 17 allow logical replicas to remain connected during future major version upgrades including 17 to 18.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.276,
+      "sources": []
+    },
+    "k22": {
+      "statement": "PostgreSQL 18 introduces skip scans for multi-column indexes, allowing indexes to be used even when the query does not filter on the first column.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.326,
+      "sources": []
+    },
+    "k23": {
+      "statement": "Generated columns in PostgreSQL 18 default to virtual, meaning they are calculated on read rather than stored on disk.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.326,
+      "sources": []
+    },
+    "k24": {
+      "statement": "PostgreSQL 18 introduces OAuth 2.0 authentication support.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.326,
+      "sources": []
+    },
+    "k25": {
+      "statement": "New PostgreSQL 18 clusters enable page checksums by default.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.326,
+      "sources": []
+    },
+    "k26": {
+      "statement": "PostgreSQL 18 was released by October 2, 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.326,
+      "sources": []
+    },
+    "k27": {
+      "statement": "The MD5 password authentication method is deprecated in PostgreSQL 18.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.326,
+      "sources": []
+    },
+    "k28": {
+      "statement": "PostgreSQL 18 was released on September 25, 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.292,
+      "sources": [
+        3
+      ]
+    },
+    "k29": {
+      "statement": "PostgreSQL 18 introduces native support for UUIDv7 via the uuidv7() function.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.7196,
+      "sources": [
+        3,
+        4
+      ]
+    },
+    "k30": {
+      "statement": "MD5 password authentication is deprecated in PostgreSQL 18 in favor of SCRAM-SHA-256 and is planned for removal in the next major release.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.292,
+      "sources": [
+        3
+      ]
+    },
+    "k31": {
+      "statement": "PostgreSQL 18 requires either a dump/restore or pg_upgrade for migration from earlier versions.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.292,
+      "sources": [
+        3
+      ]
+    },
+    "k32": {
+      "statement": "PostgreSQL 18 introduces an asynchronous I/O (AIO) subsystem, supporting sequential scans, bitmap heap scans, and vacuum, which can improve throughput by issuing multiple concurrent I/O requests.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.57,
+      "sources": [
+        8
+      ]
+    },
+    "k33": {
+      "statement": "PostgreSQL 18 enables planner statistics to be retained through a major version upgrade, preventing query performance degradation on busy systems.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.57,
+      "sources": [
+        8
+      ]
+    },
+    "k34": {
+      "statement": "PostgreSQL 18 deprecates md5 password authentication.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.57,
+      "sources": [
+        5,
+        8
+      ]
+    },
+    "k35": {
+      "statement": "Databases initialized with initdb in PostgreSQL 18 have page checksums enabled by default, which requires specifying --no-data-checksums when using pg_upgrade for clusters without them.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.57,
+      "sources": [
+        8
+      ]
+    },
+    "k36": {
+      "statement": "Major upgrades of PostgreSQL require a dump/reload of the database or the use of the pg_upgrade application because data directory contents cannot be maintained in a backward compatible way.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.504,
+      "sources": []
+    },
+    "k37": {
+      "statement": "Minor release upgrades in PostgreSQL are performed by stopping the database server, installing updated binaries, and restarting the server, without needing a dump and restore.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.504,
+      "sources": []
+    },
+    "k38": {
+      "statement": "The PostgreSQL Global Development Group supports a major version for 5 years after its initial release.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.504,
+      "sources": []
+    },
+    "k39": {
+      "statement": "PostgreSQL 18 introduces an asynchronous I/O (AIO) subsystem to improve performance for operations like sequential scans, bitmap heap scans, and vacuums.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.604,
+      "sources": [
+        4,
+        5
+      ]
+    },
+    "k40": {
+      "statement": "PostgreSQL 18 changes the default behavior of initdb to enable data checksums.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.604,
+      "sources": [
+        4
+      ]
+    },
+    "k41": {
+      "statement": "The pg_upgrade tool in PostgreSQL 18 now retains optimizer statistics.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.57,
+      "sources": [
+        5
+      ]
+    },
+    "k42": {
+      "statement": "PostgreSQL 18 disallows the use of the `\\.` sequence as an end-of-file marker when reading CSV files via COPY FROM.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.57,
+      "sources": [
+        5
+      ]
+    },
+    "k43": {
+      "statement": "initdb defaults to enabling data checksums in PostgreSQL 18; pg_upgrade requires matching checksum settings between the old and new cluster.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.699,
+      "sources": [
+        5,
+        6
+      ]
+    },
+    "k44": {
+      "statement": "PostgreSQL 18 introduces an Asynchronous I/O (AIO) subsystem to improve read-heavy scan performance and reduce maintenance I/O slowdowns.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.32,
+      "sources": [
+        9
+      ]
+    },
+    "k45": {
+      "statement": "PostgreSQL 18 enables data checksums by default for new clusters initialized with initdb.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.32,
+      "sources": [
+        9
+      ]
+    },
+    "k46": {
+      "statement": "PostgreSQL 18 introduces support for OAuth authentication.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.32,
+      "sources": [
+        9
+      ]
+    },
+    "k47": {
+      "statement": "Data checksum settings must match between the source and target clusters when using pg_upgrade in PostgreSQL 18.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.32,
+      "sources": [
+        9
+      ]
+    },
+    "k48": {
+      "statement": "SaaS teams must verify that all database extensions, such as pgvector or PostGIS, are compatible with PostgreSQL 18 before upgrading.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.32,
+      "sources": [
+        9
+      ]
+    },
+    "k49": {
+      "statement": "PostgreSQL 18 introduces asynchronous input/output capabilities.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.5072,
+      "sources": [
+        6,
+        7
+      ]
+    },
+    "k50": {
+      "statement": "The psql client now supports a pipeline mode, allowing multiple SQL commands to be sent without waiting for each to complete.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.3,
+      "sources": [
+        6
+      ]
+    },
+    "k51": {
+      "statement": "PostgreSQL 18 adds a --swap option to pg_upgrade, which moves data directories instead of copying files to improve transfer speed.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.3,
+      "sources": [
+        6
+      ]
+    },
+    "k52": {
+      "statement": "For backward compatibility in pg_dump, basic statistics are not dumped by default.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.3,
+      "sources": [
+        6
+      ]
+    },
+    "k53": {
+      "statement": "The pg_upgrade --swap option makes the old cluster unusable as soon as the catalog migration process begins, necessitating a backup.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.3,
+      "sources": [
+        6
+      ]
+    },
+    "k54": {
+      "statement": "PostgreSQL 18 introduces pg_combinebackup --link, which creates hard links in the full backup pointing to the files in source backups to save disk space and time.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.3,
+      "sources": [
+        6
+      ]
+    },
+    "k55": {
+      "statement": "PostgreSQL 18 enables data checksums by default for new clusters.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.296,
+      "sources": [
+        7
+      ]
+    },
+    "k56": {
+      "statement": "MD5 password authentication is deprecated in PostgreSQL 18 in favor of SCRAM-SHA-256.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.296,
+      "sources": [
+        7
+      ]
+    },
+    "k57": {
+      "statement": "PostgreSQL 18 major version upgrades include statistics preservation, eliminating the need for post-upgrade ANALYZE operations.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.296,
+      "sources": [
+        7
+      ]
+    },
+    "k58": {
+      "statement": "PostgreSQL 18 introduces an asynchronous I/O framework that enables parallel execution of multiple asynchronous prefetch operations to reduce query waiting overhead.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.32,
+      "sources": []
+    },
+    "k59": {
+      "statement": "PostgreSQL 18 implements Index Skip Scan, allowing multi-column B-tree indexes to be used for queries that only reference second or subsequent columns with equality constraints, reducing index reads.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.32,
+      "sources": []
+    },
+    "k60": {
+      "statement": "PostgreSQL 18 introduces virtual generated columns, which are table columns that are dynamically calculated during query time rather than stored on disk.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.32,
+      "sources": []
+    },
+    "k61": {
+      "statement": "PostgreSQL 18 supports UUIDv7, which integrates a timestamp into the high-order bits to provide time-ordered uniqueness.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.32,
+      "sources": []
+    },
+    "k62": {
+      "statement": "PostgreSQL 18 introduces new configuration parameters (GUCs) for asynchronous I/O management, including io_method (worker, io_uring, sync) and io_max_concurrency.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.32,
+      "sources": []
+    },
+    "k63": {
+      "statement": "Virtual generated columns in PostgreSQL 18 have several limitations, including no support for unique constraints, indexes, foreign keys, or logical replication.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.32,
+      "sources": []
+    },
+    "k64": {
+      "statement": "Using the io_uring backend for asynchronous I/O in PostgreSQL 18 requires a relatively new Linux kernel version.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.32,
+      "sources": []
+    },
+    "k65": {
+      "statement": "PostgreSQL 17 introduces a new memory management system for VACUUM that reduces memory usage and improves vacuuming performance.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.52,
+      "sources": []
+    },
+    "k66": {
+      "statement": "PostgreSQL 17 allows pg_upgrade to preserve logical replication slots on publishers and full subscription state on subscribers, enabling logical replication to continue after an upgrade without re-synchronization.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.52,
+      "sources": []
+    },
+    "k67": {
+      "statement": "PostgreSQL 17 introduces the new pg_createsubscriber utility to create logical replicas from physical standbys.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.52,
+      "sources": []
+    },
+    "k68": {
+      "statement": "In PostgreSQL 17, functions used by expression indexes and materialized views that reference non-default schemas must specify a search path.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.52,
+      "sources": []
+    },
+    "k69": {
+      "statement": "The feature db_user_namespace was removed in PostgreSQL 17.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.52,
+      "sources": []
+    },
+    "k70": {
+      "statement": "The VACUUM process has a new internal data structure resulting in up to a 20x memory reduction and improved completion times.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.4,
+      "sources": []
+    },
+    "k71": {
+      "statement": "PostgreSQL 17 supports parallel index builds for BRIN indexes.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.4,
+      "sources": []
+    },
+    "k72": {
+      "statement": "PostgreSQL 17 adds support for SQL/JSON standard features including JSON_TABLE and various SQL/JSON constructor and query functions.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.4,
+      "sources": []
+    },
+    "k73": {
+      "statement": "The MERGE command in PostgreSQL 17 now supports the RETURNING clause.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.218,
+      "sources": []
+    },
+    "k74": {
+      "statement": "PostgreSQL 17 introduced the JSON_TABLE functionality to convert JSON data into a relational table format.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.218,
+      "sources": []
+    },
+    "k75": {
+      "statement": "PostgreSQL 17 removed support for the AIX operating system.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.218,
+      "sources": []
+    },
+    "k76": {
+      "statement": "PostgreSQL 17 transitioned its build system from Autotools to the Meson build system.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.218,
+      "sources": []
+    },
+    "k77": {
+      "statement": "PostgreSQL 18 introduced incompatibilities regarding time zone abbreviation handling, MD5 password deprecation, VACUUM/ANALYZE inheritance behavior, and COPY FROM end-of-file handling.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.36,
+      "sources": []
+    },
+    "k78": {
+      "statement": "PostgreSQL 18 allows parallelized pre-upgrade checks using 'pg_upgrade --jobs' and faster directory swapping during upgrades using 'pg_upgrade --swap'.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.36,
+      "sources": []
+    },
+    "k79": {
+      "statement": "Upgrading to PostgreSQL 18 requires re-running baseline benchmarks to account for new asynchronous I/O performance characteristics and potential new failure modes.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.36,
+      "sources": []
+    },
+    "k80": {
+      "statement": "For PostgreSQL 18 or later, extensions must be installed into the 'Application Support' directory to ensure compatibility with Postgres.app updates.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.28,
+      "sources": []
+    },
+    "k81": {
+      "statement": "PostgreSQL 18 introduces protocol version 3.2, which maintains backward compatibility with protocol version 3.0 (implemented in PostgreSQL 7.4 and later).",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.584,
+      "sources": []
+    },
+    "k82": {
+      "statement": "PostgreSQL 18 introduces the 'pgcrypto.builtin_crypto_enabled' parameter with 'on', 'off', and 'fips' settings to control built-in cryptographic function usage.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.28,
+      "sources": []
+    },
+    "k83": {
+      "statement": "PostgreSQL 18 wire protocol version 3.2 is backward compatible with clients using protocol version 3.0.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.28,
+      "sources": []
+    },
+    "k84": {
+      "statement": "PostgreSQL 18 server supports protocol version 3.2, but the standard client library (libpq) continues to default to protocol version 3.0.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.28,
+      "sources": []
+    },
+    "k85": {
+      "statement": "The io_uring I/O method requires a Linux kernel version 5.1 or later.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.3,
+      "sources": []
+    },
+    "k86": {
+      "statement": "PostgreSQL 18 must be compiled with --with-liburing support to enable the io_uring asynchronous I/O method.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.3,
+      "sources": []
+    },
+    "k87": {
+      "statement": "Changing the io_method configuration parameter requires a server restart.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.3,
+      "sources": []
+    },
+    "k88": {
+      "statement": "The default value for effective_io_concurrency in PostgreSQL 18 is 16, increased from 1 in PostgreSQL 17.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.26,
+      "sources": []
+    },
+    "k89": {
+      "statement": "PostgreSQL 18 defaults to the 'worker' I/O method for asynchronous operations, replacing the strictly synchronous approach of PostgreSQL 17.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.26,
+      "sources": []
+    },
+    "k90": {
+      "statement": "Using the 'io_uring' I/O method requires a Linux kernel version of 5.1 or newer.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.26,
+      "sources": []
+    },
+    "k91": {
+      "statement": "To use the 'io_uring' I/O method, the PostgreSQL binary must be compiled with --with-liburing support.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.26,
+      "sources": []
+    },
+    "k92": {
+      "statement": "High io_max_concurrency values may lead to memory pressure as async I/O consumes kernel memory for buffers and tracking.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.26,
+      "sources": []
+    },
+    "k93": {
+      "statement": "The 'worker' I/O method spawns dedicated worker processes that may require increasing system process limits.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.26,
+      "sources": []
+    },
+    "k94": {
+      "statement": "Users are advised to evaluate current system requirements in preparation for the PostgreSQL 18.0 release.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.192,
+      "sources": []
+    },
+    "k95": {
+      "statement": "The use of IO_uring within PostgreSQL requires a modern Linux setup.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.192,
+      "sources": []
+    }
+  },
+  "metadata": {
+    "config_hash": "489c5300e6b5b6ebc534e9056dad55767be79449c78e05dcdebfd962b3a2c072",
+    "models_used": {
+      "reasoning": "gemini:gemini-3.8-flash",
+      "fast": "gemini:gemini-3.1-flash-lite",
+      "embedding": "gemini-embedding-001"
+    },
+    "prompt_versions": {
+      "analyze_query": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "a727cb4344e9",
+        "label": "production"
+      },
+      "assess_coverage": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "e846c73d92bf",
+        "label": "production"
+      },
+      "evaluate_sources": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "b548bfeecc30",
+        "label": "production"
+      },
+      "extract_claims": {
+        "version": "4",
+        "source": "langfuse",
+        "content_hash": "7bb08d1d31b9",
+        "label": "production"
+      },
+      "generate_queries": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "c529f97cebe9",
+        "label": "production"
+      },
+      "judge_contradictions": {
+        "version": "5",
+        "source": "langfuse",
+        "content_hash": "726f52b7aa1e",
+        "label": "production"
+      },
+      "plan": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "1ec8bb17ccf2",
+        "label": "production"
+      },
+      "synthesize": {
+        "version": "3",
+        "source": "langfuse",
+        "content_hash": "94db375c9234",
+        "label": "production"
+      },
+      "validate_claims": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "68ed4e47da0e",
+        "label": "production"
+      },
+      "verify_citations": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "32456e1a0b5a",
+        "label": "production"
+      }
+    },
+    "search_providers": [
+      "tavily"
+    ],
+    "llm_providers": [
+      "gemini",
+      "openai"
+    ],
+    "stop_reason": "max_iterations",
+    "stop_detail": "max_iterations=4 reached",
+    "iterations": 4,
+    "budget": {
+      "iteration": 4,
+      "searches": 20,
+      "searches_left": 25,
+      "llm_calls": 85,
+      "tokens_in": 588349,
+      "tokens_out": 104465,
+      "cost_usd": 0.490029,
+      "elapsed_seconds": 202.95
+    },
+    "gate_verdict": "pass_with_warnings",
+    "counters": {
+      "fetch_failures": 1,
+      "duplicate_urls": 51,
+      "claims_need_fresh_confirmation": 20,
+      "claims_validation_unsupported": 7,
+      "claims_rejected_quote": 23,
+      "extraction_failures": 0,
+      "claims_rejected_injection": 0,
+      "sentences_dropped_by_verifier": 0
+    },
+    "skills": []
+  }
+}

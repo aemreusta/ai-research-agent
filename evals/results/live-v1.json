@@ -1,0 +1,329 @@
+{
+  "mode": "live",
+  "elapsed_seconds": 28.49,
+  "baseline": {
+    "cases": 20,
+    "true_positives": 9,
+    "false_positives": 11,
+    "false_negatives": 0,
+    "precision": 0.45,
+    "recall": 1.0,
+    "accuracy": 0.45
+  },
+  "cases": [
+    {
+      "id": "transition-dropped",
+      "category": "conditions",
+      "expected": false,
+      "baseline": true,
+      "expected_entailment": false,
+      "predicted": false,
+      "entailment": false,
+      "availability": true,
+      "freshness": "current",
+      "reason": "The claim erroneously generalizes the obligation to 'All systems', while the source document restricts this deadline specifically to systems placed on the market before 2 August 2026."
+    },
+    {
+      "id": "transition-preserved",
+      "category": "conditions",
+      "expected": true,
+      "baseline": true,
+      "expected_entailment": true,
+      "predicted": true,
+      "entailment": true,
+      "availability": true,
+      "freshness": "current",
+      "reason": "The claim text is identical to the provided source document, which states the specific deadline for transparency obligations for the defined systems."
+    },
+    {
+      "id": "exemption-and",
+      "category": "conditions",
+      "expected": true,
+      "baseline": true,
+      "expected_entailment": true,
+      "predicted": true,
+      "entailment": true,
+      "availability": true,
+      "freshness": "current",
+      "reason": "The claim text is a direct match with the source document, preserving the AND condition and the specific thresholds provided."
+    },
+    {
+      "id": "exemption-or",
+      "category": "conditions",
+      "expected": false,
+      "baseline": true,
+      "expected_entailment": false,
+      "predicted": false,
+      "entailment": false,
+      "availability": true,
+      "freshness": "current",
+      "reason": "The source document specifies an 'AND' condition (both requirements must be met), while the claim incorrectly uses an 'OR' condition, significantly broadening the exemption criteria."
+    },
+    {
+      "id": "proposal-proposal",
+      "category": "legal_status",
+      "expected": true,
+      "baseline": true,
+      "expected_entailment": true,
+      "predicted": true,
+      "entailment": true,
+      "availability": true,
+      "freshness": "not_time_sensitive",
+      "reason": "The source document explicitly confirms the Commission proposed a delay until 2027."
+    },
+    {
+      "id": "proposal-law",
+      "category": "legal_status",
+      "expected": false,
+      "baseline": true,
+      "expected_entailment": false,
+      "predicted": false,
+      "entailment": false,
+      "availability": true,
+      "freshness": "current",
+      "reason": "The source explicitly states that the legislature has not adopted the proposal to delay obligations until 2027, making the claim of a delay false."
+    },
+    {
+      "id": "jurisdiction-preserved",
+      "category": "scope",
+      "expected": true,
+      "baseline": true,
+      "expected_entailment": true,
+      "predicted": true,
+      "entailment": true,
+      "availability": true,
+      "freshness": "current",
+      "reason": "The claim accurately reflects the registration mandate for domestic firms and the exclusion of foreign firms as stated in the source document. It is time-sensitive as it constitutes a current regulatory obligation."
+    },
+    {
+      "id": "jurisdiction-lost",
+      "category": "scope",
+      "expected": false,
+      "baseline": true,
+      "expected_entailment": false,
+      "predicted": false,
+      "entailment": false,
+      "availability": true,
+      "freshness": "current",
+      "reason": "The claim inaccurately generalizes the registration requirement to 'all firms,' whereas the source explicitly restricts the requirement to domestic firms and excludes foreign firms."
+    },
+    {
+      "id": "negation-negated",
+      "category": "negation",
+      "expected": true,
+      "baseline": true,
+      "expected_entailment": true,
+      "predicted": true,
+      "entailment": true,
+      "availability": true,
+      "freshness": "not_time_sensitive",
+      "reason": "The claim is a direct and accurate statement of the findings reported in the source document."
+    },
+    {
+      "id": "negation-reversed",
+      "category": "negation",
+      "expected": false,
+      "baseline": true,
+      "expected_entailment": false,
+      "predicted": false,
+      "entailment": false,
+      "availability": true,
+      "freshness": "not_time_sensitive",
+      "reason": "The source document explicitly states the opposite: the study did not establish that the treatment reduced mortality."
+    },
+    {
+      "id": "forecast-forecast",
+      "category": "forecast",
+      "expected": true,
+      "baseline": true,
+      "expected_entailment": true,
+      "predicted": true,
+      "entailment": true,
+      "availability": true,
+      "freshness": "current",
+      "reason": "The claim text matches the source text exactly, and the source explicitly states the forecast for 2028."
+    },
+    {
+      "id": "forecast-actual",
+      "category": "forecast",
+      "expected": false,
+      "baseline": true,
+      "expected_entailment": false,
+      "predicted": false,
+      "entailment": false,
+      "availability": true,
+      "freshness": "current",
+      "reason": "The source document specifies this is a forecast for 2028, not a measured historical fact."
+    },
+    {
+      "id": "stale-current",
+      "category": "freshness",
+      "expected": false,
+      "baseline": true,
+      "expected_entailment": true,
+      "predicted": false,
+      "entailment": true,
+      "availability": true,
+      "freshness": "historical",
+      "reason": "The source document, published in August 2026, confirms the 25 million TL threshold established in March 2021 remains the current rule."
+    },
+    {
+      "id": "fresh-current",
+      "category": "freshness",
+      "expected": true,
+      "baseline": true,
+      "expected_entailment": true,
+      "predicted": true,
+      "entailment": true,
+      "availability": true,
+      "freshness": "current",
+      "reason": "The source document explicitly confirms the 100 million TL reporting threshold as of 1 August 2026, which is active during the requested 2026 time scope."
+    },
+    {
+      "id": "undated-current",
+      "category": "freshness",
+      "expected": false,
+      "baseline": true,
+      "expected_entailment": true,
+      "predicted": false,
+      "entailment": true,
+      "availability": true,
+      "freshness": "undated",
+      "reason": "The claim directly matches the reporting threshold stated in the source document, and as this is a legal threshold valid in 2026, it is time-sensitive."
+    },
+    {
+      "id": "historical-scope",
+      "category": "freshness",
+      "expected": true,
+      "baseline": true,
+      "expected_entailment": true,
+      "predicted": true,
+      "entailment": true,
+      "availability": true,
+      "freshness": "current",
+      "reason": "The claim accurately reflects the historical fact stated in the source document regarding the threshold in March 2021."
+    },
+    {
+      "id": "undated-definition",
+      "category": "negative_control",
+      "expected": true,
+      "baseline": true,
+      "expected_entailment": true,
+      "predicted": true,
+      "entailment": true,
+      "availability": true,
+      "freshness": "not_time_sensitive",
+      "reason": "The claim is an exact, verbatim reproduction of the definition provided in the source document."
+    },
+    {
+      "id": "threshold-turkish-condition",
+      "category": "conditions",
+      "expected": false,
+      "baseline": true,
+      "expected_entailment": false,
+      "predicted": false,
+      "entailment": false,
+      "availability": true,
+      "freshness": "current",
+      "reason": "The source document specifies that notification occurs within 72 hours only if the breach poses a risk to individuals' rights. The claim incorrectly states this applies to 'all' breaches, omitting the critical condition of risk."
+    },
+    {
+      "id": "real-c82",
+      "category": "real_regression",
+      "expected": false,
+      "baseline": true,
+      "expected_entailment": true,
+      "predicted": false,
+      "entailment": true,
+      "availability": true,
+      "freshness": "historical",
+      "reason": "The source document confirms that these specific categories of data controllers are subject to the registration obligation by explicitly discussing the extension of their registration deadlines."
+    },
+    {
+      "id": "real-c36",
+      "category": "real_regression",
+      "expected": false,
+      "baseline": true,
+      "expected_entailment": false,
+      "predicted": true,
+      "entailment": true,
+      "availability": true,
+      "freshness": "current",
+      "reason": "The source document explicitly states that Article 50 becomes generally applicable on 2 August 2026, but the AI Omnibus postpones the specific transparency obligations for GPAI models generating synthetic content (Article 50(2)) to 2 December 2026."
+    }
+  ],
+  "improved": {
+    "cases": 20,
+    "true_positives": 9,
+    "false_positives": 1,
+    "false_negatives": 0,
+    "precision": 0.9,
+    "recall": 1.0,
+    "accuracy": 0.95
+  },
+  "availability": 1.0,
+  "entailment_accuracy": 0.95,
+  "cost_usd": 0.013474499999999999,
+  "models": {
+    "fast": "gemini:gemini-3.1-flash-lite"
+  },
+  "prompt_versions": {
+    "analyze_query": {
+      "version": "1",
+      "source": "yaml",
+      "content_hash": "a727cb4344e9"
+    },
+    "assess_coverage": {
+      "version": "1",
+      "source": "yaml",
+      "content_hash": "e846c73d92bf"
+    },
+    "evaluate_sources": {
+      "version": "1",
+      "source": "yaml",
+      "content_hash": "b548bfeecc30"
+    },
+    "extract_claims": {
+      "version": "2",
+      "source": "yaml",
+      "content_hash": "b57eae087863"
+    },
+    "generate_queries": {
+      "version": "1",
+      "source": "yaml",
+      "content_hash": "c529f97cebe9"
+    },
+    "judge_contradictions": {
+      "version": "3",
+      "source": "yaml",
+      "content_hash": "726f52b7aa1e"
+    },
+    "plan": {
+      "version": "1",
+      "source": "yaml",
+      "content_hash": "887f659cc5f7"
+    },
+    "synthesize": {
+      "version": "3",
+      "source": "yaml",
+      "content_hash": "94db375c9234"
+    },
+    "validate_claims": {
+      "version": "1",
+      "source": "yaml",
+      "content_hash": "b0e8cb2651a3"
+    },
+    "verify_citations": {
+      "version": "2",
+      "source": "yaml",
+      "content_hash": "32456e1a0b5a"
+    }
+  },
+  "thresholds": {
+    "precision": 0.95,
+    "recall": 0.8,
+    "availability": 1.0,
+    "entailment_accuracy": 0.9
+  },
+  "passed": false
+}

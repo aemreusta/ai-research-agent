@@ -1,0 +1,1180 @@
+{
+  "question": "As of September 2026, how do GDPR and Türkiye's KVKK differ on personal data breach notification timing, affected parties and exceptions? Answer in English, and distinguish regulator notification from notifying affected people.",
+  "language": "en",
+  "title": "Comparison of Personal Data Breach Notification Rules: GDPR vs. KVKK",
+  "banner": null,
+  "sections": [
+    {
+      "key": "summary",
+      "title": "Summary",
+      "sentences": [
+        {
+          "text": "For regulatory notifications, single sources report that both GDPR Article 33 and KVKK secondary procedures apply a 72-hour notification timeframe from awareness, although GDPR explicitly exempts breaches unlikely to result in a risk whereas KVKK Article 12/5 statutorily mandates notification as soon as possible when data is obtained unlawfully.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k27",
+            "k63",
+            "k73",
+            "k76",
+            "k78",
+            "k80"
+          ],
+          "sources": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "text": "When notifying affected individuals, single sources note that both regimes activate obligations when a breach poses a high risk to rights and freedoms, with GDPR requiring notice without undue delay and KVKK requiring notice as soon as possible.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k28",
+            "k37",
+            "k45",
+            "k54",
+            "k77",
+            "k81",
+            "k83"
+          ],
+          "sources": [
+            1,
+            4,
+            5,
+            6,
+            7,
+            8
+          ]
+        },
+        {
+          "text": "Single sources also indicate that both frameworks provide comparable exceptions to individual notification, including technical protections like encryption, subsequent risk mitigation, or disproportionate effort replaced by public communication.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k29",
+            "k30",
+            "k31",
+            "k46",
+            "k71"
+          ],
+          "sources": [
+            1,
+            7,
+            9
+          ]
+        },
+        {
+          "text": "1 sentence(s) removed for insufficient evidence - see gate_result.json",
+          "kind": "meta",
+          "labels": [
+            "gate_note"
+          ],
+          "findings": [],
+          "sources": []
+        }
+      ]
+    },
+    {
+      "key": "key_findings",
+      "title": "Key Findings",
+      "sentences": [
+        {
+          "text": "Under Article 12/5 of Law No. 6698, a data controller must notify the Board and affected persons as soon as possible if processed personal data is obtained unlawfully, with breach response procedures established by Board Decision 2019/10 dated 24.01.2019, according to single sources.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k9",
+            "k24",
+            "k63",
+            "k78"
+          ],
+          "sources": [
+            2,
+            4,
+            10,
+            11
+          ]
+        },
+        {
+          "text": "A single source reports that under GDPR Article 33, supervisory authorities must be notified within 72 hours of awareness unless the breach is unlikely to result in a risk to individuals' rights and freedoms.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k27",
+            "k73"
+          ],
+          "sources": [
+            1,
+            3
+          ]
+        },
+        {
+          "text": "For KVKK regulator notification, single sources report a requirement to notify the Board within 72 hours of learning of or detecting the breach, and controllers may request an extension within those 72 hours if more time is needed to determine the breach's scope.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k44",
+            "k76",
+            "k80",
+            "k85"
+          ],
+          "sources": [
+            4,
+            5,
+            7
+          ]
+        },
+        {
+          "text": "Under GDPR Article 34, communication to data subjects must occur without undue delay in clear and plain language if the breach is likely to result in a high risk to natural persons' rights and freedoms, as reported by single sources.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k28",
+            "k37",
+            "k54",
+            "k70"
+          ],
+          "sources": [
+            1,
+            6,
+            8,
+            9
+          ]
+        },
+        {
+          "text": "For KVKK, single sources state that individual notification is required as soon as possible via email, SMS, post, or website announcement when the breach creates a high risk for data subjects' rights and freedoms.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k45",
+            "k77",
+            "k81",
+            "k83"
+          ],
+          "sources": [
+            4,
+            5,
+            7
+          ]
+        },
+        {
+          "text": "Both frameworks exempt controllers from directly notifying data subjects if the data was protected by technical measures like encryption, if subsequent actions ensure high risk is no longer likely, or if direct communication involves disproportionate effort requiring public announcements, according to single sources.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k29",
+            "k30",
+            "k31",
+            "k46",
+            "k55",
+            "k56",
+            "k57",
+            "k71"
+          ],
+          "sources": [
+            1,
+            7,
+            8,
+            9
+          ]
+        },
+        {
+          "text": "Single sources report that supervisory authorities under both GDPR and KVKK have the authority to order controllers to inform individuals or to publicly announce the breach.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k58",
+            "k64",
+            "k72",
+            "k74",
+            "k79"
+          ],
+          "sources": [
+            2,
+            3,
+            4,
+            8,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "key": "conflicting_or_uncertain",
+      "title": "Conflicting / Uncertain Information",
+      "sentences": []
+    },
+    {
+      "key": "conclusion",
+      "title": "Conclusion",
+      "sentences": [
+        {
+          "text": "Both GDPR and KVKK align on a 72-hour target for notifying authorities and set a high-risk trigger for notifying affected persons, with GDPR using 'without undue delay' and KVKK specifying 'as soon as possible', according to single sources.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k27",
+            "k28",
+            "k63",
+            "k76",
+            "k77"
+          ],
+          "sources": [
+            1,
+            2,
+            4
+          ]
+        },
+        {
+          "text": "Exceptions to individual notice under both frameworks similarly center on strong technical protections, swift mitigation, or disproportionate effort paired with public notice, based on single-source findings.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k31",
+            "k46",
+            "k57",
+            "k71"
+          ],
+          "sources": [
+            1,
+            7,
+            8,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "key": "known_gaps",
+      "title": "Known Gaps",
+      "sentences": [
+        {
+          "text": "6698 sayılı KVKK ve Kurul rehberleri çerçevesinde veri ihlali bildiriminde risk eşiği, Kurulun kamuoyuna duyurma yetkisi ve mevzuattaki bildirim muafiyetleri nelerdir? - not enough independent or primary sources were found (bildirim tetikleyici risk eşiği)",
+          "kind": "meta",
+          "labels": [
+            "gap:s2"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "Under GDPR Articles 33 and 34, what are the notification timelines, recipient definitions, and risk thresholds for notifying supervisory authorities versus data subjects? - not enough independent or primary sources were found (content distinction)",
+          "kind": "meta",
+          "labels": [
+            "gap:s3"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "57 candidate claim(s) withheld: source support, conditions or current applicability could not be confirmed; see the evidence ledger.",
+          "kind": "meta",
+          "labels": [],
+          "findings": [],
+          "sources": []
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "number": 1,
+      "doc_id": "d100",
+      "url": "https://orbiqhq.com/eu-regulations/gdpr-article-34",
+      "title": "GDPR Article 34: Communicating a Breach to Data Subjects",
+      "domain": "orbiqhq.com",
+      "score": 0.4425
+    },
+    {
+      "number": 2,
+      "doc_id": "d156",
+      "url": "https://kvkk.gov.tr/Icerik/8949/kamuoyu-duyurusu-veri-ihlali-bildirimi-elektrik-muhendisleri-odasi",
+      "title": "Kamuoyu Duyurusu (Veri İhlali Bildirimi) – Elektrik Mühendisleri Odası",
+      "domain": "kvkk.gov.tr",
+      "score": 0.825
+    },
+    {
+      "number": 3,
+      "doc_id": "d183",
+      "url": "https://edpb.europa.eu/system/files/2023-04/edpb_guidelines_202209_personal_data_breach_notification_v2.0_en.pdf",
+      "title": "Guidelines 9/2022 on personal data breach notification under ...",
+      "domain": "edpb.europa.eu",
+      "score": 0.885
+    },
+    {
+      "number": 4,
+      "doc_id": "d67",
+      "url": "https://bilalalyar.av.tr/veri-ihlali-bildirim-rehberi-2026",
+      "title": "Veri İhlali Bildirim Rehberi 2026 | KVKK 72 Saat, Form ve ...",
+      "domain": "bilalalyar.av.tr",
+      "score": 0.3575
+    },
+    {
+      "number": 5,
+      "doc_id": "d75",
+      "url": "https://hukukipedia.org/makale/kvkk-veri-ihlali-bildirim-yukumlulugu-ve-72-saat-kurali-2026-uygulamasi",
+      "title": "KVKK Veri İhlali Bildiri…Kuralı: 2026 Uygulaması - Hukukipedia",
+      "domain": "hukukipedia.org",
+      "score": 0.37
+    },
+    {
+      "number": 6,
+      "doc_id": "d102",
+      "url": "https://mishcon.com/uk-gdpr/article-34",
+      "title": "Article No.34 - UK GDPR | Mishcon de Reya",
+      "domain": "mishcon.com",
+      "score": 0.45
+    },
+    {
+      "number": 7,
+      "doc_id": "d74",
+      "url": "https://bilalalyar.av.tr/kvkk-veri-ihlali-bildirimi-72-saat-2026",
+      "title": "KVKK Veri İhlali Bildirimi — 72 Saat Kuralı ve Süreç 2026",
+      "domain": "bilalalyar.av.tr",
+      "score": 0.34
+    },
+    {
+      "number": 8,
+      "doc_id": "d105",
+      "url": "https://gdpr.algolia.com/gdpr-article-34",
+      "title": "Article 34. Communication of a personal data breach to the data subject | GDPR made searchable by Algolia. Chapters, articles and recitals easily readable",
+      "domain": "gdpr.algolia.com",
+      "score": 0.35
+    },
+    {
+      "number": 9,
+      "doc_id": "d107",
+      "url": "https://docs.alertlogic.com/analyze/reports/compliance/GDPR-article-34-comm-data-breach.htm",
+      "title": "GDPR Article 34: Communication of a Personal Data Breach",
+      "domain": "docs.alertlogic.com",
+      "score": 0.205
+    },
+    {
+      "number": 10,
+      "doc_id": "d12",
+      "url": "https://dincbay.com/kvkk-veri-ihlali-mudahale-plani",
+      "title": "KVKK VERİ İHLALİ MÜDAHALE PLANI - DİNÇBAY",
+      "domain": "dincbay.com",
+      "score": 0.2325
+    },
+    {
+      "number": 11,
+      "doc_id": "d6",
+      "url": "https://kvkk.gov.tr/Icerik/5362/Veri-Ihlali-Bildirimi",
+      "title": "Kişisel Veri İhlal Bildirim Usul ve Esaslarına İlişkin ...",
+      "domain": "kvkk.gov.tr",
+      "score": 0.845
+    }
+  ],
+  "findings": {
+    "k1": {
+      "statement": "Under Article 12(5) of the Law No. 6698, if personal data is obtained by others through unlawful means, the data controller must notify the Board as soon as possible.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.676,
+      "sources": []
+    },
+    "k2": {
+      "statement": "Data controllers must notify the affected individuals as soon as reasonably possible after identifying them, using direct methods if contact information is available, or alternative methods like website publication if not.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.676,
+      "sources": []
+    },
+    "k3": {
+      "statement": "The Board Decision No. 2019/271 defines the minimum elements that must be included in a breach notification to data subjects, requiring clear and plain language.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.676,
+      "sources": []
+    },
+    "k4": {
+      "statement": "The Board has the authority to announce a data breach on its own website or by another method it deems appropriate if necessary.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.676,
+      "sources": []
+    },
+    "k5": {
+      "statement": "Data controllers must notify the affected data subjects of a personal data breach as soon as reasonably possible after identifying them.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.186,
+      "sources": []
+    },
+    "k6": {
+      "statement": "The Personal Data Protection Board has the authority to publicly announce a data breach on its website or through other appropriate methods if necessary.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.186,
+      "sources": []
+    },
+    "k7": {
+      "statement": "Under the KVKK, the data controller is required to notify the Board of a personal data breach without delay and at the latest within 72 hours of becoming aware of it.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.186,
+      "sources": [
+        10
+      ]
+    },
+    "k8": {
+      "statement": "Data controllers must notify affected data subjects as soon as reasonably possible following the determination of the individuals affected, using direct communication if contact information is available or, if not, by alternative appropriate methods such as publication on the company website.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.186,
+      "sources": [
+        10
+      ]
+    },
+    "k9": {
+      "statement": "The internal personal data breach response plan is established in accordance with the Turkish Personal Data Protection Board's principle decision dated 24.01.2019 and numbered 2019/10.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.186,
+      "sources": [
+        10
+      ]
+    },
+    "k10": {
+      "statement": "The company classifies personal data breaches into three levels based on the potential impact and risk to the data subjects.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.186,
+      "sources": [
+        10
+      ]
+    },
+    "k11": {
+      "statement": "The Personal Data Protection Board considers delays of 10 months for reporting to the Board and 17 months for reporting to affected persons as exceeding the statutory 'as soon as possible' notification requirement.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.576,
+      "sources": []
+    },
+    "k12": {
+      "statement": "Under the 2019/10 Board Decision, the data controller must notify the Personal Data Protection Board (Kurul) of a data breach within 72 hours of learning about it.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.206,
+      "sources": []
+    },
+    "k13": {
+      "statement": "The data controller must notify the affected data subjects as soon as reasonably possible after the breach has occurred and affected individuals have been identified.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.206,
+      "sources": []
+    },
+    "k14": {
+      "statement": "Notifications to affected data subjects should be made directly if contact information is available, or through appropriate methods like an announcement on the data controller's website if not.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.206,
+      "sources": []
+    },
+    "k15": {
+      "statement": "The Personal Data Protection Board may announce a data breach on its website or through another method it deems appropriate if it deems necessary.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.206,
+      "sources": []
+    },
+    "k16": {
+      "statement": "If a notification to the Board cannot be made within 72 hours, the data controller must explain the justification and reasons for the delay.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.206,
+      "sources": []
+    },
+    "k17": {
+      "statement": "The European Data Protection Board (EDPB) provides guidelines on the factors data controllers must consider when conducting risk assessments to determine whether a data breach must be reported to supervisory authorities.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.266,
+      "sources": []
+    },
+    "k18": {
+      "statement": "According to the document, the data controller must notify the Board of a personal data breach within 72 hours of becoming aware of it.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.314,
+      "sources": []
+    },
+    "k19": {
+      "statement": "If the data controller can reach the affected person's contact address, notification is made directly; otherwise, it is made via the controller's website or other appropriate methods.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.314,
+      "sources": []
+    },
+    "k20": {
+      "statement": "The Personal Data Protection Board has the authority to announce a data breach on its website or through another method it deems appropriate.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.314,
+      "sources": []
+    },
+    "k21": {
+      "statement": "Anyone who becomes aware of a data breach must report it internally to the company contact person and Information Systems official in writing within 24 hours.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.314,
+      "sources": []
+    },
+    "k22": {
+      "statement": "Data controllers must notify the KVKK Board of a personal data breach as soon as possible, and no later than 72 hours after learning of it.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.676,
+      "sources": [
+        11
+      ]
+    },
+    "k23": {
+      "statement": "Data controllers must notify affected individuals as soon as reasonably possible after identifying them; notification should be direct if contact info is available, or via appropriate methods such as the controller's website if not.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.676,
+      "sources": [
+        11
+      ]
+    },
+    "k24": {
+      "statement": "The KVKK data breach notification procedures are established by the Board's decision dated 24.01.2019 and numbered 2019/10.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.676,
+      "sources": [
+        11
+      ]
+    },
+    "k25": {
+      "statement": "The Board has the authority to publicly announce a data breach on its website or through other methods if it deems necessary.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.716,
+      "sources": [
+        11
+      ]
+    },
+    "k26": {
+      "statement": "If a data controller cannot notify the Board within 72 hours due to a legitimate reason, they must explain the reasons for the delay upon notification.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.676,
+      "sources": [
+        11
+      ]
+    },
+    "k27": {
+      "statement": "Under GDPR Article 33, a controller must notify the competent supervisory authority of a personal data breach within 72 hours of awareness if the breach is likely to result in a risk.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.354,
+      "sources": [
+        1
+      ]
+    },
+    "k28": {
+      "statement": "Under GDPR Article 34, a controller must communicate a personal data breach to affected data subjects without undue delay if the breach is likely to result in a high risk to their rights and freedoms.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.354,
+      "sources": [
+        1
+      ]
+    },
+    "k29": {
+      "statement": "A controller is exempt from notifying data subjects if it implemented effective protection measures, such as encryption, that rendered the breached data unintelligible to unauthorized persons.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.354,
+      "sources": [
+        1
+      ]
+    },
+    "k30": {
+      "statement": "A controller is exempt from notifying data subjects if it took subsequent measures ensuring that the high risk to individuals is no longer likely to materialize.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.354,
+      "sources": [
+        1
+      ]
+    },
+    "k31": {
+      "statement": "A controller is exempt from direct notification if it would involve disproportionate effort, provided the controller makes a public communication or similar measure instead.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.354,
+      "sources": [
+        1
+      ]
+    },
+    "k32": {
+      "statement": "Under the GDPR, a data controller must notify the supervisory authority of a personal data breach without undue delay and, where feasible, no later than 72 hours after becoming aware of it, unless the breach is unlikely to result in a risk to the rights and freedoms of natural persons.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.22,
+      "sources": []
+    },
+    "k33": {
+      "statement": "Under the GDPR, a controller must notify the data subject of a personal data breach without undue delay only when the breach is likely to result in a high risk to the rights and freedoms of natural persons.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.22,
+      "sources": []
+    },
+    "k34": {
+      "statement": "A controller is exempt from notifying data subjects if it has implemented appropriate technical and organisational protection measures, such as encryption, that render the data unintelligible to unauthorized persons.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.22,
+      "sources": []
+    },
+    "k35": {
+      "statement": "A controller is exempt from notifying data subjects if it has taken subsequent measures ensuring that the high risk to the rights and freedoms of data subjects is no longer likely to materialize.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.22,
+      "sources": []
+    },
+    "k36": {
+      "statement": "A controller is exempt from notifying data subjects individually if doing so would involve a disproportionate effort, provided that a public communication or similar measure is used to inform the data subjects in an equally effective manner.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.22,
+      "sources": []
+    },
+    "k37": {
+      "statement": "The data controller should communicate a personal data breach to the data subject without undue delay when the breach is likely to result in a high risk to the rights and freedoms of the natural person.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.36,
+      "sources": [
+        6
+      ]
+    },
+    "k38": {
+      "statement": "Data controllers are required to notify the Personal Data Protection Board of a data breach without delay and no later than 72 hours after learning of it.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.556,
+      "sources": []
+    },
+    "k39": {
+      "statement": "The Personal Data Protection Board has the authority to announce a data breach on its website or through another method it deems appropriate if necessary.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.556,
+      "sources": []
+    },
+    "k40": {
+      "statement": "The Turkish Personal Data Protection Board (KVKK) interprets the \"shortest time\" requirement for notifying the Board of a data breach as a period not exceeding 72 hours from the moment the data controller becomes aware of the breach.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.716,
+      "sources": []
+    },
+    "k41": {
+      "statement": "Data controllers must communicate the breach to affected data subjects within the shortest reasonable period of time, starting from the date the identities of those persons are determined.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.716,
+      "sources": []
+    },
+    "k42": {
+      "statement": "If a data subject's contact information is available, the data controller must notify them directly; if unreachable, the controller must use alternative methods such as publishing the notification on their website.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.716,
+      "sources": []
+    },
+    "k43": {
+      "statement": "The Board provides a specific Personal Data Breach Notification Form that must be used for notifications submitted to the Board.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.716,
+      "sources": []
+    },
+    "k44": {
+      "statement": "Data controllers are required to notify the KVKK authority of a data breach within 72 hours of detecting the breach.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.272,
+      "sources": [
+        7
+      ]
+    },
+    "k45": {
+      "statement": "Data controllers must notify affected data subjects of a data breach if the breach creates a 'high risk' to the individuals' fundamental rights and freedoms.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.272,
+      "sources": [
+        7
+      ]
+    },
+    "k46": {
+      "statement": "Data controllers may be exempt from notifying affected data subjects if the data was adequately protected by technical measures (such as strong encryption), if immediate measures to mitigate risk were taken, or if individual notification requires disproportionate effort (in which case a public announcement can be used).",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.272,
+      "sources": [
+        7
+      ]
+    },
+    "k47": {
+      "statement": "Data processors are recommended to be contractually obliged to notify the data controller immediately in the event of a personal data breach, enabling the data controller to perform their obligation to report the breach immediately to the Personal Data Protection Board (KVKK) and the affected person.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.568,
+      "sources": []
+    },
+    "k48": {
+      "statement": "Under the guidance of the KVKK, data controllers are required to notify the Personal Data Protection Board (Kurul) of any data breach immediately.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.568,
+      "sources": []
+    },
+    "k49": {
+      "statement": "Under GDPR Article 34, if a personal data breach is likely to result in a high risk to the rights and freedoms of natural persons, the data controller must communicate the breach to the data subject without undue delay.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.3,
+      "sources": []
+    },
+    "k50": {
+      "statement": "A controller is exempt from notifying data subjects if they have implemented appropriate technical and organizational protection measures (e.g., encryption) that render the data unintelligible to unauthorized persons.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.3,
+      "sources": []
+    },
+    "k51": {
+      "statement": "The controller must notify the supervisory authority of a personal data breach without undue delay and, where feasible, no later than 72 hours after becoming aware of it, unless the breach is unlikely to result in a risk to natural persons' rights and freedoms.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.3,
+      "sources": []
+    },
+    "k52": {
+      "statement": "The controller must communicate a personal data breach to the data subject without undue delay when the breach is likely to result in a high risk to their rights and freedoms.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.524,
+      "sources": []
+    },
+    "k53": {
+      "statement": "A controller is exempt from notifying data subjects if it has implemented appropriate technical and organisational protection measures, specifically those rendering the data unintelligible to unauthorized persons, such as encryption.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.3,
+      "sources": []
+    },
+    "k54": {
+      "statement": "Under GDPR, if a personal data breach is likely to result in a high risk to the rights and freedoms of natural persons, the controller must communicate the breach to the data subject without undue delay.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.28,
+      "sources": [
+        8
+      ]
+    },
+    "k55": {
+      "statement": "Communication to the data subject is not required if the controller implemented appropriate technical and organizational protection measures, particularly those rendering data unintelligible (e.g., encryption), applied to the affected personal data.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.28,
+      "sources": [
+        8
+      ]
+    },
+    "k56": {
+      "statement": "Communication to the data subject is not required if the controller has taken subsequent measures that ensure the high risk to the data subjects' rights and freedoms is no longer likely to materialise.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.28,
+      "sources": [
+        8
+      ]
+    },
+    "k57": {
+      "statement": "Communication to the data subject is not required if it would involve disproportionate effort, in which case a public communication or similarly effective measure must be taken instead.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.28,
+      "sources": [
+        8
+      ]
+    },
+    "k58": {
+      "statement": "If the controller has not notified the data subject, the supervisory authority can require the controller to do so after considering the high-risk likelihood.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.28,
+      "sources": [
+        8
+      ]
+    },
+    "k59": {
+      "statement": "Under the Board's 2019/10 decision, the data controller must notify the Personal Data Protection Board of a personal data breach without delay and within a maximum of 72 hours from the moment it learns of the breach.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.576,
+      "sources": []
+    },
+    "k60": {
+      "statement": "After determining the affected individuals, the data controller must notify them as soon as reasonably possible using direct communication if contact information is available, or alternative methods like website publication if not.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.576,
+      "sources": []
+    },
+    "k61": {
+      "statement": "The Personal Data Protection Board reserves the right to announce a data breach on its website or through another method it deems appropriate if it deems necessary.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.576,
+      "sources": []
+    },
+    "k62": {
+      "statement": "The Personal Data Protection Board (KVKK) interprets the legal requirement to notify the authority of a data breach 'as soon as possible' as 72 hours.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.576,
+      "sources": []
+    },
+    "k63": {
+      "statement": "Under Article 12, paragraph 5 of Law No. 6698, if processed personal data is obtained by others through unlawful means, the data controller must notify the relevant person and the Board as soon as possible.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.66,
+      "sources": [
+        2
+      ]
+    },
+    "k64": {
+      "statement": "The Personal Data Protection Board (Kurul) has the authority to announce a data breach on its website or through any other method it deems appropriate if necessary.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.66,
+      "sources": [
+        2
+      ]
+    },
+    "k65": {
+      "statement": "Under Article 12 of the KVKK, the data controller is required to notify the Board (Kurul) and the relevant data subject as soon as possible in the event of an unlawful data breach.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.238,
+      "sources": []
+    },
+    "k66": {
+      "statement": "Under the KVKK, there is no legislative distinction based on risk levels; every type of data breach must be notified to the Board and the relevant individuals.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.238,
+      "sources": []
+    },
+    "k67": {
+      "statement": "Unlike the KVKK, the GDPR distinguishes between breaches based on risk to rights and freedoms, and does not mandate notification for every single breach.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.238,
+      "sources": []
+    },
+    "k68": {
+      "statement": "Communication to the data subject is not required if the controller has applied protective measures, such as encryption, that render the data unintelligible to unauthorized persons.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.32,
+      "sources": []
+    },
+    "k69": {
+      "statement": "Under GDPR Article 34, a data controller is required to notify the data subject about a personal data breach without undue delay.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.164,
+      "sources": [
+        9
+      ]
+    },
+    "k70": {
+      "statement": "Communications to data subjects regarding a personal data breach must be in clear and plain language and describe the nature of the breach, including information referred to in points (b), (c), and (d) of Article 33.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.164,
+      "sources": [
+        9
+      ]
+    },
+    "k71": {
+      "statement": "Notification to the data subject is not required if the personal data was rendered unintelligible (e.g., via encryption), if subsequent measures ensure the high risk to data subjects is no longer likely, or if it would involve disproportionate effort.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.164,
+      "sources": [
+        9
+      ]
+    },
+    "k72": {
+      "statement": "If a controller has not communicated a data breach to the data subject, a supervisory authority has the power to require the controller to do so or to determine if the exceptions to notification are met.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.164,
+      "sources": [
+        9
+      ]
+    },
+    "k73": {
+      "statement": "Under GDPR, controllers are required to notify the competent supervisory authority of a personal data breach unless the breach is unlikely to result in a risk to the rights and freedoms of individuals.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.708,
+      "sources": [
+        3
+      ]
+    },
+    "k74": {
+      "statement": "Under GDPR, a supervisory authority may order a controller to inform data subjects about a personal data breach.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.708,
+      "sources": [
+        3
+      ]
+    },
+    "k75": {
+      "statement": "The Turkish Personal Data Protection Board (KVKK) requires data controllers to notify the Board of a personal data breach within 72 hours of detection.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.556,
+      "sources": []
+    },
+    "k76": {
+      "statement": "The data controller must notify the KVK Board of a personal data breach within 72 hours of becoming aware of it.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.286,
+      "sources": [
+        4
+      ]
+    },
+    "k77": {
+      "statement": "The data controller must notify the affected individuals of the personal data breach as soon as possible, using clear and simple language, via email, SMS, post, or website announcement.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.286,
+      "sources": [
+        4
+      ]
+    },
+    "k78": {
+      "statement": "The legal basis for the data breach notification obligation is Article 12/5 of the Law No. 6698 (KVKK).",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.286,
+      "sources": [
+        4
+      ]
+    },
+    "k79": {
+      "statement": "The KVK Board may require a public announcement of the data breach if it deems necessary.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.286,
+      "sources": [
+        4
+      ]
+    },
+    "k80": {
+      "statement": "Data controllers are required to notify the Board (Kurul) of a data breach within 72 hours of learning about it.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.296,
+      "sources": [
+        5
+      ]
+    },
+    "k81": {
+      "statement": "If a data breach creates a high risk for data subjects' rights and freedoms, they must be notified as soon as possible.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.296,
+      "sources": [
+        5
+      ]
+    },
+    "k82": {
+      "statement": "The 72-hour notification rule for the Board is legally established by Article 7 of the Data Breach Notification Regulation (Veri İhlali Bildirimi Yönetmeliği).",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.296,
+      "sources": [
+        5
+      ]
+    },
+    "k83": {
+      "statement": "The threshold for notifying affected individuals is when the breach poses a high risk to their rights and freedoms.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.296,
+      "sources": [
+        5
+      ]
+    },
+    "k84": {
+      "statement": "If a breach does not pose a high risk to individuals' rights and freedoms, notification to individuals is not mandatory, but the obligation to notify the Board persists.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.296,
+      "sources": [
+        5
+      ]
+    },
+    "k85": {
+      "statement": "Data controllers may request an extension from the Board if more time is needed to determine the scope of the breach, provided the request is made within 72 hours of learning of the breach.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.296,
+      "sources": [
+        5
+      ]
+    }
+  },
+  "metadata": {
+    "config_hash": "489c5300e6b5b6ebc534e9056dad55767be79449c78e05dcdebfd962b3a2c072",
+    "models_used": {
+      "reasoning": "gemini:gemini-3.8-flash",
+      "fast": "gemini:gemini-3.1-flash-lite",
+      "embedding": "gemini-embedding-001"
+    },
+    "prompt_versions": {
+      "analyze_query": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "a727cb4344e9",
+        "label": "production"
+      },
+      "assess_coverage": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "e846c73d92bf",
+        "label": "production"
+      },
+      "evaluate_sources": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "b548bfeecc30",
+        "label": "production"
+      },
+      "extract_claims": {
+        "version": "4",
+        "source": "langfuse",
+        "content_hash": "7bb08d1d31b9",
+        "label": "production"
+      },
+      "generate_queries": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "c529f97cebe9",
+        "label": "production"
+      },
+      "judge_contradictions": {
+        "version": "5",
+        "source": "langfuse",
+        "content_hash": "726f52b7aa1e",
+        "label": "production"
+      },
+      "plan": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "1ec8bb17ccf2",
+        "label": "production"
+      },
+      "synthesize": {
+        "version": "3",
+        "source": "langfuse",
+        "content_hash": "94db375c9234",
+        "label": "production"
+      },
+      "validate_claims": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "68ed4e47da0e",
+        "label": "production"
+      },
+      "verify_citations": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "32456e1a0b5a",
+        "label": "production"
+      }
+    },
+    "search_providers": [
+      "tavily"
+    ],
+    "llm_providers": [
+      "gemini",
+      "openai"
+    ],
+    "stop_reason": "max_iterations",
+    "stop_detail": "max_iterations=4 reached",
+    "iterations": 4,
+    "budget": {
+      "iteration": 4,
+      "searches": 33,
+      "searches_left": 12,
+      "llm_calls": 103,
+      "tokens_in": 712410,
+      "tokens_out": 124278,
+      "cost_usd": 0.588446,
+      "elapsed_seconds": 248.21
+    },
+    "gate_verdict": "pass_with_warnings",
+    "counters": {
+      "fetch_failures": 3,
+      "duplicate_urls": 65,
+      "claims_need_fresh_confirmation": 56,
+      "claims_validation_unsupported": 4,
+      "claims_rejected_quote": 13,
+      "extraction_failures": 0,
+      "claims_rejected_injection": 0,
+      "sentences_dropped_by_verifier": 0
+    },
+    "skills": [
+      "regulatory-research-tr"
+    ]
+  }
+}

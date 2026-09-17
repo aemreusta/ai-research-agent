@@ -1,0 +1,180 @@
+{
+  "question": "Is there credible public evidence that Zorynth Quantum Legal launched a product called AuroraLex in 2026? Verify the premise before describing any products, partnerships or market position.",
+  "language": "en",
+  "title": "Is there credible public evidence that Zorynth Quantum Legal launched a product called AuroraLex in 2026? Verify the premise before describing any products, partnerships or market position.",
+  "banner": "Insufficient evidence: this report did not pass the output checks. Treat it as a partial draft and review the listed issues.",
+  "sections": [
+    {
+      "key": "summary",
+      "title": "Summary",
+      "sentences": [
+        {
+          "text": "No supported finding was found.",
+          "kind": "meta",
+          "labels": [],
+          "findings": [],
+          "sources": []
+        }
+      ]
+    },
+    {
+      "key": "key_findings",
+      "title": "Key Findings",
+      "sentences": []
+    },
+    {
+      "key": "conflicting_or_uncertain",
+      "title": "Conflicting / Uncertain Information",
+      "sentences": []
+    },
+    {
+      "key": "conclusion",
+      "title": "Conclusion",
+      "sentences": [
+        {
+          "text": "Not enough evidence was found; no answer is given rather than an invented one.",
+          "kind": "meta",
+          "labels": [],
+          "findings": [],
+          "sources": []
+        }
+      ]
+    },
+    {
+      "key": "known_gaps",
+      "title": "Known Gaps",
+      "sentences": [
+        {
+          "text": "Does an entity named Zorynth Quantum Legal exist as an active company or registered corporate entity? - no progress for 2 rounds (no new findings or independent sources)",
+          "kind": "meta",
+          "labels": [
+            "gap:s1"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "Has Zorynth Quantum Legal issued any official press releases, product pages, or announcements for a product named AuroraLex in 2026? - no progress for 2 rounds (no new findings or independent sources)",
+          "kind": "meta",
+          "labels": [
+            "gap:s2"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "Is there any coverage of AuroraLex or Zorynth Quantum Legal in legal tech trade publications, tech news, or trademark registers in 2026? - no progress for 2 rounds (no new findings or independent sources)",
+          "kind": "meta",
+          "labels": [
+            "gap:s3"
+          ],
+          "findings": [],
+          "sources": []
+        }
+      ]
+    }
+  ],
+  "sources": [],
+  "findings": {},
+  "metadata": {
+    "config_hash": "489c5300e6b5b6ebc534e9056dad55767be79449c78e05dcdebfd962b3a2c072",
+    "models_used": {
+      "reasoning": "gemini:gemini-3.8-flash",
+      "fast": "gemini:gemini-3.1-flash-lite",
+      "embedding": "gemini-embedding-001"
+    },
+    "prompt_versions": {
+      "analyze_query": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "a727cb4344e9",
+        "label": "production"
+      },
+      "assess_coverage": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "e846c73d92bf",
+        "label": "production"
+      },
+      "evaluate_sources": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "b548bfeecc30",
+        "label": "production"
+      },
+      "extract_claims": {
+        "version": "4",
+        "source": "langfuse",
+        "content_hash": "7bb08d1d31b9",
+        "label": "production"
+      },
+      "generate_queries": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "c529f97cebe9",
+        "label": "production"
+      },
+      "judge_contradictions": {
+        "version": "5",
+        "source": "langfuse",
+        "content_hash": "726f52b7aa1e",
+        "label": "production"
+      },
+      "plan": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "1ec8bb17ccf2",
+        "label": "production"
+      },
+      "synthesize": {
+        "version": "3",
+        "source": "langfuse",
+        "content_hash": "94db375c9234",
+        "label": "production"
+      },
+      "validate_claims": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "68ed4e47da0e",
+        "label": "production"
+      },
+      "verify_citations": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "32456e1a0b5a",
+        "label": "production"
+      }
+    },
+    "search_providers": [
+      "tavily"
+    ],
+    "llm_providers": [
+      "gemini",
+      "openai"
+    ],
+    "stop_reason": "no_evidence",
+    "stop_detail": "no open sub-questions left (remaining ones are exhausted)",
+    "iterations": 2,
+    "budget": {
+      "iteration": 2,
+      "searches": 13,
+      "searches_left": 32,
+      "llm_calls": 12,
+      "tokens_in": 23093,
+      "tokens_out": 7914,
+      "cost_usd": 0.024334,
+      "elapsed_seconds": 46.55
+    },
+    "gate_verdict": "fail",
+    "counters": {
+      "fetch_failures": 2,
+      "duplicate_urls": 1,
+      "claims_rejected_quote": 1,
+      "extraction_failures": 0,
+      "claims_rejected_injection": 0
+    },
+    "skills": [
+      "company-research"
+    ]
+  }
+}

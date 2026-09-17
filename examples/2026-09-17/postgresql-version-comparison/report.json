@@ -1,0 +1,1083 @@
+{
+  "question": "Compare PostgreSQL 17 and PostgreSQL 18 using official release notes: which performance, developer and operational features changed, and what should a small SaaS team verify before upgrading?",
+  "language": "en",
+  "title": "PostgreSQL 17 vs PostgreSQL 18: Feature Comparison and Upgrade Considerations",
+  "banner": null,
+  "sections": [
+    {
+      "key": "summary",
+      "title": "Summary",
+      "sentences": [
+        {
+          "text": "PostgreSQL 18 brings major performance improvements, including an asynchronous I/O subsystem and skip-scan lookup capabilities for multicolumn B-tree indexes.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k2",
+            "k14",
+            "k40"
+          ],
+          "sources": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "text": "Developer-facing additions include native support for virtual generated columns, the uuidv7() function for timestamp-ordered UUID generation, and OLD and NEW aliases in RETURNING clauses.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k3",
+            "k4",
+            "k41"
+          ],
+          "sources": [
+            1,
+            2,
+            7
+          ]
+        },
+        {
+          "text": "Operationally, the release introduces notable backward incompatibilities, including changes to VACUUM and ANALYZE inheritance handling, the deprecation of MD5 password authentication, and adjustments to time zone abbreviation resolution.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k49"
+          ],
+          "sources": [
+            3,
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "key": "key_findings",
+      "title": "Key Findings",
+      "sentences": [
+        {
+          "text": "PostgreSQL 18 introduces an asynchronous I/O subsystem to improve the performance of sequential scans, bitmap heap scans, and vacuums.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k40"
+          ],
+          "sources": [
+            2,
+            3
+          ]
+        },
+        {
+          "text": "PostgreSQL 18 adds skip-scan lookups for multicolumn B-tree indexes, allowing queries to use indexes even when leading columns lack restrictions.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k2",
+            "k14"
+          ],
+          "sources": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "text": "PostgreSQL 18 includes the uuidv7() function to generate timestamp-ordered UUIDs.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k3"
+          ],
+          "sources": [
+            1,
+            2,
+            7
+          ]
+        },
+        {
+          "text": "PostgreSQL 18 supports OLD and NEW aliases in RETURNING clauses for INSERT, UPDATE, DELETE, and MERGE operations.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k4"
+          ],
+          "sources": [
+            1,
+            7
+          ]
+        },
+        {
+          "text": "PostgreSQL 18 adds support for virtual generated columns that compute values dynamically during read operations.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k41"
+          ],
+          "sources": [
+            2,
+            7
+          ]
+        },
+        {
+          "text": "PostgreSQL 18 introduces the UNIQUE NULLS DISTINCT constraint, which treats NULL values as unique and prevents duplicate NULL entries.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k10"
+          ],
+          "sources": [
+            4,
+            8,
+            9
+          ]
+        },
+        {
+          "text": "PostgreSQL 18 introduces support for OAuth authentication.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k16"
+          ],
+          "sources": [
+            4,
+            5
+          ]
+        },
+        {
+          "text": "According to a single source, initdb enables data checksums by default in PostgreSQL 18, and pg_upgrade requires matching cluster checksum settings.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k42"
+          ],
+          "sources": [
+            2
+          ]
+        },
+        {
+          "text": "According to a single source, VACUUM and ANALYZE process inheritance children by default unless the ONLY option is used.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k44"
+          ],
+          "sources": [
+            2
+          ]
+        },
+        {
+          "text": "According to single-source findings, MD5 password authentication is deprecated in PostgreSQL 18, with CREATE ROLE and ALTER ROLE emitting deprecation warnings.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k7",
+            "k43"
+          ],
+          "sources": [
+            1,
+            2,
+            10
+          ]
+        },
+        {
+          "text": "According to a single source, users with indexes on ltree columns who do not use the libc collation provider must reindex their ltree columns after upgrading to PostgreSQL 18.2.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k65"
+          ],
+          "sources": [
+            11
+          ]
+        }
+      ]
+    },
+    {
+      "key": "conflicting_or_uncertain",
+      "title": "Conflicting / Uncertain Information",
+      "sentences": []
+    },
+    {
+      "key": "conclusion",
+      "title": "Conclusion",
+      "sentences": [
+        {
+          "text": "PostgreSQL 18 provides significant performance and developer enhancements through asynchronous I/O, skip scan, uuidv7(), and virtual generated columns.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k2",
+            "k3",
+            "k40",
+            "k41"
+          ],
+          "sources": [
+            1,
+            2,
+            3,
+            7
+          ]
+        },
+        {
+          "text": "Small SaaS teams upgrading from PostgreSQL 17 must account for operational breaking changes, particularly the deprecation of MD5 authentication, default checksum activation, and inheritance handling in maintenance tasks.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k42",
+            "k44",
+            "k49"
+          ],
+          "sources": [
+            2,
+            3,
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "key": "known_gaps",
+      "title": "Known Gaps",
+      "sentences": [
+        {
+          "text": "10 candidate claim(s) withheld: source support, conditions or current applicability could not be confirmed; see the evidence ledger.",
+          "kind": "meta",
+          "labels": [],
+          "findings": [],
+          "sources": []
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "number": 1,
+      "doc_id": "d11",
+      "url": "https://postgresql.org/docs/current/release-18.html",
+      "title": "Documentation: 18: E.6. Release 18 - PostgreSQL",
+      "domain": "postgresql.org",
+      "score": 0.73
+    },
+    {
+      "number": 2,
+      "doc_id": "d17",
+      "url": "https://postgresql.org/docs/release/18.0",
+      "title": "PostgreSQL: Release Notes",
+      "domain": "postgresql.org",
+      "score": 0.7125
+    },
+    {
+      "number": 3,
+      "doc_id": "d45",
+      "url": "https://baremon.eu/postgresql-18-released-key-features-upgrade-tips",
+      "title": "PostgreSQL 18 released: Key features & upgrade tips",
+      "domain": "baremon.eu",
+      "score": 0.3325
+    },
+    {
+      "number": 4,
+      "doc_id": "d13",
+      "url": "https://severalnines.com/blog/postgresql-18-upgrades-for-ai-era-workloads-and-operations",
+      "title": "PostgreSQL 18 Upgrades for AI-Era Workloads and Operations",
+      "domain": "severalnines.com",
+      "score": 0.4175
+    },
+    {
+      "number": 5,
+      "doc_id": "d16",
+      "url": "https://xata.io/blog/going-down-the-rabbit-hole-of-postgres-18-features",
+      "title": "Postgres 18 Features: Async I/O, UUIDv7, OAuth and More | xata",
+      "domain": "xata.io",
+      "score": 0.4
+    },
+    {
+      "number": 6,
+      "doc_id": "d44",
+      "url": "https://pgedge.com/blog/postgres-18-generated-column-replication-and-enhanced-monitoring",
+      "title": "Postgres 18: Generated Column Replication and Enhanced Monitoring",
+      "domain": "pgedge.com",
+      "score": 0.4675
+    },
+    {
+      "number": 7,
+      "doc_id": "d18",
+      "url": "https://bytebase.com/blog/what-is-new-in-postgres-18",
+      "title": "What's New in PostgreSQL 18: A DBA's Perspective | Bytebase",
+      "domain": "bytebase.com",
+      "score": 0.4375
+    },
+    {
+      "number": 8,
+      "doc_id": "d12",
+      "url": "https://dev.to/dev_tips/postgresql-18-just-dropped-10-powerful-new-features-devs-need-to-know-3jf",
+      "title": "PostgreSQL 18 just dropped: 10 powerful new features devs need to know - DEV Community",
+      "domain": "dev.to",
+      "score": 0.31
+    },
+    {
+      "number": 9,
+      "doc_id": "d46",
+      "url": "https://medium.com/devlink-tips/postgresql-18-just-dropped-10-powerful-new-features-devs-need-to-know-413aa601f20b",
+      "title": "Medium",
+      "domain": "medium.com",
+      "score": 0.2475
+    },
+    {
+      "number": 10,
+      "doc_id": "d29",
+      "url": "https://postgresql.org/about/news/postgresql-18-released-3142",
+      "title": "PostgreSQL 18 Released!",
+      "domain": "postgresql.org",
+      "score": 0.735
+    },
+    {
+      "number": 11,
+      "doc_id": "d41",
+      "url": "https://postgresql.org/about/news/postgresql-182-178-1612-1516-and-1421-released-3235",
+      "title": "PostgreSQL: PostgreSQL 18.2, 17.8, 16.12, 15.16, and 14.21 Released!",
+      "domain": "postgresql.org",
+      "score": 0.6175
+    }
+  ],
+  "findings": {
+    "k1": {
+      "statement": "PostgreSQL 18 introduces an optimizer optimization that automatically removes some unnecessary table self-joins, which can be disabled via the server variable enable_self_join_elimination.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.584,
+      "sources": [
+        1
+      ]
+    },
+    "k2": {
+      "statement": "PostgreSQL 18 supports 'skip scan' lookups for multicolumn B-tree indexes, allowing their use in cases where there are no restrictions on the first or early indexed columns.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.6947,
+      "sources": [
+        1,
+        2,
+        3
+      ]
+    },
+    "k3": {
+      "statement": "PostgreSQL 18 includes a uuidv7() function for generating timestamp-ordered UUIDs.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.7296,
+      "sources": [
+        1,
+        2,
+        7
+      ]
+    },
+    "k4": {
+      "statement": "PostgreSQL 18 adds support for OLD and NEW in RETURNING clauses for INSERT, UPDATE, DELETE, and MERGE commands.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.7296,
+      "sources": [
+        1,
+        7
+      ]
+    },
+    "k5": {
+      "statement": "PostgreSQL 18 adds pg_stat_all_tables columns to report time spent in VACUUM, ANALYZE, and their automatic variants.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.584,
+      "sources": [
+        1,
+        2
+      ]
+    },
+    "k6": {
+      "statement": "PostgreSQL 18 changes the initdb default to enable data checksums, which can be disabled using the new --no-data-checksums option.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.584,
+      "sources": [
+        1
+      ]
+    },
+    "k7": {
+      "statement": "PostgreSQL 18 deprecates MD5 password authentication, with CREATE ROLE and ALTER ROLE now emitting deprecation warnings.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.588,
+      "sources": [
+        1,
+        10
+      ]
+    },
+    "k8": {
+      "statement": "PostgreSQL 18 introduces parallelized COPY FROM operations to speed up bulk imports by using multiple workers instead of a single thread.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.248,
+      "sources": [
+        8
+      ]
+    },
+    "k9": {
+      "statement": "Functions written in SQL or PL/pgSQL in PostgreSQL 18 feature improved inlining, execution plan reuse, and better integration with parallel and JIT execution.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.248,
+      "sources": [
+        8
+      ]
+    },
+    "k10": {
+      "statement": "PostgreSQL 18 introduces the UNIQUE NULLS DISTINCT constraint, which treats NULLs as unique values and prevents duplicate NULLs in unique constraints.",
+      "status": "supported",
+      "support": 3,
+      "confidence": 0.5983,
+      "sources": [
+        4,
+        8,
+        9
+      ]
+    },
+    "k11": {
+      "statement": "PostgreSQL 18 introduces full logical replication support for DDL statements such as CREATE TABLE, ALTER TABLE, and DROP, allowing them to be automatically replicated to subscribers.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.3969,
+      "sources": [
+        8,
+        9
+      ]
+    },
+    "k12": {
+      "statement": "PostgreSQL 18 adds the pg_stat_io system view to provide native insight into read and write I/O behavior across buffers and relation types.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.248,
+      "sources": [
+        8
+      ]
+    },
+    "k13": {
+      "statement": "PostgreSQL 18 improves the MERGE statement with better standards compliance, refined conditional logic resolution, and improvements for WHEN NOT MATCHED THEN INSERT.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.248,
+      "sources": [
+        8
+      ]
+    },
+    "k14": {
+      "statement": "PostgreSQL 18 introduces skip-scan for multi-column B-tree indexes, allowing the planner to iterate over leading column distinct values to satisfy predicates on later columns when the leading column is not constrained.",
+      "status": "supported",
+      "support": 3,
+      "confidence": 0.7165,
+      "sources": [
+        4,
+        5,
+        6
+      ]
+    },
+    "k15": {
+      "statement": "PostgreSQL 18 defaults generated columns to be 'virtual' rather than stored.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.334,
+      "sources": [
+        4
+      ]
+    },
+    "k16": {
+      "statement": "PostgreSQL 18 introduces support for OAuth authentication.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.5471,
+      "sources": [
+        4,
+        5
+      ]
+    },
+    "k17": {
+      "statement": "PostgreSQL 18 enables data checksums by default for new clusters initialized with initdb.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.334,
+      "sources": [
+        4
+      ]
+    },
+    "k18": {
+      "statement": "PostgreSQL 18 introduces an asynchronous I/O subsystem that allows queuing multiple read requests simultaneously to improve performance for sequential scans, bitmap heap scans, and vacuums.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.34,
+      "sources": []
+    },
+    "k19": {
+      "statement": "The skip scan capability allows the query planner to use multicolumn indexes even when early columns lack equality restrictions.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.34,
+      "sources": []
+    },
+    "k20": {
+      "statement": "The optimizer can now automatically eliminate unnecessary self-joins.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.34,
+      "sources": []
+    },
+    "k21": {
+      "statement": "Virtual generated columns are now the default behavior, computing values on read instead of storing them on write.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.34,
+      "sources": []
+    },
+    "k22": {
+      "statement": "Temporal constraints for defining non-overlapping PRIMARY KEY, UNIQUE, and FOREIGN KEY constraints on range types are supported via the WITHOUT OVERLAPS clause.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.34,
+      "sources": []
+    },
+    "k23": {
+      "statement": "The uuidv7() function is introduced for generating timestamp-ordered UUIDs.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.34,
+      "sources": []
+    },
+    "k24": {
+      "statement": "The RETURNING clause now supports OLD and NEW aliases to reference pre-modification and post-modification values.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.34,
+      "sources": []
+    },
+    "k25": {
+      "statement": "The pg_upgrade utility now preserves optimizer statistics during major version upgrades.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.34,
+      "sources": []
+    },
+    "k26": {
+      "statement": "Native OAuth authentication support is added for validating tokens issued by OAuth providers.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.34,
+      "sources": []
+    },
+    "k27": {
+      "statement": "Data checksums are enabled by default for new clusters initialized with initdb.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.34,
+      "sources": []
+    },
+    "k28": {
+      "statement": "VACUUM and ANALYZE process inheritance children by default, changing from the previous behavior of processing only the parent table.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.34,
+      "sources": []
+    },
+    "k29": {
+      "statement": "PostgreSQL 18 prioritizes session time zone abbreviations over server-wide settings.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.34,
+      "sources": []
+    },
+    "k30": {
+      "statement": "MD5 authentication is deprecated, with warnings emitted for CREATE ROLE and ALTER ROLE commands setting MD5 passwords.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.34,
+      "sources": []
+    },
+    "k31": {
+      "statement": "PostgreSQL 18 implements Self-Join Elimination (SJE), which automatically detects and removes redundant self-joins in SELECT queries when the join condition uses a unique or primary key.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.374,
+      "sources": []
+    },
+    "k32": {
+      "statement": "PostgreSQL 18 includes buffer statistics in EXPLAIN ANALYZE output by default, removing the requirement to explicitly set the BUFFERS option.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.374,
+      "sources": []
+    },
+    "k33": {
+      "statement": "PostgreSQL 18 exposes storage visibility for materialized nodes in query plans, reporting whether intermediate results are held in memory or spilled to disk, including peak storage consumed.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.374,
+      "sources": []
+    },
+    "k34": {
+      "statement": "Self-Join Elimination is introduced, replacing redundant self-joins of a plain table with a scan.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.32,
+      "sources": [
+        5
+      ]
+    },
+    "k35": {
+      "statement": "Async I/O (AIO) is introduced in PostgreSQL 18, providing performance improvements for sequential scans.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.32,
+      "sources": [
+        5
+      ]
+    },
+    "k36": {
+      "statement": "PostgreSQL 18 adds support for VIRTUAL generated columns as the default, replacing the previous implicit behavior.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.32,
+      "sources": [
+        5
+      ]
+    },
+    "k37": {
+      "statement": "The RETURNING clause in PostgreSQL 18 supports OLD and NEW aliases to return data values from rows.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.32,
+      "sources": [
+        5
+      ]
+    },
+    "k38": {
+      "statement": "PostgreSQL 18 improves pg_upgrade by adding support for parallel jobs and transferring statistics from previous versions.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.32,
+      "sources": [
+        5
+      ]
+    },
+    "k39": {
+      "statement": "EXPLAIN ANALYZE defaults to include BUFFERS in PostgreSQL 18.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.32,
+      "sources": [
+        5
+      ]
+    },
+    "k40": {
+      "statement": "PostgreSQL 18 introduces an asynchronous I/O (AIO) subsystem to improve performance of sequential scans, bitmap heap scans, and vacuums.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.6844,
+      "sources": [
+        2,
+        3
+      ]
+    },
+    "k41": {
+      "statement": "PostgreSQL 18 supports virtual generated columns which compute values during read operations.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.7205,
+      "sources": [
+        2,
+        7
+      ]
+    },
+    "k42": {
+      "statement": "The initdb default has been changed to enable data checksums.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.57,
+      "sources": [
+        2
+      ]
+    },
+    "k43": {
+      "statement": "MD5 password authentication is deprecated in PostgreSQL 18.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.57,
+      "sources": [
+        2
+      ]
+    },
+    "k44": {
+      "statement": "VACUUM and ANALYZE process inheritance children of a parent by default, requiring the new ONLY option to revert to previous behavior.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.57,
+      "sources": [
+        2
+      ]
+    },
+    "k45": {
+      "statement": "PostgreSQL 18 introduces an asynchronous I/O subsystem, which can be configured via the 'io_method' server variable.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.35,
+      "sources": [
+        7
+      ]
+    },
+    "k46": {
+      "statement": "The new system view 'pg_aios' allows monitoring of asynchronous I/O operations.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.35,
+      "sources": [
+        7
+      ]
+    },
+    "k47": {
+      "statement": "The uuidv4() function is now an alias for gen_random_uuid().",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.35,
+      "sources": [
+        7
+      ]
+    },
+    "k48": {
+      "statement": "NOT NULL constraints can now be added with the NOT VALID clause, avoiding a full table scan during creation.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.35,
+      "sources": [
+        7
+      ]
+    },
+    "k49": {
+      "statement": "PostgreSQL 18 includes several backward incompatibilities, including changes to time zone abbreviation handling, MD5 password deprecation, VACUUM/ANALYZE inheritance behavior, and COPY FROM end-of-file handling.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.5229,
+      "sources": [
+        3,
+        7
+      ]
+    },
+    "k50": {
+      "statement": "PostgreSQL 18 introduces an asynchronous I/O (AIO) subsystem supporting sequential scans, bitmap heap scans, and vacuum, with up to 3x performance gains in certain scenarios.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.588,
+      "sources": [
+        10
+      ]
+    },
+    "k51": {
+      "statement": "PostgreSQL 18 introduces an asynchronous I/O (AIO) subsystem, utilizing Linux 'io_uring' or a worker-based implementation to improve throughput and latency, with reported 2-3x performance improvements for certain operations.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.574,
+      "sources": []
+    },
+    "k52": {
+      "statement": "PostgreSQL 18 adds support for skip scan lookups on multicolumn B-tree indexes.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.574,
+      "sources": []
+    },
+    "k53": {
+      "statement": "PostgreSQL 18 introduces virtual generated columns as the default option, computing values just-in-time during query execution.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.574,
+      "sources": []
+    },
+    "k54": {
+      "statement": "The RETURNING clause in INSERT, UPDATE, DELETE, and MERGE commands now allows access to both the previous (OLD) and current (NEW) values.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.574,
+      "sources": []
+    },
+    "k55": {
+      "statement": "Data checksums, used to validate the integrity of stored data, are enabled by default for new clusters in PostgreSQL 18.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.574,
+      "sources": []
+    },
+    "k56": {
+      "statement": "PostgreSQL 18 deprecates md5 password authentication in favor of SCRAM authentication.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.574,
+      "sources": []
+    },
+    "k57": {
+      "statement": "Parallelism in hash right semi joins is disabled because of a race condition in updating the join's shared hash table.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.46,
+      "sources": []
+    },
+    "k58": {
+      "statement": "A dump/restore is not required for users upgrading within the 18.X version series.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.46,
+      "sources": []
+    },
+    "k59": {
+      "statement": "Generated columns are explicitly disallowed in partition keys, fixing cases where implicit column references previously bypassed checks.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.46,
+      "sources": []
+    },
+    "k60": {
+      "statement": "Generated columns are disallowed in COPY FROM WHERE clauses as they have not yet been computed when the filter is applied.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.46,
+      "sources": []
+    },
+    "k61": {
+      "statement": "Databases running PostgreSQL 18.2 may require reindexing of all ltree columns after updating.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.5,
+      "sources": []
+    },
+    "k62": {
+      "statement": "PostgreSQL 18 introduced new string lowercasing behavior in some locales where lower-casing a string can produce more characters than the original, which impacts contrib/pg_trgm.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.5,
+      "sources": []
+    },
+    "k63": {
+      "statement": "PostgreSQL 18 increased the usage of PlaceHolderVar nodes in query planning compared to previous versions.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.5,
+      "sources": []
+    },
+    "k64": {
+      "statement": "PostgreSQL 18.2 escalates errors during NOTIFY message processing to FATAL, which results in closing the client connection.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.5,
+      "sources": []
+    },
+    "k65": {
+      "statement": "Users with indexes on ltree columns who do not use the libc collation provider must reindex their ltree columns after upgrading to PostgreSQL 18.2.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.494,
+      "sources": [
+        11
+      ]
+    },
+    "k66": {
+      "statement": "PostgreSQL 18 introduces the publication parameter 'publish_generated_columns' to enable replication of stored generated columns.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.374,
+      "sources": [
+        6
+      ]
+    },
+    "k67": {
+      "statement": "The 'publish_generated_columns' parameter accepts two values: 'NONE' (the default) and 'STORED'.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.374,
+      "sources": [
+        6
+      ]
+    },
+    "k68": {
+      "statement": "Virtual generated columns cannot be replicated in PostgreSQL 18.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.374,
+      "sources": [
+        6
+      ]
+    },
+    "k69": {
+      "statement": "When replicating stored generated columns, the subscriber table must define the receiving column as a regular (non-generated) column; otherwise, the apply process will error.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.374,
+      "sources": [
+        6
+      ]
+    },
+    "k70": {
+      "statement": "PostgreSQL 18 enhances the 'pg_stat_subscription_stats' view with new columns for tracking specific replication conflict types.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.374,
+      "sources": [
+        6
+      ]
+    },
+    "k71": {
+      "statement": "PostgreSQL 18 adds support for virtual generated columns.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.266,
+      "sources": [
+        3
+      ]
+    },
+    "k72": {
+      "statement": "PostgreSQL 18 logical replication introduces fine-grained filtering and parallel streaming.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.266,
+      "sources": [
+        3
+      ]
+    },
+    "k73": {
+      "statement": "PostgreSQL 18 enables checksums by default for new clusters.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.266,
+      "sources": [
+        3
+      ]
+    },
+    "k74": {
+      "statement": "PostgreSQL 18 enables querying JSON data as if it were a normal table.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.198,
+      "sources": [
+        9
+      ]
+    }
+  },
+  "metadata": {
+    "config_hash": "489c5300e6b5b6ebc534e9056dad55767be79449c78e05dcdebfd962b3a2c072",
+    "models_used": {
+      "reasoning": "gemini:gemini-3.8-flash",
+      "fast": "gemini:gemini-3.1-flash-lite",
+      "embedding": "gemini-embedding-001"
+    },
+    "prompt_versions": {
+      "analyze_query": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "a727cb4344e9",
+        "label": "production"
+      },
+      "assess_coverage": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "e846c73d92bf",
+        "label": "production"
+      },
+      "evaluate_sources": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "b548bfeecc30",
+        "label": "production"
+      },
+      "extract_claims": {
+        "version": "3",
+        "source": "langfuse",
+        "content_hash": "b57eae087863",
+        "label": "production"
+      },
+      "generate_queries": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "c529f97cebe9",
+        "label": "production"
+      },
+      "judge_contradictions": {
+        "version": "5",
+        "source": "langfuse",
+        "content_hash": "726f52b7aa1e",
+        "label": "production"
+      },
+      "plan": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "887f659cc5f7",
+        "label": "production"
+      },
+      "synthesize": {
+        "version": "3",
+        "source": "langfuse",
+        "content_hash": "94db375c9234",
+        "label": "production"
+      },
+      "validate_claims": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "b0e8cb2651a3",
+        "label": "production"
+      },
+      "verify_citations": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "32456e1a0b5a",
+        "label": "production"
+      }
+    },
+    "search_providers": [
+      "tavily"
+    ],
+    "llm_providers": [
+      "gemini",
+      "openai"
+    ],
+    "stop_reason": "sufficient",
+    "stop_detail": "all 4 required sub-questions are answered",
+    "iterations": 1,
+    "budget": {
+      "iteration": 1,
+      "searches": 8,
+      "searches_left": 37,
+      "llm_calls": 49,
+      "tokens_in": 425853,
+      "tokens_out": 59051,
+      "cost_usd": 0.219979,
+      "elapsed_seconds": 93.52
+    },
+    "gate_verdict": "pass",
+    "counters": {
+      "fetch_failures": 0,
+      "duplicate_urls": 20,
+      "claims_need_fresh_confirmation": 9,
+      "claims_validation_unsupported": 2,
+      "claims_rejected_quote": 12,
+      "extraction_failures": 0,
+      "claims_rejected_injection": 0,
+      "sentences_dropped_by_verifier": 0
+    },
+    "skills": []
+  }
+}

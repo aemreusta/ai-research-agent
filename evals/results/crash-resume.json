@@ -1,0 +1,49 @@
+{
+  "run_id": "6fe9b874-b70e-44e6-8c75-547d4e9e6a8b",
+  "fault": "SIGKILL agent container during extract_claims, after search checkpoint",
+  "injected_at": 1789630189.13835,
+  "owner": "b743f55e9cfb99d02fd211b75f7f9f95e4ff5be33cfb7ab9e243d33f34ed2642",
+  "capacity_before": {
+    "agent_id": "b743f55e9cfb",
+    "slots_total": 2,
+    "slots_used": 1,
+    "slots_free": 1,
+    "running_run_ids": [
+      "6fe9b874-b70e-44e6-8c75-547d4e9e6a8b"
+    ]
+  },
+  "before": {
+    "status": "running",
+    "attempts": 1,
+    "agent_id": "b743f55e9cfb",
+    "iteration": 1,
+    "searches_used": 7
+  },
+  "last_seq_before": 75,
+  "after": {
+    "status": "succeeded_with_warnings",
+    "attempts": 2,
+    "agent_id": "b743f55e9cfb",
+    "iteration": 4,
+    "searches_used": 20,
+    "gate_status": "pass",
+    "artifacts": [
+      "gate_result",
+      "report_json",
+      "report_md",
+      "state"
+    ]
+  },
+  "run_claimed_attempts": [
+    1,
+    2
+  ],
+  "terminal_events": 1,
+  "report_ready_events": 1,
+  "sequence_gap_free": true,
+  "plan_executions": 1,
+  "intake_executions": 1,
+  "heartbeat_lost_events": 1,
+  "total_events": 346,
+  "passed": true
+}

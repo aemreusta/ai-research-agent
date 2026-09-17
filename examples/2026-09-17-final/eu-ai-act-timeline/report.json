@@ -1,0 +1,1245 @@
+{
+  "question": "What changed in the EU AI Act implementation timeline?",
+  "language": "en",
+  "title": "EU AI Act Implementation Timeline Changes",
+  "banner": null,
+  "sections": [
+    {
+      "key": "summary",
+      "title": "Summary",
+      "sentences": [
+        {
+          "text": "The EU AI Act's high-risk application dates were formally extended by Regulation (EU) 2026/1744, which entered into force on 27 July 2026.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k41"
+          ],
+          "sources": [
+            1,
+            2
+          ]
+        },
+        {
+          "text": "The stated reason for extending the high-risk application deadlines was the readiness of supporting infrastructure, specifically the lack of harmonised standards and an insufficient number of designated notified bodies.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k44"
+          ],
+          "sources": [
+            1,
+            3
+          ]
+        },
+        {
+          "text": "Earlier implementation milestones remained in place, including general provisions and prohibitions applying from 2 February 2025, General-Purpose AI rules applying from 2 August 2025, and general applicability taking effect on 2 August 2026.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k1",
+            "k17",
+            "k32",
+            "k72"
+          ],
+          "sources": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ]
+        }
+      ]
+    },
+    {
+      "key": "key_findings",
+      "title": "Key Findings",
+      "sentences": [
+        {
+          "text": "Regulation (EU) 2026/1744 formally extended the high-risk application dates under the EU AI Act and entered into force on 27 July 2026.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k41"
+          ],
+          "sources": [
+            1,
+            2
+          ]
+        },
+        {
+          "text": "The readiness of supporting infrastructure, specifically the absence of harmonised standards and an insufficient number of designated notified bodies, was the stated reason for extending the high-risk deadlines.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k44"
+          ],
+          "sources": [
+            1,
+            3
+          ]
+        },
+        {
+          "text": "According to a single source, the compliance deadline for Annex III high-risk AI systems was extended from 2 August 2026 to 2 December 2027.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k42"
+          ],
+          "sources": [
+            1
+          ]
+        },
+        {
+          "text": "According to a single source, the compliance deadline for Annex I product-safety high-risk AI systems was extended from 2 August 2027 to 2 August 2028.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k43"
+          ],
+          "sources": [
+            1
+          ]
+        },
+        {
+          "text": "According to a single source, prohibitions related to the generation or manipulation of non-consensual intimate material and child sexual abuse material apply from 2 December 2026.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k90"
+          ],
+          "sources": [
+            11
+          ]
+        },
+        {
+          "text": "The statutory applicability date for GPAI rules remained 2 August 2025, with the final iteration of the GPAI Code of Practice released on 10 July 2025 after initially being expected by 2 May 2025 according to a single source.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k1",
+            "k3",
+            "k4"
+          ],
+          "sources": [
+            4,
+            5,
+            6,
+            12
+          ]
+        },
+        {
+          "text": "The EU AI Act generally became applicable on 2 August 2026.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k32",
+            "k72"
+          ],
+          "sources": [
+            6,
+            7,
+            8,
+            9,
+            10
+          ]
+        }
+      ]
+    },
+    {
+      "key": "conflicting_or_uncertain",
+      "title": "Conflicting / Uncertain Information",
+      "sentences": []
+    },
+    {
+      "key": "conclusion",
+      "title": "Conclusion",
+      "sentences": [
+        {
+          "text": "The primary timeline changes to the EU AI Act were the formal postponements enacted by Regulation (EU) 2026/1744 due to infrastructure readiness constraints.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k41",
+            "k44"
+          ],
+          "sources": [
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "text": "Single sources report that compliance dates for Annex III and Annex I high-risk systems were shifted to 2 December 2027 and 2 August 2028 respectively, while prohibitions, GPAI requirements, and general applicability took effect as originally scheduled.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k1",
+            "k17",
+            "k32",
+            "k42",
+            "k43"
+          ],
+          "sources": [
+            1,
+            4,
+            5,
+            6,
+            7,
+            8
+          ]
+        }
+      ]
+    },
+    {
+      "key": "known_gaps",
+      "title": "Known Gaps",
+      "sentences": [
+        {
+          "text": "Have the European Commission or EU AI Office announced any formal delays, extensions, or adjustments to EU AI Act compliance deadlines? - not enough independent or primary sources were found (status of early milestones)",
+          "kind": "meta",
+          "labels": [
+            "gap:s2"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "What transitional relief, grace periods, or adjustments apply to pre-existing AI systems and GPAI models placed on the market before their respective enforcement dates? - not enough independent or primary sources were found (pre-existing high-risk AI exemptions)",
+          "kind": "meta",
+          "labels": [
+            "gap:s4"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "31 candidate claim(s) withheld: source support, conditions or current applicability could not be confirmed; see the evidence ledger.",
+          "kind": "meta",
+          "labels": [],
+          "findings": [],
+          "sources": []
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "number": 1,
+      "doc_id": "d54",
+      "url": "https://euaiact.com/blog/eu-ai-act-compliance-deadlines",
+      "title": "EU AI Act Compliance Deadlines and Dates",
+      "domain": "euaiact.com",
+      "score": 0.7725
+    },
+    {
+      "number": 2,
+      "doc_id": "d81",
+      "url": "https://docs.modulos.ai/frameworks/eu-ai-act/high-risk-ai-systems",
+      "title": "EU AI Act — High-Risk AI Systems (Article 6, Annex I/III ...",
+      "domain": "docs.modulos.ai",
+      "score": 0.305
+    },
+    {
+      "number": 3,
+      "doc_id": "d111",
+      "url": "https://akingump.com/en/insights/alerts/EU-AI-act-amendments-defer-and-clarify-obligations",
+      "title": "EU AI Act Amendments Defer and Clarify Obligations | Akin",
+      "domain": "akingump.com",
+      "score": 0.5225
+    },
+    {
+      "number": 4,
+      "doc_id": "d10",
+      "url": "https://deloitte.com/cz-sk/en/services/legal/perspectives/eus-general-purpose-ai-code-practice-need-know.html",
+      "title": "The EU's General Purpose AI Code of Practice: What You Need to Know | Deloitte",
+      "domain": "deloitte.com",
+      "score": 0.4175
+    },
+    {
+      "number": 5,
+      "doc_id": "d30",
+      "url": "https://ai-act-service-desk.ec.europa.eu/en/ai-act/timeline/timeline-implementation-eu-ai-act",
+      "title": "Timeline for the Implementation of the EU AI Act",
+      "domain": "ai-act-service-desk.ec.europa.eu",
+      "score": 0.8825
+    },
+    {
+      "number": 6,
+      "doc_id": "d88",
+      "url": "https://jonesday.com/en/insights/2025/02/eu-ai-act-first-rules-take-effect-on-prohibited-ai-systems",
+      "title": "EU AI Act: First Rules Take Effect on Prohibited AI Systems and AI Literacy | Insights | Jones Day",
+      "domain": "jonesday.com",
+      "score": 0.245
+    },
+    {
+      "number": 7,
+      "doc_id": "d37",
+      "url": "https://regulatoryglobe.com/eu-ai-act",
+      "title": "EU AI Act - Implementation Guide",
+      "domain": "regulatoryglobe.com",
+      "score": 0.29
+    },
+    {
+      "number": 8,
+      "doc_id": "d42",
+      "url": "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai",
+      "title": "AI Act | Shaping Europe's digital future - European Union",
+      "domain": "digital-strategy.ec.europa.eu",
+      "score": 1.0
+    },
+    {
+      "number": 9,
+      "doc_id": "d91",
+      "url": "https://euaiact.com/article/113",
+      "title": "EU AI Act Article 113: Entry into Force and Application",
+      "domain": "euaiact.com",
+      "score": 0.79
+    },
+    {
+      "number": 10,
+      "doc_id": "d142",
+      "url": "https://regulation-ai.eu/en/articles/article-111",
+      "title": "Article 111 — Transitional provisions (EU AI Act)",
+      "domain": "regulation-ai.eu",
+      "score": 0.43
+    },
+    {
+      "number": 11,
+      "doc_id": "d129",
+      "url": "https://digital-strategy.ec.europa.eu/en/policies/enforcement-ai-act",
+      "title": "The enforcement framework of the AI Act",
+      "domain": "digital-strategy.ec.europa.eu",
+      "score": 0.9875
+    },
+    {
+      "number": 12,
+      "doc_id": "d11",
+      "url": "https://jonesday.com/en/insights/2025/08/eu-ai-act-european-commission-publishes-generalpurpose-ai-code-of-practice",
+      "title": "EU AI Act: European Commission Publishes AI Code of ...",
+      "domain": "jonesday.com",
+      "score": 0.4125
+    }
+  ],
+  "findings": {
+    "k1": {
+      "statement": "The statutory milestone applicability date for GPAI rules under the EU AI Act is 2 August 2025.",
+      "status": "supported",
+      "support": 3,
+      "confidence": 0.8426,
+      "sources": [
+        4,
+        5,
+        6
+      ]
+    },
+    "k2": {
+      "statement": "Providers of GPAI models placed on the market before 2 August 2025 have until 2 August 2027 to comply with the EU AI Act.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.334,
+      "sources": [
+        4
+      ]
+    },
+    "k3": {
+      "statement": "The General Purpose AI (GPAI) Code of Practice was initially expected by 2 May 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.334,
+      "sources": [
+        4
+      ]
+    },
+    "k4": {
+      "statement": "The final (fourth) iteration of the GPAI Code of Practice was released on 10 July 2025.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.5538,
+      "sources": [
+        4,
+        12
+      ]
+    },
+    "k5": {
+      "statement": "Initiatives to postpone the 2 August 2025 applicability date for GPAI rules did not result in any changes.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.334,
+      "sources": [
+        4
+      ]
+    },
+    "k6": {
+      "statement": "The EU AI Act entered into force on 1 August 2024.",
+      "status": "supported",
+      "support": 7,
+      "confidence": 0.9591,
+      "sources": [
+        5,
+        7,
+        8,
+        12
+      ]
+    },
+    "k7": {
+      "statement": "The first compliance deadline for prohibited AI systems and AI literacy under the EU AI Act was 2 February 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.33,
+      "sources": [
+        12
+      ]
+    },
+    "k8": {
+      "statement": "It remains unclear whether modified GPAI models placed on the EU market after 2 August 2025 and derived from an original model from on or before 2 August 2025 will be subject to enforcement as of 2 August 2026 or 2 August 2027.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.33,
+      "sources": [
+        12
+      ]
+    },
+    "k9": {
+      "statement": "There was no formal delay announced for the EU AI Act's GPAI obligations.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.33,
+      "sources": []
+    },
+    "k10": {
+      "statement": "The European Commission's new GPAI guidance informally acknowledges that an enforcement grace period may be required.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.33,
+      "sources": []
+    },
+    "k11": {
+      "statement": "The GPAI Code of Practice was published on 10 July 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.33,
+      "sources": []
+    },
+    "k12": {
+      "statement": "The GPAI Code of Practice was formally approved on 1 August 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.33,
+      "sources": []
+    },
+    "k13": {
+      "statement": "Guidance on the scope of GPAI obligations (GPAI Guidance) was published on 18 July 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.33,
+      "sources": []
+    },
+    "k14": {
+      "statement": "The GPAI Template for summarizing data used to train GPAI models was published on 24 July 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.33,
+      "sources": []
+    },
+    "k15": {
+      "statement": "The General-Purpose AI (GPAI) Code of Practice was published on July 10, 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.78,
+      "sources": []
+    },
+    "k16": {
+      "statement": "The EU AI Act rules concerning General-Purpose AI (GPAI) models become applicable on 2 August 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.712,
+      "sources": []
+    },
+    "k17": {
+      "statement": "General provisions and prohibitions of the EU AI Act apply as of 2 February 2025.",
+      "status": "supported",
+      "support": 3,
+      "confidence": 0.8185,
+      "sources": [
+        5,
+        6,
+        7
+      ]
+    },
+    "k18": {
+      "statement": "Member States are required to have at least one operational AI regulatory sandbox per country by 2 August 2027.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.706,
+      "sources": [
+        5
+      ]
+    },
+    "k19": {
+      "statement": "Rules for high-risk AI systems in Annex III apply as of 2 December 2027.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.8,
+      "sources": [
+        5,
+        8
+      ]
+    },
+    "k20": {
+      "statement": "Rules for high-risk AI embedded in products covered by Annex I apply as of 2 August 2028.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.706,
+      "sources": [
+        5
+      ]
+    },
+    "k21": {
+      "statement": "The EU AI Act (Regulation (EU) 2024/1689) entered into force on 1 August 2024.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.577,
+      "sources": []
+    },
+    "k22": {
+      "statement": "The ban on prohibited AI practices under Article 5 became enforceable on 2 February 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.32,
+      "sources": []
+    },
+    "k23": {
+      "statement": "General Purpose AI (GPAI) model obligations under Chapter V apply from 2 August 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.32,
+      "sources": []
+    },
+    "k24": {
+      "statement": "High-risk AI system obligations under Annex III apply from 2 August 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.32,
+      "sources": []
+    },
+    "k25": {
+      "statement": "AI systems embedded in products regulated under EU product safety legislation have until 2 August 2027 to comply.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.32,
+      "sources": []
+    },
+    "k26": {
+      "statement": "There is no enforcement deadline in June 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.32,
+      "sources": []
+    },
+    "k27": {
+      "statement": "The general effective date for provisions of the EU AI Act that do not have a specific timeline, including Article 50 (transparency and labeling of synthetic content), is August 2, 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.364,
+      "sources": []
+    },
+    "k28": {
+      "statement": "Regulation (EU) 2026/1744 (Digital Omnibus) has postponed the high-risk obligations under Annex III from August 2, 2026, to December 2, 2027.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.364,
+      "sources": []
+    },
+    "k29": {
+      "statement": "The ban on the creation or manipulation of non-consensual intimate or sexual content and AI-generated child sexual abuse material (CSAM) takes effect on December 2, 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.364,
+      "sources": []
+    },
+    "k30": {
+      "statement": "Providers of AI systems, including GPAI, that generate synthetic audio, images, video, or text and were already on the market before August 2, 2026, have until December 2, 2026, to comply with labeling requirements.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.364,
+      "sources": []
+    },
+    "k31": {
+      "statement": "High-risk obligations associated with Annex I products are postponed from August 2, 2027, to August 2, 2028.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.364,
+      "sources": []
+    },
+    "k32": {
+      "statement": "The EU AI Act generally became applicable on 2 August 2026.",
+      "status": "supported",
+      "support": 3,
+      "confidence": 0.8765,
+      "sources": [
+        6,
+        7,
+        8
+      ]
+    },
+    "k33": {
+      "statement": "Prohibitions 1-8 of the AI Act became effective in February 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.8,
+      "sources": [
+        8
+      ]
+    },
+    "k34": {
+      "statement": "The prohibition on AI systems that generate non-consensual sexually explicit and intimate content or child sexual abuse material comes into effect in December 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.8,
+      "sources": [
+        8
+      ]
+    },
+    "k35": {
+      "statement": "Rules for high-risk AI systems integrated into products (Annex I) apply from 2 August 2028.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.8,
+      "sources": [
+        8
+      ]
+    },
+    "k36": {
+      "statement": "Prohibited AI systems were required to be banned by February 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.144,
+      "sources": []
+    },
+    "k37": {
+      "statement": "General-Purpose AI (GPAI) transparency requirements became mandatory in August 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.144,
+      "sources": []
+    },
+    "k38": {
+      "statement": "The deadline for compliance for high-risk AI systems is August 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.144,
+      "sources": []
+    },
+    "k39": {
+      "statement": "The full compliance deadline for AI integrated into regulated products, such as medical devices, automotive safety systems, and industrial machinery, is August 2027.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.144,
+      "sources": []
+    },
+    "k40": {
+      "statement": "GPAI models in circulation before August 2025 must be fully updated to meet EU AI Act standards by August 2027.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.144,
+      "sources": []
+    },
+    "k41": {
+      "statement": "The EU AI Act's high-risk application dates were formally extended by Regulation (EU) 2026/1744, which entered into force on 27 July 2026.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.7112,
+      "sources": [
+        1,
+        2
+      ]
+    },
+    "k42": {
+      "statement": "The deadline for Annex III high-risk AI systems was extended from 2 August 2026 to 2 December 2027.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.618,
+      "sources": [
+        1
+      ]
+    },
+    "k43": {
+      "statement": "The deadline for Annex I product-safety high-risk AI systems was extended from 2 August 2027 to 2 August 2028.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.618,
+      "sources": [
+        1
+      ]
+    },
+    "k44": {
+      "statement": "The stated reason for extending the high-risk application deadlines was the readiness of supporting infrastructure, specifically the lack of harmonised standards and insufficient number of designated notified bodies.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.7777,
+      "sources": [
+        1,
+        3
+      ]
+    },
+    "k45": {
+      "statement": "General-purpose AI models placed on the market before 2 August 2025 have until 2 August 2027 to comply with obligations.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.618,
+      "sources": [
+        1
+      ]
+    },
+    "k46": {
+      "statement": "The Council of the European Union formally approved the 'Digital Omnibus' simplification package on June 29, 2026, which delayed compliance deadlines for certain high-risk AI systems.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.384,
+      "sources": []
+    },
+    "k47": {
+      "statement": "The compliance deadline for stand-alone high-risk AI systems (Annex III) was delayed from August 2, 2026, to December 2, 2027.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.384,
+      "sources": []
+    },
+    "k48": {
+      "statement": "The compliance deadline for product-embedded high-risk AI systems (Annex I) was delayed from August 2, 2027, to August 2, 2028.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.384,
+      "sources": []
+    },
+    "k49": {
+      "statement": "Article 50 transparency obligations remain in force on their original August 2, 2026, schedule.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.384,
+      "sources": []
+    },
+    "k50": {
+      "statement": "The watermarking requirement for AI-generated content for systems already deployed before August 2, 2026, receives a four-month grace period to December 2, 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.384,
+      "sources": []
+    },
+    "k51": {
+      "statement": "The new Article 5 prohibition on AI systems that generate non-consensual intimate imagery carries a December 2, 2026, compliance date.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.384,
+      "sources": []
+    },
+    "k52": {
+      "statement": "The EU has reached an agreement to delay main compliance deadlines for high-risk AI systems, though this is currently subject to formal adoption.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.232,
+      "sources": []
+    },
+    "k53": {
+      "statement": "Obligations concerning high-risk AI systems become applicable 36 months after the entry into force of the EU AI Act.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.588,
+      "sources": []
+    },
+    "k54": {
+      "statement": "Article 6(1) and corresponding obligations start to apply on 2 August 2027.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.16,
+      "sources": []
+    },
+    "k55": {
+      "statement": "Providers of GPAI models placed on the market before 2 August 2025 have until 2 August 2027 to comply with the Regulation.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.16,
+      "sources": []
+    },
+    "k56": {
+      "statement": "The legally binding deadline for Annex III (high-risk) systems under the EU AI Act remains August 2, 2026, because the proposed changes have not been formally adopted.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.286,
+      "sources": []
+    },
+    "k57": {
+      "statement": "The proposal to extend the EU AI Act enforcement deadlines is driven by the fact that national competent authorities are only partially designated and there is a shortage of accredited bodies for conformity assessments.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.286,
+      "sources": []
+    },
+    "k58": {
+      "statement": "The current timeline includes a proposed deadline of August 2, 2028, for product-embedded systems.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.286,
+      "sources": []
+    },
+    "k59": {
+      "statement": "The enforcement date for Annex III high-risk AI system obligations was shifted to 2 December 2027, replacing the original date of 2 August 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.244,
+      "sources": [
+        2
+      ]
+    },
+    "k60": {
+      "statement": "The enforcement date for Annex I Section A high-risk AI system obligations was shifted to 2 August 2028, replacing the original date of 2 August 2027.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.244,
+      "sources": [
+        2
+      ]
+    },
+    "k61": {
+      "statement": "The EU AI Act entered into force on August 2, 2024.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.164,
+      "sources": []
+    },
+    "k62": {
+      "statement": "Providers of General-Purpose AI Models must comply with transparency obligations, including maintaining technical documentation, starting August 2, 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.164,
+      "sources": []
+    },
+    "k63": {
+      "statement": "The European Artificial Intelligence Office planned to issue Codes of Practice for Providers of General-Purpose AI Models by May 2, 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.164,
+      "sources": []
+    },
+    "k64": {
+      "statement": "The European Commission planned to issue guidance for Providers of High-Risk AI Systems on reporting serious incidents on August 2, 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.164,
+      "sources": []
+    },
+    "k65": {
+      "statement": "Chapters one and two of the EU AI Act, which cover banned practices and AI literacy duties, became applicable on February 2, 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.398,
+      "sources": []
+    },
+    "k66": {
+      "statement": "Rules governing general purpose AI models under the EU AI Act became applicable on August 2, 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.398,
+      "sources": []
+    },
+    "k67": {
+      "statement": "The Digital Omnibus amendment extended the enforcement deadlines for High Risk AI systems to provide time for infrastructure development.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.398,
+      "sources": []
+    },
+    "k68": {
+      "statement": "Under the Digital Omnibus amendment, the enforcement deadline for standalone High Risk Systems is delayed to December 2027.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.398,
+      "sources": []
+    },
+    "k69": {
+      "statement": "Under the Digital Omnibus amendment, the enforcement deadline for High Risk AI in Regulated Products is delayed to August 2028.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.398,
+      "sources": []
+    },
+    "k70": {
+      "statement": "Prohibited AI practices under Chapter II became applicable on 2 February 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.378,
+      "sources": []
+    },
+    "k71": {
+      "statement": "Rules for general-purpose AI models under Chapter V became applicable on 2 August 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.378,
+      "sources": []
+    },
+    "k72": {
+      "statement": "The Regulation generally applies from 2 August 2026.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.7586,
+      "sources": [
+        9,
+        10
+      ]
+    },
+    "k73": {
+      "statement": "Chapters I and II apply from 2 February 2025, excluding specific provisions in Article 5(1) and Article 5(1a) and (1b) which apply from 2 December 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.632,
+      "sources": [
+        9
+      ]
+    },
+    "k74": {
+      "statement": "Chapter III Section 4, Chapter V, Chapter VII, Chapter XII, and Article 78 apply from 2 August 2025, with the exception of Article 101.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.632,
+      "sources": [
+        9
+      ]
+    },
+    "k75": {
+      "statement": "Chapter III, Sections 1, 2, and 3 apply from 2 December 2027 for AI systems classified as high-risk pursuant to Article 6(2) and Annex III, excluding Article 6(5).",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.632,
+      "sources": [
+        9
+      ]
+    },
+    "k76": {
+      "statement": "Articles 102 to 110 apply from 27 July 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.632,
+      "sources": [
+        9
+      ]
+    },
+    "k77": {
+      "statement": "The deadline for compliance for high-risk AI systems classified pursuant to Article 6(2) and Annex III of the EU AI Act has been extended to 2 December 2027.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.418,
+      "sources": [
+        3
+      ]
+    },
+    "k78": {
+      "statement": "The deadline for compliance for high-risk AI systems classified pursuant to Article 6(1) and Annex I (specific EU product legislation) has been extended to 2 August 2028.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.418,
+      "sources": [
+        3
+      ]
+    },
+    "k79": {
+      "statement": "The deadline for transparency requirements for AI systems generating synthetic audio, image, video or text content (including general-purpose AI systems) has been extended to 2 December 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.418,
+      "sources": [
+        3
+      ]
+    },
+    "k80": {
+      "statement": "AI systems that generate or manipulate non-consensual intimate material are prohibited as of 2 December 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.418,
+      "sources": [
+        3
+      ]
+    },
+    "k81": {
+      "statement": "The EU AI Act's compliance requirements for high-risk AI systems listed in Annex III are postponed to 2 December 2027, and those listed in Annex I are postponed to 2 August 2028, moving from the initial enforcement date of 2 August 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.364,
+      "sources": []
+    },
+    "k82": {
+      "statement": "The primary objective of the AI Omnibus was to reduce administrative burdens and support competitiveness by providing additional time for compliance with certain obligations.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.364,
+      "sources": []
+    },
+    "k83": {
+      "statement": "Providers of GPAI models placed on the market before 2 August 2025 must comply with the AI Act by 2 August 2027.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.364,
+      "sources": []
+    },
+    "k84": {
+      "statement": "Providers of GPAI models placed on the market before August 2, 2025, must comply with the AI Act by August 2, 2027.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.196,
+      "sources": [
+        6
+      ]
+    },
+    "k85": {
+      "statement": "The obligation for providers to report serious incidents under the EU AI Act becomes enforceable on 2 August 2026, which is the same date that most high-risk obligations take effect.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.304,
+      "sources": []
+    },
+    "k86": {
+      "statement": "Prohibitions on unacceptable risk AI systems and AI literacy obligations took effect on 2 February 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.292,
+      "sources": []
+    },
+    "k87": {
+      "statement": "Rules for General-Purpose AI (GPAI) models, governance structures, and penalty/fine systems became applicable on 2 August 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.292,
+      "sources": []
+    },
+    "k88": {
+      "statement": "Most remaining provisions of the AI Act, including Article 50 transparency rules, become applicable on 2 August 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.292,
+      "sources": []
+    },
+    "k89": {
+      "statement": "Providers of GPAI models placed on the market before 2 August 2025 have until 2 August 2027 to comply with the rules.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.292,
+      "sources": []
+    },
+    "k90": {
+      "statement": "Prohibitions related to the generation or manipulation of non-consensual intimate material and child sexual abuse material (CSAM) apply from 2 December 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.79,
+      "sources": [
+        11
+      ]
+    },
+    "k91": {
+      "statement": "Rules for high-risk AI systems embedded into regulated products apply from 2 August 2028.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.79,
+      "sources": [
+        11
+      ]
+    },
+    "k92": {
+      "statement": "The European Commission’s AI Office and national authorities will begin enforcing the AI Act starting 2 August 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.78,
+      "sources": []
+    },
+    "k93": {
+      "statement": "New transparency rules requiring AI systems to disclose they are AI and label deepfakes will apply from 2 August 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.78,
+      "sources": []
+    },
+    "k94": {
+      "statement": "New rules on the transparency of AI systems took effect on 2 August 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.76,
+      "sources": []
+    },
+    "k95": {
+      "statement": "Companies may face fines of up to €15 million or 3% of global annual turnover for non-compliance with transparency rules.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.76,
+      "sources": []
+    },
+    "k96": {
+      "statement": "EU institutions, bodies, and agencies may face fines of up to €750k for non-compliance with transparency rules.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.76,
+      "sources": []
+    },
+    "k97": {
+      "statement": "High-risk AI systems listed in Annex III that were on the market before 2 August 2026 may benefit from a transitional grace period ending 2 August 2027, provided they have not been substantially modified.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.344,
+      "sources": [
+        10
+      ]
+    },
+    "k98": {
+      "statement": "Prohibited AI practices under Article 5 of the EU AI Act became enforceable on 2 February 2025 and are not subject to transitional relief.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.344,
+      "sources": [
+        10
+      ]
+    },
+    "k99": {
+      "statement": "The source document's compliance calendar lists the status for high-risk AI systems (both standalone Annex III and embedded Annex I) as 'deferred', citing the 'AI Omnibus 2026'.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.344,
+      "sources": [
+        10
+      ]
+    },
+    "k100": {
+      "statement": "The main obligations for high-risk and general-purpose AI systems take effect between August 2025 and August 2027.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.232,
+      "sources": [
+        7
+      ]
+    },
+    "k101": {
+      "statement": "Public authorities and certain large-scale systems have extended transition periods for the EU AI Act until 2030, with full enforcement beginning on 31 December 2030.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.232,
+      "sources": [
+        7
+      ]
+    },
+    "k102": {
+      "statement": "Most provisions of the EU AI Act become applicable two years after its entry into force.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.22,
+      "sources": []
+    }
+  },
+  "metadata": {
+    "config_hash": "489c5300e6b5b6ebc534e9056dad55767be79449c78e05dcdebfd962b3a2c072",
+    "models_used": {
+      "reasoning": "gemini:gemini-3.8-flash",
+      "fast": "gemini:gemini-3.1-flash-lite",
+      "embedding": "gemini-embedding-001"
+    },
+    "prompt_versions": {
+      "analyze_query": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "a727cb4344e9",
+        "label": "production"
+      },
+      "assess_coverage": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "e846c73d92bf",
+        "label": "production"
+      },
+      "evaluate_sources": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "b548bfeecc30",
+        "label": "production"
+      },
+      "extract_claims": {
+        "version": "4",
+        "source": "langfuse",
+        "content_hash": "7bb08d1d31b9",
+        "label": "production"
+      },
+      "generate_queries": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "c529f97cebe9",
+        "label": "production"
+      },
+      "judge_contradictions": {
+        "version": "5",
+        "source": "langfuse",
+        "content_hash": "726f52b7aa1e",
+        "label": "production"
+      },
+      "plan": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "1ec8bb17ccf2",
+        "label": "production"
+      },
+      "synthesize": {
+        "version": "3",
+        "source": "langfuse",
+        "content_hash": "94db375c9234",
+        "label": "production"
+      },
+      "validate_claims": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "68ed4e47da0e",
+        "label": "production"
+      },
+      "verify_citations": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "32456e1a0b5a",
+        "label": "production"
+      }
+    },
+    "search_providers": [
+      "tavily"
+    ],
+    "llm_providers": [
+      "gemini",
+      "openai"
+    ],
+    "stop_reason": "max_iterations",
+    "stop_detail": "max_iterations=4 reached",
+    "iterations": 4,
+    "budget": {
+      "iteration": 4,
+      "searches": 20,
+      "searches_left": 25,
+      "llm_calls": 102,
+      "tokens_in": 595454,
+      "tokens_out": 143748,
+      "cost_usd": 0.650795,
+      "elapsed_seconds": 253.35
+    },
+    "gate_verdict": "pass",
+    "counters": {
+      "fetch_failures": 1,
+      "duplicate_urls": 42,
+      "claims_validation_unsupported": 22,
+      "claims_need_fresh_confirmation": 10,
+      "claims_rejected_quote": 20,
+      "extraction_failures": 0,
+      "claims_rejected_injection": 0,
+      "sentences_dropped_by_verifier": 0
+    },
+    "skills": []
+  }
+}

@@ -1,0 +1,414 @@
+{
+  "question": "Compare Shopify and Wix actual full-year 2025 revenue and year-over-year growth using their primary earnings releases. Keep fiscal periods, reporting currencies and actual results separate from forecasts.",
+  "language": "en",
+  "title": "FY 2025 Revenue and Growth Comparison: Shopify and Wix",
+  "banner": null,
+  "sections": [
+    {
+      "key": "summary",
+      "title": "Summary",
+      "sentences": [
+        {
+          "text": "Shopify's revenue grew by 30% year-over-year in 2025 [k1], with a single source reporting that actual full-year revenue reached $11.556 billion [k5].",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k1",
+            "k5"
+          ],
+          "sources": [
+            1,
+            2
+          ]
+        },
+        {
+          "text": "Under US GAAP, a single source states Shopify reported financial results for the full fiscal year ended December 31, 2025, using US dollars as the reporting currency [k4].",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k4"
+          ],
+          "sources": [
+            2
+          ]
+        },
+        {
+          "text": "According to single sources, Wix scheduled the announcement and release of its fourth quarter and full-year earnings results for the year ended December 31, 2025, for March 4, 2026 [k7, k8].",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k7",
+            "k8"
+          ],
+          "sources": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "key": "key_findings",
+      "title": "Key Findings",
+      "sentences": [
+        {
+          "text": "Shopify's revenue grew by 30% year-over-year in 2025.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k1"
+          ],
+          "sources": [
+            1,
+            2
+          ]
+        },
+        {
+          "text": "A single source indicates that Shopify's actual total revenue for the full year 2025 was $11.556 billion.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k5"
+          ],
+          "sources": [
+            2
+          ]
+        },
+        {
+          "text": "A single source reports that Shopify's financial results under US GAAP are for the full fiscal year ended December 31, 2025, using US dollars as the reporting currency.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k4"
+          ],
+          "sources": [
+            2
+          ]
+        },
+        {
+          "text": "According to a single source, the primary source for Shopify's 2025 financial results is the press release issued on February 11, 2026.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k6"
+          ],
+          "sources": [
+            2
+          ]
+        },
+        {
+          "text": "According to single sources, Wix scheduled the release of its fourth quarter and full-year 2025 earnings results for the year ended December 31, 2025, on March 4, 2026.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k7",
+            "k8"
+          ],
+          "sources": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "key": "conflicting_or_uncertain",
+      "title": "Conflicting / Uncertain Information",
+      "sentences": []
+    },
+    {
+      "key": "conclusion",
+      "title": "Conclusion",
+      "sentences": [
+        {
+          "text": "Shopify achieved 30% year-over-year revenue growth in 2025 [k1], with full-year revenue reported by a single source as $11.556 billion [k5].",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k1",
+            "k5"
+          ],
+          "sources": [
+            1,
+            2
+          ]
+        },
+        {
+          "text": "Because Wix only scheduled its earnings results release for the full year ended December 31, 2025, for March 4, 2026 according to single sources [k7, k8], some comparative questions remain open.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k7",
+            "k8"
+          ],
+          "sources": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "key": "known_gaps",
+      "title": "Known Gaps",
+      "sentences": [
+        {
+          "text": "What are Shopify's actual full-year 2025 total revenue and year-over-year revenue growth rate reported in its primary earnings release? - no progress for 2 rounds (no new findings or independent sources)",
+          "kind": "meta",
+          "labels": [
+            "gap:s1"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "What are Wix.com Ltd.'s actual full-year 2025 total revenue and year-over-year revenue growth rate reported in its primary earnings release? - no progress for 2 rounds (no new findings or independent sources)",
+          "kind": "meta",
+          "labels": [
+            "gap:s2"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "How do Shopify and Wix compare regarding their reporting standards, currencies, and release timing for FY 2025 actual results versus guidance? - not enough independent or primary sources were found (accounting standards alignment, guidance distinction)",
+          "kind": "meta",
+          "labels": [
+            "gap:s3"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "1 candidate claim(s) withheld: source support, conditions or current applicability could not be confirmed; see the evidence ledger.",
+          "kind": "meta",
+          "labels": [],
+          "findings": [],
+          "sources": []
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "number": 1,
+      "doc_id": "d14",
+      "url": "https://shopify.com/news/shopify-q4-2025-financial-results",
+      "title": "Shopify's Standout 2025: The Launchpad for a New Era of ...",
+      "domain": "shopify.com",
+      "score": 0.58
+    },
+    {
+      "number": 2,
+      "doc_id": "d49",
+      "url": "https://newsfilecorp.com/release/283507/Shopifys-Standout-2025-The-Launchpad-for-a-New-Era-of-Commerce-in-2026",
+      "title": "Shopify's Standout 2025: The Launchpad for a New Era of Commerce in 2026",
+      "domain": "newsfilecorp.com",
+      "score": 0.51
+    },
+    {
+      "number": 3,
+      "doc_id": "d30",
+      "url": "https://markets.businessinsider.com/news/stocks/wix-to-announce-fourth-quarter-and-full-year-2025-earnings-results-on-march-4-2026-1035822405",
+      "title": "Wix to Announce Fourth Quarter and Full Year 2025 Earnings Results on March 4, 2026 | Markets Insider",
+      "domain": "markets.businessinsider.com",
+      "score": 0.255
+    },
+    {
+      "number": 4,
+      "doc_id": "d187",
+      "url": "https://wix.com/press-room/home/post/wix-to-announce-fourth-quarter-and-full-year-2025-earnings-results-on-march-4-2026",
+      "title": "Wix to Announce Fourth Quarter and Full Year 2025 Earnings Results on March 4, 2026",
+      "domain": "wix.com",
+      "score": 0.63
+    }
+  ],
+  "findings": {
+    "k1": {
+      "statement": "Shopify's revenue grew by 30% year-over-year in 2025.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.6827,
+      "sources": [
+        1,
+        2
+      ]
+    },
+    "k2": {
+      "statement": "Shopify's financial results are for the year ended December 31, 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.464,
+      "sources": [
+        1
+      ]
+    },
+    "k3": {
+      "statement": "Wix is scheduled to report its results for the fourth quarter and full year 2025 on March 4, 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.264,
+      "sources": []
+    },
+    "k4": {
+      "statement": "Shopify reported financial results for the full fiscal year ended December 31, 2025, using US dollars as the reporting currency.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.408,
+      "sources": [
+        2
+      ]
+    },
+    "k5": {
+      "statement": "Shopify's actual total revenue for the full year 2025 was $11.556 billion.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.408,
+      "sources": [
+        2
+      ]
+    },
+    "k6": {
+      "statement": "The primary source for Shopify's 2025 financial results is the press release issued on February 11, 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.408,
+      "sources": [
+        2
+      ]
+    },
+    "k7": {
+      "statement": "Wix scheduled the announcement of its financial results for the full year ended December 31, 2025, to occur on March 4, 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.204,
+      "sources": [
+        3
+      ]
+    },
+    "k8": {
+      "statement": "Wix scheduled the release of its fourth quarter and full-year 2025 earnings results for March 4, 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.504,
+      "sources": [
+        4
+      ]
+    }
+  },
+  "metadata": {
+    "config_hash": "489c5300e6b5b6ebc534e9056dad55767be79449c78e05dcdebfd962b3a2c072",
+    "models_used": {
+      "reasoning": "gemini:gemini-3.8-flash",
+      "fast": "gemini:gemini-3.1-flash-lite",
+      "embedding": "gemini-embedding-001"
+    },
+    "prompt_versions": {
+      "analyze_query": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "a727cb4344e9",
+        "label": "production"
+      },
+      "assess_coverage": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "e846c73d92bf",
+        "label": "production"
+      },
+      "evaluate_sources": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "b548bfeecc30",
+        "label": "production"
+      },
+      "extract_claims": {
+        "version": "4",
+        "source": "langfuse",
+        "content_hash": "7bb08d1d31b9",
+        "label": "production"
+      },
+      "generate_queries": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "c529f97cebe9",
+        "label": "production"
+      },
+      "judge_contradictions": {
+        "version": "5",
+        "source": "langfuse",
+        "content_hash": "726f52b7aa1e",
+        "label": "production"
+      },
+      "plan": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "1ec8bb17ccf2",
+        "label": "production"
+      },
+      "synthesize": {
+        "version": "3",
+        "source": "langfuse",
+        "content_hash": "94db375c9234",
+        "label": "production"
+      },
+      "validate_claims": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "68ed4e47da0e",
+        "label": "production"
+      },
+      "verify_citations": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "32456e1a0b5a",
+        "label": "production"
+      }
+    },
+    "search_providers": [
+      "tavily"
+    ],
+    "llm_providers": [
+      "gemini",
+      "openai"
+    ],
+    "stop_reason": "max_iterations",
+    "stop_detail": "max_iterations=4 reached",
+    "iterations": 4,
+    "budget": {
+      "iteration": 4,
+      "searches": 24,
+      "searches_left": 21,
+      "llm_calls": 51,
+      "tokens_in": 262353,
+      "tokens_out": 31068,
+      "cost_usd": 0.152995,
+      "elapsed_seconds": 132.37
+    },
+    "gate_verdict": "pass",
+    "counters": {
+      "fetch_failures": 1,
+      "duplicate_urls": 50,
+      "claims_need_fresh_confirmation": 1,
+      "claims_rejected_quote": 1,
+      "extraction_failures": 0,
+      "claims_rejected_injection": 0,
+      "sentences_dropped_by_verifier": 0
+    },
+    "skills": []
+  }
+}

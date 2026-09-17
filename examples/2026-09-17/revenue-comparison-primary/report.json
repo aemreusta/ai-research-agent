@@ -1,0 +1,350 @@
+{
+  "question": "Compare Shopify and Wix actual full-year 2025 revenue and year-over-year growth using their primary earnings releases. Keep fiscal periods, reporting currencies and actual results separate from forecasts.",
+  "language": "en",
+  "title": "Shopify and Wix Full-Year 2025 Financial Comparison",
+  "banner": null,
+  "sections": [
+    {
+      "key": "summary",
+      "title": "Summary",
+      "sentences": [
+        {
+          "text": "Shopify reports its revenue in US dollars.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k1"
+          ],
+          "sources": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "text": "According to a single source, Shopify released its earnings for full-year 2025 on February 11, 2026.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k2"
+          ],
+          "sources": [
+            1
+          ]
+        },
+        {
+          "text": "For full-year 2025, Shopify reported a year-over-year revenue growth rate of 30%.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k3"
+          ],
+          "sources": [
+            1,
+            2,
+            4,
+            5
+          ]
+        },
+        {
+          "text": "1 sentence(s) removed for insufficient evidence - see gate_result.json",
+          "kind": "meta",
+          "labels": [
+            "gate_note"
+          ],
+          "findings": [],
+          "sources": []
+        }
+      ]
+    },
+    {
+      "key": "key_findings",
+      "title": "Key Findings",
+      "sentences": [
+        {
+          "text": "Shopify reports its revenue in US dollars (indicated as $).",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k1"
+          ],
+          "sources": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "text": "A single source indicates that Shopify released its earnings for full-year 2025 on February 11, 2026.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k2"
+          ],
+          "sources": [
+            1
+          ]
+        },
+        {
+          "text": "Shopify reported a year-over-year revenue growth rate of 30% for full-year 2025.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k3"
+          ],
+          "sources": [
+            1,
+            2,
+            4,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "key": "conflicting_or_uncertain",
+      "title": "Conflicting / Uncertain Information",
+      "sentences": []
+    },
+    {
+      "key": "conclusion",
+      "title": "Conclusion",
+      "sentences": [
+        {
+          "text": "Shopify achieved 30% revenue growth year-over-year for full-year 2025 while reporting in US dollars.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k1",
+            "k3"
+          ],
+          "sources": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "key": "known_gaps",
+      "title": "Known Gaps",
+      "sentences": [
+        {
+          "text": "What were Shopify's total actual revenue and reporting currency for full-year 2025 reported in its primary earnings release? - no progress for 2 rounds (no new findings or independent sources)",
+          "kind": "meta",
+          "labels": [
+            "gap:s1"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "What was Shopify's year-over-year revenue growth rate for full-year 2025 relative to full-year 2024 as disclosed in its earnings release? - no progress for 2 rounds (no new findings or independent sources)",
+          "kind": "meta",
+          "labels": [
+            "gap:s2"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "3 candidate claim(s) withheld: source support, conditions or current applicability could not be confirmed; see the evidence ledger.",
+          "kind": "meta",
+          "labels": [],
+          "findings": [],
+          "sources": []
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "number": 1,
+      "doc_id": "d1",
+      "url": "https://finance.yahoo.com/news/shopify-inc-shop-q4-2025-210208784.html",
+      "title": "Shopify Inc (SHOP) Q4 2025 Earnings Call Highlights: Record Revenue and Strategic AI Advancements",
+      "domain": "finance.yahoo.com",
+      "score": 0.38
+    },
+    {
+      "number": 2,
+      "doc_id": "d27",
+      "url": "https://linkedin.com/posts/jessicarhertz_record-year-for-shopify-revenue-up-30-activity-7427382237555286016-Xmi9",
+      "title": "Shopify Sees Record Growth, 30% Revenue Increase | Jess Hertz posted on the topic | LinkedIn",
+      "domain": "linkedin.com",
+      "score": 0.405
+    },
+    {
+      "number": 3,
+      "doc_id": "d28",
+      "url": "https://brentonway.com/blog/top-shopify-marketing-statistics",
+      "title": "80+ Shopify Statistics for 2026: Marketing, Revenue & Growth | Brenton Way",
+      "domain": "brentonway.com",
+      "score": 0.3125
+    },
+    {
+      "number": 4,
+      "doc_id": "d3",
+      "url": "https://mlq.ai/news/shopify-reports-strong-q4-revenue-growth-and-launches-2-billion-share-buyback",
+      "title": "Shopify Reports Strong Q4 Revenue Growth and Launches $2 Billion Share Buyback | MLQ News",
+      "domain": "mlq.ai",
+      "score": 0.415
+    },
+    {
+      "number": 5,
+      "doc_id": "d20",
+      "url": "https://quartr.com/companies/shopify-inc_4014",
+      "title": "Shopify (SHOP) Investor Relations, Earnings Summary & Outlook",
+      "domain": "quartr.com",
+      "score": 0.185
+    }
+  ],
+  "findings": {
+    "k1": {
+      "statement": "Shopify reports its revenue in US dollars (indicated as $).",
+      "status": "supported",
+      "support": 5,
+      "confidence": 0.7992,
+      "sources": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "k2": {
+      "statement": "Shopify released its earnings for full-year 2025 on February 11, 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.304,
+      "sources": [
+        1
+      ]
+    },
+    "k3": {
+      "statement": "Shopify reported a year-over-year revenue growth rate of 30% for full-year 2025.",
+      "status": "supported",
+      "support": 4,
+      "confidence": 0.7322,
+      "sources": [
+        1,
+        2,
+        4,
+        5
+      ]
+    }
+  },
+  "metadata": {
+    "config_hash": "489c5300e6b5b6ebc534e9056dad55767be79449c78e05dcdebfd962b3a2c072",
+    "models_used": {
+      "reasoning": "gemini:gemini-3.8-flash",
+      "fast": "gemini:gemini-3.1-flash-lite",
+      "embedding": "gemini-embedding-001"
+    },
+    "prompt_versions": {
+      "analyze_query": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "a727cb4344e9",
+        "label": "production"
+      },
+      "assess_coverage": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "e846c73d92bf",
+        "label": "production"
+      },
+      "evaluate_sources": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "b548bfeecc30",
+        "label": "production"
+      },
+      "extract_claims": {
+        "version": "3",
+        "source": "langfuse",
+        "content_hash": "b57eae087863",
+        "label": "production"
+      },
+      "generate_queries": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "c529f97cebe9",
+        "label": "production"
+      },
+      "judge_contradictions": {
+        "version": "5",
+        "source": "langfuse",
+        "content_hash": "726f52b7aa1e",
+        "label": "production"
+      },
+      "plan": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "887f659cc5f7",
+        "label": "production"
+      },
+      "synthesize": {
+        "version": "3",
+        "source": "langfuse",
+        "content_hash": "94db375c9234",
+        "label": "production"
+      },
+      "validate_claims": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "b0e8cb2651a3",
+        "label": "production"
+      },
+      "verify_citations": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "32456e1a0b5a",
+        "label": "production"
+      }
+    },
+    "search_providers": [
+      "tavily"
+    ],
+    "llm_providers": [
+      "gemini",
+      "openai"
+    ],
+    "stop_reason": "max_iterations",
+    "stop_detail": "max_iterations=4 reached",
+    "iterations": 4,
+    "budget": {
+      "iteration": 4,
+      "searches": 11,
+      "searches_left": 34,
+      "llm_calls": 41,
+      "tokens_in": 280440,
+      "tokens_out": 26433,
+      "cost_usd": 0.128162,
+      "elapsed_seconds": 102.77
+    },
+    "gate_verdict": "pass_with_warnings",
+    "counters": {
+      "fetch_failures": 1,
+      "duplicate_urls": 32,
+      "claims_validation_unsupported": 3,
+      "claims_rejected_quote": 3,
+      "extraction_failures": 0,
+      "claims_rejected_injection": 0,
+      "sentences_dropped_by_verifier": 0
+    },
+    "skills": []
+  }
+}

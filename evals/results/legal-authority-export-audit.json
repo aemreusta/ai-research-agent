@@ -1,0 +1,38 @@
+[
+  {
+    "case": "eu-ai-act-timeline",
+    "claims": 166,
+    "cited_documents": 16,
+    "quote_methods": {
+      "exact": 160,
+      "fuzzy": 6
+    },
+    "invalid_quotes": 0,
+    "dangling_references": 0,
+    "source_list_mismatch": 0,
+    "undated_cited_documents": 8,
+    "numeric_violations_replay": 0,
+    "numeric_warnings_replay": 2,
+    "ineligible_citations_replay": 0,
+    "stop_reason": "max_iterations",
+    "gate_verdict": "pass_with_warnings"
+  },
+  {
+    "case": "kvkk-2026-saas-action-plan",
+    "claims": 150,
+    "cited_documents": 10,
+    "quote_methods": {
+      "fuzzy": 6,
+      "exact": 144
+    },
+    "invalid_quotes": 0,
+    "dangling_references": 0,
+    "source_list_mismatch": 0,
+    "undated_cited_documents": 4,
+    "numeric_violations_replay": 0,
+    "numeric_warnings_replay": 0,
+    "ineligible_citations_replay": 0,
+    "stop_reason": "max_iterations",
+    "gate_verdict": "pass_with_warnings"
+  }
+]

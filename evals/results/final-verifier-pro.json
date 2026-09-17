@@ -1,0 +1,17 @@
+{
+  "test": "Backend scope: reject universal ordering, retain same-backend control",
+  "rejected": {
+    "key_findings:0": "The source specifies that monotonicity is ensured within the same backend, not across all backends."
+  },
+  "verification": {
+    "requested": 2,
+    "checked": 2,
+    "unsupported": 1,
+    "unavailable": 0
+  },
+  "models": {
+    "reasoning": "gemini:gemini-3.1-pro-preview"
+  },
+  "cost_usd": 0.014336,
+  "passed": true
+}

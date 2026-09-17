@@ -1,0 +1,175 @@
+{
+  "mode": "offline_dataset_and_baseline",
+  "elapsed_seconds": 0.01,
+  "baseline": {
+    "cases": 20,
+    "true_positives": 9,
+    "false_positives": 11,
+    "false_negatives": 0,
+    "precision": 0.45,
+    "recall": 1.0,
+    "accuracy": 0.45
+  },
+  "cases": [
+    {
+      "id": "transition-dropped",
+      "category": "conditions",
+      "expected": false,
+      "baseline": true,
+      "expected_entailment": false,
+      "temporal_hold": false
+    },
+    {
+      "id": "transition-preserved",
+      "category": "conditions",
+      "expected": true,
+      "baseline": true,
+      "expected_entailment": true,
+      "temporal_hold": false
+    },
+    {
+      "id": "exemption-and",
+      "category": "conditions",
+      "expected": true,
+      "baseline": true,
+      "expected_entailment": true,
+      "temporal_hold": false
+    },
+    {
+      "id": "exemption-or",
+      "category": "conditions",
+      "expected": false,
+      "baseline": true,
+      "expected_entailment": false,
+      "temporal_hold": false
+    },
+    {
+      "id": "proposal-proposal",
+      "category": "legal_status",
+      "expected": true,
+      "baseline": true,
+      "expected_entailment": true,
+      "temporal_hold": false
+    },
+    {
+      "id": "proposal-law",
+      "category": "legal_status",
+      "expected": false,
+      "baseline": true,
+      "expected_entailment": false,
+      "temporal_hold": false
+    },
+    {
+      "id": "jurisdiction-preserved",
+      "category": "scope",
+      "expected": true,
+      "baseline": true,
+      "expected_entailment": true,
+      "temporal_hold": false
+    },
+    {
+      "id": "jurisdiction-lost",
+      "category": "scope",
+      "expected": false,
+      "baseline": true,
+      "expected_entailment": false,
+      "temporal_hold": false
+    },
+    {
+      "id": "negation-negated",
+      "category": "negation",
+      "expected": true,
+      "baseline": true,
+      "expected_entailment": true,
+      "temporal_hold": false
+    },
+    {
+      "id": "negation-reversed",
+      "category": "negation",
+      "expected": false,
+      "baseline": true,
+      "expected_entailment": false,
+      "temporal_hold": false
+    },
+    {
+      "id": "forecast-forecast",
+      "category": "forecast",
+      "expected": true,
+      "baseline": true,
+      "expected_entailment": true,
+      "temporal_hold": false
+    },
+    {
+      "id": "forecast-actual",
+      "category": "forecast",
+      "expected": false,
+      "baseline": true,
+      "expected_entailment": false,
+      "temporal_hold": false
+    },
+    {
+      "id": "stale-current",
+      "category": "freshness",
+      "expected": false,
+      "baseline": true,
+      "expected_entailment": true,
+      "temporal_hold": true
+    },
+    {
+      "id": "fresh-current",
+      "category": "freshness",
+      "expected": true,
+      "baseline": true,
+      "expected_entailment": true,
+      "temporal_hold": false
+    },
+    {
+      "id": "undated-current",
+      "category": "freshness",
+      "expected": false,
+      "baseline": true,
+      "expected_entailment": true,
+      "temporal_hold": true
+    },
+    {
+      "id": "historical-scope",
+      "category": "freshness",
+      "expected": true,
+      "baseline": true,
+      "expected_entailment": true,
+      "temporal_hold": false
+    },
+    {
+      "id": "undated-definition",
+      "category": "negative_control",
+      "expected": true,
+      "baseline": true,
+      "expected_entailment": true,
+      "temporal_hold": false
+    },
+    {
+      "id": "threshold-turkish-condition",
+      "category": "conditions",
+      "expected": false,
+      "baseline": true,
+      "expected_entailment": false,
+      "temporal_hold": false
+    },
+    {
+      "id": "real-c82",
+      "category": "real_regression",
+      "expected": false,
+      "baseline": true,
+      "expected_entailment": true,
+      "temporal_hold": true
+    },
+    {
+      "id": "real-c36",
+      "category": "real_regression",
+      "expected": false,
+      "baseline": true,
+      "expected_entailment": false,
+      "temporal_hold": false
+    }
+  ]
+}
