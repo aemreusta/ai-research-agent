@@ -59,6 +59,13 @@ lint: ## ruff, mypy --strict, gofmt, go vet
 	uv run mypy agent/src agent/tests migrations
 	cd dispatcher && test -z "$$(gofmt -l .)" && go vet ./...
 
+.PHONY: verify
+verify: ## sequential local acceptance checks; no paid provider calls
+	$(MAKE) lint
+	$(MAKE) test-integration
+	cd dispatcher && TEST_DATABASE_URL=$(TEST_DATABASE_URL) go test -race ./...
+	uv run python evals/run.py --output /tmp/apilex-evidence-baseline.json
+
 .PHONY: fmt
 fmt: ## format Python and Go
 	uv run ruff check --fix .

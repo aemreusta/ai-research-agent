@@ -1,0 +1,10 @@
+[
+  {"slug":"kvkk-2026-saas-action-plan","question":"Türkiye'deki SaaS şirketleri için 2026 KVKK uyum aksiyon planı nedir?"},
+  {"slug":"apilexai-products-partnerships","question":"ApilexAI'ın ürünleri, iş ortaklıkları ve stratejik yönü nedir?"},
+  {"slug":"eu-ai-act-timeline","question":"What changed in the EU AI Act implementation timeline?"},
+  {"slug":"legal-tech-market-size","question":"What is the size of the European legal tech market and how fast is it growing?"},
+  {"slug":"turkiye-english-gdpr-kvkk","question":"As of September 2026, how do GDPR and Türkiye's KVKK differ on personal data breach notification timing, affected parties and exceptions? Answer in English, and distinguish regulator notification from notifying affected people."},
+  {"slug":"postgresql-version-comparison","question":"Compare PostgreSQL 17 and PostgreSQL 18 using official release notes: which performance, developer and operational features changed, and what should a small SaaS team verify before upgrading?"},
+  {"slug":"fictional-company-evidence-limit","question":"Is there credible public evidence that Zorynth Quantum Legal launched a product called AuroraLex in 2026? Verify the premise before describing any products, partnerships or market position."},
+  {"slug":"revenue-comparison-primary","question":"Compare Shopify and Wix actual full-year 2025 revenue and year-over-year growth using their primary earnings releases. Keep fiscal periods, reporting currencies and actual results separate from forecasts."}
+]

@@ -1,0 +1,15 @@
+[
+  {
+    "slug": "gemini-pro-postgresql-uuid",
+    "question": "Using official PostgreSQL documentation, explain what the uuidv7() function added in PostgreSQL 18 does and how it differs from uuidv4(). Include limitations and avoid unsupported performance claims.",
+    "overrides": {
+      "llm.fast_model": "gemini-3.1-flash-lite",
+      "llm.allow_fallback": false,
+      "budget.max_cost_usd": 1,
+      "budget.max_searches": 9,
+      "llm.reasoning_model": "gemini-3.1-pro-preview",
+      "budget.max_iterations": 1,
+      "fetch.top_k_first_round": 3
+    }
+  }
+]
