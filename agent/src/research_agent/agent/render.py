@@ -15,12 +15,12 @@ from research_agent.gate.rules import LABEL_APPROXIMATE, LABEL_SINGLE_SOURCE, LA
 
 LABELS = {
     "en": {
-        LABEL_SINGLE_SOURCE: "single source",
+        LABEL_SINGLE_SOURCE: "single independent source",
         LABEL_APPROXIMATE: "approximate",
         LABEL_UNCERTAIN: "uncertain",
     },
     "tr": {
-        LABEL_SINGLE_SOURCE: "tek kaynak",
+        LABEL_SINGLE_SOURCE: "tek bağımsız kaynak",
         LABEL_APPROXIMATE: "yaklaşık",
         LABEL_UNCERTAIN: "belirsiz",
     },

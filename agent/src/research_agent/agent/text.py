@@ -181,6 +181,18 @@ def detect_language(text: str) -> str:
     return "tr" if any(char in _TR_CHARS for char in text) else "en"
 
 
+def lacks_turkish_letters(text: str, *, min_letters: int = 120) -> bool:
+    """Turkish prose written in ASCII ("Sirket yatirim") - a model habit a reader notices at once.
+
+    Ordinary Turkish has several percent of ç, ğ, ı, ö, ş, ü; below 0.5 % of a long enough text
+    the letters were dropped. Short texts are not judged.
+    """
+    letters = [char for char in text if char.isalpha()]
+    if len(letters) < min_letters:
+        return False
+    return sum(char in _TR_CHARS for char in letters) / len(letters) < 0.005
+
+
 def truncate(text: str, limit: int) -> str:
     if len(text) <= limit:
         return text

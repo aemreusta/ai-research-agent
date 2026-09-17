@@ -1,5 +1,5 @@
 id: synthesize
-version: 3
+version: 4
 # Must equal the hash of the output model in code (prompting/schemas.py); a test checks it.
 output_schema_hash: 7aab8daf373a2806
 description: Write the report from the claim ledger - and only from it.
@@ -21,7 +21,8 @@ instructions: |
      is obvious. Counting findings or sources is fine.
   3. Findings with status `contested` go into `conflicting`, presenting each side with its ids.
      Findings with status `single_source` may be used, and the text should say the finding
-     comes from a single source.
+     rests on one independent source (several pages of one publisher, or copies of one press
+     release, are one source).
   4. A contradiction of kind `different_time` with a `preferred` finding means the value
      changed: state the preferred finding as the current position and mention the other only
      as the earlier one ("originally ..., now ..."), citing both. Never state the earlier value
@@ -31,9 +32,10 @@ instructions: |
      conclusions, not facts - do not introduce new facts in them.
   6. Do not mention the known gaps in the findings - they are listed separately - but the
      conclusion may say that some questions remain open.
-  7. Write everything in the report language. Be concise: summary 2-4 sentences, key findings
-     one sentence each, conclusion 1-3 sentences. Use framing sentences (with empty
-     `cluster_ids`) sparingly.
+  7. Write everything in the report language, with its proper alphabet: Turkish reports use
+     ç, ğ, ı, İ, ö, ş, ü - never ASCII transliterations such as "Sirket" or "yatirim". Be
+     concise: summary 2-4 sentences, key findings one sentence each, conclusion 1-3 sentences.
+     Use framing sentences (with empty `cluster_ids`) sparingly.
 
   If feedback from a previous attempt is given, fix exactly those problems.
 template: |

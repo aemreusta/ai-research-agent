@@ -1,4 +1,4 @@
-"""Rules G1-G11. Each is a plain function `(report, state, config) -> list[Violation]`.
+"""Rules G1-G12. Each is a plain function `(report, state, config) -> list[Violation]`.
 
 Sentences are addressed by (section key, index) so remediation can act on exactly the sentence
 a rule flagged, and every violation carries the details that end up in `gate_result.json`.
@@ -21,7 +21,7 @@ from research_agent.agent.state import (
     SentenceKind,
     SubQuestionStatus,
 )
-from research_agent.agent.text import detect_language
+from research_agent.agent.text import detect_language, lacks_turkish_letters
 from research_agent.gate.config import GateConfig
 from research_agent.gate.numeric import (
     Kind,
@@ -448,6 +448,15 @@ def g10_language(report: Report, state: ResearchState, config: GateConfig) -> li
         return []
     detected = detect_language(body)
     if detected == state.language:
+        if state.language == "tr" and lacks_turkish_letters(body):
+            return [
+                Violation(
+                    "G10",
+                    "warn",
+                    "Turkish report is written without Turkish letters",
+                    details={"problem": "missing_turkish_letters"},
+                )
+            ]
         return []
     return [
         Violation(

@@ -1,4 +1,8 @@
-"""Output Gate G1-G11 (architecture v0.6 §11.2-11.3): one test group per rule, then the runner."""
+"""Output Gate G1-G11 (architecture v0.6 §11.2-11.3): one test group per rule, then the runner.
+
+G12 (evidence eligibility) is tested with the evidence rules in `agent/test_evidence_regressions.py`,
+and the Turkish-letter check of G10 in `agent/test_turkish_letters.py`.
+"""
 
 from __future__ import annotations
 

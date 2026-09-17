@@ -22,6 +22,7 @@ from research_agent.agent.state import (
     SentenceKind,
     SubQuestionStatus,
 )
+from research_agent.agent.text import lacks_turkish_letters
 from research_agent.errors import AgentError, ErrorCode
 from research_agent.gate import run_gate
 from research_agent.gate.rules import (
@@ -331,11 +332,33 @@ async def _synthesise(
     return build_report(result.value, state)
 
 
+_TURKISH_LETTERS = (
+    "The previous draft wrote Turkish without Turkish letters (for example 'Sirket', "
+    "'yatirim'). Rewrite the same report with correct Turkish spelling: ç, ğ, ı, İ, ö, ş, ü."
+)
+
+
+def _prose(report: Report) -> str:
+    return " ".join(
+        sentence.text
+        for section in report.sections
+        for sentence in section.sentences
+        if sentence.kind is not SentenceKind.META
+    )
+
+
 async def synthesize(state: ResearchState, deps: AgentDeps, events: EventSink) -> None:
     if not state.clusters:
         state.report = fallback_report(state)
     else:
         state.report = await _synthesise(state, deps, events, feedback="")
+        if state.language == "tr" and lacks_turkish_letters(_prose(state.report)):
+            await events.warn(
+                EventType.DECISION,
+                "The draft is Turkish without Turkish letters; rewriting once.",
+                label="Synthesizer",
+            )
+            state.report = await _synthesise(state, deps, events, feedback=_TURKISH_LETTERS)
     rebuild_sources(state.report, state)
     counts = {s.key.value: len(s.sentences) for s in state.report.sections}
     await events.info(
