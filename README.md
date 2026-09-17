@@ -14,6 +14,21 @@ Microsoft Presidio and self-hosted Langfuse. The only thing you bring is API key
 > decision log: [`TODO.md`](TODO.md) · audit: [`docs/design/analysis_v1.md`](docs/design/analysis_v1.md) ·
 > evaluation and measured limits: [`docs/review/evaluation_v3.md`](docs/review/evaluation_v3.md) ·
 > example runs: [`examples/`](examples/README.md) · answers to the case's design questions: [§16](#16-design-questions)
+> · [submission checklist and verification](docs/review/submission_checklist.md)
+
+![Run detail: a finished EU AI Act run with its citation-checked report](docs/screenshots/03-run-report.png)
+
+<details>
+<summary>More screenshots of the running system</summary>
+
+| | |
+|---|---|
+| **New research** - question, model choice per stage, advanced limits<br>![New research](docs/screenshots/01-new-research.png) | **Runs** - status, stop reason, gate verdict, cost and duration<br>![Runs](docs/screenshots/02-runs.png) |
+| **Timeline** - every dispatcher and agent step, live over SSE<br>![Timeline](docs/screenshots/04-run-timeline.png) | **Output gate** - deterministic G1-G12 checks with removed sentences<br>![Gate](docs/screenshots/05-run-gate.png) |
+| **Findings** - contradictions and the claim ledger<br>![Findings](docs/screenshots/06-run-findings.png) | **Costs** - per model, node and search provider<br>![Costs](docs/screenshots/07-costs.png) |
+| **Prompts & Skills** - signatures, active prompt versions, schema hashes<br>![Prompts](docs/screenshots/08-prompts-skills.png) | **Settings** - provider keys, kept in the browser tab<br>![Settings](docs/screenshots/09-settings.png) |
+
+</details>
 
 ---
 
@@ -71,9 +86,11 @@ docker compose --profile local-llm up -d         # add Ollama as the last link o
 make examples                                    # the four case examples, with your keys
 make reset                                       # stop everything and delete all data
 
-# The research CLI - same agent, no service layer; writes examples/<slug>/
-docker compose run --rm agent run "Your question" --out examples/my-run
-docker compose run --rm agent run "Your question" --simulate   # offline, no keys
+# The research CLI - same agent, no service layer; persist exports on the host.
+mkdir -p examples
+docker compose run --rm --no-deps --user "$(id -u):$(id -g)" \
+  -v "$PWD/examples:/app/examples" agent run "Your question" --out examples/my-run
+# Add --simulate to that command for an offline run with no keys.
 docker compose run --rm agent config --override budget.max_searches=20
 ```
 </details>
@@ -95,7 +112,8 @@ presets preserve both selections and the fallback setting. Embeddings retain the
 The same controls work through the API's `overrides` object or the CLI:
 
 ```bash
-docker compose run --rm agent run "Your question" \
+docker compose run --rm --no-deps --user "$(id -u):$(id -g)" \
+  -v "$PWD/examples:/app/examples" agent run "Your question" \
   --override llm.reasoning_model=gemini-3.1-pro-preview \
   --override llm.fast_model=gemini-3.1-flash-lite \
   --override llm.allow_fallback=false --out examples/pro-run
@@ -129,7 +147,7 @@ The gate records final structural checks after remediation. For developer accept
 | PII | Microsoft Presidio analyzer with Turkish ad-hoc recognisers, always unioned with regex rules; stable placeholders assigned in code |
 | Observability | Postgres `run_events` (primary) + self-hosted Langfuse v4 over OTLP (traces, prompt versions, cost) |
 | Frontend | Static HTML + ES modules + Server-Sent Events, no build step |
-| Quality | pytest (543 tests incl. Postgres integration and offline end-to-end graph runs), Go tests with the race detector, ruff, mypy `--strict`, pre-commit with gitleaks |
+| Quality | pytest (548 tests incl. Postgres integration and offline end-to-end graph runs), Go tests with the race detector, ruff, mypy `--strict`, pre-commit with gitleaks |
 
 ## 3. Architecture
 
@@ -271,7 +289,12 @@ similar the wording, because merging them would hide a contradiction.
 After each round the code - not the model - updates every facet:
 
 > a facet is **sufficient** if a primary source scoring ≥ 0.7 supports it, or ≥ 2 independent
-> origins do - and no unresolved contradiction touches it.
+> origins do - and no contradiction still awaiting its targeted follow-up blocks it.
+
+An unresolved contradiction blocks coverage until its one targeted follow-up is attempted.
+After that it remains contested and must be reported with uncertainty labels, but stops forcing
+more searches. Thus `sufficient` means the coverage policy is satisfied; it does not mean every
+conflict was resolved. Claims must also pass support, freshness and legal-authority checks (§5).
 
 The model's coverage review may add a missing facet and writes the gap note
 (`[Research State] Missing information: partnerships.`), but it does not decide. Then the router
@@ -441,6 +464,14 @@ The Gemini 3.1 Pro browser run took **94 seconds / $0.21**.
 
 ## 14. Tests
 
+Local development commands require **uv**, **Python 3.13** (uv can install it), **Go 1.27**
+and **make**. Docker is also required for the disposable integration database. From the repository
+root, install the locked Python dependencies first:
+
+```bash
+uv sync --locked
+```
+
 ```bash
 make verify             # lint, full suite, Go race tests, offline evidence fixtures
 make test               # unit + contract tests, Python and Go, no database
@@ -456,6 +487,16 @@ make lint               # ruff, mypy --strict, gofmt, go vet
 | API | Run creation with masking, encryption and override validation, SSE backfill / resume / live, cancel, export, costs, prompts, no key in any response |
 | Integration | Migrations match the models; events are gap-free under concurrency; concurrent claims never double-claim; compare-and-set races; requeue budget; secrets deleted on finish; agent server behaviour against real Postgres |
 | Go | Watchdog decision table, dispatch and fallback, capacity ranking and DNS discovery, agent client ↔ OpenAPI contract, state machine ↔ contract, store against Postgres (concurrent claims, CAS races, deadlines, backoff), NOTIFY listener |
+
+Direct entry points for the case's requested critical components:
+
+| Component | Tests |
+|---|---|
+| Duplicate detection | [URL, document and query dedup](agent/tests/unit/agent/test_dedup.py), [syndication](agent/tests/unit/agent/test_syndication.py) |
+| Query generation | [Quota enforcement, duplicates, fallback, gap-only follow-up and exhaustion](agent/tests/unit/agent/test_query_generation.py) |
+| Source scoring | [Weights, primary sources, recency and authority bounds](agent/tests/unit/agent/test_scoring_and_quotes.py) |
+| State transitions | [Shared state contract](agent/tests/unit/test_contracts.py), [lease and stale-worker integration](agent/tests/integration/test_leases.py) |
+| Termination logic | [Coverage, stagnation and stop rules](agent/tests/unit/agent/test_ledger_logic.py), [whole-graph scenarios](agent/tests/scenario/test_research_graph.py) |
 
 ## 15. Design decisions
 
@@ -521,10 +562,14 @@ Her alt sorunun, cevaplanmış sayılması için gereken kontrol edilebilir madd
 Her turdan sonra bu maddeler kuralla güncellenir. Bir madde şu durumda **yeterli** sayılır:
 
 - skoru ≥ 0.7 olan birincil bir kaynak onu destekliyor, **ya da** en az iki bağımsız kaynak destekliyor;
-- ona dokunan çözülmemiş bir çelişki yok;
+- ona dokunan, hedefli takip araması henüz denenmemiş bir çelişki yok;
 - destekleyen iddia doğrulanmış ve güncel. Eski ya da tarihsiz, değişebilir bir değer (ör. bir
   eşik tutarı) maddeyi tek başına kapatamaz. Hukuki yükümlülüklerde birincil bir mevzuat metni ya
   da ayrıntılı resmî rehber aranır.
+
+Çelişki için bir takip araması denendikten sonra çelişki çözülemese de kapsam kararını
+engellemeyi bırakır; bulgu tartışmalı kalır ve raporda iki taraf belirsizlik etiketiyle verilir.
+Bu yüzden `sufficient`, tüm çelişkilerin çözüldüğü değil, kapsam politikasının karşılandığı anlamına gelir.
 
 Router her turdan sonra şu sırayla karar verir:
 
@@ -563,11 +608,12 @@ Birbirinden bağımsız katmanlarla. Biri çalışmasa bile diğeri durdurur.
    - atıf doğrulamasında tek bir yeniden yazım;
    - çıktı kontrolünde (gate) ayarlanmış sayıda düzeltme turu.
 5. **LangGraph `recursion_limit`.** Tur sayısından hesaplanır; graf kendi içinde de sonsuz dönemez.
-6. **Dışarıdan zorlanan süre.** Agent'tan bağımsız Go dispatcher her denemeye kesin bir bitiş
+6. **Dışarıdan zorlanan süre.** Agent'tan bağımsız Go dispatcher her run'a kesin bir bitiş
    süresi koyar:
    - Süre dolunca önce agent'tan durması istenir, kısa bir ek süreden sonra run başarısız sayılır.
    - Heartbeat gelmeye devam etse bile süre uzamaz.
    - Çöken bir agent'ın run'ı en fazla 3 denemeye kadar başka bir kopyada kaldığı yerden devam eder.
+     Yeniden denemelerde ilk bitiş süresi korunur.
 
 ### 3. Bir kaynağın güvenilirliğini nasıl değerlendiriyorsunuz?
 
@@ -678,8 +724,9 @@ Art arda savunma katmanlarıyla:
    Çıkarılan cümle sayısı raporda yazılır. Desteklenen hiçbir bulgu kalmazsa rapor "yetersiz
    kanıt" uyarısıyla döner. Gate'te LLM olmadığı için prompt injection onu ikna edemez.
 
-Bu katmanlar desteklenmeyen iddiayı engeller. Ancak kaynağın kendisi yanlış ya da eksikse bunu
-tespit edemezler; gate'ten geçmek raporun doğru olduğunu kanıtlamaz (bkz. Known limitations).
+Bu katmanlar desteklenmeyen iddiaları filtreler; anlamsal doğrulama modeli yine de hata yapabilir.
+Kaynağın kendisi yanlış ya da eksikse bu da gözden kaçabilir; gate'ten geçmek raporun doğru
+olduğunu kanıtlamaz (bkz. Known limitations).
 
 ### 7. Search sayısı, latency ve LLM token maliyeti arasında nasıl bir denge kuruyorsunuz?
 
@@ -707,8 +754,9 @@ tespit edemezler; gate'ten geçmek raporun doğru olduğunu kanıtlamaz (bkz. Kn
 | Sıkılaştırılmış kanıt kurallarıyla (sekiz soru) | 50–306 sn | $0.02–0.70 | Çoğu 4 turun sonunda durdu |
 | Hukuki soruların birincil kaynak kuralından sonraki tekrarı | 330–360 sn | ~$1 | En pahalı durum |
 
-Daha sıkı doğrulama yanlış bilgiyi azalttı ama maliyeti, süreyi ve bazen kapsamı artırdı. Bunu
-bilinçli bir tercih olarak kabul ediyoruz. Daha düşük maliyet gerekiyorsa şunlar yapılabilir:
+Daha sıkı doğrulama bazı hatalı iddiaları dışarıda bıraktı; maliyeti ve süreyi artırırken bazı
+sorularda cevap kapsamını daralttı. Bunu bilinçli bir tercih olarak kabul ediyoruz. Daha düşük
+maliyet gerekiyorsa şunlar yapılabilir:
 
 - tur sayısı azaltılır;
 - `max_cost_usd` ya da `max_wall_clock_seconds` limiti açılır;
@@ -777,5 +825,6 @@ dahil değildir.
 ├── evals/                    # labelled evidence regressions, export audits, manual review steps
 ├── examples/                 # example runs (inputs, traces, reports, ledgers)
 ├── docs/design/              # architecture and audit (Turkish)
+├── docs/screenshots/         # screenshots of the running app
 └── docs/review/              # evaluations of the implementation and the live runs
 ```
