@@ -1,6 +1,14 @@
 # Live runs: what they showed and what changed
 
-> Historical September 16 analysis. The later [September 17 results](2026-09-17-RESULTS.md) preserve follow-up failures and current verification; “final” below refers only to the September 16 snapshot.
+> **Historical record (2026-09-16).** These are the first live runs. The code has changed since;
+> newer runs and their remaining problems are in [`2026-09-17-RESULTS.md`](2026-09-17-RESULTS.md)
+> and [evaluation v3](../docs/review/evaluation_v3.md). "Final" below refers only to the September 16 snapshot.
+>
+> Addressed later:
+>
+> - **Stale VERBİS threshold:** handled by the rule that holds back old or undated values.
+> - **Label wording:** the label now reads "single independent source", and ASCII-only Turkish
+>   reports are rewritten and flagged.
 
 All runs on 2026-09-16 used Gemini (`gemini-3.8-flash` reasoning, `gemini-3.1-flash-lite` fast,
 `gemini-embedding-001`) and Tavily. Each was started through the API (the same path as the UI),
@@ -40,7 +48,7 @@ the cost came from `extract_claims` and `verify_citations`.
 | 8 | ApilexAI v2 | The Turkish report gave the known-gap reason in English ("no progress for 2 rounds"). | Reasons are localised ("2 turdur ilerleme yok ..."). |
 
 Each fix has unit tests (`test_syndication.py`, `test_contradiction_node.py`, and additions in
-`test_ledger_logic.py` and `test_prompting.py`). The Python suite has 476 tests.
+`test_ledger_logic.py` and `test_prompting.py`). At the time the Python suite had 476 tests.
 
 ## What the final reports get right
 

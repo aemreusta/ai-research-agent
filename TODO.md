@@ -34,7 +34,7 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 | D16 | Worker + kuyruk | **Go dispatcher** (control plane: claim, kapasite, agent seçimi, heartbeat watchdog, hard deadline, cancel, retry; iş mantığı/secret yok) + **Python agent servisi** (data plane, N replica, `202 + heartbeat`). PG kuyruğu `SKIP LOCKED` + `LISTEN/NOTIFY`. Kontrat `contracts/` (OpenAPI, run states, error codes). Not: öneri Python worker'dı; Go'nun kazancı izolasyon + dış deadline güvencesi | ✅ (Emre) |
 | D17 | Frontend | API'nin servis ettiği statik HTML + vanilla JS + SSE, build adımı yok. **Çok ekranlı** hash router: `#/new` · `#/runs` · `#/runs/:id` (canlı timeline + rapor + Gate checklist) · `#/costs` · `#/prompts` · `#/settings`. **Ürünün birincil yüzü UI'dır** | ✅ |
 | D18 | API key yönetimi | UI → `sessionStorage` → run başına Fernet-şifreli `run_secrets` → run bitince silinir; `.env` varsayılan yedek; dispatcher key görmez; key'ler log/event/trace'e asla girmez (testli) | ✅ |
-| D19 | Kullanıcıya çıkış kontrolü | Deterministik Output Gate G1–G11 (`gate.yaml`), deterministik remediation, sessiz başarısızlık yok | ✅ |
+| D19 | Kullanıcıya çıkış kontrolü | Deterministik Output Gate G1–G11, sonra G12 (D45) (`gate.yaml`), deterministik remediation, sessiz başarısızlık yok | ✅ |
 | D20 | PII | Microsoft Presidio (analyzer + anonymizer). Hassas tanımlayıcılar (TCKN, IBAN, kart, telefon, e-posta, IP) her zaman maskeli; web içeriğindeki kişi/kurum adları maskelenmez; 3 sınır: intake, telemetri, çıktı | ✅ |
 | D21 | Trace backend | Postgres `run_events` birincil (UI buradan) + **Langfuse self-host** (LangGraph callback, generation ↔ prompt versiyonu bağlantısı, SDK `mask` ile redaction, trace URL `runs`'ta). LangSmith elendi: self-host Enterprise lisansı gerektiriyor | ✅ (revize) |
 | D22 | Logging | `structlog` (Python) + `log/slog` (Go), ortak JSON alanları, `run_id`/`span_id` korelasyonu, redaction processor | ✅ |
@@ -153,7 +153,7 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 ## Faz 6 — Güvenilirlik & observability · Paz
 - [~] Hata matrisi: kodların büyük kısmı senaryo/unit testlerle tetikleniyor; gerçek API'lere geçersiz anahtarla canlı doğrulama yapıldı (auth gövdeden tanınıyor, devre kesici, hepsi reddedilince fail-fast). Kalan: `DEADLINE_EXCEEDED`'in compose içinde canlı gösterimi (watchdog tablo testli)
 - [x] Langfuse payload'ında secret/PII olmadığı testli; hafif modda sistem kalkıyor ve çalışıyor (compose, `COMPOSE_PROFILES=`)
-- [ ] (SHOULD) `optimize/`: DSPy 3.x + GEPA job'ı (kilitli bağımlılıklar, ayrı profil), eval set → Langfuse dataset, koşu → experiment, `generate_queries` veya `extract_claims` için 1 optimizasyon → `candidate` + before/after metrik tablosu
+- [ ] (SHOULD, **uygulanmadı** — README Known limitations) `optimize/`: DSPy 3.x + GEPA job'ı (kilitli bağımlılıklar, ayrı profil), eval set → Langfuse dataset, koşu → experiment, `generate_queries` veya `extract_claims` için 1 optimizasyon → `candidate` + before/after metrik tablosu
 - [x] Worker crash → heartbeat → requeue → resume: lokal süreçlerle canlı, graf seviyesinde Postgres checkpointer ile entegrasyon testi
 - [x] Prompt'lar: ortak güvenlik önsözü, `<untrusted_source>` çiti, çıkarıcıda "talimatları izleme" kuralı, enjeksiyon tripwire'ı
 
@@ -182,7 +182,7 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 - [x] Temiz clone → `cp .env.example .env` → `docker compose up -d` → tüm servisler sağlıklı → UI → anahtarsız/geçersiz anahtarlı run'lar anlaşılır mesajla biter → `docker compose --profile test run tests` yeşil. Geçerli anahtarla run: kullanıcı adımı
 - [x] Secret taraması: pre-commit gitleaks her commit'te; `.env` gitignore'da
 - [x] README ↔ kod tutarlılığı: README iddiaları testlerle desteklendi (resume, simüle etiket, bellek ölçümü)
-- [ ] Repo private + reviewer daveti → link + kısa açıklama ile mail (D31)
+- [ ] Teslim: kullanıcı repoyu zip olarak iletecek (`git archive` ile; `.env` ve case PDF'i dahil değil). Gönderim kullanıcıda
 - [x] Case PDF ne çalışma ağacında ne geçmişte var (`git log --all --name-only | grep .pdf` boş)
 
 ---
@@ -194,7 +194,7 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 | Agent Orchestration & Reasoning Flow | 25% | §5 akış, §7 sonlandırma, alt soru durum makinesi, coverage-driven follow-up |
 | Search & Retrieval Strategy | 20% | §5 sorgu çeşitliliği, paralel search, triage, hedefli follow-up, §16 |
 | Reliability & Edge Case Handling | 15% | §13 hata matrisi + taksonomi, §2 heartbeat watchdog + dış deadline + checkpoint resume, §11 Gate |
-| LLM / Prompt Engineering | 15% | §20 signature katmanı + registry + skills + GEPA optimizasyonu, structured output + repair, claim-ledger-only sentez |
+| LLM / Prompt Engineering | 15% | §20 signature katmanı + registry + skills, structured output + repair, claim-ledger-only sentez (GEPA optimizasyonu tasarlandı, uygulanmadı) |
 | Software Architecture & Code Quality | 15% | §2 control/data plane ayrımı + kontratlar, §3 konfig, §17 yapı, provider soyutlamaları |
 | Testing & Observability | 5% | §14, §18 |
 | Documentation & Design Decisions | 5% | README + bu karar günlüğü |
@@ -222,7 +222,8 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 | D46 | Kullanıcı reasoning ve fast modelini ayrı seçer; fallback açık/kapalı; istenen/kullanılan modeller kaydedilir | Gemini Pro UI run; 2.5 Pro canlı test; OpenAI seçimi 429 kredi engelinde |
 | D47 | H1–H6 plan/kanıt kontrol adımları UI ve trace içinde; pass doğruluk garantisi değildir | Heuristic checks ekranı, unit ve graph testleri |
 | D48 | Hukuki yükümlülük için şirket blogu veya resmi özet sayfası yeterli değil; birincil hüküm/ayrıntılı rehber aranır | Otorite politikası regresyonları ve ayrı son canlı tekrar |
-| D49 | Doğrulama sırası make verify ile tekrarlanabilir; CI ücretli key gerektirmez | lint → PG suite → Go race → offline fixture kontrolü |
+| D49 | Doğrulama sırası make verify ile tekrarlanabilir; CI ücretli key gerektirmez | lint → PG suite → Go race → offline fixture kontrolü; GitHub Actions `Verification` yeşil |
+| D50 | Türkçe rapor Türkçe harflerle yazılır: harfsiz taslak bir kez geri bildirimle yeniden yazılır, kalırsa G10 uyarır; "tek kaynak" etiketi "tek bağımsız kaynak" oldu (bir yayıncının birkaç sayfası tek kaynaktır, atıf sayısı birden fazla olabilir); `synthesize` v4 | 2026-09-17-final ApilexAI raporu ASCII Türkçe idi; `test_turkish_letters.py` |
 
 - [x] Kullanıcının istediği Conventional Commits ile mantıksal gruplar halinde commit.
 - [x] Model seçimi ve araştırma içi sezgisel kontrol adımları.

@@ -11,7 +11,9 @@ Everything runs locally with Docker: a Python API and agent, a Go dispatcher, Po
 Microsoft Presidio and self-hosted Langfuse. The only thing you bring is API keys.
 
 > Design rationale: [`docs/design/architecture_v0.6.md`](docs/design/architecture_v0.6.md) (Turkish) ·
-> decision log: [`TODO.md`](TODO.md) · audit: [`docs/design/analysis_v1.md`](docs/design/analysis_v1.md)
+> decision log: [`TODO.md`](TODO.md) · audit: [`docs/design/analysis_v1.md`](docs/design/analysis_v1.md) ·
+> evaluation and measured limits: [`docs/review/evaluation_v3.md`](docs/review/evaluation_v3.md) ·
+> example runs: [`examples/`](examples/README.md) · answers to the case's design questions: [§16](#16-design-questions)
 
 ---
 
@@ -127,7 +129,7 @@ The gate records final structural checks after remediation. For developer accept
 | PII | Microsoft Presidio analyzer with Turkish ad-hoc recognisers, always unioned with regex rules; stable placeholders assigned in code |
 | Observability | Postgres `run_events` (primary) + self-hosted Langfuse v4 over OTLP (traces, prompt versions, cost) |
 | Frontend | Static HTML + ES modules + Server-Sent Events, no build step |
-| Quality | pytest (538 tests incl. Postgres integration and offline end-to-end graph runs), Go tests with the race detector, ruff, mypy `--strict`, pre-commit with gitleaks |
+| Quality | pytest (543 tests incl. Postgres integration and offline end-to-end graph runs), Go tests with the race detector, ruff, mypy `--strict`, pre-commit with gitleaks |
 
 ## 3. Architecture
 
@@ -320,7 +322,7 @@ injection or a hallucinating model cannot argue with it.
 | G7 | Exhausted sub-questions are in Known Gaps | Added |
 | G8 | Source URLs valid, canonical, unique | Fixed or dropped |
 | G9 | No sensitive identifier or secret in the output | Masked |
-| G10 | Report language = question language | Flagged |
+| G10 | Report language = question language; a Turkish report uses Turkish letters | Flagged (synthesis already rewrote an ASCII-only Turkish draft once) |
 | G11 | Every recommendation rests on a finding | Removed |
 | G12 | Cited claims remain eligible after support and freshness checks | Removed |
 
@@ -409,8 +411,12 @@ Unexpected ones (`UNEXPECTED_EXCEPTION`) fail the run with a redacted stack trac
 
 ## 13. Examples
 
-See [`examples/`](examples/). The four case examples are generated with your keys by
-`make examples`; `examples/offline-demo-eu-ai-act/` shows the file format from an offline run.
+See [`examples/README.md`](examples/README.md). **Start with
+[`examples/2026-09-17-final/`](examples/2026-09-17-final/)**: eight distinct questions run with real
+keys through the API, each with `input.md`, `trace.jsonl`, `report.md`, `report.json`,
+`gate_result.json` and `state.json.gz` (the full ledger, gzip-compressed). The
+[results index](examples/2026-09-17-RESULTS.md) lists every batch with duration, cost, searches,
+gate verdict, stop reason and what was still wrong; nothing was rewritten after the fact.
 
 | # | Question | Why this one |
 |---|---|---|
@@ -418,18 +424,20 @@ See [`examples/`](examples/). The four case examples are generated with your key
 | 2 | ApilexAI'ın ürünleri, iş ortaklıkları ve stratejik yönü nedir? | Thin coverage → Known Gaps |
 | 3 | What changed in the EU AI Act implementation timeline? | Conflicting dates → contradiction handling |
 | 4 | What is the size of the European legal tech market and how fast is it growing? | Numeric disagreement → G4, conflicting section |
+| 5 | GDPR vs. KVKK breach notification (asked in English about Türkiye) | Report language follows the question, not the topic |
+| 6 | PostgreSQL 17 vs. 18 from official release notes | A technical domain, primary sources |
+| 7 | Shopify vs. Wix full-year 2025 revenue | Both comparison entities must stay in the plan (H1) |
+| 8 | A made-up company and product | Honest abstention: `no_evidence`, gate `fail` by design |
 
-New exports contain `input.md`, `trace.jsonl`, `report.md`, `report.json`, `gate_result.json`
-and `state.json` (large committed snapshots are losslessly compressed as `state.json.gz`).
-The four original September 16 directories predate report JSON export and do not contain it.
-The UI exports Markdown, report JSON, state, gate result and trace; the CLI and batch harness
-also write `input.md`. See the [September 17 results index](examples/2026-09-17-RESULTS.md) for
-eight distinct questions, model-selection evidence, legal reruns and the preserved failures.
+`make examples` regenerates the four case questions with your keys; a run started in the UI can be
+exported in the same format. The four top-level folders are the first live runs (2026-09-16);
+[`examples/ANALYSIS.md`](examples/ANALYSIS.md) lists the eight defects they exposed and the fixes.
+`examples/offline-demo-eu-ai-act/` shows the file format from a keyless offline run.
 
-The eight repeat cases took **50–306 seconds** and **$0.024–$0.700** in recorded LLM cost per run.
-These are measurements from this machine, not a latency guarantee. Costs use token estimates
-and exclude search-provider credits, infrastructure and unrecorded usage when a process dies.
-The Gemini Pro browser case used one research round: **94 seconds / $0.208**.
+Across the eight questions a run took **50–306 seconds** and **$0.02–0.70** in recorded LLM cost;
+the legal reruns after the primary-source rule cost about $1 each. These are measurements from this
+machine, not guarantees; costs use token counts and exclude search credits and infrastructure.
+The Gemini 3.1 Pro browser run took **94 seconds / $0.21**.
 
 ## 14. Tests
 
@@ -489,100 +497,258 @@ The full log with alternatives considered is in [`TODO.md`](TODO.md).
   rules apply from 2026" vs. "high-risk rules were postponed") is left to the synthesiser.
 - Runs are not deterministic: the same question can stop after one round or four, depending on
   what search returns and what the models extract (see [`examples/ANALYSIS.md`](examples/ANALYSIS.md)).
+- Stricter evidence rules trade cost and coverage for fewer wrong statements: most repeat runs
+  used all four rounds, and the legal reruns cost about $1 each and reported more Known Gaps
+  (see §16, question 7).
+- The Turkish-letter check (G10) catches a report written in ASCII, not individual spelling
+  mistakes.
+- The offline prompt optimisation job (DSPy/GEPA) from the design document was not implemented;
+  prompts are versioned and hand-tuned from live runs.
 - No authentication - this is a local, single-user deployment.
 
 ---
 
 ## 16. Design Questions
 
-> Bu bölümün cevapları Türkçedir (case gereği).
+> Bu bölümün cevapları Türkçedir (case gereği). Her cevabın ayrıntısı İngilizce bölümlerde:
+> durma §7, kaynak skoru §5, tekrar tespiti §6, çelişkiler §8, çıktı kontrolü §9, maliyet §13.
 
 ### 1. Agent araştırmayı ne zaman sonlandırıyor?
 
-Karar LLM'de değil kodda. Her turdan sonra her alt sorunun facet'leri (cevaplanma kriterleri) kural
-ile güncellenir: bir facet, skoru ≥ 0.7 olan birincil bir kaynakla **ya da** en az iki bağımsız
-origin ile destekleniyorsa ve çözülmemiş bir çelişkiye dokunmuyorsa yeterlidir. Router sırayla
-bakar: (1) tüm `must` alt sorular yeterliyse **başarı**; (2) tur ya da arama bütçesi bittiyse (ve
-açıksa süre/maliyet bütçesi) **bütçe**; (3) açık alt soru kalmadıysa **ilerleme yok**; aksi halde
-yalnızca eksik facet'ler ve çözülmemiş çelişkiler için yeni tur. Her durumda rapor yazılır;
-cevaplanamayan alt sorular "Bilinen Eksikler"de listelenir ve durma nedeni raporda görünür.
+Durma kararını LLM değil kod veriyor.
+
+Her alt sorunun, cevaplanmış sayılması için gereken kontrol edilebilir maddeleri (facet) var.
+Her turdan sonra bu maddeler kuralla güncellenir. Bir madde şu durumda **yeterli** sayılır:
+
+- skoru ≥ 0.7 olan birincil bir kaynak onu destekliyor, **ya da** en az iki bağımsız kaynak destekliyor;
+- ona dokunan çözülmemiş bir çelişki yok;
+- destekleyen iddia doğrulanmış ve güncel. Eski ya da tarihsiz, değişebilir bir değer (ör. bir
+  eşik tutarı) maddeyi tek başına kapatamaz. Hukuki yükümlülüklerde birincil bir mevzuat metni ya
+  da ayrıntılı resmî rehber aranır.
+
+Router her turdan sonra şu sırayla karar verir:
+
+1. Zorunlu (`must`) alt soruların hepsi yeterliyse → `sufficient` (başarı).
+2. Bütçe bittiyse → `max_iterations` ya da `budget`. Bütçe: 4 tur ve 45 arama; süre ve maliyet
+   limitleri isteğe bağlı olarak run başına açılabilir.
+3. Açık alt soru kalmadıysa (kalanların hepsi tükendiyse) → `no_progress`.
+4. Bunların hiçbiri değilse yeni bir tura geçilir. Yeni tur yalnızca eksik maddeleri ve çözülmemiş
+   çelişkileri arar.
+
+Hangi nedenle durursa dursun rapor yazılır:
+
+- Cevaplanamayan alt sorular "Bilinen Eksikler" bölümünde nedenleriyle listelenir.
+- Durma nedeni raporda ve arayüzde görünür.
+- Hiç kanıt bulunamadıysa sonuç `no_evidence` olur. Bu durumda uydurma bir cevap değil, "yeterli
+  kanıt bulunamadı" diyen bir rapor döner. Örnek: `examples/2026-09-17-final/fictional-company-evidence-limit`.
+- Kullanıcı run'ı iptal ederse neden `cancelled` olur.
 
 ### 2. Sistemin sonsuz search loop'una girmesini nasıl engelliyorsunuz?
 
-Katmanlı: (1) sabit tur ve arama limitleri (4 tur, 45 arama) ve tur genişliği kuralı — ilk tur
-geniş, sonraki turlar yalnızca eksiklere tek sorgu; (2) durgunluk — iki tur boyunca yeni bulgu ya
-da yeni bağımsız kaynak getirmeyen alt soru "tükendi" sayılır; (3) sorgu tekrarı engeli — daha önce
-denenmiş bir sorgunun yeniden yazılmış hali çalıştırılmaz, yalnızca tekrar üretilebiliyorsa alt soru
-kapanır; (4) çelişki başına tek hedefli takip sorgusu; (5) LangGraph `recursion_limit`'i tur
-sayısından türetilir; (6) en dışta, agent'tan bağımsız Go dispatcher'ın **hard deadline**'ı — agent'ta
-bir hata olsa bile run süresiz koşamaz; önce durması istenir, süre dolunca başarısız sayılır.
+Birbirinden bağımsız katmanlarla. Biri çalışmasa bile diğeri durdurur.
+
+1. **Sabit limitler.** En fazla 4 tur ve 45 arama. Önbellekten dönen aramalar da bütçeden düşer.
+   Tur genişliği de sınırlı:
+   - ilk turda alt soru başına en fazla 3 sorgu;
+   - sonraki turlarda eksik madde başına 1 sorgu, turda toplam en fazla 8.
+2. **Durgunluk.** İki tur boyunca yeni bulgu ya da yeni bağımsız kaynak getirmeyen alt soru
+   "tükendi" sayılır ve bir daha aranmaz.
+3. **Sorgu tekrarı engeli.** Daha önce denenmiş bir sorgunun benzeri (token Jaccard ≥ 0.9)
+   çalıştırılmaz. Yalnızca tekrar sorgu üretilebiliyorsa alt soru kapanır (`DUPLICATE_QUERY`).
+4. **Sınırlı yeniden denemeler.** Hata durumlarındaki tekrarların hepsinin üst sınırı var:
+   - boş sonuçta tek bir genişletilmiş sorgu;
+   - arama ve LLM çağrılarında backoff'lu, sayısı belli yeniden deneme;
+   - geçersiz yapılandırılmış çıktıda tek bir onarma turu;
+   - çözülmemiş çelişki başına tek bir hedefli takip sorgusu;
+   - atıf doğrulamasında tek bir yeniden yazım;
+   - çıktı kontrolünde (gate) ayarlanmış sayıda düzeltme turu.
+5. **LangGraph `recursion_limit`.** Tur sayısından hesaplanır; graf kendi içinde de sonsuz dönemez.
+6. **Dışarıdan zorlanan süre.** Agent'tan bağımsız Go dispatcher her denemeye kesin bir bitiş
+   süresi koyar:
+   - Süre dolunca önce agent'tan durması istenir, kısa bir ek süreden sonra run başarısız sayılır.
+   - Heartbeat gelmeye devam etse bile süre uzamaz.
+   - Çöken bir agent'ın run'ı en fazla 3 denemeye kadar başka bir kopyada kaldığı yerden devam eder.
 
 ### 3. Bir kaynağın güvenilirliğini nasıl değerlendiriyorsunuz?
 
-Şeffaf, ağırlıklı bir skorla: `0.35·otorite + 0.25·birincillik + 0.15·güncellik + 0.25·ilgililik`.
-Otorite içerikten değil, düzenlenebilir bir domain listesinden gelir (T1 resmi/regülatör, T2 yerleşik
-haber ve araştırma kuruluşları, T3 diğerleri); model bunu tier içinde en fazla ±0.1 oynatabilir ama
-bir blogu regülatör seviyesine çıkaramaz. Birincillik: bilginin kaynağı olan yayıncı (regülatör, resmi
-gazete, şirketin kendi sitesi). Güncellik sorunun zaman kapsamına göre hesaplanır. İlgililik modelce
-değerlendirilir. Bileşenler ve tek satırlık gerekçe her kaynak için zaman çizelgesine yazılır. Ayrıca
-kaynak skoru tek başına bir iddiayı doğrulamaz: iddia, sayfada birebir geçen bir alıntıyla ve bağımsız
-kaynak sayısıyla desteklenmelidir.
+Şeffaf, ağırlıklı bir skorla:
+`0.35·otorite + 0.25·birincillik + 0.15·güncellik + 0.25·ilgililik`.
+
+- **Otorite** sayfa içeriğinden değil, düzenlenebilir bir domain listesinden gelir:
+  - T1: resmî kurumlar ve regülatörler;
+  - T2: yerleşik haber ve araştırma kuruluşları;
+  - T3: diğer tüm siteler.
+
+  Model otoriteyi en fazla ±0.1 oynatabilir ama kademe değiştiremez; bir blog kendini regülatör
+  yapamaz. Adı resmî bir kuruma benzeyen siteler (ör. `kvkkuyum.com`) de birincil sayılmaz.
+- **Birincillik:** bilgiyi ilk kez yayımlayan kaynak birincildir: regülatör, resmî gazete ya da
+  şirketin kendisiyle ilgili iddialarda kendi sitesi.
+- **Güncellik**, sorunun zaman kapsamına göre hesaplanır. Kapsamdan eski kaynak cezalandırılır,
+  tarihsiz kaynak nötrün biraz altında kalır.
+- **İlgililik**i model değerlendirir. Model yanıt vermezse kelime örtüşmesine göre hesaplanır.
+
+Kaynak skoru tek başına bir bilgiyi doğrulamaz. Her iddia ayrıca şu kontrollerden geçer:
+
+- sayfada birebir geçen bir alıntıya dayanmalı;
+- ayrı bir model kontrolünde kaynağın o iddiayı gerçekten desteklediği doğrulanmalı;
+- koşulları, yürürlük tarihi ve güncelliği kaydedilir;
+- desteği bağımsız kaynak sayısıyla ölçülür.
+
+Hukuki yükümlülük iddiaları hukuk bürosu yazılarına, bloglara ya da resmî özet ve basın
+sayfalarına dayanamaz. Bu durumda asıl mevzuat metni ya da ayrıntılı rehber için hedefli bir arama
+yapılır. Her kaynağın skoru, bileşenleri ve tek satırlık gerekçesi zaman çizelgesine yazılır.
 
 ### 4. Aynı haberin farklı sitelerde yayınlanmasını nasıl duplicate olarak tespit ediyorsunuz?
 
-Dört katmanla: URL normalizasyonu (aynı sayfa), normalize metin hash'i ve **MinHash** (kelime 5-gram,
-Jaccard ≥ 0.8) ile aynı **origin**'e bağlama (sendikasyon, basın bülteni kopyaları), embedding +
-aynı entity ile iddia kümeleme (aynı olgunun farklı ifadesi) ve sorgu tekrarı kontrolü. Belirleyici
-kural: doğrulama **bağımsız origin** sayısıyla ölçülür, URL sayısıyla değil — aynı bülteni yayımlayan
-beş site tek doğrulamadır. İddia "X'in açıklamasına göre" diyorsa X origin kabul edilir.
+Temel kural: bir bilginin desteği URL sayısıyla değil, **bağımsız kaynak** (origin) sayısıyla
+ölçülür. Aynı basın bültenini yayımlayan beş site tek doğrulamadır.
+
+Aynı kaynaktan gelen sayfalar şu katmanlarla bulunur:
+
+| Katman | Yöntem | Yakaladığı |
+|---|---|---|
+| L1 | URL normalizasyonu (şema, `www`/`m`/AMP, takip parametreleri, parça) | Aynı sayfanın farklı adresleri |
+| L2 | Normalize metin hash'i ve MinHash (kelime 5-gram, Jaccard ≥ 0.8) | Birebir ya da neredeyse aynı kopyalar, sendikasyon |
+| L2b | En az 2 ortak, en az 12 kelimelik birebir alıntı | Aynı bülten, sitelerin farklı menü ve kenar içerikleri yüzünden MinHash eşiğini geçemediğinde |
+| Yayıncı | Aynı sitenin sayfaları tek kaynak (`tr.linkedin.com` = `linkedin.com`) | Şirketin kendi sitesindeki dört sayfanın dört doğrulama sayılması |
+| Atıf | "X'in açıklamasına göre" diyen iddiada X kaynak kabul edilir | Aynı açıklamayı aktaran farklı haberler |
+| L3 | Embedding benzerliği ve aynı varlık | Aynı olgunun farklı ifadelerini tek bulguda toplamak |
+| L4 | Sorgu benzerliği | Aynı aramanın tekrar yapılması |
+
+- **Farklı değerleri olan iddialar asla birleştirilmez.** Birleştirilirlerse çelişki gizlenir.
+- **Bu yaklaşım canlı verilerle ayarlandı.** İlk canlı denemelerde aynı bülten üç ayrı sitede
+  üç doğrulama sayılmıştı; L2b ve yayıncı kuralı bunun üzerine eklendi
+  (`examples/ANALYSIS.md`).
+- **Bilinen sınır:** bülteni kendi cümleleriyle yeniden yazan sitelerde ortak alıntı olmadığı
+  için, ortak atıf da çıkarılamadıysa bu siteler hâlâ ayrı sayılabilir.
 
 ### 5. İki güvenilir kaynak birbiriyle çelişiyorsa sistem nasıl davranıyor?
 
-Önce kural aynı varlık ve özellik için farklı değerleri aday olarak bulur (sayı, para, yüzde ve
-tarihler normalize edilerek). Sonra bir yargıç model çelişkiyi sınıflandırır: gerçek çelişki, farklı
-zaman noktası, farklı kapsam/tanım ya da yuvarlama. Gerçek çelişkide, daha yüksek skorlu birincil
-kaynak tercih edilebilir — ama bu tercih ancak ledger destekliyorsa kabul edilir ve çelişki **yine
-raporlanır**. Çözülemezse birincil kaynağı arayan tek bir hedefli sorgu atılır; hâlâ çözülmezse
-rapordaki "Çelişkili / Belirsiz Bilgiler" bölümünde iki değer kaynaklarıyla birlikte verilir ve bu
-bulgulara atıf yapan diğer cümleler "belirsiz" olarak işaretlenir.
+1. **Adayları kural bulur.** Aday çift için dört koşul aranır:
+   - aynı varlık (yazım farkları eşleştirilir: "Europe legal tech" = "European legal technology");
+   - aynı özellik ("projected" gibi nitelemeler ve "valuation/size" gibi eş anlamlılar yok sayılır);
+   - ikisi de dönem belirtiyorsa aynı dönem (2025 değeri ile 2030 tahmini çelişki sayılmaz);
+   - birimi ve ölçeğiyle normalize edildiğinde tolerans dışında kalan değerler.
+2. **Bir hakem model çifti sınıflandırır:**
+   - gerçek çelişki;
+   - farklı zaman (ör. ertelenmiş bir tarih);
+   - farklı kapsam;
+   - yuvarlama;
+   - uyumlu (aynı şeyin başka ifadesi).
+
+   Hakem her iki tarafın en yeni kaynak tarihini görür. Yalnızca gerçek çelişki bulguları
+   "tartışmalı" yapar.
+3. **Tercih ancak kanıt destekliyorsa kabul edilir.** Hakem bir tarafı tercih edebilir. Tercih
+   ancak o tarafın birincil kaynağı varsa ve karşı taraftan skorca ya da kaynak tarihçe geride
+   değilse kabul edilir. Bu durumda bile çelişki **raporlanır**. Değişmiş bir tarihte güncel taraf "şimdiki
+   durum", diğeri "önceki durum" olarak yazılır.
+4. **Çözülemeyen çelişki için hedefli arama yapılır.** Birincil kaynağı bulmak için tek bir takip
+   sorgusu atılır.
+5. **Hâlâ çözülmediyse belirsizlik açıkça yazılır.** İki değer kaynaklarıyla birlikte raporun
+   "Çelişkili / Belirsiz Bilgiler" bölümünde verilir. Bu bulgulara atıf yapan diğer cümleler
+   "belirsiz" etiketi alır; çıktı kontrolü (G5) bunu denetler.
 
 ### 6. LLM tarafından üretilmiş fakat hiçbir kaynak tarafından desteklenmeyen bir claim'in final cevaba girmesini nasıl engelliyorsunuz?
 
-Derinlemesine savunma: (1) her iddianın alıntısı sayfa metnine eşleşmelidir (birebir, normalize
-veya eşikli fuzzy eşleşme; sayı tutarlılığı ayrıca denetlenir); eşleşmeyen iddia atılır; modele hitap eden cümleler ("önceki talimatları
-yok say") kanıt sayılmaz; (2) sentez modeli web'i hiç görmez, yalnızca ID'li bulgu defterini görür ve
-her olgusal cümle bulgu ID'si taşımak zorundadır; (3) ayrı bir doğrulama adımı her cümlenin atıf
-yaptığı bulgularca desteklenip desteklenmediğini batch'ler halinde kontrol eder, bir kez geri
-bildirimle yeniden yazdırır, desteklenmeyeni atar; (4) son sözü **deterministik Output Gate** söyler:
-atıfsız cümle (G2), ledger'da olmayan atıf (G3) ve kaynakta karşılığı olmayan sayı/tarih/tutar (G4)
-çıkarılır, çıkarılan cümle sayısı raporda yazılır, hiç desteklenen bulgu kalmazsa rapor "yetersiz
-kanıt" uyarısıyla döner. Gate'te LLM olmadığı için prompt injection da onu ikna edemez.
+Art arda savunma katmanlarıyla:
+
+1. **Alıntı zorunlu.** Her iddianın alıntısı sayfa metninde bulunmalıdır: birebir, normalize ya da
+   eşikli fuzzy eşleşmeyle, sayıların tutarlılığı ayrıca denetlenerek.
+   - Eşleşmeyen iddia atılır.
+   - Modele hitap eden cümleler ("önceki talimatları yok say") kanıt sayılmaz.
+2. **İddia doğrulaması.** Ayrı bir model kontrolü, kaynağın iddiayı koşullarıyla birlikte gerçekten
+   desteklediğini doğrular.
+   - Cevap eksik ya da geçersizse bir kez yeniden denenir, sonra iddia reddedilir; şüphede kanıt
+     kabul edilmez.
+   - Güncelliği doğrulanamayan değerler sentezden önce ayrılır.
+3. **Sentez yalnızca bulgu listesini görür.** Sentez modeli web'i hiç görmez; yalnızca ID'li bulgu
+   listesini görür. Her olgusal cümle en az bir bulgu ID'si taşımak zorundadır.
+4. **Atıf doğrulaması.** Ayrı bir adım her cümlenin atıf yaptığı bulgularca desteklenip
+   desteklenmediğini toplu olarak kontrol eder (öneriler dahil). Desteklenmeyen cümleler için
+   rapor bir kez geri bildirimle yeniden yazdırılır, yine desteklenmeyen cümle atılır.
+5. **Sezgisel kontroller (H1–H6).** Tek kaynağa dayanan, koşulu kaybolmuş ya da güncelliği
+   doğrulanmamış bulguları zaman çizelgesinde ve arayüzde görünür yapar.
+6. **Son söz deterministik çıktı kontrolünde (gate).** Şu cümleler çıkarılır:
+   - atıfsız cümleler (G2);
+   - kayıtta olmayan bulgulara yapılan atıflar (G3);
+   - kaynakta karşılığı olmayan sayı, tarih ve tutarlar (G4);
+   - doğrulanmamış ya da güncelliği teyit edilmemiş bulgulara dayanan cümleler (G12);
+   - bir bulguya dayanmayan öneriler (G11).
+
+   Çıkarılan cümle sayısı raporda yazılır. Desteklenen hiçbir bulgu kalmazsa rapor "yetersiz
+   kanıt" uyarısıyla döner. Gate'te LLM olmadığı için prompt injection onu ikna edemez.
+
+Bu katmanlar desteklenmeyen iddiayı engeller. Ancak kaynağın kendisi yanlış ya da eksikse bunu
+tespit edemezler; gate'ten geçmek raporun doğru olduğunu kanıtlamaz (bkz. Known limitations).
 
 ### 7. Search sayısı, latency ve LLM token maliyeti arasında nasıl bir denge kuruyorsunuz?
 
-Bütçenin asıl kontrolü tur genişliği: ilk tur geniş, sonraki turlar yalnızca eksiklere. Snippet-first
-triage ile yalnızca alt soru başına ilk birkaç kaynak tam okunur; Tavily sayfa metnini aramayla
-birlikte döndürdüğü için ayrıca fetch nadiren gerekir, ve `basic` derinlik arama başına 1 kredi harcar.
-İki model katmanı var: planlama/sentez ve iddia/atıf doğrulama gibi yargı adımları `reasoning`, çıkarma/sınıflandırma gibi
-yüksek hacimli adımlar ucuz `fast` modelde, düşük düşünme seviyesiyle. Arama, çıkarma ve doğrulama
-paralel ve semaphore'la sınırlı; atıf doğrulama cümle başına değil batch'ler halinde. Arama ve
-embedding sonuçları Postgres'te önbelleklenir. Token, maliyet ve süre sayaçları her zaman çalışır ve
-UI'da canlı görünür; süre ve maliyet limitleri varsayılan kapalıdır ve run başına açılabilir.
-Fiyatlar tek bir dosyada tutulur ve maliyet panosu model, node ve run bazında kırılım verir.
+- **Tur genişliği bütçenin asıl kontrolü.** İlk tur geniş tutulur, sonraki turlar yalnızca
+  eksikleri arar. Bu sayede dört tur 45 aramalık bütçeye sığar.
+- **Az sayfa tam okunur.** Alt soru başına yalnızca ilk 5 kaynak (sonraki turlarda 3) tam okunur.
+  Tavily sayfa metnini sonuçla birlikte döndürdüğü için ayrıca sayfa indirmek nadiren gerekir;
+  `basic` derinlik arama başına 1 kredi harcar.
+- **İki model katmanı.** Planlama, kapsam değerlendirmesi, sentez ve doğrulama `reasoning`
+  modelinde; sorgu üretimi, kaynak skorlama, iddia çıkarma ve çelişki hakemliği ucuz `fast`
+  modelde, düşük düşünme seviyesiyle çalışır. İki model yeni araştırma ekranından, API'den ya da
+  CLI'dan ayrı ayrı seçilebilir.
+- **Paralel çalışma ve önbellek.** Arama, sayfa indirme ve LLM çağrıları paralel çalışır; her biri
+  semaphore ile sınırlıdır. Atıf doğrulaması cümle cümle değil 10'arlı gruplar halinde yapılır.
+  Arama ve embedding sonuçları Postgres'te önbelleklenir.
+- **Her şey ölçülür.** Token, maliyet ve süre her çağrı için kaydedilir; arayüzde canlı ve
+  model/adım/run bazında görünür. Süre ve maliyet limitleri varsayılan olarak kapalıdır, run
+  başına açılabilir.
+
+**Ölçülen denge (bu makinede):**
+
+| Denemeler | Süre | LLM maliyeti | Not |
+|---|---|---|---|
+| İlk canlı denemeler | 100–140 sn | $0.08–0.20 | Aynı dört soru |
+| Sıkılaştırılmış kanıt kurallarıyla (sekiz soru) | 50–306 sn | $0.02–0.70 | Çoğu 4 turun sonunda durdu |
+| Hukuki soruların birincil kaynak kuralından sonraki tekrarı | 330–360 sn | ~$1 | En pahalı durum |
+
+Daha sıkı doğrulama yanlış bilgiyi azalttı ama maliyeti, süreyi ve bazen kapsamı artırdı. Bunu
+bilinçli bir tercih olarak kabul ediyoruz. Daha düşük maliyet gerekiyorsa şunlar yapılabilir:
+
+- tur sayısı azaltılır;
+- `max_cost_usd` ya da `max_wall_clock_seconds` limiti açılır;
+- `reasoning` katmanında daha ucuz bir model seçilir.
+
+Ayrıntılar `examples/2026-09-17-RESULTS.md` dosyasında. Maliyetlere arama kredileri ve altyapı
+dahil değildir.
 
 ### 8. Bu sistemi production ortamına taşımanız gerekse hangi parçaları değiştirir veya geliştirirdiniz?
 
-Platform: Kubernetes/Helm, yönetilen Postgres, anahtarlar için Fernet + `.env` yerine Vault/KMS,
-SSO ve çok kiracılı yetkilendirme, API kimlik doğrulaması ve rate limit. Ölçek: agent ve dispatcher
-için yatay otomatik ölçekleme; hacim artarsa Postgres kuyruğu yerine özel bir kuyruk; sağlayıcı başına
-circuit breaker ve kota yönetimi; büyük fetch yükü için ayrı bir fetch servisi. Kalite: altın bir
-değerlendirme seti ve prompt/model değişikliklerinde CI'da regresyon kapısı; offline prompt
-optimizasyonu (DSPy/GEPA) Gate ihlallerini geri bildirim olarak kullanarak. Hukuk alanı: kurumca
-yönetilen domain listeleri (Resmî Gazete, mevzuat, içtihat kaynakları), izin/yasak listeleri,
-robots/kullanım koşulu uyumu. PII: Türkçe NER modeli, saklama ve silme politikası, denetim kaydı.
-Gözlemlenebilirlik: OpenTelemetry collector (dispatcher span'leri dahil), Langfuse için harici
-ClickHouse/S3 ve RBAC, maliyet ve hata alarmları. Ayrıca run'lar arası semantik önbellek (pgvector)
-ve isteğe bağlı insan onaylı plan adımı.
+- **Platform:**
+  - Kubernetes/Helm ve yönetilen Postgres;
+  - anahtarlar için `.env` ve Fernet yerine Vault/KMS;
+  - SSO, çok kiracılı yetkilendirme, API kimlik doğrulaması ve rate limit (şu an yok: yerel,
+    tek kullanıcılı kurulum).
+- **Ölçek:**
+  - agent ve dispatcher için yatay otomatik ölçekleme;
+  - hacim artarsa Postgres kuyruğu yerine ayrı bir kuyruk sistemi;
+  - sağlayıcı başına circuit breaker ve kota yönetimi;
+  - yoğun sayfa indirme işi için ayrı bir fetch servisi.
+- **Kalite:**
+  - geliştirme sırasında görülmemiş, daha büyük ve alan uzmanlarınca etiketlenmiş bir
+    değerlendirme seti (şu anki 20 vakalık set küçük);
+  - prompt veya model değişikliklerinde, ücretli anahtarla çalışan bir regresyon kontrolü (bugünkü
+    GitHub Actions iş akışı anahtarsız testleri çalıştırıyor);
+  - eşik değerlerinin kalibrasyonu;
+  - gate ihlallerini geri bildirim olarak kullanan offline prompt optimizasyonu (DSPy/GEPA). Bu
+    tasarlandı ama uygulanmadı.
+- **Hukuk alanı:**
+  - kurumca yönetilen kaynak listeleri (Resmî Gazete, mevzuat, içtihat);
+  - izin ve yasak listeleri;
+  - mevzuat sürüm takibi;
+  - robots ve kullanım koşullarına uyum;
+  - hukuki yorum gerektiren bulgularda uzman onayı (human-in-the-loop).
+- **PII:** Türkçe NER modeli, saklama ve silme politikası, denetim kaydı.
+- **Gözlemlenebilirlik:**
+  - OpenTelemetry collector (dispatcher span'leri dahil);
+  - Langfuse için harici ClickHouse/S3 ve rol bazlı erişim;
+  - maliyet ve hata alarmları.
+- **Diğer:** run'lar arası semantik önbellek (pgvector) ve isteğe bağlı, insan onaylı plan adımı.
 
 ---
 
@@ -597,7 +763,7 @@ ve isteğe bağlı insan onaylı plan adımı.
 ├── skills/                   # research skills (SKILL.md + references)
 ├── agent/src/research_agent/
 │   ├── agent/                # graph, nodes, state (claim ledger), scoring, dedup, clustering, termination
-│   ├── gate/                 # output gate: numeric normaliser, rules G1-G11, remediation
+│   ├── gate/                 # output gate: numeric normaliser, rules G1-G12, remediation
 │   ├── prompting/            # signatures, prompt registry, skills, predictor
 │   ├── providers/            # LLM (Gemini, OpenAI/Ollama), search (Tavily, Brave), fetch, embeddings
 │   ├── pii/                  # intake masking (Presidio + regex)
@@ -608,6 +774,8 @@ ve isteğe bağlı insan onaylı plan adımı.
 │   └── cli.py                # research config | contracts | run | serve | migrate
 ├── agent/tests/              # unit · scenario · api · contract · integration
 ├── dispatcher/               # Go control plane
-├── examples/                 # example runs
-└── docs/design/              # architecture and audit (Turkish)
+├── evals/                    # labelled evidence regressions, export audits, manual review steps
+├── examples/                 # example runs (inputs, traces, reports, ledgers)
+├── docs/design/              # architecture and audit (Turkish)
+└── docs/review/              # evaluations of the implementation and the live runs
 ```

@@ -102,10 +102,11 @@ not a certification of correctness. Full state snapshots are losslessly compress
 
 ## Reliability evidence and reproducibility
 
-`make verify` passed **538 Python tests**, all Go packages including the race detector, Ruff,
-strict mypy (154 source/test files), Go formatting/vet and offline fixtures. The final Docker suite also passed **538 tests** in 20.72 seconds against a separate test
+`make verify` passed **543 Python tests** (after the Turkish-letter and label change below), all Go packages including the race detector, Ruff,
+strict mypy (155 source/test files), Go formatting/vet and offline fixtures. The Docker suite passed the then **538 tests** in 20.72 seconds against a separate test
 database inside the Compose network. A GitHub Actions
-workflow runs the same categories with PostgreSQL and no paid keys; it has not run remotely yet.
+workflow runs the same categories with PostgreSQL and no paid keys; its remote run on the pushed
+`main` passed.
 
 The real crash test killed an agent container during extraction after a completed search
 checkpoint. The dispatcher reclaimed the run as attempt 2. It completed with 346 gap-free events,
@@ -117,6 +118,22 @@ Controlled tests cover 401/429/5xx, malformed responses/repair failure, empty se
 budgets and optional-service degradation. An actual local TCP server which never responds tests
 read timeout and provider fallback. The hard-deadline/heartbeat race is tested against PostgreSQL;
 a separate full-stack hung-but-heartbeating fault injection was not performed.
+
+## Report wording (post-review change)
+
+A completeness review against the case found two presentation defects in the retained reports:
+
+- **ASCII-only Turkish.** The `2026-09-17-final` ApilexAI report was written without Turkish
+  letters ("Sirket", "yatirim").
+  - Synthesis now detects such a draft and rewrites it once with feedback.
+  - If the report is still ASCII-only, G10 raises a warning.
+  - The `synthesize` seed is now version 4 with an explicit spelling rule.
+- **Misleading "single source" label.** The label appeared on sentences with several citations.
+  Those citations were pages of one publisher, which count as one independent source, so the label
+  now reads "single independent source" / "tek bağımsız kaynak".
+
+Unit tests cover the detection, the single rewrite, the G10 warning and the label. No new live
+run was made for this change; the retained reports are not edited.
 
 ## Remaining limits
 
@@ -134,5 +151,5 @@ a separate full-stack hung-but-heartbeating fault injection was not performed.
 5. No authentication or multitenancy is provided for this local deployment. DSPy/GEPA optimization,
    broader threshold calibration and production operations remain outside this improvement pass.
 
-No email, reviewer invitation, remote push or deployment was performed. Changes are committed in
-Conventional Commit groups; local evidence is available without provider keys.
+No email, reviewer invitation or deployment was performed. Changes are committed in Conventional
+Commit groups and pushed to the private repository; local evidence is available without provider keys.
