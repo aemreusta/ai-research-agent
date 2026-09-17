@@ -20,6 +20,7 @@ import asyncio
 import contextlib
 import traceback
 import uuid
+from datetime import UTC, datetime
 from typing import Any
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
@@ -33,9 +34,8 @@ from research_agent.agent.runner import (
 )
 from research_agent.config.schema import Settings
 from research_agent.contracts import RunStatus
-from research_agent.db.models import RunArtifact
-from research_agent.db.repository import RunRepository
-from research_agent.errors import AgentError, AgentException, ErrorCode
+from research_agent.db.repository import IllegalTransitionError, RunRepository
+from research_agent.errors import AgentError, AgentException, ErrorCode, LeaseLostError
 from research_agent.keys import ProviderKeys, SecretBox
 from research_agent.observability.events import EventType, EventWriter, new_span_id
 from research_agent.observability.logging import bind_context, clear_context, get_logger
@@ -92,6 +92,7 @@ class RunExecutor:
         self._secret_box = secret_box
         self._tasks: dict[uuid.UUID, asyncio.Task[None]] = {}
         self._draining = False
+        self._accept_lock = asyncio.Lock()
 
     # --- state the dispatcher polls -------------------------------------------------------------
 
@@ -137,6 +138,7 @@ class RunExecutor:
         run_id: uuid.UUID,
         *,
         attempt: int,
+        lease_id: uuid.UUID,
         deadline_at: Any = None,
         dispatcher_id: str | None = None,
     ) -> None:
@@ -146,22 +148,28 @@ class RunExecutor:
         meaningful: after this returns, the run is this replica's responsibility even if the HTTP
         response never arrives.
         """
-        if run_id in self._tasks:
-            raise AlreadyExecutingError(run_id)
-        if self.slots_free <= 0:
-            raise NoCapacityError(run_id)
-
-        async with self._sessionmaker() as session:
-            repository = RunRepository(session)
-            await repository.require(run_id)
-            await repository.mark_running(run_id, agent_id=self.agent_id, deadline_at=deadline_at)
-
-        task = asyncio.create_task(
-            self._execute(run_id, attempt=attempt, dispatcher_id=dispatcher_id),
-            name=f"run-{run_id}",
-        )
-        self._tasks[run_id] = task
-        task.add_done_callback(lambda _: self._tasks.pop(run_id, None))
+        async with self._accept_lock:
+            if run_id in self._tasks:
+                raise AlreadyExecutingError(run_id)
+            if self.slots_free <= 0:
+                raise NoCapacityError(run_id)
+            async with self._sessionmaker() as session:
+                repository = RunRepository(session, lease_id=lease_id)
+                run = await repository.require(run_id)
+                if run.attempts != attempt or run.lease_id != lease_id:
+                    raise LeaseLostError(run_id)
+                # The stored deadline is authoritative; a delayed request cannot extend it.
+                await repository.mark_running(
+                    run_id, agent_id=self.agent_id, deadline_at=run.deadline_at
+                )
+            task = asyncio.create_task(
+                self._execute(
+                    run_id, attempt=attempt, lease_id=lease_id, dispatcher_id=dispatcher_id
+                ),
+                name=f"run-{run_id}",
+            )
+            self._tasks[run_id] = task
+            task.add_done_callback(lambda _: self._tasks.pop(run_id, None))
 
     async def cancel(self, run_id: uuid.UUID, *, reason: str | None = None) -> bool:
         """Request a cooperative stop. Returns whether this replica owns the run."""
@@ -192,14 +200,23 @@ class RunExecutor:
 
     # --- the run itself -------------------------------------------------------------------------
 
-    async def _execute(self, run_id: uuid.UUID, *, attempt: int, dispatcher_id: str | None) -> None:
+    async def _execute(
+        self, run_id: uuid.UUID, *, attempt: int, lease_id: uuid.UUID, dispatcher_id: str | None
+    ) -> None:
         span_id = new_span_id()
         bind_context(run_id=str(run_id), span_id=span_id, agent_id=self.agent_id)
-        events = EventWriter(self._sessionmaker, run_id=run_id, node="agent", span_id=span_id)
-        heartbeat = asyncio.create_task(self._heartbeat(run_id), name=f"heartbeat-{run_id}")
+        events = EventWriter(
+            self._sessionmaker, run_id=run_id, node="agent", span_id=span_id, lease_id=lease_id
+        )
+        heartbeat = asyncio.create_task(
+            self._heartbeat(run_id, lease_id=lease_id, owner=asyncio.current_task()),
+            name=f"heartbeat-{run_id}",
+        )
 
         try:
-            context = await self._build_context(run_id, attempt=attempt, events=events)
+            context = await self._build_context(
+                run_id, attempt=attempt, events=events, lease_id=lease_id
+            )
             await events.info(
                 EventType.RUN_STARTED,
                 (
@@ -210,7 +227,23 @@ class RunExecutor:
                 label="Agent",
                 data={"attempt": attempt, "agent_id": self.agent_id, "dispatcher": dispatcher_id},
             )
-            outcome = await self._runner(context)
+            seconds = (
+                (context.deadline_at - datetime.now(UTC)).total_seconds()
+                if context.deadline_at
+                else None
+            )
+            async with asyncio.timeout(seconds):
+                outcome = await self._runner(context)
+        except (LeaseLostError, asyncio.CancelledError):
+            clear_context()
+            # Ownership was revoked. No event or artifact may be published by this attempt.
+            return
+        except TimeoutError:
+            outcome = RunOutcome(
+                status=RunStatus.FAILED,
+                error_code=ErrorCode.DEADLINE_EXCEEDED.value,
+                error_message="The run exceeded its stored hard deadline.",
+            )
         except CancelledByRequest:
             outcome = RunOutcome(status=RunStatus.CANCELLED, stop_reason="cancelled")
             await events.warn(EventType.RUN_CANCELLED, "Run cancelled at a node boundary.")
@@ -243,14 +276,16 @@ class RunExecutor:
             with contextlib.suppress(asyncio.CancelledError):
                 await heartbeat
 
-        await self._settle(run_id, outcome, events)
-        clear_context()
+        try:
+            await self._settle(run_id, outcome, events, lease_id=lease_id)
+        finally:
+            clear_context()
 
     async def _build_context(
-        self, run_id: uuid.UUID, *, attempt: int, events: EventWriter
+        self, run_id: uuid.UUID, *, attempt: int, events: EventWriter, lease_id: uuid.UUID
     ) -> RunContext:
         async with self._sessionmaker() as session:
-            repository = RunRepository(session)
+            repository = RunRepository(session, lease_id=lease_id)
             run = await repository.require(run_id)
             # The snapshot, not today's YAML: a config change mid-flight must not alter a run.
             settings = Settings.model_validate(run.config_snapshot)
@@ -263,7 +298,7 @@ class RunExecutor:
 
         async def is_cancelled() -> bool:
             async with self._sessionmaker() as session:
-                return await RunRepository(session).cancel_requested(run_id)
+                return await RunRepository(session, lease_id=lease_id).cancel_requested(run_id)
 
         return RunContext(
             run_id=run_id,
@@ -272,56 +307,49 @@ class RunExecutor:
             keys=keys,
             events=events,
             attempt=attempt,
+            lease_id=lease_id,
+            deadline_at=run.deadline_at,
             is_cancelled=is_cancelled,
         )
 
-    async def _heartbeat(self, run_id: uuid.UUID) -> None:
+    async def _heartbeat(
+        self, run_id: uuid.UUID, *, lease_id: uuid.UUID, owner: asyncio.Task[Any] | None
+    ) -> None:
         while True:
             await asyncio.sleep(self._heartbeat_interval)
             try:
                 async with self._sessionmaker() as session:
-                    await RunRepository(session).heartbeat(run_id)
+                    await RunRepository(session, lease_id=lease_id).heartbeat(run_id)
+            except LeaseLostError:
+                if owner is not None:
+                    owner.cancel()
+                return
             except Exception:
                 _logger.warning("heartbeat failed", run_id=str(run_id))
 
-    async def _settle(self, run_id: uuid.UUID, outcome: RunOutcome, events: EventWriter) -> None:
-        """Write the terminal status, the artifacts and the closing event - in that order."""
+    async def _settle(
+        self,
+        run_id: uuid.UUID,
+        outcome: RunOutcome,
+        events: EventWriter,
+        *,
+        lease_id: uuid.UUID | None = None,
+    ) -> None:
+        """Commit the complete terminal result atomically, only while this attempt owns it."""
         try:
             async with self._sessionmaker() as session:
-                repository = RunRepository(session)
-                for kind, (content_type, content) in outcome.artifacts.items():
-                    session.add(
-                        RunArtifact(
-                            run_id=run_id,
-                            kind=kind,
-                            content_type=content_type,
-                            content=content,
-                            size_bytes=len(content.encode("utf-8")),
-                        )
-                    )
-                if outcome.metrics:
-                    await repository.update_counters(run_id, **outcome.metrics)
-                await repository.finish(
+                await RunRepository(session, lease_id=lease_id).finish(
                     run_id,
                     status=outcome.status,
                     stop_reason=outcome.stop_reason,
                     gate_status=outcome.gate_status,
                     error_code=outcome.error_code,
                     error_message=outcome.error_message,
+                    artifacts=outcome.artifacts,
+                    metrics=outcome.metrics,
+                    emit_finished=True,
                 )
-            await events.info(
-                EventType.RUN_FINISHED,
-                f"Run finished: {outcome.status.value}"
-                + (f" ({outcome.stop_reason})" if outcome.stop_reason else ""),
-                label="Agent",
-                data={
-                    "status": outcome.status.value,
-                    "stop_reason": outcome.stop_reason,
-                    "gate_status": outcome.gate_status,
-                    "error_code": outcome.error_code,
-                },
-            )
+        except (LeaseLostError, IllegalTransitionError):
+            _logger.info("terminal write superseded", run_id=str(run_id))
         except Exception:
-            # Losing the terminal write is the one failure the watchdog must clean up, so it is
-            # logged loudly and left to the heartbeat going stale.
             _logger.exception("could not write the terminal status", run_id=str(run_id))

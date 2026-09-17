@@ -24,14 +24,15 @@ from research_agent.agent_server.executor import (
     NoCapacityError,
     RunExecutor,
 )
-from research_agent.db.repository import RunNotFoundError
-from research_agent.errors import AgentException
+from research_agent.db.repository import IllegalTransitionError, RunNotFoundError
+from research_agent.errors import AgentException, LeaseLostError
 
 
 class ExecuteRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     attempt: int = Field(ge=1, description="Above 1 the agent resumes from its checkpoint.")
+    lease_id: uuid.UUID
     deadline_at: datetime | None = Field(
         default=None, description="For visibility; the dispatcher enforces it."
     )
@@ -146,10 +147,13 @@ def create_agent_app(executor: RunExecutor) -> FastAPI:
             await executor.execute(
                 run_id,
                 attempt=request.attempt,
+                lease_id=request.lease_id,
                 deadline_at=request.deadline_at,
                 dispatcher_id=request.dispatcher_id,
             )
         except AlreadyExecutingError as exc:
+            return _error(exc, status.HTTP_409_CONFLICT)
+        except (IllegalTransitionError, LeaseLostError) as exc:
             return _error(exc, status.HTTP_409_CONFLICT)
         except NoCapacityError as exc:
             return _error(exc, status.HTTP_503_SERVICE_UNAVAILABLE)

@@ -12,6 +12,7 @@ import asyncio
 import uuid
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
+from datetime import datetime
 from typing import Any, Protocol
 
 from research_agent.config.schema import Settings
@@ -34,6 +35,8 @@ class RunContext:
     keys: ProviderKeys
     events: EventWriter
     attempt: int = 1
+    lease_id: uuid.UUID | None = None
+    deadline_at: datetime | None = None
     # Polled between nodes rather than cancelling a task mid-write, so the claim ledger is never
     # left half-built (contracts/agent-api.openapi.yaml, `cancel`).
     is_cancelled: Callable[[], Awaitable[bool]] = field(default_factory=lambda: _never_cancelled)

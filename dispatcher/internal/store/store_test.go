@@ -203,6 +203,23 @@ func TestTheWatchdogLosesToAFreshHeartbeat(t *testing.T) {
 	}
 }
 
+func TestDeadlineFailureIgnoresAnInterveningHeartbeat(t *testing.T) {
+	s := open(t)
+	id := insertRun(t, s, "")
+	if _, err := s.Claim(context.Background(), time.Hour, time.Minute); err != nil {
+		t.Fatal(err)
+	}
+	markRunning(t, s, id, time.Hour)
+	if _, err := s.pool.Exec(context.Background(), `UPDATE runs SET deadline_at = now() - interval '1 minute' WHERE id = $1`, id); err != nil {
+		t.Fatal(err)
+	}
+	observed := snapshot(t, s, id)
+	markRunning(t, s, id, 0)
+	if err := s.Fail(context.Background(), observed, c.CodeDeadlineExceeded, "expired"); err != nil {
+		t.Fatalf("expired run must fail despite a new heartbeat: %v", err)
+	}
+}
+
 func TestSettlingARunDestroysItsKeys(t *testing.T) {
 	s := open(t)
 	id := insertRun(t, s, "")
@@ -238,7 +255,7 @@ func TestAnUnstartedRunGetsItsAttemptBack(t *testing.T) {
 	if err != nil || claimed.Attempts != 1 {
 		t.Fatal(err)
 	}
-	if err := s.ReturnUnstarted(context.Background(), id, 0); err != nil {
+	if err := s.ReturnUnstarted(context.Background(), id, claimed.LeaseID, 0); err != nil {
 		t.Fatal(err)
 	}
 	again, _ := s.Claim(context.Background(), time.Hour, time.Minute)

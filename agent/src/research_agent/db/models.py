@@ -119,6 +119,7 @@ class Run(Base):
 
     # Scheduling, owned by the dispatcher.
     agent_id: Mapped[str | None] = mapped_column(String(128))
+    lease_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True))
     attempts: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     # Retry backoff: a requeued run is not claimable before this moment.
     available_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
@@ -140,6 +141,12 @@ class Run(Base):
         Index("ix_runs_status_created_at", "status", "created_at"),
         # The watchdog's scan: runs that owe a heartbeat.
         Index("ix_runs_heartbeat_at", "heartbeat_at"),
+        Index(
+            "ix_runs_watchdog",
+            "status",
+            "deadline_at",
+            postgresql_where=status.in_(["dispatched", "running", "queued"]),
+        ),
     )
 
 

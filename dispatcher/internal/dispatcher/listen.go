@@ -48,6 +48,7 @@ func (d *Dispatcher) listenOnce(ctx context.Context, pool *pgxpool.Pool) error {
 		}
 	}
 	d.Log.Info("listening for notifications", "channels", listenChannels)
+	d.Wake() // Notifications sent during reconnect were lost; reconcile the queue immediately.
 	for {
 		notification, err := conn.WaitForNotification(ctx)
 		if err != nil {

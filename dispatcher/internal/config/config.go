@@ -88,6 +88,18 @@ func (c Config) Validate() error {
 			problems = append(problems, fmt.Sprintf("%s must be > 0 (got %d)", name, value))
 		}
 	}
+	if c.Watchdog.CancelGraceSeconds < 0 {
+		problems = append(problems, "watchdog.cancel_grace_seconds must be >= 0")
+	}
+	if c.Deadline.WallClockMarginSeconds < 0 {
+		problems = append(problems, "deadline.wall_clock_margin_seconds must be >= 0")
+	}
+	for _, delay := range c.Retry.BackoffSeconds {
+		if delay < 0 {
+			problems = append(problems, "retry.backoff_seconds must be >= 0")
+			break
+		}
+	}
 	if c.Watchdog.HeartbeatTimeoutSeconds > 0 &&
 		c.Watchdog.TickSeconds >= c.Watchdog.HeartbeatTimeoutSeconds {
 		problems = append(problems,

@@ -27,7 +27,7 @@ type Store interface {
 	QueuedCount(ctx context.Context) (int, error)
 	Watchlist(ctx context.Context) ([]watchdog.Run, error)
 	Requeue(ctx context.Context, observed watchdog.Run, backoff time.Duration) error
-	ReturnUnstarted(ctx context.Context, runID string, backoff time.Duration) error
+	ReturnUnstarted(ctx context.Context, runID, leaseID string, backoff time.Duration) error
 	Fail(ctx context.Context, observed watchdog.Run, code, reason string) error
 	Cancel(ctx context.Context, observed watchdog.Run, reason string) error
 	RequestCancel(ctx context.Context, runID string) error
@@ -160,7 +160,7 @@ func (d *Dispatcher) DispatchOnce(ctx context.Context) (bool, error) {
 	})
 
 	request := agentclient.ExecuteRequest{
-		Attempt: claimed.Attempts, DeadlineAt: &claimed.DeadlineAt, DispatcherID: d.ID,
+		Attempt: claimed.Attempts, LeaseID: claimed.LeaseID, DeadlineAt: &claimed.DeadlineAt, DispatcherID: d.ID,
 	}
 	var failures []string
 	for _, replica := range ranked {
@@ -183,7 +183,7 @@ func (d *Dispatcher) DispatchOnce(ctx context.Context) (bool, error) {
 	}
 
 	backoff := d.Config.Backoff(2)
-	if err := d.Store.ReturnUnstarted(ctx, claimed.ID, backoff); err != nil && !errors.Is(err, store.ErrLostRace) {
+	if err := d.Store.ReturnUnstarted(ctx, claimed.ID, claimed.LeaseID, backoff); err != nil && !errors.Is(err, store.ErrLostRace) {
 		return false, fmt.Errorf("return run %s to queue: %w", claimed.ID, err)
 	}
 	d.emit(ctx, store.Event{
@@ -314,6 +314,9 @@ func (d *Dispatcher) apply(ctx context.Context, run watchdog.Run, decision watch
 	}
 
 	log.Warn(decision.Reason)
+	if decision.Kind == watchdog.Fail || decision.Kind == watchdog.Cancel {
+		return nil // Store committed the terminal event with the status.
+	}
 	message := decision.Reason + " -> " + outcome
 	if decision.Code != "" {
 		message = decision.Code + ": " + message

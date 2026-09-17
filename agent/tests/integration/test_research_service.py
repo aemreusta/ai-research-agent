@@ -57,7 +57,9 @@ async def test_a_research_run_completes_through_the_service_path(
     executor = RunExecutor(
         db_sessionmaker, agent_id="agent-it", slots=1, runner=runner, heartbeat_interval_seconds=0.5
     )
-    await executor.execute(run_id, attempt=1)
+    lease_id = (await RunRepository(db_session).require(run_id)).lease_id
+    assert lease_id is not None
+    await executor.execute(run_id, attempt=1, lease_id=lease_id)
     await executor.wait_for(run_id, timeout=60)
 
     run = await RunRepository(db_session).require(run_id)
@@ -98,7 +100,9 @@ async def test_a_run_without_keys_fails_with_an_actionable_message(
         db_sessionmaker, dsn=libpq_dsn(migrated_database), toolkit_factory=_no_keys
     )
     executor = RunExecutor(db_sessionmaker, agent_id="agent-it", slots=1, runner=runner)
-    await executor.execute(run_id, attempt=1)
+    lease_id = (await RunRepository(db_session).require(run_id)).lease_id
+    assert lease_id is not None
+    await executor.execute(run_id, attempt=1, lease_id=lease_id)
     await executor.wait_for(run_id, timeout=30)
     run = await RunRepository(db_session).require(run_id)
     assert run.status == RunStatus.FAILED.value

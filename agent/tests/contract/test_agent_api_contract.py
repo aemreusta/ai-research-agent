@@ -56,7 +56,7 @@ def test_execute_requires_the_attempt_number_on_both_sides() -> None:
     """Attempt drives resume-from-checkpoint, so it may never become optional by accident."""
     contract = _contract()["components"]["schemas"]["ExecuteRequest"]
     served = _served()["components"]["schemas"]["ExecuteRequest"]
-    assert contract["required"] == served["required"] == ["attempt"]
+    assert contract["required"] == served["required"] == ["attempt", "lease_id"]
 
 
 def test_both_sides_forbid_unknown_request_fields() -> None:

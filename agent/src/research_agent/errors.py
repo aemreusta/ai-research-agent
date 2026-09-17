@@ -66,6 +66,7 @@ class ErrorCode(StrEnum):
     AGENT_HEARTBEAT_LOST = "AGENT_HEARTBEAT_LOST"
     DEADLINE_EXCEEDED = "DEADLINE_EXCEEDED"
     DISPATCH_DEFERRED = "DISPATCH_DEFERRED"
+    RUN_LEASE_LOST = "RUN_LEASE_LOST"
     # bug
     UNEXPECTED_EXCEPTION = "UNEXPECTED_EXCEPTION"
 
@@ -129,3 +130,17 @@ class AgentException(Exception):
     def __init__(self, error: AgentError) -> None:
         super().__init__(f"{error.code.value}: {error.decision}")
         self.error = error
+
+
+class LeaseLostError(AgentException):
+    """This attempt has been superseded or the run has already terminated."""
+
+    def __init__(self, run_id: object) -> None:
+        super().__init__(
+            AgentError(
+                code=ErrorCode.RUN_LEASE_LOST,
+                node="ownership",
+                run_id=str(run_id),
+                decision="stop the stale attempt without publishing state",
+            )
+        )

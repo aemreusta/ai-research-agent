@@ -50,6 +50,7 @@ type Capacity struct {
 // ExecuteRequest is the execute body. Unknown fields are rejected by the agent, so this struct
 // is the whole vocabulary.
 type ExecuteRequest struct {
+	LeaseID      string     `json:"lease_id"`
 	Attempt      int        `json:"attempt"`
 	DeadlineAt   *time.Time `json:"deadline_at,omitempty"`
 	DispatcherID string     `json:"dispatcher_id,omitempty"`

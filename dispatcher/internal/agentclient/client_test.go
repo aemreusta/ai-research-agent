@@ -38,15 +38,15 @@ func TestExecuteSendsTheContractBodyAndAccepts202(t *testing.T) {
 
 	deadline := time.Date(2026, 9, 16, 12, 30, 0, 0, time.UTC)
 	err := client().Execute(context.Background(), server.URL, runID,
-		ExecuteRequest{Attempt: 2, DeadlineAt: &deadline, DispatcherID: "d1"})
+		ExecuteRequest{Attempt: 2, LeaseID: runID, DeadlineAt: &deadline, DispatcherID: "d1"})
 	if err != nil {
 		t.Fatal(err)
 	}
-	if got["attempt"] != float64(2) || got["dispatcher_id"] != "d1" {
+	if got["attempt"] != float64(2) || got["dispatcher_id"] != "d1" || got["lease_id"] != runID {
 		t.Errorf("body = %v", got)
 	}
 	for key := range got {
-		if key != "attempt" && key != "deadline_at" && key != "dispatcher_id" {
+		if key != "attempt" && key != "deadline_at" && key != "dispatcher_id" && key != "lease_id" {
 			t.Errorf("unexpected field %q: the agent rejects unknown fields", key)
 		}
 	}

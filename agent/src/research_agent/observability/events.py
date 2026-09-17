@@ -30,7 +30,7 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from research_agent.db.session import libpq_dsn
-from research_agent.errors import AgentError
+from research_agent.errors import AgentError, LeaseLostError
 from research_agent.observability.logging import get_logger
 from research_agent.observability.redaction import redact, redact_text
 
@@ -147,6 +147,8 @@ _INSERT_EVENT = text(
     WITH next AS (
         UPDATE runs SET event_seq = event_seq + 1
         WHERE id = :run_id
+          AND (CAST(:lease_id AS uuid) IS NULL
+               OR (lease_id = CAST(:lease_id AS uuid) AND status = 'running'))
         RETURNING event_seq
     )
     INSERT INTO run_events (
@@ -176,6 +178,7 @@ class EventWriter:
         iteration: int | None = None,
         span_id: str | None = None,
         parent_span_id: str | None = None,
+        lease_id: uuid.UUID | None = None,
     ) -> None:
         self._sessionmaker = sessionmaker
         self.run_id = run_id
@@ -183,6 +186,7 @@ class EventWriter:
         self.iteration = iteration
         self.span_id = span_id
         self.parent_span_id = parent_span_id
+        self.lease_id = lease_id
 
     def child(
         self,
@@ -199,6 +203,7 @@ class EventWriter:
             iteration=self.iteration if iteration is None else iteration,
             span_id=span_id or new_span_id(),
             parent_span_id=self.span_id,
+            lease_id=self.lease_id,
         )
 
     async def emit(
@@ -227,6 +232,7 @@ class EventWriter:
 
         parameters = {
             "run_id": self.run_id,
+            "lease_id": self.lease_id,
             "level": level.value,
             "node": self.node,
             "event_type": str(event_type),
@@ -243,7 +249,9 @@ class EventWriter:
             "expected": expected,
         }
         async with self._sessionmaker() as session, session.begin():
-            seq = (await session.execute(_INSERT_EVENT, parameters)).scalar_one()
+            seq = (await session.execute(_INSERT_EVENT, parameters)).scalar_one_or_none()
+            if seq is None:
+                raise LeaseLostError(self.run_id)
             await session.execute(
                 text("SELECT pg_notify(:channel, :payload)"),
                 {
@@ -259,7 +267,7 @@ class EventWriter:
             node=self.node,
             seq=seq,
             message=redacted_message,
-            **redacted_data,
+            data=redacted_data,
         )
         return int(seq)
 

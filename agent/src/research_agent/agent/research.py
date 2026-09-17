@@ -41,7 +41,6 @@ from research_agent.db.repository import RunRepository
 from research_agent.errors import AgentError, ErrorCode
 from research_agent.gate.config import GateConfig
 from research_agent.keys import Provider, ProviderKeys
-from research_agent.observability.events import EventType
 from research_agent.paths import config_dir
 from research_agent.pii.masking import Masker, RegexMasker
 from research_agent.prompting.predict import Predictor
@@ -305,7 +304,10 @@ class ResearchGraphRunner:
         self._masker = masker
 
     async def __call__(self, context: RunContext) -> RunOutcome:
-        from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
+        from research_agent.db.checkpoints import lease_checkpointer
+
+        if context.lease_id is None:
+            raise ValueError("A service run requires a dispatch lease")
 
         toolkit = await self._toolkit_factory(context.keys)
         try:
@@ -318,7 +320,7 @@ class ResearchGraphRunner:
                 cache=DbCache(self._sessionmaker),
                 masker=self._masker,
                 is_cancelled=context.is_cancelled,
-                report_progress=self._progress(context.run_id),
+                report_progress=self._progress(context.run_id, context.lease_id),
             )
             if (problem := preflight(deps)) is not None:
                 await context.events.error(problem)
@@ -328,7 +330,7 @@ class ResearchGraphRunner:
                     error_message=problem.outcome,
                 )
             async with self._sessionmaker() as session:
-                await RunRepository(session).update_metadata(
+                await RunRepository(session, lease_id=context.lease_id).update_metadata(
                     context.run_id, prompt_versions=deps.prompts.references()
                 )
             if toolkit.tracer is not None and hasattr(toolkit.tracer, "trace_url"):
@@ -338,12 +340,13 @@ class ResearchGraphRunner:
                     "attempt": context.attempt,
                 }
                 async with self._sessionmaker() as session:
-                    await RunRepository(session).update_metadata(
+                    await RunRepository(session, lease_id=context.lease_id).update_metadata(
                         context.run_id, langfuse_trace_url=toolkit.tracer.trace_url()
                     )
 
-            async with AsyncPostgresSaver.from_conn_string(self._dsn) as checkpointer:
-                await checkpointer.setup()
+            async with lease_checkpointer(
+                self._dsn, run_id=context.run_id, lease_id=context.lease_id
+            ) as checkpointer:
                 state = await execute(
                     deps,
                     run_id=context.run_id,
@@ -354,18 +357,9 @@ class ResearchGraphRunner:
 
             metadata = metadata_for(deps, context.settings)
             async with self._sessionmaker() as session:
-                await RunRepository(session).update_metadata(
+                await RunRepository(session, lease_id=context.lease_id).update_metadata(
                     context.run_id, models_used=metadata["models_used"], skills_used=state.skills
                 )
-            await context.events.info(
-                EventType.REPORT_READY,
-                "Report ready.",
-                label="Agent",
-                data={
-                    "verdict": (state.gate_result or {}).get("verdict"),
-                    "stop_reason": state.stop_reason,
-                },
-            )
             return RunOutcome(
                 status=outcome_status(state),
                 stop_reason=state.stop_reason.value if state.stop_reason else None,
@@ -386,10 +380,12 @@ class ResearchGraphRunner:
                 await flush()
             await toolkit.aclose()
 
-    def _progress(self, run_id: uuid.UUID) -> Callable[[dict[str, Any]], Awaitable[None]]:
+    def _progress(
+        self, run_id: uuid.UUID, lease_id: uuid.UUID
+    ) -> Callable[[dict[str, Any]], Awaitable[None]]:
         async def report(counters: dict[str, Any]) -> None:
             async with self._sessionmaker() as session:
-                await RunRepository(session).update_counters(run_id, **counters)
+                await RunRepository(session, lease_id=lease_id).update_counters(run_id, **counters)
 
         return report
 

@@ -26,6 +26,7 @@ from research_agent.agent.runner import CancelledByRequest
 from research_agent.agent.runtime import EventSink
 from research_agent.agent.state import ResearchState
 from research_agent.observability.events import EventType
+from research_agent.prompting.skills import guidance
 
 NodeFn = Callable[[ResearchState, AgentDeps, EventSink], Awaitable[None]]
 
@@ -59,6 +60,11 @@ def _wrap(name: str, fn: NodeFn, deps: AgentDeps) -> Callable[[GraphState], Awai
         state = ResearchState.model_validate(graph_state["research"])
         if state.budget and deps.meter.llm_calls == 0 and deps.meter.searches == 0:
             deps.meter.restore(state.budget)  # resumed from a checkpoint
+        # These are runtime dependencies, not checkpoint fields. Restore them after a crash.
+        chosen = [deps.skills[key] for key in state.skills if key in deps.skills]
+        deps.predictor.skill_guidance = guidance(chosen)
+        if state.skill_domains:
+            deps.tiers = deps.tiers.extended(state.skill_domains)
         events = deps.events.child(name, iteration=state.iteration or None)
         started = time.perf_counter()
         await events.debug(EventType.NODE_STARTED, f"{name} started.")

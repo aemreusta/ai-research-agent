@@ -168,6 +168,11 @@ codes:
     expected: true
     retryable: true
     description: Informational - no capacity, the run waits on the queue.
+  RUN_LEASE_LOST:
+    category: infra
+    expected: true
+    retryable: false
+    description: Attempt ownership changed or the run ended; the stale worker stops writing.
 
   # --- bug ----------------------------------------------------------------
   UNEXPECTED_EXCEPTION:

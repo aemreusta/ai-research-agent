@@ -16,6 +16,7 @@ import (
 // Run is the slice of a runs row the watchdog looks at.
 type Run struct {
 	ID              string
+	LeaseID         string
 	Status          contracts.Status
 	Attempts        int
 	CancelRequested bool

@@ -185,7 +185,6 @@ async def _run_persisted(
     from research_agent.agent.runtime import DbCache, DbCallRecorder
     from research_agent.contracts import RunStatus
     from research_agent.db import session as db
-    from research_agent.db.models import RunArtifact
     from research_agent.db.repository import RunRepository
     from research_agent.keys import ProviderKeys
     from research_agent.observability.events import EventWriter
@@ -201,13 +200,13 @@ async def _run_persisted(
             overrides=overrides,
         )
     run_id = run.id
-    events = EventWriter(sessionmaker, run_id=run_id, node="agent")
+    events = EventWriter(sessionmaker, run_id=run_id, node="agent", lease_id=run.lease_id)
 
     async def heartbeat() -> None:
         while True:
             await asyncio.sleep(5)
             async with sessionmaker() as session:
-                await RunRepository(session).heartbeat(run_id)
+                await RunRepository(session, lease_id=run.lease_id).heartbeat(run_id)
 
     beating = asyncio.create_task(heartbeat())
     if args.simulate:
@@ -228,7 +227,9 @@ async def _run_persisted(
 
         async def progress(counters: dict[str, Any]) -> None:
             async with sessionmaker() as session:
-                await RunRepository(session).update_counters(run_id, **counters)
+                await RunRepository(session, lease_id=run.lease_id).update_counters(
+                    run_id, **counters
+                )
 
         deps.report_progress = progress
         state = await research.execute(
@@ -236,17 +237,7 @@ async def _run_persisted(
         )
         metadata = research.metadata_for(deps, effective.settings)
         async with sessionmaker() as session:
-            repository = RunRepository(session)
-            for kind, (content_type, content) in research.artifacts_for(state, metadata).items():
-                session.add(
-                    RunArtifact(
-                        run_id=run_id,
-                        kind=kind,
-                        content_type=content_type,
-                        content=content,
-                        size_bytes=len(content.encode()),
-                    )
-                )
+            repository = RunRepository(session, lease_id=run.lease_id)
             await repository.update_metadata(
                 run_id,
                 prompt_versions=metadata["prompt_versions"],
@@ -255,13 +246,15 @@ async def _run_persisted(
             )
             await repository.finish(
                 run_id,
+                artifacts=research.artifacts_for(state, metadata),
+                emit_finished=True,
                 status=research.outcome_status(state),
                 stop_reason=state.stop_reason.value if state.stop_reason else None,
                 gate_status=(state.gate_result or {}).get("verdict"),
             )
     except BaseException as exc:
         async with sessionmaker() as session:
-            await RunRepository(session).finish(
+            await RunRepository(session, lease_id=run.lease_id).finish(
                 run_id,
                 status=RunStatus.FAILED,
                 error_code="UNEXPECTED_EXCEPTION",

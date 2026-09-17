@@ -25,8 +25,8 @@ from sqlalchemy.engine import CursorResult
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from research_agent.contracts import RunStatus, run_state_machine
-from research_agent.db.models import Run, RunSecret
-from research_agent.errors import AgentError, AgentException, ErrorCode
+from research_agent.db.models import Run, RunArtifact, RunEvent, RunSecret
+from research_agent.errors import AgentError, AgentException, ErrorCode, LeaseLostError, spec
 from research_agent.keys import Provider, ProviderKeys, SecretBox
 from research_agent.observability.events import notify_run_queued, notify_status_changed
 
@@ -68,6 +68,7 @@ _CLAIM = text(
        SET status = 'dispatched',
            dispatched_at = now(),
            attempts = attempts + 1,
+           lease_id = gen_random_uuid(),
            agent_id = NULL
      WHERE id = (
             SELECT id FROM runs
@@ -85,8 +86,24 @@ _CLAIM = text(
 class RunRepository:
     """Everything the api, the agent server and the tests need to do to a run row."""
 
-    def __init__(self, session: AsyncSession) -> None:
+    def __init__(self, session: AsyncSession, *, lease_id: uuid.UUID | None = None) -> None:
         self._session = session
+        self._lease_id = lease_id
+
+    def _owned(self, statement: Any) -> Any:
+        """Worker repositories bind a lease; API/admin operations use the unbound repository."""
+        if self._lease_id is not None:
+            return statement.where(Run.lease_id == self._lease_id, Run.status == "running")
+        return statement
+
+    async def _write_owned(self, run_id: uuid.UUID, values: dict[str, Any]) -> None:
+        result = await self._session.execute(
+            self._owned(update(Run).where(Run.id == run_id)).values(**values)
+        )
+        if self._lease_id is not None and cast("CursorResult[Any]", result).rowcount != 1:
+            await self._session.rollback()
+            raise LeaseLostError(run_id)
+        await self._session.commit()
 
     # --- reads ----------------------------------------------------------------------------------
 
@@ -105,8 +122,11 @@ class RunRepository:
 
     async def cancel_requested(self, run_id: uuid.UUID) -> bool:
         """Checked at every node boundary, so it reads one column rather than the whole row."""
-        statement = select(Run.cancel_requested).where(Run.id == run_id)
-        return bool((await self._session.execute(statement)).scalar_one_or_none())
+        statement = self._owned(select(Run.cancel_requested).where(Run.id == run_id))
+        value = (await self._session.execute(statement)).scalar_one_or_none()
+        if value is None and self._lease_id is not None:
+            raise LeaseLostError(run_id)
+        return bool(value)
 
     async def stale_runs(self, *, timeout_seconds: int) -> Sequence[Run]:
         """Running runs whose agent stopped reporting: the watchdog's input (v0.6 §2)."""
@@ -179,6 +199,7 @@ class RunRepository:
             key_sources=key_sources or {},
             status=RunStatus.RUNNING.value,
             agent_id="cli",
+            lease_id=uuid.uuid4(),
             attempts=1,
             started_at=now,
             heartbeat_at=now,
@@ -212,10 +233,7 @@ class RunRepository:
 
     async def heartbeat(self, run_id: uuid.UUID) -> None:
         """Not a transition: a liveness stamp, written every few seconds while a run executes."""
-        await self._session.execute(
-            update(Run).where(Run.id == run_id).values(heartbeat_at=datetime.now(UTC))
-        )
-        await self._session.commit()
+        await self._write_owned(run_id, {"heartbeat_at": datetime.now(UTC)})
 
     async def update_counters(
         self,
@@ -241,8 +259,7 @@ class RunRepository:
         }
         if not values:
             return
-        await self._session.execute(update(Run).where(Run.id == run_id).values(**values))
-        await self._session.commit()
+        await self._write_owned(run_id, values)
 
     async def update_metadata(
         self,
@@ -265,8 +282,7 @@ class RunRepository:
             if value is not None
         }
         if values:
-            await self._session.execute(update(Run).where(Run.id == run_id).values(**values))
-            await self._session.commit()
+            await self._write_owned(run_id, values)
 
     async def finish(
         self,
@@ -277,19 +293,80 @@ class RunRepository:
         gate_status: str | None = None,
         error_code: str | None = None,
         error_message: str | None = None,
+        artifacts: dict[str, tuple[str, str]] | None = None,
+        metrics: dict[str, Any] | None = None,
+        emit_finished: bool = False,
     ) -> Run:
-        """Terminal write. Provider keys are destroyed in the same transaction."""
+        """Publish status, artifacts, counters and the final event in one fenced transaction."""
+        ready = bool(artifacts and "report_md" in artifacts and emit_finished)
+        counters = dict(metrics or {})
+        if set(counters) - {"iteration", "searches_used", "tokens_in", "tokens_out", "cost_usd"}:
+            raise ValueError("unknown run counter")
+
+        async def persist() -> None:
+            await self._session.execute(delete(RunSecret).where(RunSecret.run_id == run_id))
+            for kind, (content_type, content) in (artifacts or {}).items():
+                self._session.add(
+                    RunArtifact(
+                        run_id=run_id,
+                        kind=kind,
+                        content_type=content_type,
+                        content=content,
+                        size_bytes=len(content.encode("utf-8")),
+                    )
+                )
+            if emit_finished:
+                seq = (
+                    await self._session.execute(select(Run.event_seq).where(Run.id == run_id))
+                ).scalar_one()
+                if ready:
+                    self._session.add(
+                        RunEvent(
+                            run_id=run_id,
+                            seq=seq - 1,
+                            level="info",
+                            node="agent",
+                            event_type="report_ready",
+                            message="Report ready.",
+                            data={"display": "[Agent] Report ready.", "gate_status": gate_status},
+                        )
+                    )
+                message = f"Run finished: {status.value}" + (
+                    f" ({stop_reason})" if stop_reason else ""
+                )
+                self._session.add(
+                    RunEvent(
+                        run_id=run_id,
+                        seq=seq,
+                        level="info",
+                        node="agent",
+                        event_type="run_finished",
+                        message=message,
+                        error_code=error_code,
+                        expected=spec(ErrorCode(error_code)).expected if error_code else None,
+                        data={
+                            "display": f"[Agent] {message}",
+                            "status": status.value,
+                            "stop_reason": stop_reason,
+                            "gate_status": gate_status,
+                            "error_code": error_code,
+                        },
+                    )
+                )
+
         run = await self._transition(
             run_id,
             status,
             {
+                **counters,
+                **({"event_seq": Run.event_seq + 1 + int(ready)} if emit_finished else {}),
                 "stop_reason": stop_reason,
                 "gate_status": gate_status,
                 "error_code": error_code,
                 "error_message": error_message,
                 "finished_at": datetime.now(UTC),
             },
-            also=lambda: self._session.execute(delete(RunSecret).where(RunSecret.run_id == run_id)),
+            also=persist,
         )
         return run
 
@@ -313,6 +390,7 @@ class RunRepository:
             RunStatus.QUEUED,
             {
                 "agent_id": None,
+                "lease_id": None,
                 "heartbeat_at": None,
                 "dispatched_at": None,
                 "available_at": datetime.now(UTC) + timedelta(seconds=backoff_seconds),
@@ -387,13 +465,14 @@ class RunRepository:
         """
         run = await self.require(run_id)
         source = RunStatus(run.status)
+        if self._lease_id is not None and run.lease_id != self._lease_id:
+            raise LeaseLostError(run_id)
         if not run_state_machine().can_transition(source, target):
             raise IllegalTransitionError(run_id, run.status, target)
-        result = await self._session.execute(
-            update(Run)
-            .where(Run.id == run_id, Run.status == source.value)
-            .values(status=target.value, **values)
-        )
+        statement = update(Run).where(Run.id == run_id, Run.status == source.value)
+        if self._lease_id is not None:
+            statement = statement.where(Run.lease_id == self._lease_id)
+        result = await self._session.execute(statement.values(status=target.value, **values))
         if cast("CursorResult[Any]", result).rowcount != 1:
             await self._session.rollback()
             current = await self.require(run_id)

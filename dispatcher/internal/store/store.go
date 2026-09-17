@@ -58,6 +58,7 @@ func (s *Store) Pool() *pgxpool.Pool { return s.pool }
 // Claimed is what dispatch needs to know about a freshly claimed run.
 type Claimed struct {
 	ID         string
+	LeaseID    string
 	Attempts   int
 	DeadlineAt time.Time
 }
@@ -70,6 +71,7 @@ UPDATE runs
    SET status = 'dispatched',
        dispatched_at = now(),
        attempts = attempts + 1,
+       lease_id = gen_random_uuid(),
        agent_id = NULL,
        deadline_at = COALESCE(
            deadline_at,
@@ -86,14 +88,14 @@ UPDATE runs
            FOR UPDATE SKIP LOCKED
          LIMIT 1
        )
-RETURNING id::text, attempts, deadline_at`
+RETURNING id::text, attempts, deadline_at, lease_id::text`
 
 // Claim takes the oldest claimable run, or returns (nil, nil) when there is none.
 func (s *Store) Claim(ctx context.Context, hardDeadline, wallClockMargin time.Duration) (*Claimed, error) {
 	var claimed Claimed
 	err := s.pool.QueryRow(ctx, claimSQL,
 		int(hardDeadline.Seconds()), int(wallClockMargin.Seconds()),
-	).Scan(&claimed.ID, &claimed.Attempts, &claimed.DeadlineAt)
+	).Scan(&claimed.ID, &claimed.Attempts, &claimed.DeadlineAt, &claimed.LeaseID)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return nil, nil
 	}
@@ -110,7 +112,7 @@ func (s *Store) Claim(ctx context.Context, hardDeadline, wallClockMargin time.Du
 func (s *Store) ActiveCount(ctx context.Context) (int, error) {
 	var n int
 	err := s.pool.QueryRow(ctx,
-		`SELECT count(*) FROM runs WHERE status IN ('dispatched', 'running')`).Scan(&n)
+		`SELECT count(*) FROM runs WHERE status IN ('dispatched', 'running') AND agent_id IS DISTINCT FROM 'cli'`).Scan(&n)
 	return n, err
 }
 
@@ -125,10 +127,11 @@ func (s *Store) QueuedCount(ctx context.Context) (int, error) {
 func (s *Store) Watchlist(ctx context.Context) ([]watchdog.Run, error) {
 	rows, err := s.pool.Query(ctx, `
 SELECT id::text, status, attempts, cancel_requested, dispatched_at, heartbeat_at, deadline_at,
-       COALESCE(agent_id, '')
+       COALESCE(agent_id, ''), COALESCE(lease_id::text, '')
   FROM runs
- WHERE status IN ('dispatched', 'running')
-    OR (status = 'queued' AND deadline_at IS NOT NULL)`)
+ WHERE (status IN ('dispatched', 'running')
+    OR (status = 'queued' AND deadline_at IS NOT NULL))
+   AND agent_id IS DISTINCT FROM 'cli'`)
 	if err != nil {
 		return nil, fmt.Errorf("watchlist: %w", err)
 	}
@@ -138,7 +141,7 @@ SELECT id::text, status, attempts, cancel_requested, dispatched_at, heartbeat_at
 		var run watchdog.Run
 		var status string
 		if err := rows.Scan(&run.ID, &status, &run.Attempts, &run.CancelRequested,
-			&run.DispatchedAt, &run.HeartbeatAt, &run.DeadlineAt, &run.AgentID); err != nil {
+			&run.DispatchedAt, &run.HeartbeatAt, &run.DeadlineAt, &run.AgentID, &run.LeaseID); err != nil {
 			return nil, fmt.Errorf("watchlist scan: %w", err)
 		}
 		run.Status = c.Status(status)
@@ -149,20 +152,20 @@ SELECT id::text, status, attempts, cancel_requested, dispatched_at, heartbeat_at
 
 // Requeue sends a run back to the queue, not claimable before backoff has passed.
 func (s *Store) Requeue(ctx context.Context, observed watchdog.Run, backoff time.Duration) error {
-	return s.transition(ctx, observed, c.Queued, `
-		agent_id = NULL, heartbeat_at = NULL, dispatched_at = NULL,
+	return s.transition(ctx, observed, c.Queued, true, `
+		agent_id = NULL, lease_id = NULL, heartbeat_at = NULL, dispatched_at = NULL,
 		available_at = now() + make_interval(secs => $4::int)`,
 		int(backoff.Seconds()))
 }
 
 // ReturnUnstarted undoes a claim no replica accepted. The attempt is given back: nothing ran,
 // and a briefly saturated cluster must not burn a run's retry budget.
-func (s *Store) ReturnUnstarted(ctx context.Context, runID string, backoff time.Duration) error {
+func (s *Store) ReturnUnstarted(ctx context.Context, runID, leaseID string, backoff time.Duration) error {
 	tag, err := s.pool.Exec(ctx, `
 UPDATE runs
-   SET status = 'queued', dispatched_at = NULL, attempts = GREATEST(attempts - 1, 0),
+   SET status = 'queued', dispatched_at = NULL, lease_id = NULL, attempts = GREATEST(attempts - 1, 0),
        available_at = now() + make_interval(secs => $2::int)
- WHERE id = $1 AND status = 'dispatched'`, runID, int(backoff.Seconds()))
+ WHERE id = $1 AND status = 'dispatched' AND lease_id::text = $3`, runID, int(backoff.Seconds()), leaseID)
 	if err != nil {
 		return fmt.Errorf("return unstarted: %w", err)
 	}
@@ -174,13 +177,13 @@ UPDATE runs
 
 // Fail settles a run as failed and destroys its provider keys.
 func (s *Store) Fail(ctx context.Context, observed watchdog.Run, code, reason string) error {
-	return s.transition(ctx, observed, c.Failed,
+	return s.transition(ctx, observed, c.Failed, code != c.CodeDeadlineExceeded,
 		`error_code = $4, error_message = $5, finished_at = now()`, code, reason)
 }
 
 // Cancel settles a run as cancelled and destroys its provider keys.
 func (s *Store) Cancel(ctx context.Context, observed watchdog.Run, reason string) error {
-	return s.transition(ctx, observed, c.Cancelled,
+	return s.transition(ctx, observed, c.Cancelled, true,
 		`stop_reason = 'cancelled', error_message = $4, finished_at = now()`, reason)
 }
 
@@ -192,7 +195,7 @@ func (s *Store) RequestCancel(ctx context.Context, runID string) error {
 
 // transition is the compare-and-set every settle goes through. $1 = id, $2 = observed status,
 // $3 = observed heartbeat; extra arguments start at $4.
-func (s *Store) transition(ctx context.Context, observed watchdog.Run, target c.Status, set string, extra ...any) error {
+func (s *Store) transition(ctx context.Context, observed watchdog.Run, target c.Status, checkHeartbeat bool, set string, extra ...any) error {
 	if !s.machine.CanTransition(observed.Status, target) {
 		return fmt.Errorf("contract forbids %s -> %s", observed.Status, target)
 	}
@@ -202,10 +205,13 @@ func (s *Store) transition(ctx context.Context, observed watchdog.Run, target c.
 	}
 	defer func() { _ = tx.Rollback(ctx) }()
 
+	args := append([]any{observed.ID, string(observed.Status), observed.HeartbeatAt}, extra...)
+	args = append(args, observed.LeaseID, checkHeartbeat)
 	query := fmt.Sprintf(`
 UPDATE runs SET status = '%s', %s
- WHERE id = $1 AND status = $2 AND heartbeat_at IS NOT DISTINCT FROM $3`, target, set)
-	args := append([]any{observed.ID, string(observed.Status), observed.HeartbeatAt}, extra...)
+ WHERE id = $1 AND status = $2
+   AND (NOT $%d::boolean OR heartbeat_at IS NOT DISTINCT FROM $3::timestamptz)
+   AND COALESCE(lease_id::text, '') = $%d`, target, set, len(args), len(args)-1)
 	tag, err := tx.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("%s -> %s: %w", observed.Status, target, err)
@@ -214,6 +220,18 @@ UPDATE runs SET status = '%s', %s
 		return ErrLostRace
 	}
 	if s.machine.IsTerminal(target) {
+		// A terminal observer must see the final event in the same commit as the status.
+		var code, reason string
+		if err := tx.QueryRow(ctx, `SELECT COALESCE(error_code, ''), COALESCE(error_message, '') FROM runs WHERE id = $1`, observed.ID).Scan(&code, &reason); err != nil {
+			return err
+		}
+		message := "Run finished: " + string(target) + ". " + reason
+		data := map[string]any{"status": string(target), "display": "[Dispatcher] " + message, "error_code": code, "reason": reason}
+		var seq int
+		if err := tx.QueryRow(ctx, insertEventSQL, observed.ID, "warn", "run_finished",
+			message, mustJSON(data), code).Scan(&seq); err != nil {
+			return fmt.Errorf("terminal event: %w", err)
+		}
 		if _, err := tx.Exec(ctx, `DELETE FROM run_secrets WHERE run_id = $1`, observed.ID); err != nil {
 			return fmt.Errorf("delete secrets: %w", err)
 		}

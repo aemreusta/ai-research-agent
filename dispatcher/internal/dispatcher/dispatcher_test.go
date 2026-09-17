@@ -58,7 +58,7 @@ func (s *fakeStore) Requeue(_ context.Context, run watchdog.Run, _ time.Duration
 	s.requeued = append(s.requeued, run.ID)
 	return nil
 }
-func (s *fakeStore) ReturnUnstarted(_ context.Context, id string, _ time.Duration) error {
+func (s *fakeStore) ReturnUnstarted(_ context.Context, id, _ string, _ time.Duration) error {
 	s.returned = append(s.returned, id)
 	s.active--
 	return nil

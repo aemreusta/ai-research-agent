@@ -169,8 +169,12 @@ components:
     ExecuteRequest:
       type: object
       additionalProperties: false
-      required: [attempt]
+      required: [attempt, lease_id]
       properties:
+        lease_id:
+          type: string
+          format: uuid
+          description: Fresh dispatch token; stale attempts cannot write after reassignment.
         attempt:
           type: integer
           minimum: 1

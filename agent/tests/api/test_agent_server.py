@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 import uuid
 from collections.abc import AsyncIterator
+from unittest.mock import AsyncMock
 
 import httpx
 import pytest
@@ -33,6 +34,11 @@ async def _queued_and_claimed(session: AsyncSession, question: str = "Question?"
     )
     await repo.claim(dispatcher_id="test-dispatcher")
     return run.id
+
+
+async def _body(session: AsyncSession, run_id: uuid.UUID, attempt: int = 1) -> dict[str, object]:
+    run = await RunRepository(session).require(run_id)
+    return {"attempt": attempt, "lease_id": str(run.lease_id)}
 
 
 def _executor(
@@ -88,7 +94,9 @@ async def test_execute_accepts_and_runs_the_graph(
     executor = _executor(db_sessionmaker)
 
     async for client in _client(executor):
-        response = await client.post(f"/v1/runs/{run_id}/execute", json={"attempt": 1})
+        response = await client.post(
+            f"/v1/runs/{run_id}/execute", json=await _body(db_session, run_id)
+        )
         assert response.status_code == 202
         assert response.json()["accepted"] is True
         await executor.wait_for(run_id, timeout=10)
@@ -116,8 +124,12 @@ async def test_executing_the_same_run_twice_is_refused(
     executor = _executor(db_sessionmaker, runner=EchoGraphRunner(delay_seconds=0.2))
 
     async for client in _client(executor):
-        first = await client.post(f"/v1/runs/{run_id}/execute", json={"attempt": 1})
-        second = await client.post(f"/v1/runs/{run_id}/execute", json={"attempt": 1})
+        first = await client.post(
+            f"/v1/runs/{run_id}/execute", json=await _body(db_session, run_id)
+        )
+        second = await client.post(
+            f"/v1/runs/{run_id}/execute", json=await _body(db_session, run_id)
+        )
         assert first.status_code == 202
         assert second.status_code == 409
         assert second.json()["error_code"] == "DISPATCH_DEFERRED"
@@ -132,10 +144,12 @@ async def test_execute_without_a_free_slot_is_503(
 
     async for client in _client(executor):
         assert (
-            await client.post(f"/v1/runs/{busy}/execute", json={"attempt": 1})
+            await client.post(f"/v1/runs/{busy}/execute", json=await _body(db_session, busy))
         ).status_code == 202
         waiting = await _queued_and_claimed(db_session, "waiting")
-        response = await client.post(f"/v1/runs/{waiting}/execute", json={"attempt": 1})
+        response = await client.post(
+            f"/v1/runs/{waiting}/execute", json=await _body(db_session, waiting)
+        )
         assert response.status_code == 503
         assert response.json()["error_code"] == "DISPATCH_DEFERRED"
         await executor.wait_for(busy, timeout=10)
@@ -146,7 +160,9 @@ async def test_execute_for_an_unknown_run_is_404(
 ) -> None:
     executor = _executor(db_sessionmaker)
     async for client in _client(executor):
-        response = await client.post(f"/v1/runs/{uuid.uuid4()}/execute", json={"attempt": 1})
+        response = await client.post(
+            f"/v1/runs/{uuid.uuid4()}/execute", json={"attempt": 1, "lease_id": str(uuid.uuid4())}
+        )
     assert response.status_code == 404
 
 
@@ -157,7 +173,7 @@ async def test_cancel_stops_the_run_at_the_next_node_boundary(
     executor = _executor(db_sessionmaker, runner=EchoGraphRunner(delay_seconds=0.15, steps=20))
 
     async for client in _client(executor):
-        await client.post(f"/v1/runs/{run_id}/execute", json={"attempt": 1})
+        await client.post(f"/v1/runs/{run_id}/execute", json=await _body(db_session, run_id))
         await asyncio.sleep(0.1)
         response = await client.post(f"/v1/runs/{run_id}/cancel", json={"reason": "user_requested"})
         assert response.status_code == 202
@@ -192,7 +208,7 @@ async def test_the_heartbeat_keeps_ticking_while_a_run_executes(
     repo = RunRepository(db_session)
 
     async for client in _client(executor):
-        await client.post(f"/v1/runs/{run_id}/execute", json={"attempt": 1})
+        await client.post(f"/v1/runs/{run_id}/execute", json=await _body(db_session, run_id))
         await asyncio.sleep(0.1)
         first = (await repo.require(run_id)).heartbeat_at
         await asyncio.sleep(0.2)
@@ -214,7 +230,7 @@ async def test_a_bug_in_the_graph_fails_the_run_with_a_stack_trace(
     executor = _executor(db_sessionmaker, runner=exploding)
 
     async for client in _client(executor):
-        await client.post(f"/v1/runs/{run_id}/execute", json={"attempt": 1})
+        await client.post(f"/v1/runs/{run_id}/execute", json=await _body(db_session, run_id))
         await executor.wait_for(run_id, timeout=10)
 
     run = await RunRepository(db_session).require(run_id)
@@ -232,10 +248,13 @@ async def test_a_second_attempt_is_recorded_as_a_resume(
     db_session: AsyncSession, db_sessionmaker: async_sessionmaker[AsyncSession]
 ) -> None:
     run_id = await _queued_and_claimed(db_session)
+    repo = RunRepository(db_session)
+    await repo.requeue(run_id, reason="test")
+    await repo.claim(dispatcher_id="test")
     executor = _executor(db_sessionmaker)
 
     async for client in _client(executor):
-        await client.post(f"/v1/runs/{run_id}/execute", json={"attempt": 2})
+        await client.post(f"/v1/runs/{run_id}/execute", json=await _body(db_session, run_id, 2))
         await executor.wait_for(run_id, timeout=10)
 
     events = (await db_session.execute(select(RunEvent).order_by(RunEvent.seq))).scalars().all()
@@ -254,5 +273,30 @@ async def test_draining_marks_the_replica_unavailable(
         assert response.json()["status"] == "draining"
         run_id = uuid.uuid4()
         assert (
-            await client.post(f"/v1/runs/{run_id}/execute", json={"attempt": 1})
+            await client.post(
+                f"/v1/runs/{run_id}/execute", json={"attempt": 1, "lease_id": str(uuid.uuid4())}
+            )
         ).status_code == 503
+
+
+async def test_a_losing_completion_cannot_publish_artifacts_or_counters(
+    db_session: AsyncSession, db_sessionmaker: async_sessionmaker[AsyncSession]
+) -> None:
+    run_id = await _queued_and_claimed(db_session)
+    repo = RunRepository(db_session)
+    await repo.mark_running(run_id, agent_id="agent-test", deadline_at=None)
+    await repo.finish(run_id, status=RunStatus.FAILED, error_code="DEADLINE_EXCEEDED")
+    executor = _executor(db_sessionmaker)
+    await executor._settle(
+        run_id,
+        RunOutcome(
+            status=RunStatus.SUCCEEDED,
+            artifacts={"report_md": ("text/markdown", "Late output")},
+            metrics={"tokens_in": 777},
+        ),
+        AsyncMock(),
+    )
+    run = await repo.require(run_id)
+    assert run.status == "failed"
+    assert run.tokens_in == 0
+    assert (await db_session.execute(select(RunArtifact))).scalars().all() == []
