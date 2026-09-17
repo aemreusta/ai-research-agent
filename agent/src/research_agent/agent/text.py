@@ -171,14 +171,14 @@ def overlap_ratio(query: str, text: str) -> float:
 def detect_language(text: str) -> str:
     """ "tr" or "en" - enough for this system, which answers in the question's language (D4).
 
-    Turkish-specific letters are decisive; otherwise stopword votes decide.
+    Language markers take precedence over proper nouns such as Türkiye in an English question.
     """
-    if any(char in _TR_CHARS for char in text):
-        return "tr"
     words = set(tokens(text, keep_stopwords=True))
     tr_votes = len(words & _TR_MARKERS)
     en_votes = len(words & _EN_MARKERS)
-    return "tr" if tr_votes > en_votes else "en"
+    if tr_votes != en_votes:
+        return "tr" if tr_votes > en_votes else "en"
+    return "tr" if any(char in _TR_CHARS for char in text) else "en"
 
 
 def truncate(text: str, limit: int) -> str:

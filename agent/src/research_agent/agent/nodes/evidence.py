@@ -10,6 +10,7 @@ from research_agent.agent.clustering import cluster_claims
 from research_agent.agent.contradictions import contradiction_candidates
 from research_agent.agent.dedup.syndication import merge_syndicated_origins
 from research_agent.agent.deps import AgentDeps
+from research_agent.agent.freshness import document_evidence
 from research_agent.agent.injection import looks_like_injection
 from research_agent.agent.quotes import verify_quote
 from research_agent.agent.runtime import EventSink
@@ -25,6 +26,7 @@ from research_agent.agent.state import (
     ResearchState,
 )
 from research_agent.agent.text import overlap_ratio, truncate
+from research_agent.agent.validation import validate_claims
 from research_agent.errors import AgentError, ErrorCode
 from research_agent.observability.events import EventType
 from research_agent.prompting.predict import untrusted
@@ -36,8 +38,8 @@ from research_agent.prompting.schemas import (
 from research_agent.providers.llm.gateway import LLMFailure
 
 EVALUATION_BATCH = 8
-EVALUATION_EXCERPT = 700
-EXTRACTION_CHARS = 14_000
+EVALUATION_EXCERPT = 2200
+EXTRACTION_CHARS = 24_000
 
 
 def _selected(state: ResearchState) -> list[Document]:
@@ -73,7 +75,7 @@ async def evaluate_sources(state: ResearchState, deps: AgentDeps, events: EventS
         payload = "\n\n".join(
             untrusted(
                 f"TITLE: {d.title}\nDATE: {d.published_at or 'unknown'}\n"
-                f"{truncate(d.content or d.snippet, EVALUATION_EXCERPT)}",
+                f"{document_evidence(d, state.question, limit=EVALUATION_EXCERPT)}",
                 id=d.id,
                 domain=d.domain,
             )
@@ -212,6 +214,12 @@ async def extract_claims(state: ResearchState, deps: AgentDeps, events: EventSin
                     value=item.value,
                     unit=item.unit,
                     as_of=item.as_of,
+                    conditions=item.conditions,
+                    effective_from=item.effective_from,
+                    effective_until=item.effective_until,
+                    time_sensitive=item.time_sensitive,
+                    quote_match_method=check.method,
+                    quote_match_score=check.similarity,
                     attributed_to=item.attributed_to,
                     iteration=state.iteration,
                 )
@@ -235,6 +243,8 @@ async def extract_claims(state: ResearchState, deps: AgentDeps, events: EventSin
                     outcome=f"{doc.domain}: quote not found in the page text",
                 )
             )
+        async with semaphore:
+            await validate_claims(accepted, doc, state, deps, events)
         return accepted
 
     results = await asyncio.gather(*(extract(doc) for doc in documents))
@@ -243,6 +253,10 @@ async def extract_claims(state: ResearchState, deps: AgentDeps, events: EventSin
             claim.id = f"c{len(state.claims) + 1}"
             state.claims[claim.id] = claim
             stats["claims"] += 1
+            if claim.validation_status != "supported":
+                state.bump(f"claims_validation_{claim.validation_status}")
+            if claim.requires_fresh_confirmation:
+                state.bump("claims_need_fresh_confirmation")
     state.bump("claims_rejected_quote", stats["rejected"])
     state.bump("extraction_failures", stats["failed"])
     state.bump("claims_rejected_injection", stats["injection"])
@@ -261,7 +275,11 @@ async def extract_claims(state: ResearchState, deps: AgentDeps, events: EventSin
 
 async def cluster_and_corroborate(state: ResearchState, deps: AgentDeps, events: EventSink) -> None:
     clustered = {cid for cluster in state.clusters.values() for cid in cluster.claim_ids}
-    new_claims = [c for c in state.claims.values() if c.id not in clustered]
+    new_claims = [
+        c
+        for c in state.claims.values()
+        if c.id not in clustered and c.validation_status in {"supported", "legacy"}
+    ]
     if not new_claims:
         return
     dedup = deps.settings.dedup
@@ -327,6 +345,10 @@ def _judge_side(state: ResearchState, cluster: ClaimCluster) -> dict[str, Any]:
         "statement": cluster.statement,
         "value": cluster.value,
         "as_of": cluster.as_of,
+        "conditions": cluster.conditions,
+        "effective_from": cluster.effective_from,
+        "effective_until": cluster.effective_until,
+        "requires_fresh_confirmation": cluster.requires_fresh_confirmation,
         "support": cluster.support,
         "primary": cluster.has_primary,
         "best_source_score": cluster.best_source_score,

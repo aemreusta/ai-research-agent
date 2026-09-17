@@ -1,7 +1,7 @@
 id: extract_claims
-version: 1
+version: 3
 # Must equal the hash of the output model in code (prompting/schemas.py); a test checks it.
-output_schema_hash: ee101a2dbb51434c
+output_schema_hash: e931815ff2bbb35b
 description: Pull atomic, quote-backed claims out of one source document.
 instructions: |
   You extract factual claims from ONE source document for a research agent.
@@ -17,6 +17,20 @@ instructions: |
     attribute "notification deadline", value "72 hours");
   - record `attributed_to` when the document reports someone else's statement
     ("according to the ministry ...").
+
+  Preserve all applicability conditions in BOTH `text` and `conditions`: jurisdictions,
+  affected groups, exceptions, prerequisites, and the AND/OR logic of thresholds. Read the
+  surrounding paragraphs, not just the quoted sentence. Distinguish a grace period from a
+  universal postponement, and a proposal or political agreement from enacted law.
+  Record effective_from/effective_until as ISO dates only when stated. as_of is the date or
+  year the VALUE describes, not today's date or the page's copyright year. Mark mutable
+  current values and obligations time_sensitive=true; a dated historical event is not mutable.
+  For a legal threshold, as_of is when the source explicitly confirms that rule applies:
+  do not confuse the year of a company's financial assessment with the year the registration
+  rule applies, or the original enactment date with a later explicit reaffirmation. For actual
+  revenue, as_of is the reporting period (e.g. 2025), even if results were published in 2026.
+  Include necessary context in the quote. Do not extract an unconditional summary when the
+  document supports only a conditional statement.
 
   Write `text` in the report language given with the sub-questions, the quote in the
   document's own language.

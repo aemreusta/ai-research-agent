@@ -200,6 +200,13 @@ def cluster_claims(
             anchor = representative.get(cid)
             if anchor is None or not _entities_compatible(claim.entity, anchor.entity):
                 continue
+            if (
+                {fold(c) for c in claim.conditions} != {fold(c) for c in anchor.conditions}
+                or claim.effective_from != anchor.effective_from
+                or claim.effective_until != anchor.effective_until
+                or claim.requires_fresh_confirmation != anchor.requires_fresh_confirmation
+            ):
+                continue
             if values_conflict(claim, anchor):
                 continue
             score, threshold = similarity(claim, anchor)
@@ -225,6 +232,10 @@ def cluster_claims(
                 unit=claim.unit,
                 as_of=claim.as_of,
                 kind=claim.kind,
+                conditions=list(claim.conditions),
+                effective_from=claim.effective_from,
+                effective_until=claim.effective_until,
+                requires_fresh_confirmation=claim.requires_fresh_confirmation,
             )
             representative[best_id] = claim
 
@@ -239,12 +250,10 @@ def cluster_claims(
     return clusters
 
 
-def _refresh(
-    cluster: ClaimCluster, claims: Mapping[str, Claim], documents: Mapping[str, Document]
-) -> None:
-    """Recompute support and confidence from the ledger."""
-    members = [claims[cid] for cid in cluster.claim_ids if cid in claims]
-    doc_ids = list(dict.fromkeys(claim.doc_id for claim in members))
+def independent_origin_keys(
+    members: list[Claim], documents: Mapping[str, Document]
+) -> dict[str, str]:
+    """Deduplicate publishers, copied text and attributed speakers together, across findings."""
     # Independent = a different text AND a different publisher: copies of one text share an
     # origin, and four pages of apilex.ai are one voice, not four confirmations.
     parent: dict[str, str] = {}
@@ -278,6 +287,20 @@ def _refresh(
 
     def origin_key(claim: Claim) -> str:
         return group_key[root(f"origin:{claim.origin_id}")]
+
+    return {claim.id: origin_key(claim) for claim in members}
+
+
+def _refresh(
+    cluster: ClaimCluster, claims: Mapping[str, Claim], documents: Mapping[str, Document]
+) -> None:
+    """Recompute support and confidence from the ledger."""
+    members = [claims[cid] for cid in cluster.claim_ids if cid in claims]
+    doc_ids = list(dict.fromkeys(claim.doc_id for claim in members))
+    keys = independent_origin_keys(members, documents)
+
+    def origin_key(claim: Claim) -> str:
+        return keys[claim.id]
 
     origins = list(dict.fromkeys(origin_key(claim) for claim in members))
     cluster.doc_ids = doc_ids

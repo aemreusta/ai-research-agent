@@ -68,5 +68,10 @@ rules:
     description: Every recommendation links to at least one finding.
     remediation: drop_recommendation
 
+  G12:
+    severity: error
+    description: Cited findings have validated evidence and confirmed temporal applicability.
+    remediation: drop_sentence
+
 # A report never reaches the user without this line when anything was dropped.
 report_note_on_drop: "{count} sentence(s) removed for insufficient evidence - see gate_result.json"

@@ -201,7 +201,7 @@ def _remediate(
                     ReportSentence(text=_NONE.get(language, _NONE["en"]), kind=SentenceKind.META)
                 )
             actions.append({"rule": "G1", "action": "add_section", "section": key.value})
-        elif v.rule in {"G2", "G11"} or (v.rule == "G4" and v.severity == "error"):
+        elif v.rule in {"G2", "G11", "G12"} or (v.rule == "G4" and v.severity == "error"):
             if v.section is not None and v.index is not None:
                 drop.add((v.section, v.index))
         elif v.rule == "G3" and "cluster_id" in v.details:
@@ -262,20 +262,23 @@ def _remediate(
 def run_gate(
     report: Report, state: ResearchState, config: GateConfig, *, max_rounds: int = 1
 ) -> GateOutcome:
+    if max_rounds < 0:
+        raise ValueError("max_rounds must be nonnegative")
     language = state.language
     working = _clone(report)
-    for section in working.sections:
-        section.title = section_title(section.key, language)
-    # Known Gaps must list exhausted sub-questions; make sure the section exists to hold them.
-    if any(s.status is SubQuestionStatus.EXHAUSTED for s in state.plan):
-        _ensure_section(working, SectionKey.KNOWN_GAPS, language)
+    if max_rounds:
+        for section in working.sections:
+            section.title = section_title(section.key, language)
+        # Zero rounds is report-only, including normalization and missing sections.
+        if any(s.status is SubQuestionStatus.EXHAUSTED for s in state.plan):
+            _ensure_section(working, SectionKey.KNOWN_GAPS, language)
 
     initial = evaluate(working, state, config)
     violations = initial
     actions: list[dict[str, Any]] = []
     removed = 0
     rounds = 0
-    while violations and rounds < max_rounds + 1:
+    while violations and rounds < max_rounds:
         remediable = [v for v in violations if v.details.get("remediable", True)]
         if not remediable:
             break
@@ -284,8 +287,6 @@ def run_gate(
         actions.extend(round_actions)
         removed += round_removed
         violations = evaluate(working, state, config)
-        if rounds > max_rounds:
-            break
 
     if removed:
         summary = _ensure_section(working, SectionKey.SUMMARY, language)

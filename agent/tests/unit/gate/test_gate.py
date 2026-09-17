@@ -467,10 +467,28 @@ def test_the_gate_is_deterministic() -> None:
     assert first == second
 
 
+def test_zero_remediation_rounds_preserves_the_report() -> None:
+    report = _complete(_fact("Nobody cites this."))
+    before = report.model_dump()
+    outcome = run_gate(report, _state(), CONFIG, max_rounds=0)
+    assert outcome.rounds == 0
+    assert outcome.removed_sentences == 0
+    assert outcome.report.model_dump() == before
+    assert outcome.verdict == "fail"
+
+
+def test_one_remediation_round_is_a_strict_limit() -> None:
+    report = _complete(_fact("GPAI obligations apply from 2 August 2025.", "k1"))
+    # G4 produces a persistent warning even after the approximate label has been added.
+    report.sections[0].sentences.append(_fact("GPAI obligations apply from August 2025.", "k1"))
+    outcome = run_gate(report, _state(), CONFIG, max_rounds=1)
+    assert outcome.rounds == 1
+
+
 def test_the_gate_result_records_every_rule() -> None:
     outcome = run_gate(
         _complete(_fact("GPAI obligations apply from 2 August 2025.", "k1")), _state(), CONFIG
     )
     result = outcome.to_dict()
-    assert set(result["checks"]) == {f"G{i}" for i in range(1, 12)}
+    assert set(result["checks"]) == {f"G{i}" for i in range(1, 13)}
     assert result["verdict"] == "pass"

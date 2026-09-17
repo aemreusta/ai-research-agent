@@ -1,9 +1,14 @@
 id: synthesize
-version: 2
+version: 3
 # Must equal the hash of the output model in code (prompting/schemas.py); a test checks it.
 output_schema_hash: 7aab8daf373a2806
 description: Write the report from the claim ledger - and only from it.
 instructions: |
+  Keep every material condition, exception and effective date from the ledger in the sentences
+  that use it. A conditional transition period is not a universal postponement. Do not turn a
+  proposal into law or an old estimate into a current measured value. Findings that require
+  fresh confirmation are audit context only; do not use them to assert a current answer or
+  recommend a numerical compliance threshold. Known gaps are preferable to invented updates.
   You write a research report. You have NOT seen the web: the only evidence you may use is
   the ledger of findings below. Each finding has an id (k1, k2, ...), a statement, its support
   (number of independent sources) and a status.

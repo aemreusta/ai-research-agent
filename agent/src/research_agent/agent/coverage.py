@@ -23,6 +23,8 @@ from research_agent.config.schema import BudgetSettings, ScoringSettings
 
 
 def assess_facets(state: ResearchState, settings: ScoringSettings) -> None:
+    from research_agent.agent.clustering import independent_origin_keys
+
     # A contradiction stops blocking its facet once it is resolved, or once a targeted follow-up
     # has been tried: from then on it is reported under "Conflicting / Uncertain" instead of
     # being chased round after round.
@@ -38,10 +40,22 @@ def assess_facets(state: ResearchState, settings: ScoringSettings) -> None:
             relevant = [
                 cluster
                 for cluster in clusters
-                if facet.id in cluster.facet_ids
-                or (not cluster.facet_ids and len(subq.facets) == 1)
+                if not cluster.requires_fresh_confirmation
+                and (
+                    facet.id in cluster.facet_ids
+                    or (not cluster.facet_ids and len(subq.facets) == 1)
+                )
             ]
-            origins = {origin for cluster in relevant for origin in cluster.origin_ids}
+            members = {
+                cid: state.claims[cid]
+                for cluster in relevant
+                for cid in cluster.claim_ids
+                if cid in state.claims
+            }
+            origins = set(independent_origin_keys(list(members.values()), state.documents).values())
+            # Legacy/test snapshots may contain clusters without the underlying claims.
+            if not members:
+                origins = {origin for cluster in relevant for origin in cluster.origin_ids}
             strong_primary = any(
                 cluster.has_primary
                 and cluster.best_source_score >= settings.primary_source_min_score
@@ -51,7 +65,21 @@ def assess_facets(state: ResearchState, settings: ScoringSettings) -> None:
                 cluster.status is ClusterStatus.CONTESTED and cluster.id not in settled
                 for cluster in relevant
             )
-            if contested:
+            facet_claims = [
+                claim
+                for claim in state.claims.values()
+                if claim.subq_id == subq.id
+                and claim.facet_id == facet.id
+                and claim.validation_status in {"supported", "legacy"}
+            ]
+            awaiting_freshness = any(
+                c.requires_fresh_confirmation for c in facet_claims
+            ) and not any(
+                c.time_sensitive and not c.requires_fresh_confirmation for c in facet_claims
+            )
+            if awaiting_freshness:
+                facet.status = FacetStatus.OPEN
+            elif contested:
                 facet.status = FacetStatus.CONTESTED
             elif strong_primary or len(origins) >= settings.min_independent_origins:
                 facet.status = FacetStatus.SUFFICIENT

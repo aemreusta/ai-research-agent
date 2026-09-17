@@ -40,6 +40,7 @@ COPY skills ./skills
 COPY migrations ./migrations
 COPY alembic.ini ./alembic.ini
 COPY agent/tests ./agent/tests
+COPY evals/cases.json ./evals/cases.json
 ENV PATH="/app/.venv/bin:${PATH}" \
     APP_ROOT=/app \
     APP_CONFIG_DIR=/app/config \

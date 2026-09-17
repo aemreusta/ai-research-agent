@@ -70,6 +70,12 @@ SIGNATURES: dict[str, Signature] = {
             frozenset({"question", "subquestions", "document", "today"}),
         ),
         Signature(
+            "validate_claims",
+            schemas.ClaimValidationOutput,
+            Tier.REASONING,
+            frozenset({"question", "time_scope", "today", "document", "claims"}),
+        ),
+        Signature(
             "judge_contradictions",
             schemas.ContradictionJudgements,
             Tier.FAST,

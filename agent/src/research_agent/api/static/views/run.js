@@ -50,7 +50,7 @@ export async function render(root, runId) {
       catch (error) { toast(error.body?.message || error.message, "bad"); }
     } }, "Cancel") : null;
     const exports = run.artifacts.length ? h("div", { class: "row" },
-      ...[["report", "report.md"], ["trace", "trace.jsonl"], ["gate", "gate_result.json"], ["state", "state.json"]]
+      ...[["report", "report.md"], ["report_json", "report.json"], ["trace", "trace.jsonl"], ["gate", "gate_result.json"], ["state", "state.json"]]
         .map(([artifact, label]) => h("a", { class: "button ghost small", href: `/api/runs/${runId}/export?artifact=${artifact}` }, label))) : null;
 
     mount(header,
@@ -265,16 +265,19 @@ export async function render(root, runId) {
           h("div", {}, x.summary), x.rationale ? h("div", { class: "muted small" }, x.rationale) : null))) : null,
       h("div", { class: "panel" },
         h("div", { class: "panel-head" }, h("h2", {}, "Findings (claim ledger)"),
-          h("span", { class: "muted small" }, `${ledger.claims.length} quote-verified claims → ${clusters.length} findings`)),
+          h("span", { class: "muted small" }, `${ledger.claims.length} candidate claims → ${clusters.length} findings`)),
         ...clusters.map((cluster) => h("details", { style: "border-bottom:1px solid var(--line); padding:8px 0" },
           h("summary", {},
             h("span", { class: "mono small" }, cluster.id), " ",
             h("span", { class: `badge ${kinds[cluster.status] || ""}` }, cluster.status.replaceAll("_", " ")), " ",
             h("span", { class: "badge" }, `${cluster.origin_ids.length} origin(s)`), " ",
             h("span", { class: "badge" }, `conf ${cluster.confidence.toFixed(2)}`), " ",
+            cluster.requires_fresh_confirmation ? h("span", { class: "badge warn" }, "needs current evidence") : null,
             cluster.statement),
           h("ul", {}, ...cluster.claim_ids.map((id) => claimsById[id]).filter(Boolean).map((claim) => h("li", {},
             h("div", {}, claim.text),
+            h("div", { class: "muted small" }, `${claim.validation_status || "legacy"} · ${claim.freshness || "date not checked"}`),
+            (claim.conditions || []).length ? h("div", { class: "small" }, `Applies when: ${claim.conditions.join("; ")}`) : null,
             h("div", { class: "muted small" }, `“${truncate(claim.quote, 220)}” - ${claim.doc_id}`,
               claim.attributed_to ? ` (according to ${claim.attributed_to})` : ""))))))));
   }

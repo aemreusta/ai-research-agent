@@ -4,10 +4,12 @@ from __future__ import annotations
 
 import asyncio
 import re
+from collections import Counter
 from typing import Any
 
 from research_agent.agent.coverage import localised_reason
 from research_agent.agent.deps import AgentDeps
+from research_agent.agent.freshness import source_context
 from research_agent.agent.runtime import EventSink
 from research_agent.agent.state import (
     ClusterStatus,
@@ -51,9 +53,10 @@ _GAP_REASON = {
 
 
 def _ledger(state: ResearchState) -> list[dict[str, Any]]:
-    clusters = sorted(state.clusters.values(), key=lambda c: (c.subq_id, -c.confidence, c.id))[
-        :MAX_LEDGER_FINDINGS
-    ]
+    clusters = sorted(
+        (c for c in state.clusters.values() if not c.requires_fresh_confirmation),
+        key=lambda c: (c.subq_id, -c.confidence, c.id),
+    )[:MAX_LEDGER_FINDINGS]
     rows = []
     for cluster in clusters:
         domains = sorted(
@@ -66,6 +69,10 @@ def _ledger(state: ResearchState) -> list[dict[str, Any]]:
                 "statement": cluster.statement,
                 "value": cluster.value,
                 "as_of": cluster.as_of,
+                "conditions": cluster.conditions,
+                "effective_from": cluster.effective_from,
+                "effective_until": cluster.effective_until,
+                "requires_fresh_confirmation": cluster.requires_fresh_confirmation,
                 "status": cluster.status.value,
                 "independent_sources": cluster.support,
                 "has_primary_source": cluster.has_primary,
@@ -174,6 +181,22 @@ def _gap_section(state: ResearchState) -> ReportSection:
         )
         for subq_id, question, reason in _gaps(state)
     ]
+    withheld = sum(
+        1
+        for c in state.claims.values()
+        if c.requires_fresh_confirmation or c.validation_status in {"unsupported", "unavailable"}
+    )
+    if withheld:
+        note = (
+            f"{withheld} candidate claim(s) withheld: source support, conditions or current "
+            "applicability could not be confirmed; see the evidence ledger."
+        )
+        if state.language == "tr":
+            note = (
+                f"{withheld} aday iddia kullanılmadı: kaynak desteği, koşulları veya güncel "
+                "geçerliliği doğrulanamadı; ayrıntılar kanıt defterindedir."
+            )
+        sentences.append(ReportSentence(text=note, kind=SentenceKind.META))
     return ReportSection(
         key=SectionKey.KNOWN_GAPS,
         title=section_title(SectionKey.KNOWN_GAPS, state.language),
@@ -184,7 +207,10 @@ def _gap_section(state: ResearchState) -> ReportSection:
 def fallback_report(state: ResearchState) -> Report:
     """No model: one sentence per finding, straight from the ledger. Plain but true."""
     language = state.language
-    clusters = sorted(state.clusters.values(), key=lambda c: (-c.confidence, c.id))
+    clusters = sorted(
+        (c for c in state.clusters.values() if not c.requires_fresh_confirmation),
+        key=lambda c: (-c.confidence, c.id),
+    )
     contested = [c for c in clusters if c.status is ClusterStatus.CONTESTED]
     settled = [c for c in clusters if c.status is not ClusterStatus.CONTESTED]
 
@@ -310,39 +336,96 @@ async def _verify(
     items = []
     for section in report.sections:
         for index, sentence in enumerate(section.sentences):
-            if sentence.kind is SentenceKind.FACT and sentence.cluster_ids:
+            if sentence.kind in {SentenceKind.FACT, SentenceKind.RECOMMENDATION} and (
+                sentence.cluster_ids or sentence.finding_refs
+            ):
                 items.append(
                     {
                         "sentence_id": f"{section.key.value}:{index}",
                         "sentence": sentence.text,
+                        "kind": sentence.kind.value,
+                        "question": state.question,
+                        "as_of": state.as_of.isoformat(),
+                        "evidence": [
+                            {
+                                "cluster_id": cid,
+                                "claim": claim.text,
+                                "quote": claim.quote,
+                                "conditions": claim.conditions,
+                                "effective_from": claim.effective_from,
+                                "effective_until": claim.effective_until,
+                                "as_of": claim.as_of,
+                                "freshness": claim.freshness,
+                                "requires_fresh_confirmation": claim.requires_fresh_confirmation,
+                                "validation_status": claim.validation_status,
+                                "source_date": str(doc.published_at) if doc.published_at else None,
+                                "source_url": doc.canonical_url,
+                                "source_context": source_context(doc, claim.quote),
+                            }
+                            for cid in (sentence.cluster_ids or sentence.finding_refs)
+                            if cid in state.clusters
+                            for claim_id in state.clusters[cid].claim_ids
+                            if (claim := state.claims.get(claim_id)) is not None
+                            if (doc := state.documents.get(claim.doc_id)) is not None
+                        ],
                         "cited_findings": [
                             state.clusters[c].statement
-                            for c in sentence.cluster_ids
+                            for c in (sentence.cluster_ids or sentence.finding_refs)
                             if c in state.clusters
                         ],
                     }
                 )
     if not items:
+        state.verification = {"requested": 0, "checked": 0, "unsupported": 0, "unavailable": 0}
         return {}
     size = deps.settings.concurrency.citation_verification_batch_size
     batches = [items[i : i + size] for i in range(0, len(items), size)]
     semaphore = asyncio.Semaphore(3)
     unsupported: dict[str, str] = {}
+    checked: set[str] = set()
+    unavailable: set[str] = set()
 
     async def check(batch: list[dict[str, Any]]) -> None:
+        pending = {item["sentence_id"]: item for item in batch}
         async with semaphore:
-            try:
-                result = await deps.predictor("verify_citations", events, sentences=batch)
-            except LLMFailure:
-                return
-        output: VerificationOutput = result.value
-        wanted = {item["sentence_id"] for item in batch}
-        for verdict in output.items:
-            if verdict.sentence_id in wanted and not verdict.supported:
-                unsupported[verdict.sentence_id] = verdict.reason
+            for _ in range(2):
+                try:
+                    result = await deps.predictor(
+                        "verify_citations", events, sentences=list(pending.values())
+                    )
+                except LLMFailure:
+                    continue
+                output: VerificationOutput = result.value
+                counts = Counter(verdict.sentence_id for verdict in output.items)
+                for verdict in output.items:
+                    sid = verdict.sentence_id
+                    if sid not in pending or counts[sid] != 1:
+                        continue
+                    checked.add(sid)
+                    del pending[sid]
+                    if not verdict.supported:
+                        unsupported[sid] = verdict.reason
+                if not pending:
+                    break
+        for sid in pending:
+            unavailable.add(sid)
+            unsupported[sid] = "Citation verification unavailable after two attempts."
 
     await asyncio.gather(*(check(batch) for batch in batches))
-    state.verification = {"checked": len(items), "unsupported": len(unsupported)}
+    state.verification = {
+        "requested": len(items),
+        "checked": len(checked),
+        "unsupported": len(unsupported) - len(unavailable),
+        "unavailable": len(unavailable),
+    }
+    if unavailable:
+        await events.warn(
+            EventType.DECISION,
+            f"Citation verification unavailable for {len(unavailable)} sentence(s); "
+            "withholding them.",
+            label="Verifier",
+            data={"unavailable": sorted(unavailable)},
+        )
     return unsupported
 
 
@@ -363,7 +446,7 @@ async def verify_citations(state: ResearchState, deps: AgentDeps, events: EventS
     if state.report is None or state.report.fallback:
         return
     unsupported = await _verify(state, deps, events, state.report)
-    if unsupported and not state.resynthesized:
+    if unsupported and not state.resynthesized and not state.verification.get("unavailable"):
         state.resynthesized = True
         feedback = "\n".join(
             f'- Unsupported: "{_text(state.report, sid)}" - {reason}'
@@ -379,7 +462,24 @@ async def verify_citations(state: ResearchState, deps: AgentDeps, events: EventS
         state.report = await _synthesise(state, deps, events, feedback=feedback)
         if not state.report.fallback:
             unsupported = await _verify(state, deps, events, state.report)
+        else:
+            # The old positional IDs refer to a different report, not the fallback's rows.
+            unsupported = {}
     dropped = _drop(state.report, unsupported) if unsupported else 0
+    if state.verification.get("unavailable"):
+        note = (
+            f"Atıf doğrulaması tamamlanamadığı için {dropped} cümle çıkarıldı."
+            if state.language == "tr"
+            else f"{dropped} sentence(s) withheld because citation verification was unavailable."
+        )
+        gaps = state.report.section(SectionKey.KNOWN_GAPS)
+        if gaps is None:
+            gaps = ReportSection(
+                key=SectionKey.KNOWN_GAPS,
+                title=section_title(SectionKey.KNOWN_GAPS, state.language),
+            )
+            state.report.sections.append(gaps)
+        gaps.sentences.append(ReportSentence(text=note, kind=SentenceKind.META))
     rebuild_sources(state.report, state)
     state.bump("sentences_dropped_by_verifier", dropped)
     await events.info(

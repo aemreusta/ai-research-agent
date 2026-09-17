@@ -10,8 +10,9 @@ from research_agent.agent.coverage import REPEATED_QUERIES_REASON, progress_snap
 from research_agent.agent.dedup import OriginIndex, QueryDeduplicator, canonicalize_url, domain_of
 from research_agent.agent.dedup.minhash import content_hash
 from research_agent.agent.deps import AgentDeps
+from research_agent.agent.freshness import dated_header
 from research_agent.agent.runtime import EventSink
-from research_agent.agent.scoring import recency_score
+from research_agent.agent.scoring import is_own_domain, recency_score
 from research_agent.agent.state import (
     Document,
     PendingHit,
@@ -95,7 +96,7 @@ def plan_targets(state: ResearchState, deps: AgentDeps) -> list[Target]:
                     QueryPurpose.GAP,
                     facet_id=facet.id,
                     facet_name=facet.name,
-                    detail=facet.description,
+                    detail=facet.description + _freshness_gap(state, subq.id, facet.id),
                 )
             )
     trimmed: list[Target] = []
@@ -107,6 +108,25 @@ def plan_targets(state: ResearchState, deps: AgentDeps) -> list[Target]:
         trimmed.append(target)
         total += target.quota
     return trimmed
+
+
+def _freshness_gap(state: ResearchState, subq_id: str, facet_id: str) -> str:
+    held = [
+        c
+        for c in state.claims.values()
+        if c.subq_id == subq_id and c.facet_id == facet_id and c.requires_fresh_confirmation
+    ]
+    if not held:
+        return ""
+    values = "; ".join(
+        f"{c.entity or ''} {c.attribute or ''}: {c.value or c.text} ({c.as_of or 'undated'})"
+        for c in held[:3]
+    )
+    return (
+        f". Fresh official confirmation needed as of {state.as_of}: {values}. "
+        "Search for amendments, replacement thresholds and current consolidated guidance; "
+        "do not repeat the old source as proof of the current rule."
+    )
 
 
 def _fallback_queries(target: Target, state: ResearchState) -> list[str]:
@@ -289,40 +309,40 @@ async def search(state: ResearchState, deps: AgentDeps, events: EventSink) -> No
             outcome = await deps.search.search(
                 request, events=events, subquestion_id=query.subq_id, preferred=preferred
             )
-            query.provider = outcome.provider
-            query.cache_hit = outcome.cache_hit
-            query.result_count = len(outcome.hits)
-            query.error_code = outcome.error_code.value if outcome.error_code else None
-            if outcome.hits:
-                query.status = QueryStatus.DONE
-                state.pending_hits.extend(
-                    PendingHit(
-                        hit=hit.model_dump(mode="json"), query_id=query.id, subq_id=query.subq_id
-                    )
-                    for hit in outcome.hits
+        query.provider = outcome.provider
+        query.cache_hit = outcome.cache_hit
+        query.result_count = len(outcome.hits)
+        query.error_code = outcome.error_code.value if outcome.error_code else None
+        if outcome.hits:
+            query.status = QueryStatus.DONE
+            state.pending_hits.extend(
+                PendingHit(
+                    hit=hit.model_dump(mode="json"), query_id=query.id, subq_id=query.subq_id
                 )
-                return
-            query.status = QueryStatus.FAILED if outcome.failed else QueryStatus.EMPTY
-            # One broadened retry for an empty result (v0.6 §13.2, SEARCH_EMPTY).
-            broadened = " ".join(_BROADEN.sub(" ", query.text).split())
-            if (
-                query.status is QueryStatus.EMPTY
-                and query.purpose is not QueryPurpose.BROADENED
-                and broadened
-                and broadened != query.text
-                and deps.meter.searches_left() > 0
-            ):
-                retry = QueryRecord(
-                    id=f"q{len(state.queries) + 1}",
-                    text=broadened,
-                    subq_id=query.subq_id,
-                    facet_id=query.facet_id,
-                    purpose=QueryPurpose.BROADENED,
-                    rationale=f"broadened from {query.id}",
-                    iteration=state.iteration,
-                )
-                state.queries.append(retry)
-                await run(index, retry)
+                for hit in outcome.hits
+            )
+            return
+        query.status = QueryStatus.FAILED if outcome.failed else QueryStatus.EMPTY
+        # One broadened retry for an empty result (v0.6 §13.2, SEARCH_EMPTY).
+        broadened = " ".join(_BROADEN.sub(" ", query.text).split())
+        if (
+            query.status is QueryStatus.EMPTY
+            and query.purpose is not QueryPurpose.BROADENED
+            and broadened
+            and broadened != query.text
+            and deps.meter.searches_left() > 0
+        ):
+            retry = QueryRecord(
+                id=f"q{len(state.queries) + 1}",
+                text=broadened,
+                subq_id=query.subq_id,
+                facet_id=query.facet_id,
+                purpose=QueryPurpose.BROADENED,
+                rationale=f"broadened from {query.id}",
+                iteration=state.iteration,
+            )
+            state.queries.append(retry)
+            await run(index, retry)
 
     await asyncio.gather(*(run(i, q) for i, q in enumerate(planned)))
     ran = [q for q in state.queries if q.iteration == state.iteration]
@@ -369,7 +389,20 @@ def _triage(
     authority = deps.tiers.tier_score(deps.tiers.tier_of(doc.domain))
     rank_signal = hit.provider_score if hit.provider_score is not None else 1 / (hit.rank + 1)
     recency = recency_score(doc.published_at, state.as_of, state.analysis.time_scope)
-    return round(0.4 * relevance + 0.3 * authority + 0.2 * rank_signal + 0.1 * recency, 4)
+    score = 0.4 * relevance + 0.3 * authority + 0.2 * rank_signal + 0.1 * recency
+    # The literal question name may be ApilexAI while sources write Apilex.ai or Apilex.
+    # Profile triage must not let generic pages about "founders" displace the named company.
+    if is_own_domain(doc.domain, state.analysis.entities):
+        score = max(score, 0.7 + 0.2 * relevance)
+    elif state.analysis.answer_type == "profile":
+        compact = re.sub(
+            r"[^a-z0-9]", "", f"{doc.title} {doc.snippet} {doc.content[:1500]}".lower()
+        )
+        names = [re.sub(r"[^a-z0-9]", "", name.lower()) for name in state.analysis.entities]
+        aliases = [name[:-2] if name.endswith("ai") and len(name) > 5 else name for name in names]
+        matches = any(len(name) >= 3 and name in compact for name in [*names, *aliases])
+        score = min(1.0, score + 0.3) if matches else score * 0.25
+    return round(score, 4)
 
 
 async def process_results(state: ResearchState, deps: AgentDeps, events: EventSink) -> None:
@@ -406,6 +439,7 @@ async def process_results(state: ResearchState, deps: AgentDeps, events: EventSi
             content=(hit.content or "")[:MAX_DOCUMENT_CHARS],
             fetched=bool(hit.content),
             published_at=hit.published_at,
+            date_provenance="search_provider" if hit.published_at else None,
             provider=hit.provider,
             subq_ids=[pending.subq_id],
             query_ids=[pending.query_id],
@@ -418,6 +452,10 @@ async def process_results(state: ResearchState, deps: AgentDeps, events: EventSi
 
     for doc_id, (hit, query_text) in best_hit.items():
         doc = state.documents[doc_id]
+        if doc.published_at is None:
+            doc.published_at, doc.date_provenance = dated_header(
+                doc.content or doc.snippet, doc.url
+            )
         doc.triage_score = _triage(doc, state, deps, hit, query_text)
 
     # Snippet-first triage: only the top-K unextracted documents per sub-question go further.
@@ -446,20 +484,24 @@ async def process_results(state: ResearchState, deps: AgentDeps, events: EventSi
                 doc.selected_round = state.iteration
                 selected.append(doc)
 
-    # Full text for the selected documents that do not have it yet.
+    # Fetch missing text and publication metadata, including undated provider-supplied raw text.
     semaphore = asyncio.Semaphore(deps.settings.concurrency.max_parallel_fetches)
     fetch_failures = 0
 
     async def fetch(doc: Document) -> None:
         nonlocal fetch_failures
+        metadata_only = doc.fetched
         async with semaphore:
             page = await deps.fetcher.fetch(doc.url)
         if page.ok and page.text:
-            doc.content = page.text[:MAX_DOCUMENT_CHARS]
-            doc.fetched = True
+            if not metadata_only:
+                doc.content = page.text[:MAX_DOCUMENT_CHARS]
+                doc.fetched = True
             doc.title = doc.title or (page.title or "")
-            doc.published_at = doc.published_at or page.published_at
-        else:
+            if doc.published_at is None and page.published_at:
+                doc.published_at = page.published_at
+                doc.date_provenance = "page_metadata"
+        elif not metadata_only:
             fetch_failures += 1
             doc.fetch_error = page.error
             doc.content = doc.snippet
@@ -472,7 +514,9 @@ async def process_results(state: ResearchState, deps: AgentDeps, events: EventSi
                 )
             )
 
-    await asyncio.gather(*(fetch(doc) for doc in selected if not doc.fetched))
+    await asyncio.gather(
+        *(fetch(doc) for doc in selected if not doc.fetched or doc.published_at is None)
+    )
 
     # L2: near-duplicate documents share an origin.
     index = _origin_index(state, deps)

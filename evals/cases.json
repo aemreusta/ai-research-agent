@@ -1,0 +1,690 @@
+{
+  "description": "Fixed labeled traps and positive controls. Synthetic legal examples are fixtures, not descriptions of real law. Expected labels never enter model prompts.",
+  "cases": [
+    {
+      "id": "transition-dropped",
+      "category": "conditions",
+      "provenance": "synthetic",
+      "question": "What obligations and thresholds apply to Acme companies in 2026?",
+      "as_of": "2026-09-17",
+      "time_scope": {
+        "start": "2026-01-01",
+        "end": "2026-12-31"
+      },
+      "claim": {
+        "id": "c1",
+        "subq_id": "s1",
+        "facet_id": "f1",
+        "doc_id": "d1",
+        "origin_id": "o1",
+        "text": "All systems have until 2 December 2026 to meet transparency obligations.",
+        "quote": "Systems placed on the market before 2 August 2026 have until 2 December 2026 to meet transparency obligations.",
+        "conditions": [],
+        "time_sensitive": false,
+        "as_of": null
+      },
+      "document": {
+        "id": "d1",
+        "url": "https://regulator.example/test",
+        "canonical_url": "https://regulator.example/test",
+        "domain": "regulator.example",
+        "published_at": "2026-08-01",
+        "content": "Systems placed on the market before 2 August 2026 have until 2 December 2026 to meet transparency obligations."
+      },
+      "expected_entailment": false,
+      "expected_usable": false
+    },
+    {
+      "id": "transition-preserved",
+      "category": "conditions",
+      "provenance": "synthetic",
+      "question": "What obligations and thresholds apply to Acme companies in 2026?",
+      "as_of": "2026-09-17",
+      "time_scope": {
+        "start": "2026-01-01",
+        "end": "2026-12-31"
+      },
+      "claim": {
+        "id": "c1",
+        "subq_id": "s1",
+        "facet_id": "f1",
+        "doc_id": "d1",
+        "origin_id": "o1",
+        "text": "Systems placed on the market before 2 August 2026 have until 2 December 2026 to meet transparency obligations.",
+        "quote": "Systems placed on the market before 2 August 2026 have until 2 December 2026 to meet transparency obligations.",
+        "conditions": [
+          "systems placed on the market before 2 August 2026"
+        ],
+        "time_sensitive": false,
+        "as_of": null
+      },
+      "document": {
+        "id": "d1",
+        "url": "https://regulator.example/test",
+        "canonical_url": "https://regulator.example/test",
+        "domain": "regulator.example",
+        "published_at": "2026-08-01",
+        "content": "Systems placed on the market before 2 August 2026 have until 2 December 2026 to meet transparency obligations."
+      },
+      "expected_entailment": true,
+      "expected_usable": true
+    },
+    {
+      "id": "exemption-and",
+      "category": "conditions",
+      "provenance": "synthetic",
+      "question": "What obligations and thresholds apply to Acme companies in 2026?",
+      "as_of": "2026-09-17",
+      "time_scope": {
+        "start": "2026-01-01",
+        "end": "2026-12-31"
+      },
+      "claim": {
+        "id": "c1",
+        "subq_id": "s1",
+        "facet_id": "f1",
+        "doc_id": "d1",
+        "origin_id": "o1",
+        "text": "Companies with fewer than 50 employees AND a balance sheet below 100 million TL are exempt.",
+        "quote": "Companies with fewer than 50 employees AND a balance sheet below 100 million TL are exempt.",
+        "conditions": [
+          "fewer than 50 employees AND a balance sheet below 100 million TL"
+        ],
+        "time_sensitive": true,
+        "as_of": null
+      },
+      "document": {
+        "id": "d1",
+        "url": "https://regulator.example/test",
+        "canonical_url": "https://regulator.example/test",
+        "domain": "regulator.example",
+        "published_at": "2026-08-01",
+        "content": "Companies with fewer than 50 employees AND a balance sheet below 100 million TL are exempt."
+      },
+      "expected_entailment": true,
+      "expected_usable": true
+    },
+    {
+      "id": "exemption-or",
+      "category": "conditions",
+      "provenance": "synthetic",
+      "question": "What obligations and thresholds apply to Acme companies in 2026?",
+      "as_of": "2026-09-17",
+      "time_scope": {
+        "start": "2026-01-01",
+        "end": "2026-12-31"
+      },
+      "claim": {
+        "id": "c1",
+        "subq_id": "s1",
+        "facet_id": "f1",
+        "doc_id": "d1",
+        "origin_id": "o1",
+        "text": "Companies with fewer than 50 employees OR a balance sheet below 100 million TL are exempt.",
+        "quote": "Companies with fewer than 50 employees AND a balance sheet below 100 million TL are exempt.",
+        "conditions": [
+          "fewer than 50 employees OR a balance sheet below 100 million TL"
+        ],
+        "time_sensitive": true,
+        "as_of": null
+      },
+      "document": {
+        "id": "d1",
+        "url": "https://regulator.example/test",
+        "canonical_url": "https://regulator.example/test",
+        "domain": "regulator.example",
+        "published_at": "2026-08-01",
+        "content": "Companies with fewer than 50 employees AND a balance sheet below 100 million TL are exempt."
+      },
+      "expected_entailment": false,
+      "expected_usable": false
+    },
+    {
+      "id": "proposal-proposal",
+      "category": "legal_status",
+      "provenance": "synthetic",
+      "question": "What obligations and thresholds apply to Acme companies in 2026?",
+      "as_of": "2026-09-17",
+      "time_scope": {
+        "start": "2026-01-01",
+        "end": "2026-12-31"
+      },
+      "claim": {
+        "id": "c1",
+        "subq_id": "s1",
+        "facet_id": "f1",
+        "doc_id": "d1",
+        "origin_id": "o1",
+        "text": "The Commission proposed a delay until 2027.",
+        "quote": "The Commission proposed a delay until 2027. The legislature has not adopted the proposal.",
+        "conditions": [],
+        "time_sensitive": false,
+        "as_of": null
+      },
+      "document": {
+        "id": "d1",
+        "url": "https://regulator.example/test",
+        "canonical_url": "https://regulator.example/test",
+        "domain": "regulator.example",
+        "published_at": "2026-08-01",
+        "content": "The Commission proposed a delay until 2027. The legislature has not adopted the proposal."
+      },
+      "expected_entailment": true,
+      "expected_usable": true
+    },
+    {
+      "id": "proposal-law",
+      "category": "legal_status",
+      "provenance": "synthetic",
+      "question": "What obligations and thresholds apply to Acme companies in 2026?",
+      "as_of": "2026-09-17",
+      "time_scope": {
+        "start": "2026-01-01",
+        "end": "2026-12-31"
+      },
+      "claim": {
+        "id": "c1",
+        "subq_id": "s1",
+        "facet_id": "f1",
+        "doc_id": "d1",
+        "origin_id": "o1",
+        "text": "The law now delays all obligations until 2027.",
+        "quote": "The Commission proposed a delay until 2027. The legislature has not adopted the proposal.",
+        "conditions": [],
+        "time_sensitive": false,
+        "as_of": null
+      },
+      "document": {
+        "id": "d1",
+        "url": "https://regulator.example/test",
+        "canonical_url": "https://regulator.example/test",
+        "domain": "regulator.example",
+        "published_at": "2026-08-01",
+        "content": "The Commission proposed a delay until 2027. The legislature has not adopted the proposal."
+      },
+      "expected_entailment": false,
+      "expected_usable": false
+    },
+    {
+      "id": "jurisdiction-preserved",
+      "category": "scope",
+      "provenance": "synthetic",
+      "question": "What obligations and thresholds apply to Acme companies in 2026?",
+      "as_of": "2026-09-17",
+      "time_scope": {
+        "start": "2026-01-01",
+        "end": "2026-12-31"
+      },
+      "claim": {
+        "id": "c1",
+        "subq_id": "s1",
+        "facet_id": "f1",
+        "doc_id": "d1",
+        "origin_id": "o1",
+        "text": "Domestic firms must register; foreign firms are excluded.",
+        "quote": "Domestic firms must register; foreign firms are excluded.",
+        "conditions": [
+          "domestic firms only; foreign firms excluded"
+        ],
+        "time_sensitive": false,
+        "as_of": null
+      },
+      "document": {
+        "id": "d1",
+        "url": "https://regulator.example/test",
+        "canonical_url": "https://regulator.example/test",
+        "domain": "regulator.example",
+        "published_at": "2026-08-01",
+        "content": "Domestic firms must register; foreign firms are excluded."
+      },
+      "expected_entailment": true,
+      "expected_usable": true
+    },
+    {
+      "id": "jurisdiction-lost",
+      "category": "scope",
+      "provenance": "synthetic",
+      "question": "What obligations and thresholds apply to Acme companies in 2026?",
+      "as_of": "2026-09-17",
+      "time_scope": {
+        "start": "2026-01-01",
+        "end": "2026-12-31"
+      },
+      "claim": {
+        "id": "c1",
+        "subq_id": "s1",
+        "facet_id": "f1",
+        "doc_id": "d1",
+        "origin_id": "o1",
+        "text": "All firms must register.",
+        "quote": "Domestic firms must register; foreign firms are excluded.",
+        "conditions": [],
+        "time_sensitive": false,
+        "as_of": null
+      },
+      "document": {
+        "id": "d1",
+        "url": "https://regulator.example/test",
+        "canonical_url": "https://regulator.example/test",
+        "domain": "regulator.example",
+        "published_at": "2026-08-01",
+        "content": "Domestic firms must register; foreign firms are excluded."
+      },
+      "expected_entailment": false,
+      "expected_usable": false
+    },
+    {
+      "id": "negation-negated",
+      "category": "negation",
+      "provenance": "synthetic",
+      "question": "What obligations and thresholds apply to Acme companies in 2026?",
+      "as_of": "2026-09-17",
+      "time_scope": {
+        "start": "2026-01-01",
+        "end": "2026-12-31"
+      },
+      "claim": {
+        "id": "c1",
+        "subq_id": "s1",
+        "facet_id": "f1",
+        "doc_id": "d1",
+        "origin_id": "o1",
+        "text": "The study did not establish that the treatment reduced mortality.",
+        "quote": "The study did not establish that the treatment reduced mortality.",
+        "conditions": [],
+        "time_sensitive": false,
+        "as_of": null
+      },
+      "document": {
+        "id": "d1",
+        "url": "https://regulator.example/test",
+        "canonical_url": "https://regulator.example/test",
+        "domain": "regulator.example",
+        "published_at": "2026-08-01",
+        "content": "The study did not establish that the treatment reduced mortality."
+      },
+      "expected_entailment": true,
+      "expected_usable": true
+    },
+    {
+      "id": "negation-reversed",
+      "category": "negation",
+      "provenance": "synthetic",
+      "question": "What obligations and thresholds apply to Acme companies in 2026?",
+      "as_of": "2026-09-17",
+      "time_scope": {
+        "start": "2026-01-01",
+        "end": "2026-12-31"
+      },
+      "claim": {
+        "id": "c1",
+        "subq_id": "s1",
+        "facet_id": "f1",
+        "doc_id": "d1",
+        "origin_id": "o1",
+        "text": "The study established that the treatment reduced mortality.",
+        "quote": "The study did not establish that the treatment reduced mortality.",
+        "conditions": [],
+        "time_sensitive": false,
+        "as_of": null
+      },
+      "document": {
+        "id": "d1",
+        "url": "https://regulator.example/test",
+        "canonical_url": "https://regulator.example/test",
+        "domain": "regulator.example",
+        "published_at": "2026-08-01",
+        "content": "The study did not establish that the treatment reduced mortality."
+      },
+      "expected_entailment": false,
+      "expected_usable": false
+    },
+    {
+      "id": "forecast-forecast",
+      "category": "forecast",
+      "provenance": "synthetic",
+      "question": "What obligations and thresholds apply to Acme companies in 2026?",
+      "as_of": "2026-09-17",
+      "time_scope": {
+        "start": "2026-01-01",
+        "end": "2026-12-31"
+      },
+      "claim": {
+        "id": "c1",
+        "subq_id": "s1",
+        "facet_id": "f1",
+        "doc_id": "d1",
+        "origin_id": "o1",
+        "text": "The study forecasts a market size of EUR 10 billion in 2028.",
+        "quote": "The study forecasts a market size of EUR 10 billion in 2028.",
+        "conditions": [],
+        "time_sensitive": true,
+        "as_of": "2026-08-01"
+      },
+      "document": {
+        "id": "d1",
+        "url": "https://regulator.example/test",
+        "canonical_url": "https://regulator.example/test",
+        "domain": "regulator.example",
+        "published_at": "2026-08-01",
+        "content": "The study forecasts a market size of EUR 10 billion in 2028."
+      },
+      "expected_entailment": true,
+      "expected_usable": true
+    },
+    {
+      "id": "forecast-actual",
+      "category": "forecast",
+      "provenance": "synthetic",
+      "question": "What obligations and thresholds apply to Acme companies in 2026?",
+      "as_of": "2026-09-17",
+      "time_scope": {
+        "start": "2026-01-01",
+        "end": "2026-12-31"
+      },
+      "claim": {
+        "id": "c1",
+        "subq_id": "s1",
+        "facet_id": "f1",
+        "doc_id": "d1",
+        "origin_id": "o1",
+        "text": "The market measured EUR 10 billion in 2028.",
+        "quote": "The study forecasts a market size of EUR 10 billion in 2028.",
+        "conditions": [],
+        "time_sensitive": true,
+        "as_of": "2026-08-01"
+      },
+      "document": {
+        "id": "d1",
+        "url": "https://regulator.example/test",
+        "canonical_url": "https://regulator.example/test",
+        "domain": "regulator.example",
+        "published_at": "2026-08-01",
+        "content": "The study forecasts a market size of EUR 10 billion in 2028."
+      },
+      "expected_entailment": false,
+      "expected_usable": false
+    },
+    {
+      "id": "stale-current",
+      "category": "freshness",
+      "provenance": "synthetic",
+      "question": "What obligations and thresholds apply to Acme companies in 2026?",
+      "as_of": "2026-09-17",
+      "time_scope": {
+        "start": "2026-01-01",
+        "end": "2026-12-31"
+      },
+      "claim": {
+        "id": "c1",
+        "subq_id": "s1",
+        "facet_id": "f1",
+        "doc_id": "d1",
+        "origin_id": "o1",
+        "text": "The reporting threshold is 25 million TL.",
+        "quote": "The reporting threshold is 25 million TL. This is the rule as of 11 March 2021.",
+        "conditions": [],
+        "time_sensitive": true,
+        "as_of": "11/03/2021"
+      },
+      "document": {
+        "id": "d1",
+        "url": "https://regulator.example/test",
+        "canonical_url": "https://regulator.example/test",
+        "domain": "regulator.example",
+        "published_at": "2026-08-01",
+        "content": "The reporting threshold is 25 million TL. This is the rule as of 11 March 2021."
+      },
+      "expected_entailment": true,
+      "expected_usable": false
+    },
+    {
+      "id": "fresh-current",
+      "category": "freshness",
+      "provenance": "synthetic",
+      "question": "What obligations and thresholds apply to Acme companies in 2026?",
+      "as_of": "2026-09-17",
+      "time_scope": {
+        "start": "2026-01-01",
+        "end": "2026-12-31"
+      },
+      "claim": {
+        "id": "c1",
+        "subq_id": "s1",
+        "facet_id": "f1",
+        "doc_id": "d1",
+        "origin_id": "o1",
+        "text": "The reporting threshold is 100 million TL.",
+        "quote": "The reporting threshold is 100 million TL as of 1 August 2026.",
+        "conditions": [],
+        "time_sensitive": true,
+        "as_of": "2026-08-01"
+      },
+      "document": {
+        "id": "d1",
+        "url": "https://regulator.example/test",
+        "canonical_url": "https://regulator.example/test",
+        "domain": "regulator.example",
+        "published_at": "2026-08-01",
+        "content": "The reporting threshold is 100 million TL as of 1 August 2026."
+      },
+      "expected_entailment": true,
+      "expected_usable": true
+    },
+    {
+      "id": "undated-current",
+      "category": "freshness",
+      "provenance": "synthetic",
+      "question": "What obligations and thresholds apply to Acme companies in 2026?",
+      "as_of": "2026-09-17",
+      "time_scope": {
+        "start": "2026-01-01",
+        "end": "2026-12-31"
+      },
+      "claim": {
+        "id": "c1",
+        "subq_id": "s1",
+        "facet_id": "f1",
+        "doc_id": "d1",
+        "origin_id": "o1",
+        "text": "The reporting threshold is 25 million TL.",
+        "quote": "The reporting threshold is 25 million TL.",
+        "conditions": [],
+        "time_sensitive": true,
+        "as_of": null
+      },
+      "document": {
+        "id": "d1",
+        "url": "https://regulator.example/test",
+        "canonical_url": "https://regulator.example/test",
+        "domain": "regulator.example",
+        "published_at": null,
+        "content": "The reporting threshold is 25 million TL."
+      },
+      "expected_entailment": true,
+      "expected_usable": false
+    },
+    {
+      "id": "historical-scope",
+      "category": "freshness",
+      "provenance": "synthetic",
+      "question": "What reporting threshold applied to Acme companies in March 2021?",
+      "as_of": "2026-09-17",
+      "time_scope": {
+        "start": "2021-01-01",
+        "end": "2021-12-31"
+      },
+      "claim": {
+        "id": "c1",
+        "subq_id": "s1",
+        "facet_id": "f1",
+        "doc_id": "d1",
+        "origin_id": "o1",
+        "text": "The reporting threshold was 25 million TL in March 2021.",
+        "quote": "The reporting threshold was 25 million TL in March 2021.",
+        "conditions": [],
+        "time_sensitive": true,
+        "as_of": "11/03/2021"
+      },
+      "document": {
+        "id": "d1",
+        "url": "https://regulator.example/test",
+        "canonical_url": "https://regulator.example/test",
+        "domain": "regulator.example",
+        "published_at": "2026-08-01",
+        "content": "The reporting threshold was 25 million TL in March 2021."
+      },
+      "expected_entailment": true,
+      "expected_usable": true
+    },
+    {
+      "id": "undated-definition",
+      "category": "negative_control",
+      "provenance": "synthetic",
+      "question": "What obligations and thresholds apply to Acme companies in 2026?",
+      "as_of": "2026-09-17",
+      "time_scope": {
+        "start": "2026-01-01",
+        "end": "2026-12-31"
+      },
+      "claim": {
+        "id": "c1",
+        "subq_id": "s1",
+        "facet_id": "f1",
+        "doc_id": "d1",
+        "origin_id": "o1",
+        "text": "Personal data means information relating to an identifiable natural person.",
+        "quote": "Personal data means information relating to an identifiable natural person.",
+        "conditions": [],
+        "time_sensitive": false,
+        "as_of": null
+      },
+      "document": {
+        "id": "d1",
+        "url": "https://regulator.example/test",
+        "canonical_url": "https://regulator.example/test",
+        "domain": "regulator.example",
+        "published_at": null,
+        "content": "Personal data means information relating to an identifiable natural person."
+      },
+      "expected_entailment": true,
+      "expected_usable": true
+    },
+    {
+      "id": "threshold-turkish-condition",
+      "category": "conditions",
+      "provenance": "synthetic",
+      "question": "What obligations and thresholds apply to Acme companies in 2026?",
+      "as_of": "2026-09-17",
+      "time_scope": {
+        "start": "2026-01-01",
+        "end": "2026-12-31"
+      },
+      "claim": {
+        "id": "c1",
+        "subq_id": "s1",
+        "facet_id": "f1",
+        "doc_id": "d1",
+        "origin_id": "o1",
+        "text": "Tüm ihlaller için bildirim 72 saat içinde yapılır.",
+        "quote": "Bildirim, ihlalin kişilerin hakları açısından risk oluşturması halinde 72 saat içinde yapılır.",
+        "conditions": [],
+        "time_sensitive": false,
+        "as_of": null
+      },
+      "document": {
+        "id": "d1",
+        "url": "https://regulator.example/test",
+        "canonical_url": "https://regulator.example/test",
+        "domain": "regulator.example",
+        "published_at": "2026-08-01",
+        "content": "Bildirim, ihlalin kişilerin hakları açısından risk oluşturması halinde 72 saat içinde yapılır."
+      },
+      "expected_entailment": false,
+      "expected_usable": false
+    },
+    {
+      "id": "real-c82",
+      "category": "real_regression",
+      "provenance": "commit f8fc007 examples/kvkk-2026-saas-action-plan/state.json c82",
+      "question": "Türkiye'deki SaaS şirketleri için 2026 KVKK uyum aksiyon planı nedir?",
+      "as_of": "2026-09-17",
+      "time_scope": {
+        "start": "2026-01-01",
+        "end": "2026-12-31",
+        "description": "calendar year 2026"
+      },
+      "claim": {
+        "id": "c82",
+        "subq_id": "s2",
+        "facet_id": "s2f3",
+        "doc_id": "d82",
+        "origin_id": "o-d82",
+        "text": "Yıllık çalışan sayısı 50’den çok veya yıllık mali bilanço toplamı 25 milyon TL’den çok olan gerçek ve tüzel kişi veri sorumluları ile yurtdışında yerleşik gerçek ve tüzel kişi veri sorumluları Sicile kayıt yükümlülüğüne tabidir.",
+        "quote": "Yıllık çalışan sayısı 50’den çok veya yıllık mali bilanço toplamı 25 milyon TL’den çok olan gerçek ve tüzel kişi veri sorumluları ile yurtdışında yerleşik gerçek ve tüzel kişi veri sorumlularının Sicile kayıt yükümlülüğünü yerine getirmeleri için belirlenen sürenin 31.12.2021 tarihine",
+        "kind": "fact",
+        "entity": "Veri Sorumluları",
+        "attribute": "Sicile kayıt yükümlülüğü kriteri",
+        "value": "Yıllık çalışan sayısı 50’den çok veya yıllık mali bilanço toplamı 25 milyon TL’den çok",
+        "unit": null,
+        "as_of": "11/03/2021",
+        "attributed_to": "Kişisel Verileri Koruma Kurulu",
+        "iteration": 2,
+        "conditions": [],
+        "time_sensitive": true
+      },
+      "document": {
+        "id": "d82",
+        "url": "https://www.kvkk.gov.tr/Icerik/6903/VERBIS-E-KAYIT-SURELERININ-UZATILMASI-HAKKINDA-DUYURU",
+        "canonical_url": "https://kvkk.gov.tr/Icerik/6903/VERBIS-E-KAYIT-SURELERININ-UZATILMASI-HAKKINDA-DUYURU",
+        "domain": "kvkk.gov.tr",
+        "content": "[![KVKK (Kişisel Verileri Koruma Kurumu) logosu: Sol tarafta beyaz zemin üzerinde kırmızı, mavi, turkuaz ve gri renklerden oluşan geometrik şekiller ve noktaların birbirine bağlantı çizgileriyle oluşturduğu ağ yapısı bulunuyor. Bu ağ yapısı dijital veri bağlantılarını simgeliyor. Yapının üstünde kırmızı bir yay şekli yer alıyor. Sağ tarafta ise kırmızı renkte büyük harflerle 'KVKK' yazısı ve altında daha küçük punto ile 'KİŞİSEL VERİLERİ KORUMA KURUMU' açıklaması bulunuyor.](https://www.kvkk.gov.tr/public/images/logo.png)](https://www.kvkk.gov.tr/ \"Anasayfa\")\n\n[+90 312 216 50 00](call:903122165000)\n\n[Başkanın Mesajı](https://www.kvkk.gov.tr/Icerik/4181/Baskanin-Mesaji \"Başkanın Mesajı\")\n\n![Alo 198](https://www.kvkk.gov.tr/public/images/alo_198.png)\n\n* [TR](https://www.kvkk.gov.tr/lang/tr \"Türkçe\")\n* [EN](https://www.kvkk.gov.tr/lang/en \"English\")\n* [DE](https://www.kvkk.gov.tr/lang/de \"Deutsch\")\n\n![VERBİS’E KAYIT SÜRELERİNİN UZATILMASI HAKKINDA DUYURU](https://www.kvkk.gov.tr/SharedFolderServer/ContentImages/32dffdb9-a7c5-4008-91dd-3cfa5d40c31b.jpg)\n\nYayınlanma Tarihi: 11 Mart 2021, Perşembe\n\n## VERBİS’E KAYIT SÜRELERİNİN UZATILMASI HAKKINDA DUYURU\n\nÜlkemizde halen etkisini göstermeye devam eden Covid-19 virüs salgını nedeniyle Veri Sorumluları Siciline (Sicil) kayıt yükümlülüğünün gereği gibi yerine getirilmesi hususunda zorluklar yaşandığı gerekçesiyle Sicile kayıt sürelerinin uzatılmasına ilişkin birçok veri sorumlusu veya bunların bağlı olduğu üst kuruluşlar, muhtelif sektör temsilcileri ile bazı kamu kurumları ve kamu kurumu niteliğindeki meslek kuruluşları tarafından Kuruma intikal ettirilen taleplerin değerlendirilmesi neticesinde Kişisel Verileri Koruma Kurulunun 11/03/2021 tarihli ve 2021/238 sayılı Kararı ile;\n\n* Yıllık çalışan sayısı 50’den çok veya yıllık mali bilanço toplamı 25 milyon TL’den çok olan gerçek ve tüzel kişi veri sorumluları ile yurtdışında yerleşik gerçek ve tüzel kişi veri sorumlularının Sicile kayıt yükümlülüğünü yerine getirmeleri için belirlenen sürenin 31.12.2021 tarihine,\n* Yıllık çalışan sayısı 50’den az ve yıllık mali bilançosu 25 milyon TL’ den az olup ana faaliyet konusu özel nitelikli kişisel veri işleme olan gerçek ve tüzel kişi veri sorumlularının Sicile kayıt yükümlülüğünü yerine getirmeleri için belirlenen sürenin 31.12.2021 tarihine,\n* Kamu kurum ve kuruluşları ile kamu kurumu niteliğindeki meslek kuruluşu veri sorumlularının Sicile kayıt yükümlülüğünü yerine getirmeleri için belirlenen sürenin 31.12.2021 tarihine\n\nkadar uzatılmasına,\n\n* Anılan Kararın Kurum internet sayfası ve Resmi Gazetede yayımlanmasına\n\noybirliği ile karar verilmiştir.\n\n#### [Duyurular](https://www.kvkk.gov.tr/Icerik/2015/Duyurular \"Duyurular\")\n\n[##### 29.04.2026 Tarihli ve 2026/921 Sayılı “Mesai Takibi Amacıyla Biyometrik Veri İşlenmesi Hakkında İlke Kararı”na İlişkin Görüş Talepleri Hakkında Kamuoyu Duyurusu](https://www.kvkk.gov.tr/Icerik/8912/29-04-2026-tarihli-ve-2026-921-sayili-mesai-takibi-amaciyla-biyometrik-veri-islenmesi-hakkinda-ilke-karari-na-iliskin-gorus-talepleri-hakkinda-kamuoyu-duyurusu \"29.04.2026 Tarihli ve 2026/921 Sayılı “Mesai Takibi Amacıyla Biyometrik Veri İşlenmesi Hakkında İlke Kararı”na İlişkin Görüş Talepleri Hakkında Kamuoyu Duyurusu\")\n\n27 Ağustos 2026\n\n[##### Kişisel Verileri Koruma Uzman Yardımcılığı Giriş Sınavı Kesin Sonuçları](https://www.kvkk.gov.tr/Icerik/8909/kisisel-verileri-koruma-uzman-yardimciligi-giris-sinavi-kesin-sonuclari \"Kişisel Verileri Koruma Uzman Yardımcılığı Giriş Sınavı Kesin Sonuçları\")\n\n24 Ağustos 2026\n\n[##### Çocuğunuz Akıllı Telefon Kullanmaya Hazır Mı?](https://www.kvkk.gov.tr/Icerik/8908/cocugunuz-akilli-telefon-kullanmaya-hazir-mi \"Çocuğunuz Akıllı Telefon Kullanmaya Hazır Mı?\")\n\n21 Ağustos 2026\n\n#### [Etkinlikler](https://www.kvkk.gov.tr/Icerik/2020/Etkinlikler \"Etkinlikler\")\n\n[##### Kaymakam Adaylarına Kişisel Verilerin Korunması Hakkında Seminer Verildi](https://www.kvkk.gov.tr/Icerik/8902/kaymakam-adaylarina-kisisel-verilerin-korunmasi-hakkinda-seminer-verildi \"Kaymakam Adaylarına Kişisel Verilerin Korunması Hakkında Seminer Verildi\")\n\n21 Ağustos 2026\n\n[##### Mali Veri Koruma Otoritesi Heyetinin Kurumumuzu Ziyareti](https://www.kvkk.gov.tr/Icerik/8832/mali-veri-koruma-otoritesi-heyetinin-kurumumuzu-ziyareti \"Mali Veri Koruma Otoritesi Heyetinin Kurumumuzu Ziyareti\")\n\n23 Temmuz 2026\n\n[##### Muş’ta Kişisel Verilerin Korunması Kanunu Farkındalık Eğitimi Gerçekleştirildi](https://www.kvkk.gov.tr/Icerik/8828/mus-ta-kisisel-verilerin-korunmasi-kanunu-farkindalik-egitimi-gerceklestirildi \"Muş’ta Kişisel Verilerin Korunması Kanunu Farkındalık Eğitimi Gerçekleştirildi\")\n\n17 Temmuz 2026\n\nKİŞİSEL VERİLERİ KORUMA KURUMU\n\nNasuh Akar Mahallesi 1407. Sok. No:4, 06520 Çankaya/Ankara\n\nKurumsal\n\n* [Kurum Başkanı](https://www.kvkk.gov.tr/Icerik/1015/kurum-baskani \"Kurum Başkanı\")\n* [Kurul Üyeleri](https://www.kvkk.gov.tr/Icerik/1016/kurul-uyeleri \"Kurul Üyeleri\")\n* [Tarihçe](https://www.kvkk.gov.tr/Icerik/2075/Kurumsal-Tarihce \"Tarihçe\")\n* [Misyon - Vizyon](https://www.kvkk.gov.tr/Icerik/2074/Misyon---Vizyon \"Misyon - Vizyon\")\n* [Stratejik Plan](https://www.kvkk.gov.tr/Icerik/7793/Stratejik-Plan \"Stratejik Plan\")\n* [Faaliyet Raporu](https://www.kvkk.gov.tr/Icerik/2094/Faaliyet-Raporu \"Faaliyet Raporu\")\n* [Mali Tablolar](https://www.kvkk.gov.tr/Icerik/8742/mali-tablolar \"Mali Tablolar\")\n* [Çerez Aydınlatma Metni](https://www.kvkk.gov.tr/yayinlar/cerezlere_dair_aydinlatma_metni.pdf \"Çerez Aydınlatma Metni\")\n\nMevzuat\n\n* [Kişisel Verilerin Korunması Kanunu](http://www.mevzuat.gov.tr/Metin1.Aspx?MevzuatKod=1.5.6698&MevzuatIliski=0&sourceXmlSearch=6698&Tur=1&Tertip=5&No=6698 \"Kişisel Verilerin Korunması Kanunu\")\n* [Yönetmelikler](https://www.kvkk.gov.tr/Icerik/5257/yonetmelikler \"Yönetmelikler\")\n* [Tebliğler](https://www.kvkk.gov.tr/Icerik/5258/tebligler \"Tebliğler\")\n* [Bağlayıcı Şirket Kuralları](https://www.kvkk.gov.tr/Icerik/7928/Baglayici-Sirket-Kurallari \"Bağlayıcı Şirket Kuralları\")\n* [Standart Sözleşmeler](https://www.kvkk.gov.tr/Icerik/7929/Standart-Sozlesmeler \"Standart Sözleşmeler\")\n\nVeri Sorumlusu\n\n* [Veri Sorumlusu Kimdir?](https://www.kvkk.gov.tr/Icerik/2032/Veri-Sorumlusu-Kimdir \"Veri Sorumlusu Kimdir?\")\n* [Kişisel Verilerin Silinmesi, Yok Edilmesi veya Anonim Hale Getirilmesi](https://www.kvkk.gov.tr/Icerik/2038/kisisel-verilerin-silinmesi-yok-edilmesi-veya-anonim-hale-getirilmesi \"Kişisel Verilerin Silinmesi, Yok Edilmesi veya Anonim Hale Getirilmesi\")\n* [Açık Rıza Alırken Dikkat Edilecek Hususlar](https://www.kvkk.gov.tr/Icerik/2037/Acik-Riza-Alirken-Dikkat-Edilecek-Hususlar \"Açık Rıza Alırken Dikkat Edilecek Hususlar\")\n\nİlgili Kişi\n\n* [İlgili Kişi Kimdir?](https://www.kvkk.gov.tr/Icerik/2034/Ilgili-Kisi-Kimdir \"İlgili Kişi Kimdir?\")\n* [İlgili Kişinin Hakları](https://www.kvkk.gov.tr/Icerik/2036/Ilgili-Kisinin-Haklari \"İlgili Kişinin Hakları\")\n\n* [Kişisel Verileri Koruma Dergisi](https://dergipark.org.tr/kvkd \"Kişisel Verileri Koruma Dergisi\")\n* [Rehberler](https://www.kvkk.gov.tr/Icerik/2030/rehberler \"Rehberler\")\n* [Diğer Dokümanlar](https://www.kvkk.gov.tr/Icerik/5383/diger-dokumanlar \"Diğer Dokümanlar\")\n* [KVKK Bülten](https://www.kvkk.gov.tr/Icerik/7671/kvkk-bulten \"KVKK Bülten\")\n* [Videolar](https://www.kvkk.gov.tr/Icerik/4118/videolar \"Videolar\")\n* [Podcast Kanalımız](https://www.kvkk.gov.tr/Icerik/7101/podcast-kanalimiz \"Podcast Kanalımız\")",
+        "published_at": null
+      },
+      "expected_entailment": true,
+      "expected_usable": false
+    },
+    {
+      "id": "real-c36",
+      "category": "real_regression",
+      "provenance": "commit f8fc007 examples/eu-ai-act-timeline/state.json c36",
+      "question": "What changed in the EU AI Act implementation timeline?",
+      "as_of": "2026-09-17",
+      "time_scope": {
+        "start": "2024-08-01",
+        "end": "2026-09-16",
+        "description": "from entry into force in mid-2024 up to September 2026"
+      },
+      "claim": {
+        "id": "c36",
+        "subq_id": "s4",
+        "facet_id": "s4f2",
+        "doc_id": "d39",
+        "origin_id": "o-d39",
+        "text": "The AI Omnibus postpones Article 50(2) (transparency obligations for GPAI models generating synthetic content) to 2 December 2026, though Article 50 generally becomes applicable on 2 August 2026.",
+        "quote": "While Article 50 becomes generally applicable on 2 August 2026, the AI Omnibus postpones Article 50(2) (transparency obligations for GPAI models generating synthetic content) to 2 December 2026.",
+        "kind": "date",
+        "entity": "Article 50(2) transparency obligations",
+        "attribute": "effective date",
+        "value": "2 December 2026",
+        "unit": null,
+        "as_of": "2026-07-28",
+        "attributed_to": null,
+        "iteration": 1,
+        "conditions": [],
+        "time_sensitive": true
+      },
+      "document": {
+        "id": "d39",
+        "url": "https://fpf.org/blog/the-ai-act-implementation-timeline-what-changes-under-the-ai-omnibus",
+        "canonical_url": "https://fpf.org/blog/the-ai-act-implementation-timeline-what-changes-under-the-ai-omnibus",
+        "domain": "fpf.org",
+        "content": "[![FPF](https://fpf.org/wp-content/themes/fpf/img/logo.svg)](/)\n\n* [Media](https://fpf.org/media/)\n* [Events](/fpf-events/upcoming/)\n* [Training](/training)\n  + [FPF Member Training](/training)\n  + [Private Trainings](/training-private)\n  + [FPF Training Faculty](/training/faculty)\n  + [FPF Member Training FAQs](https://fpf.org/fpf-training-program-2024-faqs/)\n* [Subscribe](/subscribe)\n* [Contact](/contact)\n* [Search](/?s=)\n\n\n\n# The AI Act Implementation Timeline: What Changes Under the AI Omnibus?\n\nJuly 28, 2026\n\n[Share on Facebook](https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ffpf.org%2Fblog%2Fthe-ai-act-implementation-timeline-what-changes-under-the-ai-omnibus%2F)   [Share on LinkedIn](https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Ffpf.org%2Fblog%2Fthe-ai-act-implementation-timeline-what-changes-under-the-ai-omnibus%2F&title=The+AI+Act+Implementation+Timeline%3A+What+Changes+Under+the+AI+Omnibus%3F&summary=The+implementation+timeline+of+the+EU+AI+Act+has+been+significantly+modified+through+the+recently+adopted+AI+Omnibus%2C+which+pushes+compliance+with+the+obligations+for+high-risk+AI+systems+to+December+2027+%28Annex+III%29+and+August+2028+%28Annex+I%29%2C+from+the+initial+date+of+2+August+2026.+Changes+of+the+AI+Act+include%2C+among+others%2C+the+%5B%26hellip%3B%5D&source=https://fpf.org)   [Share on Twitter](https://twitter.com/intent/tweet?text=The+AI+Act+Implementation+Timeline%3A+What+Changes+Under+the+AI+Omnibus%3F&url=https%3A%2F%2Ffpf.org%2Fblog%2Fthe-ai-act-implementation-timeline-what-changes-under-the-ai-omnibus%2F)   [Share through Email](/cdn-cgi/l/email-protection#caf5b9bfa8a0afa9bef79ea2afe18b83e18ba9bee183a7baa6afa7afa4beabbea3a5a4e19ea3a7afa6a3a4afeff98be19da2abbee189a2aba4adafb9e19fa4aeafb8e1bea2afe18b83e185a7a4a3a8bfb9eff98cecaba7baf1a8a5aeb3f7a2bebebab9eff98beff88ceff88cacbaace4a5b8adeff88ca8a6a5adeff88cbea2afe7aba3e7aba9bee7a3a7baa6afa7afa4beabbea3a5a4e7bea3a7afa6a3a4afe7bda2abbee7a9a2aba4adafb9e7bfa4aeafb8e7bea2afe7aba3e7a5a7a4a3a8bfb9eff88c)\n\nAndreea Șerban\n\nPolicy Counsel\n\n[About Andreea](https://fpf.org/person/andreea-serban/)\n\n[Blogs by Andreea](https://fpf.org/person/andreea-serban/#blog)\n\nBianca-Ioana Marcu\n\nManaging Director for Europe\n\n[About Bianca-Ioana](https://fpf.org/person/bianca-marcu/)\n\n[Blogs by Bianca-Ioana](https://fpf.org/person/bianca-marcu/#blog)\n\nThe implementation timeline of the EU AI Act has been significantly modified through the recently adopted [AI Omnibus](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=OJ:L_202601744), which pushes compliance with the obligations for high-risk AI systems to December 2027 (Annex III) and August 2028 (Annex I), from the initial date of 2 August 2026. Changes of the AI Act include, among others, the addition of new prohibited practices under Article 5, measures that further allow the processing of special categories of personal data for bias detection and correction in AI systems, and revises post-market monitoring requirements.\n\nSince the [AI Act](https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng)’s entry into force in August 2024, several provisions have already begun to apply: the rules on prohibited AI practices and AI literacy, and the obligations for providers of general-purpose AI models. Others, especially the rules on high-risk AI systems, will take effect over the next several years.\n\nIn November 2025, the European Commission presented the AI Omnibus [proposal](https://digital-strategy.ec.europa.eu/en/library/digital-omnibus-ai-regulation-proposal), aiming to reduce administrative burden and provide additional time to comply with certain obligations. Following several months of negotiations, the European Parliament and the Council of the European Union reached a [political agreement](https://www.consilium.europa.eu/en/press/press-releases/2026/05/07/artificial-intelligence-council-and-parliament-agree-to-simplify-and-streamline-rules/) on the AI Omnibus in May 2026. One of their main priorities was to agree on the revised implementation timelines ahead of the AI Act’s next milestone, envisioned for 2 August 2026.\n\nThe European Parliament [adopted](https://www.europarl.europa.eu/news/en/press-room/20260611IPR45207/ai-act-ep-approves-simplification-measures-and-nudifier-app-ban) the agreed text of the AI Omnibus on 16 June 2026, and the Council [adopted](https://www.consilium.europa.eu/en/press/press-releases/2026/06/29/artificial-intelligence-council-gives-final-green-light-to-simplify-and-streamline-rules/) it on 29 June 2026. The AI Omnibus was published in the Official Journal of the EU on 24 July 2026.\n\nTo reflect these developments, we have updated the [AI Act Implementation Timeline](https://fpf.org/wp-content/uploads/2026/07/FPF-EU-AI-Act-Timeline-2026-R2.pdf) and incorporated both the original AI Act milestones and the changes introduced by the AI Omnibus.\n\n[**View the Updated AI Act Implementation Timeline Infographic**](https://fpf.org/wp-content/uploads/2026/07/FPF-EU-AI-Act-Timeline-2026-R2.pdf)\n\nThis accompanying blog outlines several milestones already achieved under the AI Act, such as adopted guidelines and market surveillance authorities (MSAs) appointed thus far, and provides an overview of key changes introduced by the AI Omnibus. Key takeaways include:\n\n* While several countries including Italy and Ireland have established MSAs and communicated their Single Points of Contact to the European Commission, several **remaining Member States are yet to appoint national competent authorities for the supervision of certain AI systems**;\n* One of the driving factors of the AI Omnibus was the postponement of requirements for high-risk AI systems, most of which have been **delayed to 2 December 2027**;\n* The AI Omnibus slightly amends the language of the AI literacy obligation in Article 4 AI Act, so that **providers and deployers are no longer required** ***to ensure*** **a sufficient level of AI literacy, but rather have** ***to support the development of*** **AI literacy** for staff and other individuals dealing with the operation and use of an AI system;\n* A **new prohibited AI practice is introduced** covering AI systems that generate child sexual abuse material (CSAM) and non-consensual intimate material;\n* The **legal basis for processing special category data for bias detection and correction is expanded to providers and deployers of** ***all*** **AI systems and models**, rather than applying only to high-risk AI;\n* **The AI Omnibus significantly expands the powers of the AI Office**, which will now have exclusive competence over systems built on GPAI models not only when both the system and the model are developed by the same provider, but “also where they are developed by providers that form part of the same undertaking”;\n* The **AI Omnibus follows the competitiveness and innovation logic** pursued by the European Commission by ensuring that certain exemptions, including for simplified technical documentation, will apply to SMCs in addition to SMEs and start-ups.\n\n1. **AI Act implementation has already begun: an overview of the milestones achieved so far**\n\nAlthough it entered into force as a whole, the application of the AI Act provisions follows a phased timeline, with different obligations becoming applicable at different points over the following years.\n\nThe first institutional deadline followed soon after the AI Act’s adoption when, by November 2024, Member States were required to identify the public authorities or bodies responsible for supervising or enforcing the EU law protecting fundamental rights, make the list publicly available, and notify it to the European Commission and other Member States. In practice, this was not a single designation event happening at the same time at EU level. National implementation proceeded at varying speeds, and the European Commission established a [consolidated list](https://digital-strategy.ec.europa.eu/en/policies/fundamental-rights-protection-authorities-ai-act) of appointed fundamental rights agencies, to be updated as Member States provide or revise their information.\n\nThe next governance milestone came on 2 August 2025, when Member States were required to designate at least one MSA and at least one notifying authority. The designation and notification of these authorities did not occur simultaneously across the EU, with some Member States experiencing significant delays. The European Commission maintains a [list](https://digital-strategy.ec.europa.eu/en/policies/market-surveillance-authorities-under-ai-act) of designated Single Points of Contact which is updated continuously as Member States submit or revise their notifications. At the time of writing, only a limited number of Member States had notified their designated Single Points of Contact. These include Cyprus, Ireland, Italy, Latvia and Lithuania, and notifications from Luxembourg, Slovenia and Spain are published subject to the final adoption of the national designation decision.\n\nThe first provisions of the AI Act became applicable on 2 February 2025. These referred to the scope and definitions, the rules on prohibited AI practices, and the AI literacy obligations. The European Commission published [Guidelines](https://digital-strategy.ec.europa.eu/en/library/commission-publishes-guidelines-prohibited-artificial-intelligence-ai-practices-defined-ai-act) soon after on prohibited AI practices under Article 5 AI Act (4 February 2025), and on the [definition](https://digital-strategy.ec.europa.eu/en/library/commission-publishes-guidelines-ai-system-definition-facilitate-first-ai-acts-rules-application) of an AI system(6 February 2025).\n\nAlso in February of the same year, the AI Office [launched](https://digital-strategy.ec.europa.eu/en/library/living-repository-foster-learning-and-exchange-ai-literacy) a living repository of AI literacy practices. Important to note is that the repository does not create a presumption of compliance, but rather gives an indication of how the European Commission expects organizations to approach the obligation in practice. The AI Omnibus also introduces some significant changes to the AI literacy obligation, including by foreseeing an increased role of the European Commission and Member States, as further explored in Section 2.2 below.\n\nThe next milestone came on 2 August 2025, when the rules on general-purpose AI (GPAI) models, the governance framework, confidentiality obligations, and the provisions on penalties became applicable. The implementation of the GPAI framework extended beyond the envisaged application date. Article 56(9) required that the GPAI Code of Practice be ready by 2 May 2025. Although this deadline was not met, the European Commission [published](https://digital-strategy.ec.europa.eu/en/news/general-purpose-ai-code-practice-now-available) the GPAI Code of Practice on 10 July 2025. Soon after, the Commission also [published](https://digital-strategy.ec.europa.eu/en/library/guidelines-scope-obligations-providers-general-purpose-ai-models-under-ai-act) the Guidelines on the scope of obligations for providers of GPAI models.\n\nOn 26 September 2025, the European Commission [launched](https://digital-strategy.ec.europa.eu/en/consultations/ai-act-commission-issues-draft-guidance-and-reporting-template-serious-ai-incidents-and-seeks) a public consultation on draft guidance and a reporting template on serious AI incidents under Article 73, later than the original deadline established for August 2025. The final guidance has not yet been published and the Commission [published](https://digital-strategy.ec.europa.eu/en/library/ai-act-commission-publishes-reporting-template-serious-incidents-involving-general-purpose-ai) a reporting template for serious incidents involving GPAI models with systemic risk on 4 November 2025.\n\nOn 22 May 2026, the European Commission [published](https://digital-strategy.ec.europa.eu/en/library/report-review-prohibitions-and-high-risk-ai) its first review under Article 112(1), assessing whether the lists of prohibited AI practices and high-risk AI systems should be amended. It concluded that no immediate changes to Annex III were necessary and that it was still too early to assess the operation of the prohibited AI practices due to the limited implementation time. However, it identified a potential regulatory gap for AI systems generating child sexual abuse material and non-consensual intimate content, which was later addressed by the AI Omnibus through the introduction of a new prohibited AI practice (see Section 2.1 below).\n\nThe [Guidelines](https://digital-strategy.ec.europa.eu/en/policies/guidelines-transparency-ai-generated-content) on Transparency of AI-generated content under Article 50 were published on 20 July 2026. While Article 50 becomes generally applicable on 2 August 2026, the AI Omnibus postpones Article 50(2) (transparency obligations for GPAI models generating synthetic content) to 2 December 2026. These are complemented by a [Code of Practice](https://digital-strategy.ec.europa.eu/en/policies/code-practice-ai-generated-content) on Transparency of AI-generated content. The European Commission also published [draft Guidelines](https://digital-strategy.ec.europa.eu/en/library/draft-commission-guidelines-classification-high-risk-ai-systems) on the classification of high-risk AI systems on 19 May 2026, with stakeholder consultations being open until 23 July 2026.\n\nThe implementation of the AI Act also revealed some of the challenges associated with this Regulation. Delays in the development of harmonized European standards and the need for additional implementation guidance became central during the legislative process and negotiations on the AI Omnibus. These developments ultimately shaped the decision to postpone the application of certain obligations for high-risk AI systems.\n\n2. **The AI Omnibus changes the timelines initially envisaged in the AI Act beyond high-risk AI**\n\nBefore diving into the specifics of the changes to the AI Act timeline, it is useful to understand what the AI Omnibus is and why it was adopted. It was originally proposed by the European Commission in November 2025 as part of its broader Digital Omnibus package, aiming to reduce certain administrative burdens and facilitate the implementation of the AI Act, as part of the broader competitiveness push of the European Commission. The current text of the AI Omnibus is the result of the compromise between the European Parliament and the Council of the European Union in the legislative process, reached in May 2026. The agreed text was adopted by the European Parliament on 16 June and by the Council on 29 June.\n\nThe AI Omnibus provides for more than the postponement of implementation deadlines. It introduces a number of amendments that apply upon its entry into force, including new provisions on the supervisory and enforcement powers of the AI Office. It amends Article 113 of the AI Act (which regards the entry into force and application) to postpone the application of certain provisions, such as those concerning the requirements for high-risk AI systems, and leaves others subject to the AI Act’s existing application timeline.\n\n**The key highlights of the timeline as proposed by the AI Omnibus are the following:**\n\n* **2 August 2026:** the AI Act becomes generally applicable.\n* **2 December 2026**: the new prohibited AI practice introduced by the AI Omnibus and the transitional transparency obligation for certain existing AI systems under Article 50(2) become applicable.\n* **2 August 2027**: providers of GPAI models placed on the market before 2 August 2025 must comply with the AI Act. Member States must ensure that their competent authorities establish at least one AI regulatory sandbox, operational by this date. The European Commission must also publish guidelines on the classification of high-risk AI systems under Article 6 and guidance on the implementation of Articles 8(2), 9(10), and 17(3). The Commission must also adopt delegated acts specifying the high-risk AI systems concerned, the applicable requirements or obligations, the conditions of any limitation, and its scope.\n* **2 December 2027:** Chapter III, Sections 1-3 (rules on the classification of high-risk AI systems, the requirements applicable to those systems, and the obligations of providers and other operators) become applicable to high-risk AI systems referred to in Article 6(2) and Annex III (AI systems classified as high-risk under Article 6(2), such as AI systems used in employment, education, law enforcement, migration, access to essential services, and the administration of justice, as listed in Annex III).\n* **2 August 2028:** The same Chapter III rules become applicable to high-risk AI systems referred to in Article 6(1) and Annex I (AI systems classified as high-risk under Article 6(1) because they are safety components of products, or are themselves products, covered by the Union harmonization legislation listed in Annex I).\n\nIndeed, perhaps the most impactful change introduced by the AI Omnibus is the postponement of Chapter III, Sections 1-3 AI Act, which set out the rules on the classification of high-risk AI systems, the requirements applicable to those systems, and the obligations of providers and other operators. For the high-risk AI systems referred to in Article 6(2) and Annex III, the Chapter III requirements will apply from 2 December 2027 rather than 2 August 2026. For high-risk AI systems referred to in Article 6(1) and Annex I, the same provisions will apply from 2 August 2028 rather than 2 August 2027.\n\nThe AI Omnibus also brings some changes on substance to the AI Act. While not significant changes, they further shape AI law in the EU and are a first concrete expression of the European Commission’s push for “simplification” of regulation as part of its competitiveness agenda. Below, the blog explores some of the key changes in substance:\n\n**2.1. New prohibited AI practice focused on AI-generated CSAM and non-consensual intimate material**\n\nThe AI Omnibus expands the list of prohibited AI practices under Article 5 AI Act by introducing a new prohibition covering AI systems that generate child sexual abuse material (CSAM) and non-consensual intimate material. Unlike the original Article 5 prohibitions, which have applied since 2 February 2025, this new prohibition applies from 2 December 2026. This gives providers and deployers falling within its scope approximately four months from the entry into force of the AI Omnibus to comply with the prohibition.\n\nGiven that Article 96 AI Act continues to require the European Commission to develop guidelines on the prohibited AI practices referred to in Article 5, the [Guidelines](https://digital-strategy.ec.europa.eu/en/library/commission-publishes-guidelines-prohibited-artificial-intelligence-ai-practices-defined-ai-act) on prohibited AI practices published in February 2025 will likely be updated to reflect the new prohibition introduced by the AI Omnibus. To better understand the prohibited AI practices, FPF’s “Red Lines under the AI Act” blog series breaks down each prohibition, as well as their interplay with existing EU law such as the GDPR and the Digital Services Act, and is available [***here***](https://fpf.org/blog/red-lines-under-the-eu-ai-act-understanding-prohibited-ai-practices-and-their-interplay-with-the-gdpr-dsa/).\n\n**2.2. Changes to the AI literacy obligation**\n\nArticle 4 AI Act originally stated that “providers and deployers of AI systems shall take measures *to ensure*, to their best extent, a sufficient level of AI literacy of their staff and other persons dealing with the operation and use of AI systems on their behalf” (emphasis added). The new Article 4(1) of the AI Omnibus has changed slightly the wording of this provision so that providers and deployers of AI systems “shall take measures *to support the development* of AI literacy…” (emphasis added). The same Article 4(1) also introduces a new sentence explaining that this obligation “does not require providers or deployers to guarantee any specific level of AI literacy of any individual.” In this way, the AI literacy requirement is seemingly presented less as a strict obligation through which providers or deployers shall *ensure* a sufficient, measurable level of AI literacy, and more as an obligation through which *some* level of AI literacy should be achieved.\n\nCoupled with the new Article 4(2) of the AI Omnibus, which introduces a role for the Commission and Member States in issuing guidance and practical examples on how the AI literacy obligation should be fulfilled, it remains to be seen how the AI literacy requirement will be implemented in practice.\n\n**2.3. Processing of special categories of personal data for bias detection and correction**\n\nThe AI Omnibus introduces a new Article 4a, which allows providers of high-risk AI systems to exceptionally process special categories of personal data where this is strictly necessary to detect and correct bias. The bias detection provision originally foreseen for high-risk AI systems in Article 10(5)(a) – (f) AI Act remains unchanged by the new Article 4a of the AI Omnibus.\n\nWhere a change can be seen is in the expansion of this provision to AI systems not classified as high-risk. Indeed Article 4a introduces a new point (2) allowing “providers and deployers of ***other***AI systems and models” (emphasis added) to exceptionally process special category data “to the extent that such processing is strictly necessary to ensure bias detection and correction in view of possible biases that are likely to affect the health and safety of persons, have a negative impact on fundamental rights or lead to discrimination” (new Article 4a (2)(a) AI Omnibus). While the applicable safeguards for this processing remain the same as those for high-risk AI systems, **the legal basis for processing special category data is expanded to providers and deployers of** ***all*** **AI systems and models**, including general-purpose AI models.\n\nInterestingly, the new Article 4a of the AI Omnibus also adds a new sentence which clarifies that “This paragraph does not create any obligation to conduct such bias detection and correction”, leaving bias detection to the discretion of providers and deployers. The new Article 4a applies upon the entry into force of the AI Omnibus, and must continue to be applied alongside the GDPR and other applicable data protection rules.\n\n**2.4. New powers for the AI Office**\n\nThe AI Office sees its supervisory role significantly expanded under the AI Omnibus. Recital 31 of the AI Omnibus states that clarifying the role of the AI Office is necessary in order to strengthen the governance of AI systems, and that it should have exclusive competence over systems built on GPAI models not only when both the system and the model are developed by the same provider, but “also **where they are developed by providers that form part of the same undertaking**” (emphasis added). The AI Omnibus amends Article 75 AI Act to this effect.\n\nThe AI Office will also act as the MSA for AI systems constituting or embedded in Very Large Online Platforms and Very Large Online Services as designated under the Digital Services Act (DSA) (see Recital 32 of the AI Omnibus). The same Recital also explicitly includes the requirement of regulatory cooperation between the AI Office and the European Commission unit responsible for DSA enforcement.\n\nThe AI Omnibus also introduces several new Commission guidance obligations. By 1 August 2027, the Commission must publish guidelines on the classification of high-risk AI systems under Article 6 and guidance on the practical implementation of Articles 8(2) (requirements for high-risk AI systems), 9(10) (risk management system) and 17(3) (quality management system). In addition, by 2 September 2027, the Commission must publish guidance on the post-market monitoring plan for high-risk AI systems. The extended timelines provide the Commission with significantly more time to publish and adopt interpretative guidelines to support the implementation of the AI act.\n\n**2.5. Sandboxes and other “competitiveness” markers**\n\nIn view of the European Commission’s overall [competitiveness agenda](https://commission.europa.eu/topics/competitiveness_en), the AI Omnibus similarly aims to address and facilitate innovation. A core part of this goal is the extension of certain simplified requirements from applying only to SMEs to include small mid-cap enterprises (SMCs). The Commission defines SMCs as having fewer than 750 employees and an annual turnover not exceeding EUR 150 million (see Commission Recommendation [2025/1099](https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=OJ:L_202501099) of May 2025). The introduction of a new SMC category and definition is aimed at supporting the transition of enterprises from SME to SMC, recognizing that the latter may continue to face similar regulatory burdens as the former and should therefore continue to benefit from simplified requirements.\n\nIn this context, certain AI Act exemptions applicable to SMEs will also apply to SMCs, namely:\n\n* Technical documentation for high-risk AI systems – SMCs may also use the simplified template for providing technical documentation under Annex IV AI Act (amended Article 11(1) AI Act);\n* Quality management systems – SMCs can also benefit from the proportionality requirement in Article 17 AI Act, by which the implementation of quality management systems should be proportionate to the size of the provider’s organization;\n* Priority to AI regulation sandboxes – alongside startups and SMEs (Recital 24 AI Omnibus, and amendments made to Article 57).\n\nIn addition to the role expansion foreseen for the AI Office, as explored above, the AI Omnibus also introduces a requirement for it to establish an AI regulatory sandbox at the Union level for systems based on GPAI models. The reasoning behind this change is a recognition that sandboxes act as regulatory tools to foster clarity and consistency in the governance of AI systems, and to foster innovation (see Recitals 24-26 AI Omnibus).\n\n3. **Concluding reflections**\n\n**The simplification and competitiveness agenda of the European Commission has been so far translated for the AI Act into more generous timelines for compliance, support for sandboxes**, easing of compliance bureaucracy for medium-sized enterprises and easing of the AI literacy obligations. It is notable that the amendment of the AI Act was swift – it took only about nine months for the EU legislative machine to convert the proposal into law. On the other hand, the amendments are a targeted intervention, given that the core obligations and legislative philosophy of the AI Act were not touched.\n\n**One visible structural shift achieved by the AI Omnibus was the enhancement of supervisory powers of the AI Office**, which aligns with the European Commission’s inclination to centralize under its authority supervisory powers within the digital *acquis*. The supervisory structure of the DSA for VLOPS and VLOSES, as well as that of the Digital Markets Act follow the same trend.\n\n**The AI Omnibus does not change the AI Act’s phased implementation, but it provides a larger window for compliance readiness to providers of high-risk AI systems**, addressing some of the AI Act’s deadlines and milestones. Beyond the rules for high-risk AI, prohibited practices under Article 5 are already in force and applicable, as are transparency requirements for GPAI model providers (Article 53) and systemic risk rules (Article 51).\n\n**As the implementation of the AI Act continues, keeping track of the changes provided by the AI Omnibus and the new guidance will be essential**. For requirements regarding AI literacy in particular, ensuing Commission and Member States’ guidance will determine how the obligation will apply in practice.\n\nThe updated **[FPF AI Act Implementation Timeline](https://fpf.org/wp-content/uploads/2026/07/FPF-EU-AI-Act-Timeline-2026-R2.pdf)** provides an overview of the revised implementation timeline, key AI Omnibus amendments, and the remaining AI Act provisions that continue to apply.\n\nLast Updated: August 5, 2026\n\nTags: [Global](https://fpf.org/tag/global/)\n\n## Explore\n\n## Clean-Up on Aisle Three: New Jersey Becomes Third State to Regulate Data-Driven Pricing This Year\n\n## A New Design Code Takes Root in the Garden State\n\n## CADA: An (E)U-turn on AI regulation\n\n## FPF Statement on the Senior Chatbot Protection Bill\n\n## The AI Act Implementation Timeline: What Changes Under the AI Omnibus?\n\n## FPF Submits Comments to Inform Colorado Automated Decision-Making Technology and Chatbot Rulemaking Processes\n\n## FPF Releases New Issue Brief on U.S. “Data Broker” Regulatory Landscape\n\n## New Survey: Privacy Concerns Are A Top Barrier to AgeTech Adoption Among Older Adults\n\n## Navigating Cross-Border Data Transfers in the APAC Region: An Analysis of Developments from 2023 to 2026\n\n## FPF Submits Comments to Inform California Children’s Social Media Protections Rulemaking Process\n\n#### Dates\n\n#### Content Types\n\n#### Issues\n\n#### Topics\n\n#### FPF Staff\n\n#### Guest Authors\n\n## Posts by Bianca-Ioana and Andreea\n\n[![digital,symbols,of,ai,,law,,justice,and,security,over,a](https://fpf.org/wp-content/uploads/2026/07/shutterstock_2814136079-300x168.jpg)](https://fpf.org/blog/the-ai-act-implementation-timeline-what-changes-under-the-ai-omnibus/) \n\n[The AI Act Implementation Timeline: What Changes Under the AI Omnibus?](https://fpf.org/blog/the-ai-act-implementation-timeline-what-changes-under-the-ai-omnibus/)\n\n[READ MORE](https://fpf.org/blog/the-ai-act-implementation-timeline-what-changes-under-the-ai-omnibus/)\n\n[![](https://fpf.org/wp-content/uploads/2026/05/shutterstock_2336351861-300x200.jpg)](https://fpf.org/blog/the-eu-commissions-approach-to-age-verification-mobile-apps-dsa-enforcement-and-challenging-national-social-media-bans/) \n\n[The EU Commission’s Approach to Age Verification: Mobile Apps, DSA Enforcement, and Challenging National Social Media Bans](https://fpf.org/blog/the-eu-commissions-approach-to-age-verification-mobile-apps-dsa-enforcement-and-challenging-national-social-media-bans/)\n\n[READ MORE](https://fpf.org/blog/the-eu-commissions-approach-to-age-verification-mobile-apps-dsa-enforcement-and-challenging-national-social-media-bans/)\n\n[![socials africa dp reforms](https://fpf.org/wp-content/uploads/2026/04/Socials-Africa-DP-reforms-300x169.png)](https://fpf.org/resource/data-protection-reforms-in-africa-key-regulatory-developments-video/) \n\n[Data Protection Reforms in Africa: Key Regulatory Developments (Video)](https://fpf.org/resource/data-protection-reforms-in-africa-key-regulatory-developments-video/)\n\n[READ MORE](https://fpf.org/resource/data-protection-reforms-in-africa-key-regulatory-developments-video/)\n\n[View More](#)\n\n ",
+        "published_at": null
+      },
+      "expected_entailment": false,
+      "expected_usable": false
+    }
+  ],
+  "version": 2
+}

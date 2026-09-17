@@ -477,6 +477,40 @@ def g11_recommendations(
     ]
 
 
+def g12_evidence_eligibility(
+    report: Report, state: ResearchState, config: GateConfig
+) -> list[Violation]:
+    """Never publish a finding whose own ledger says current applicability is unconfirmed."""
+    violations = []
+    for key, index, sentence in _addressed(report):
+        for cid in dict.fromkeys([*sentence.cluster_ids, *sentence.finding_refs]):
+            cluster = state.clusters.get(cid)
+            if cluster is None:
+                continue
+            rejected = [
+                claim_id
+                for claim_id in cluster.claim_ids
+                if claim_id in state.claims
+                and state.claims[claim_id].validation_status in {"unsupported", "unavailable"}
+            ]
+            if cluster.requires_fresh_confirmation or rejected:
+                violations.append(
+                    Violation(
+                        "G12",
+                        "error",
+                        "finding lacks validated, applicable source evidence",
+                        key,
+                        index,
+                        {
+                            "cluster_id": cid,
+                            "requires_fresh_confirmation": cluster.requires_fresh_confirmation,
+                            "rejected_claims": rejected,
+                        },
+                    )
+                )
+    return violations
+
+
 RULES: dict[str, Rule] = {
     "G1": g1_sections,
     "G2": g2_citations,
@@ -489,6 +523,7 @@ RULES: dict[str, Rule] = {
     "G9": g9_sensitive,
     "G10": g10_language,
     "G11": g11_recommendations,
+    "G12": g12_evidence_eligibility,
 }
 
 

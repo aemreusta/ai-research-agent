@@ -114,6 +114,25 @@ class ClaimOut(BaseModel):
     value: str | None = Field(None, description="The value as written, e.g. '2 August 2026'.")
     unit: str | None = None
     as_of: str | None = Field(None, description="When the value holds, if stated.")
+    conditions: list[str] = Field(
+        default_factory=list,
+        description="Every applicability condition, exception, jurisdiction, affected group "
+        "or prerequisite. Repeat these in text; never broaden the source's "
+        "scope.",
+    )
+    effective_from: str | None = Field(
+        None, description="ISO date when this rule or value takes effect, only if stated."
+    )
+    effective_until: str | None = Field(
+        None,
+        description="ISO date when this rule or value expires or is superseded, only if stated.",
+    )
+    time_sensitive: bool = Field(
+        False,
+        description="Whether current applicability matters: legal thresholds, obligations, "
+        "prices, market estimates, product features, officeholders. Historical "
+        "events and definitions are not mutable current values.",
+    )
     attributed_to: str | None = Field(
         None, description="If the source reports someone else's statement, who said it."
     )
@@ -122,6 +141,31 @@ class ClaimOut(BaseModel):
 class ExtractionOutput(BaseModel):
     rationale: str = Rationale
     claims: list[ClaimOut]
+
+
+# --- validate_claims ---------------------------------------------------------------------------
+
+
+class ClaimValidation(BaseModel):
+    claim_id: str
+    supported: bool = Field(
+        description="The statement and all structured fields follow from the source in "
+        "context, including negation, exceptions, scope, conditions and legal "
+        "status (proposal versus adopted law)."
+    )
+    conditions_complete: bool = Field(
+        description="Both text and conditions preserve every material applicability limit "
+        "in the surrounding source, even when the quoted sentence omits it."
+    )
+    time_sensitive: bool = Field(
+        description="The claim states a mutable current value, status or obligation, not "
+        "merely a historical event or definition."
+    )
+    reason: str
+
+
+class ClaimValidationOutput(BaseModel):
+    items: list[ClaimValidation]
 
 
 # --- judge_contradictions ----------------------------------------------------------------------

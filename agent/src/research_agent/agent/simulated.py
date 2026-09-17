@@ -270,12 +270,30 @@ def _verify(prompt: str) -> dict[str, Any]:
     return {"items": items}
 
 
+def _validate(prompt: str) -> dict[str, Any]:
+    claims = _after(prompt, "Candidate claims:") or []
+    # Offline orchestration stand-in only; semantic quality is measured separately on labels.
+    return {
+        "items": [
+            {
+                "claim_id": c["claim_id"],
+                "supported": True,
+                "conditions_complete": True,
+                "time_sensitive": c.get("time_sensitive", False),
+                "reason": "simulated source-copy validation",
+            }
+            for c in claims
+        ]
+    }
+
+
 _HANDLERS = {
     "AnalyzeOutput": _analyze,
     "PlanOutput": _plan,
     "QueriesOutput": _queries,
     "SourceJudgements": _evaluate,
     "ExtractionOutput": _extract,
+    "ClaimValidationOutput": _validate,
     "ContradictionJudgements": _judge,
     "CoverageOutput": _coverage,
     "SynthesisOutput": _synthesize,

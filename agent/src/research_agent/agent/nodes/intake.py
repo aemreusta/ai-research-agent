@@ -14,7 +14,7 @@ from research_agent.agent.state import (
     SubQuestion,
     TimeScope,
 )
-from research_agent.agent.text import detect_language, token_jaccard
+from research_agent.agent.text import detect_language, fold, token_jaccard
 from research_agent.errors import AgentError, AgentException, ErrorCode
 from research_agent.observability.events import EventType
 from research_agent.prompting.schemas import AnalyzeOutput, PlanOutput
@@ -205,9 +205,24 @@ def normalise_plan(out: PlanOutput, state: ResearchState, deps: AgentDeps) -> li
     settings = deps.settings.plan
     kept: list[SubQuestion] = []
     ranked = sorted(out.subquestions, key=lambda sq: 0 if sq.priority == "must" else 1)
+
+    def mentioned_entities(text: str) -> set[str]:
+        normalized = fold(text)
+        found = set()
+        for entity in state.analysis.entities:
+            # Entity analysis may return Wix.com while the planner writes Wix.
+            alias = re.sub(r"\.(?:com|org|net|ai)$", "", fold(entity))
+            if alias and re.search(rf"(?<!\w){re.escape(alias)}(?!\w)", normalized):
+                found.add(alias)
+        return found
+
     for candidate in ranked:
         text = " ".join(candidate.text.split())
-        if not text or any(token_jaccard(text, other.text) >= 0.8 for other in kept):
+        entities = mentioned_entities(text)
+        if not text or any(
+            token_jaccard(text, other.text) >= 0.8 and entities == mentioned_entities(other.text)
+            for other in kept
+        ):
             continue
         subq_id = f"s{len(kept) + 1}"
         facets: list[Facet] = []

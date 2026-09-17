@@ -147,6 +147,7 @@ class Document(_Model):
     content: str = ""
     content_hash: str = ""
     published_at: date | None = None
+    date_provenance: str | None = None
     provider: str | None = None
     subq_ids: list[str] = Field(default_factory=list)
     query_ids: list[str] = Field(default_factory=list)
@@ -190,6 +191,18 @@ class Claim(_Model):
     value: str | None = None
     unit: str | None = None
     as_of: str | None = None
+    conditions: list[str] = Field(default_factory=list)
+    effective_from: str | None = None
+    effective_until: str | None = None
+    time_sensitive: bool = False
+    validation_status: Literal["legacy", "supported", "unsupported", "unavailable"] = "legacy"
+    validation_reason: str = ""
+    freshness: Literal["not_time_sensitive", "current", "historical", "undated"] = (
+        "not_time_sensitive"
+    )
+    requires_fresh_confirmation: bool = False
+    quote_match_method: str | None = None
+    quote_match_score: float | None = None
     attributed_to: str | None = None
     """"X'in açıklamasına göre..." - the original speaker, which becomes the origin (§8)."""
     iteration: int = 1
@@ -215,6 +228,10 @@ class ClaimCluster(_Model):
     unit: str | None = None
     as_of: str | None = None
     kind: ClaimKind = ClaimKind.FACT
+    conditions: list[str] = Field(default_factory=list)
+    effective_from: str | None = None
+    effective_until: str | None = None
+    requires_fresh_confirmation: bool = False
     confidence: float = 0.0
     best_source_score: float = 0.0
     has_primary: bool = False
@@ -390,6 +407,16 @@ class ResearchState(_Model):
         return [cluster for cluster in self.clusters.values() if cluster.subq_id == subq_id]
 
     def origins_for(self, subq_id: str) -> set[str]:
+        from research_agent.agent.clustering import independent_origin_keys
+
+        members = {
+            cid: self.claims[cid]
+            for cluster in self.clusters_for(subq_id)
+            for cid in cluster.claim_ids
+            if cid in self.claims
+        }
+        if members:
+            return set(independent_origin_keys(list(members.values()), self.documents).values())
         return {origin for cluster in self.clusters_for(subq_id) for origin in cluster.origin_ids}
 
     def bump(self, counter: str, amount: int = 1) -> None:

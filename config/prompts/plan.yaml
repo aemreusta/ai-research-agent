@@ -1,5 +1,5 @@
 id: plan
-version: 1
+version: 2
 # Must equal the hash of the output model in code (prompting/schemas.py); a test checks it.
 output_schema_hash: 3aaf393e62df1813
 description: Break the question into sub-questions, each with a checklist of facets.
@@ -16,6 +16,9 @@ instructions: |
     is considered answered when all of its facets are, so do not add vague facets such as
     "background" or "overview".
   - Do not repeat the same facet across sub-questions.
+  - For comparisons, cover EVERY named entity. Reserve a sub-question for each entity before
+    splitting metrics into more sub-questions; combine its metrics as facets when needed to
+    stay within the limit. The same metric for different entities is not a duplicate.
   - If the question asks for recommendations or an action plan, include a sub-question for
     the requirements the recommendations must rest on - recommendations themselves are not
     searched for; they are derived from findings later.
