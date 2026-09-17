@@ -5,7 +5,9 @@ sufficient is decided here:
 
     sufficient  <=>  (a primary source scoring >= primary_source_min_score)
                      or (>= min_independent_origins independent origins)
-                     and no unresolved contradiction touches it
+                     and no contradiction still awaiting follow-up blocks it
+
+A conflict with a follow-up attempt stays contested in the report but stops blocking coverage.
 """
 
 from __future__ import annotations
