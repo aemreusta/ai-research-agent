@@ -1,6 +1,7 @@
 # Examples
 
-Every example is one real research run. The folders hold these files:
+The live examples are actual provider runs; `offline-demo-eu-ai-act` is explicitly simulated.
+The folders hold these files:
 
 | File | Content |
 |---|---|
@@ -17,7 +18,7 @@ Every example is one real research run. The folders hold these files:
 
 | Folder | What it shows |
 |---|---|
-| [`2026-09-17-final/`](2026-09-17-final/) | **Start here.** Eight distinct questions (the four case questions plus a Turkish/English GDPR–KVKK comparison, a PostgreSQL version comparison, a revenue comparison and a made-up company), run on the current evidence rules |
+| [`2026-09-17-final/`](2026-09-17-final/) | **Start here.** Eight distinct questions (the four case questions plus a Turkish/English GDPR–KVKK comparison, a PostgreSQL version comparison, a revenue comparison and a made-up company); these retained runs predate the later legal-authority and Turkish-letter refinements |
 | [`2026-09-17-legal-authority/`](2026-09-17-legal-authority/) | EU AI Act and KVKK rerun after the rule that legal obligations need a primary source |
 | [`2026-09-17-model-selection/`](2026-09-17-model-selection/) | A run started from the browser with Gemini 3.1 Pro and provider fallback switched off |
 | [`2026-09-17-legal-final/`](2026-09-17-legal-final/), [`2026-09-17/`](2026-09-17/) | Earlier iterations, kept with their failures |
@@ -44,6 +45,19 @@ Keep in mind when reading the reports:
 | `apilexai-products-partnerships` | ApilexAI'ın ürünleri, iş ortaklıkları ve stratejik yönü nedir? | Thin coverage, syndicated press releases, Known Gaps |
 | `eu-ai-act-timeline` | What changed in the EU AI Act implementation timeline? | English, conflicting dates, contradiction handling |
 | `legal-tech-market-size` | What is the size of the European legal tech market and how fast is it growing? | Numeric disagreement, the `market-sizing` skill, gate rule G4 |
+
+Direct links to the required input, agent trace and final output (recorded repeat batch):
+
+| Example | Input | Agent trace | Final output |
+|---|---|---|---|
+| KVKK action plan | [input](2026-09-17-final/kvkk-2026-saas-action-plan/input.md) | [trace](2026-09-17-final/kvkk-2026-saas-action-plan/trace.jsonl) | [report](2026-09-17-final/kvkk-2026-saas-action-plan/report.md) |
+| ApilexAI company research | [input](2026-09-17-final/apilexai-products-partnerships/input.md) | [trace](2026-09-17-final/apilexai-products-partnerships/trace.jsonl) | [report](2026-09-17-final/apilexai-products-partnerships/report.md) |
+| EU AI Act timeline | [input](2026-09-17-final/eu-ai-act-timeline/input.md) | [trace](2026-09-17-final/eu-ai-act-timeline/trace.jsonl) | [report](2026-09-17-final/eu-ai-act-timeline/report.md) |
+| European legal tech market | [input](2026-09-17-final/legal-tech-market-size/input.md) | [trace](2026-09-17-final/legal-tech-market-size/trace.jsonl) | [report](2026-09-17-final/legal-tech-market-size/report.md) |
+
+The newer legal reruns and their remaining interpretation errors are listed in
+[the results index](2026-09-17-RESULTS.md). These exports are historical evidence, not freshly
+regenerated outputs from the final code revision.
 
 To regenerate them with your own keys:
 
