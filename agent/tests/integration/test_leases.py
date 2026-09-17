@@ -46,10 +46,12 @@ async def test_revoked_worker_cannot_write_into_the_new_attempt(
     run_id, old_lease = await claimed(db_session)
     admin = RunRepository(db_session)
     await admin.mark_running(run_id, agent_id="old", deadline_at=None)
+    first_started_at = (await admin.require(run_id)).started_at
     await admin.requeue(run_id, reason="AGENT_HEARTBEAT_LOST")
     current = await admin.claim(dispatcher_id="recovery")
     assert current is not None and current.lease_id != old_lease
     await admin.mark_running(run_id, agent_id="new", deadline_at=None)
+    assert (await admin.require(run_id)).started_at == first_started_at
 
     async with db_sessionmaker() as session:
         old = RunRepository(session, lease_id=old_lease)

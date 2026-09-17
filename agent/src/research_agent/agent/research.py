@@ -238,6 +238,13 @@ async def execute(
     payload: GraphState | None = None
     if resume:
         snapshot = await graph.aget_state(config)
+        if not snapshot.next and snapshot.values.get("research"):
+            # The process can die after the final checkpoint but before the terminal DB CAS.
+            # Settle that completed graph rather than starting another paid research run.
+            completed = ResearchState.model_validate(snapshot.values["research"])
+            if completed.report is not None and completed.gate_result is not None:
+                deps.meter.restore(completed.budget)
+                return completed
         if not snapshot.next:
             resume = False
     if not resume:

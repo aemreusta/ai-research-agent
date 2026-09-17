@@ -390,6 +390,16 @@ async def test_cancellation_stops_at_a_node_boundary() -> None:
         await run(cancel_after=3)
 
 
+async def test_completed_checkpoint_settles_without_repeating_paid_research() -> None:
+    checkpointer = InMemorySaver()
+    rid = uuid.uuid4()
+    first = await run(run_id=rid, checkpointer=checkpointer)
+    resumed = await run(run_id=rid, checkpointer=checkpointer, resume=True)
+    assert resumed.state == first.state
+    assert resumed.deps.meter.cost_usd == pytest.approx(first.deps.meter.cost_usd, abs=1e-6)
+    assert not [e for e in resumed.events.events if e["event_type"] == "node_started"]
+
+
 async def test_a_crashed_run_resumes_from_its_checkpoint() -> None:
     """The requeue path: attempt 2 continues where attempt 1 died instead of starting over."""
     checkpointer = InMemorySaver()

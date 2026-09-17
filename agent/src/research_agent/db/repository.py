@@ -20,7 +20,7 @@ from collections.abc import Sequence
 from datetime import UTC, datetime, timedelta
 from typing import Any, cast
 
-from sqlalchemy import delete, select, text, update
+from sqlalchemy import delete, func, select, text, update
 from sqlalchemy.engine import CursorResult
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -224,7 +224,7 @@ class RunRepository:
         now = datetime.now(UTC)
         values: dict[str, Any] = {
             "agent_id": agent_id,
-            "started_at": now,
+            "started_at": func.coalesce(Run.started_at, now),
             "heartbeat_at": now,
         }
         if deadline_at is not None:
