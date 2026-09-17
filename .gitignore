@@ -296,10 +296,9 @@ docs/reference/
 *.pem
 *.p12
 
-# Local editor / assistant state
+# Local editor state
 .vscode/
 .idea/
-.claude/settings.local.json
 
 # Local compose overrides and container volumes
 docker-compose.override.yml

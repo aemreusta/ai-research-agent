@@ -1,13 +1,12 @@
 # Project evaluation v3 — implementation and verification
 
-Date: 2026-09-17. Baseline: `f8fc007`, independently reviewed in evaluation v2. This report
-records the implemented changes and fresh evidence. It supersedes the v1 implementation brief.
+Date: 2026-09-17. Baseline: `f8fc007`. This report records the implemented changes and the
+evidence behind them.
 
 The project is materially stronger in ownership, failure recovery, evidence admission and user
 control. It now supports explicit model selection and visible heuristic review steps. It remains
 an assisted research system: structurally valid, well-cited reports can contain incomplete or
 misleading interpretations. A gate pass or 20-case regression pass is not a factual certificate.
-I am not replacing the earlier estimated reviewer score with an unmeasured “near-perfect” score.
 
 ## Changes that close verified defects
 
@@ -151,5 +150,4 @@ run was made for this change; the retained reports are not edited.
 5. No authentication or multitenancy is provided for this local deployment. DSPy/GEPA optimization,
    broader threshold calibration and production operations remain outside this improvement pass.
 
-No email, reviewer invitation or deployment was performed. Changes are committed in Conventional
-Commit groups and pushed to the private repository; local evidence is available without provider keys.
+The local evidence (tests, fixtures and export audits) can be reproduced without provider keys.

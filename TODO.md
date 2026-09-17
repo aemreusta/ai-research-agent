@@ -225,10 +225,9 @@ Durum etiketleri: `[ ]` yapılacak · `[~]` devam ediyor · `[x]` bitti · **❓
 | D49 | Doğrulama sırası make verify ile tekrarlanabilir; CI ücretli key gerektirmez | lint → PG suite → Go race → offline fixture kontrolü; GitHub Actions `Verification` yeşil |
 | D50 | Türkçe rapor Türkçe harflerle yazılır: harfsiz taslak bir kez geri bildirimle yeniden yazılır, kalırsa G10 uyarır; "tek kaynak" etiketi "tek bağımsız kaynak" oldu (bir yayıncının birkaç sayfası tek kaynaktır, atıf sayısı birden fazla olabilir); `synthesize` v4 | 2026-09-17-final ApilexAI raporu ASCII Türkçe idi; `test_turkish_letters.py` |
 
-- [x] Kullanıcının istediği Conventional Commits ile mantıksal gruplar halinde commit.
+- [x] Conventional Commits ile mantıksal gruplar halinde commit.
 - [x] Model seçimi ve araştırma içi sezgisel kontrol adımları.
 - [x] Sekiz farklı soru, gerçek crash/resume, model seçimi ve yasal regresyon tekrarları.
 - [x] Maliyet/süre, başarısız örnekler ve eksik retrieval açıkça belgeli.
-- [ ] Harici teslim/reviewer daveti/mail: bu oturumda istenmedi, gönderilmedi.
 - [ ] Daha geniş, değişiklik sırasında görülmemiş bir hukuk değerlendirme seti ve eşik kalibrasyonu.
 - [ ] OpenAI hesap kredisi olduğunda tam canlı model karşılaştırması.
