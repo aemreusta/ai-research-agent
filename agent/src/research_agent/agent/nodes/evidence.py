@@ -14,7 +14,7 @@ from research_agent.agent.freshness import document_evidence
 from research_agent.agent.injection import looks_like_injection
 from research_agent.agent.quotes import verify_quote
 from research_agent.agent.runtime import EventSink
-from research_agent.agent.scoring import score_source
+from research_agent.agent.scoring import score_source, self_primary_entities
 from research_agent.agent.state import (
     Claim,
     ClaimCluster,
@@ -113,7 +113,7 @@ async def evaluate_sources(state: ResearchState, deps: AgentDeps, events: EventS
             as_of=state.as_of,
             scope=state.analysis.time_scope,
             relevance=item.relevance if item else rule_relevance,
-            entities=state.analysis.entities,
+            entities=self_primary_entities(state.analysis),
             tiers=deps.tiers,
             settings=deps.settings.scoring,
             authority_adjustment=item.authority_adjustment if item else 0.0,

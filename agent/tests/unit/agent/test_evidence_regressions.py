@@ -282,6 +282,20 @@ def test_profile_triage_prefers_the_named_company_over_generic_high_rank_pages()
     assert score > 0.65 and irrelevant < 0.2
 
 
+def test_law_names_and_domain_prefixes_cannot_impersonate_primary_publishers() -> None:
+    from research_agent.agent.scoring import is_own_domain, self_primary_entities
+
+    assert not is_own_domain("kvkkuyum.com", ["KVKK"])
+    assert not is_own_domain("apilexreviews.com", ["ApilexAI"])
+    assert is_own_domain("apilex.ai", ["ApilexAI"])
+    assert is_own_domain("postgresql.org", ["PostgreSQL 18"])
+    s = state()
+    s.analysis.entities = ["EU AI Act"]
+    s.analysis.domain = "EU AI regulation"
+    s.analysis.answer_type = "timeline"
+    assert not is_own_domain("euaiact.com", self_primary_entities(s.analysis))
+
+
 async def test_original_eu_scope_trap_is_rejected_even_if_the_model_accepts_it(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

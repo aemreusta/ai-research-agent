@@ -12,7 +12,7 @@ from research_agent.agent.dedup.minhash import content_hash
 from research_agent.agent.deps import AgentDeps
 from research_agent.agent.freshness import dated_header
 from research_agent.agent.runtime import EventSink
-from research_agent.agent.scoring import is_own_domain, recency_score
+from research_agent.agent.scoring import is_own_domain, recency_score, self_primary_entities
 from research_agent.agent.state import (
     Document,
     PendingHit,
@@ -392,7 +392,7 @@ def _triage(
     score = 0.4 * relevance + 0.3 * authority + 0.2 * rank_signal + 0.1 * recency
     # The literal question name may be ApilexAI while sources write Apilex.ai or Apilex.
     # Profile triage must not let generic pages about "founders" displace the named company.
-    if is_own_domain(doc.domain, state.analysis.entities):
+    if is_own_domain(doc.domain, self_primary_entities(state.analysis)):
         score = max(score, 0.7 + 0.2 * relevance)
     elif state.analysis.answer_type == "profile":
         compact = re.sub(

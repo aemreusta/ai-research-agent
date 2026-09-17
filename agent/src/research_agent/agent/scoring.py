@@ -11,6 +11,7 @@ carries a one-line rationale that goes onto the timeline:
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from datetime import date
 from functools import cache
@@ -19,7 +20,7 @@ from typing import Any
 
 import yaml
 
-from research_agent.agent.state import SourceScore, TimeScope
+from research_agent.agent.state import QueryAnalysis, SourceScore, TimeScope
 from research_agent.agent.text import fold
 from research_agent.config.schema import ScoringSettings
 from research_agent.paths import config_dir
@@ -130,10 +131,20 @@ def is_own_domain(domain: str, entities: list[str]) -> bool:
     for entity in entities:
         key = _entity_key(entity)
         if len(key) >= 3 and (
-            key == host_key or key.startswith(host_key) or host_key.startswith(key)
+            key == host_key or (key.startswith(host_key) and key[len(host_key) :].isdigit())
         ):
             return True
     return False
+
+
+def self_primary_entities(analysis: QueryAnalysis) -> list[str]:
+    """A site named after a law is not that law's publisher (e.g. euaiact.com)."""
+    legal = re.search(
+        r"\blaw\b|regulat|mevzuat|hukuk|data protection", analysis.domain, re.IGNORECASE
+    )
+    if legal and analysis.answer_type != "profile":
+        return []
+    return analysis.entities
 
 
 def recency_score(published_at: date | None, as_of: date, scope: TimeScope) -> float:
