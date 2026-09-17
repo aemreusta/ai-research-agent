@@ -8,15 +8,30 @@
 # into Langfuse model pricing so both dashboards show the same number.
 version: 1
 
+# Explicit per-run selections. IDs and prices checked 2026-09-17 against the official
+# model pages above and https://ai.google.dev/gemini-api/docs/gemini-3.
+# Only structured-output text models belong here; account access is checked when called.
+choices:
+  gemini-3.8-flash: {provider: gemini, label: "Google · Gemini 3.8 Flash"}
+  gemini-3.1-flash-lite: {provider: gemini, label: "Google · Gemini 3.1 Flash-Lite"}
+  gemini-3.1-pro-preview: {provider: gemini, label: "Google · Gemini 3.1 Pro (preview)"}
+  gemini-2.5-pro: {provider: gemini, label: "Google · Gemini 2.5 Pro"}
+  gpt-6-astra: {provider: openai, label: "OpenAI · GPT-6 Astra"}
+  gpt-5.6-sol: {provider: openai, label: "OpenAI · GPT-5.6 Sol"}
+  gpt-5.6-terra: {provider: openai, label: "OpenAI · GPT-5.6 Terra"}
+  gpt-5.6-luna: {provider: openai, label: "OpenAI · GPT-5.6 Luna"}
+  qwen3:14b: {provider: ollama, label: "Ollama · Qwen3 14B (local)"}
+  qwen3:8b: {provider: ollama, label: "Ollama · Qwen3 8B (local)"}
+
 # Tried in order; a provider without a key is skipped, not failed.
 chain: [gemini, openai, ollama]
 
 tiers:
-  reasoning: # analyze_query, plan, assess_coverage, synthesize
+  reasoning: # analyze_query, plan, assess_coverage, synthesize, claim + citation verification
     gemini: gemini-3.8-flash
     openai: gpt-5.6-terra
     ollama: qwen3:14b
-  fast: # generate_queries, evaluate_sources, extract_claims, contradiction judge, entailment
+  fast: # generate_queries, evaluate_sources, extract_claims, contradiction judge
     gemini: gemini-3.1-flash-lite
     openai: gpt-5.6-luna
     ollama: qwen3:8b
@@ -43,9 +58,13 @@ prices_usd_per_million_tokens:
   # Gemini 3.8 Flash: introductory price through 2026-12-31 ($1.50 / $7.50 from 2027-01-01).
   gemini-3.8-flash: { input: 0.75, output: 3.75 }
   gemini-3.1-flash-lite: { input: 0.25, output: 1.50 }
+  gemini-3.1-pro-preview: { input: 2.00, output: 12.00, long_context_above: 200000, long_input: 4.00, long_output: 18.00 }
+  gemini-2.5-pro: { input: 1.25, output: 10.00, long_context_above: 200000, long_input: 2.50, long_output: 15.00 }
   gemini-embedding-001: { input: 0.15, output: 0.0 }
   gpt-5.6-terra: { input: 2.00, output: 12.00 }
   gpt-5.6-luna: { input: 0.20, output: 1.20 }
+  gpt-5.6-sol: { input: 4.00, output: 20.00 }
+  gpt-6-astra: { input: 10.00, output: 50.00 }
   text-embedding-3-small: { input: 0.02, output: 0.0 }
   # Local models are free; listed so the cost dashboard shows 0 instead of "unknown".
   qwen3:14b: { input: 0.0, output: 0.0 }

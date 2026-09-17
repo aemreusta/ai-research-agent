@@ -49,7 +49,7 @@ from research_agent.prompting.skills import load_skills
 from research_agent.providers.embeddings import Embedder
 from research_agent.providers.fetch import ContentFetcher
 from research_agent.providers.llm.base import LLMProvider
-from research_agent.providers.llm.catalog import ModelCatalog, catalog
+from research_agent.providers.llm.catalog import ModelCatalog, Tier, catalog
 from research_agent.providers.llm.gateway import LLMGateway, Tracer
 from research_agent.providers.llm.gemini import GeminiProvider
 from research_agent.providers.llm.openai_compat import OpenAICompatibleProvider
@@ -203,6 +203,15 @@ async def build_deps(
 
 def preflight(deps: AgentDeps) -> AgentError | None:
     """Fail fast, with an actionable message, when a run cannot possibly work."""
+    for tier in (Tier.REASONING, Tier.FAST):
+        selection = deps.llm.selection(tier)
+        if selection and selection[0] not in deps.llm.providers:
+            return AgentError(
+                code=ErrorCode.LLM_AUTH,
+                node="preflight",
+                decision="fail before research starts",
+                outcome=f"Selected {selection[1]} requires a {selection[0]} key in Settings.",
+            )
     if not deps.llm.available:
         return AgentError(
             code=ErrorCode.LLM_AUTH,
@@ -266,6 +275,11 @@ def metadata_for(deps: AgentDeps, settings: Settings) -> dict[str, Any]:
         "prompt_versions": deps.prompts.references(),
         "search_providers": deps.search.available,
         "llm_providers": deps.llm.available,
+        "model_selection": {
+            "reasoning": settings.llm.reasoning_model or "automatic",
+            "fast": settings.llm.fast_model or "automatic",
+            "allow_fallback": settings.llm.allow_fallback,
+        },
     }
 
 

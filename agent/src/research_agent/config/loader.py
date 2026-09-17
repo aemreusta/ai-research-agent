@@ -20,6 +20,7 @@ from pydantic import BaseModel, ConfigDict, ValidationError
 from research_agent.config.schema import Settings, is_locked, known_paths
 from research_agent.errors import AgentError, AgentException, ErrorCode
 from research_agent.paths import config_dir
+from research_agent.providers.llm.catalog import catalog
 
 SETTINGS_FILE = "settings.yaml"
 
@@ -137,6 +138,10 @@ def load_settings(
         settings = Settings.model_validate(merged)
     except ValidationError as exc:
         raise ConfigError("settings failed validation", cause=str(exc)) from exc
+
+    for model in (settings.llm.reasoning_model, settings.llm.fast_model):
+        if model and model not in catalog().choices:
+            raise ConfigError(f"unknown research model: {model}; choose a model from the catalog")
 
     snapshot = settings.model_dump(mode="json")
     return EffectiveConfig(

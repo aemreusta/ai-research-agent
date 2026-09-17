@@ -58,7 +58,8 @@ class GeminiProvider:
         }
         if "temperature" in params:
             generation["temperature"] = params["temperature"]
-        if level := params.get("thinking_level"):
+        # Gemini 2.5 rejects thinkingLevel; keep its native dynamic-thinking default.
+        if (level := params.get("thinking_level")) and not model.startswith("gemini-2.5-"):
             generation["thinkingConfig"] = {"thinkingLevel": str(level).upper()}
         body: dict[str, Any] = {"contents": contents, "generationConfig": generation}
         if system:

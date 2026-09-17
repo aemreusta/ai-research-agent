@@ -9,6 +9,7 @@ from fastapi import APIRouter
 from research_agent.api.schemas import ConfigField, ConfigSchema
 from research_agent.config.loader import load_settings
 from research_agent.config.schema import tunable_fields
+from research_agent.providers.llm.catalog import catalog
 
 router = APIRouter(prefix="/api/config", tags=["config"])
 
@@ -51,6 +52,15 @@ async def config_schema() -> ConfigSchema:
                 minimum=field.minimum,
                 maximum=field.maximum,
                 nullable=nullable,
+                options=(
+                    [{"value": "", "label": "Automatic (configured provider chain)"}]
+                    + [
+                        {"value": model, "label": choice.label}
+                        for model, choice in catalog().choices.items()
+                    ]
+                    if field.path in {"llm.reasoning_model", "llm.fast_model"}
+                    else None
+                ),
             )
         )
     groups = list(dict.fromkeys(field.group for field in fields))

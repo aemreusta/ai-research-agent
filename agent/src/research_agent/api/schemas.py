@@ -112,6 +112,7 @@ class CancelResponse(BaseModel):
 
 class ConfigField(BaseModel):
     model_config = ConfigDict(extra="forbid")
+    options: list[dict[str, str]] | None = None
 
     path: str
     group: str

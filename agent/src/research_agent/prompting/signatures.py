@@ -106,7 +106,7 @@ SIGNATURES: dict[str, Signature] = {
             uses_skills=True,
         ),
         Signature(
-            "verify_citations", schemas.VerificationOutput, Tier.FAST, frozenset({"sentences"})
+            "verify_citations", schemas.VerificationOutput, Tier.REASONING, frozenset({"sentences"})
         ),
     )
 }

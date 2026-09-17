@@ -119,6 +119,15 @@ class LLMGateway:
     def providers(self) -> dict[str, LLMProvider]:
         return dict(self._providers)
 
+    def selection(self, tier: Tier) -> tuple[str, str] | None:
+        model = (
+            self._settings.reasoning_model if tier == Tier.REASONING else self._settings.fast_model
+        )
+        if not model:
+            return None
+        choice = self._catalog.choices[model]
+        return choice.provider, model
+
     async def generate[T: BaseModel](
         self,
         output: type[T],
@@ -140,16 +149,37 @@ class LLMGateway:
                 )
             )
 
+        selected = self.selection(tier)
+        chain = list(self._chain)
+        if selected:
+            preferred, _ = selected
+            if preferred not in self._providers:
+                raise LLMKeysRejected(
+                    AgentError(
+                        code=ErrorCode.LLM_AUTH,
+                        node=events.node,
+                        decision="stop before substituting a different model",
+                        outcome=f"Selected {selected[1]} requires a {preferred} key in Settings.",
+                    )
+                )
+            chain = [preferred, *(name for name in chain if name != preferred)]
+        if not self._settings.allow_fallback:
+            chain = chain[:1]
+
         schema = inline_refs(strict_json_schema(output))
         messages = [Message("system", system), Message("user", user)]
-        first = self._chain[0]
+        first = chain[0]
         last_error: ProviderError | None = None
 
-        live = [name for name in self._chain if name not in self.rejected]
+        live = [name for name in chain if name not in self.rejected]
         if not live:
             raise self._keys_rejected(events)
         for index, provider_name in enumerate(live):
-            model = self._catalog.model_for(tier, provider_name)
+            model = (
+                selected[1]
+                if selected and provider_name == selected[0]
+                else self._catalog.model_for(tier, provider_name)
+            )
             if model is None:
                 continue
             next_provider = live[index + 1] if index + 1 < len(live) else None
@@ -186,7 +216,7 @@ class LLMGateway:
                 )
             return result
 
-        if all(name in self.rejected for name in self._chain):
+        if all(name in self.rejected for name in chain):
             raise self._keys_rejected(events)
         code = last_error.code if last_error else ErrorCode.LLM_PROVIDER_ERROR
         failure = AgentError(

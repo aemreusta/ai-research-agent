@@ -104,6 +104,21 @@ async def test_gemini_blocked_prompt_is_a_non_retryable_error() -> None:
     assert "SAFETY" in caught.value.message
 
 
+async def test_gemini_25_pro_uses_native_thinking_instead_of_unsupported_level() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        body = json.loads(request.content)
+        assert "thinkingConfig" not in body["generationConfig"]
+        return httpx.Response(
+            200, json={"candidates": [{"content": {"parts": [{"text": '{"x":"ok"}'}]}}]}
+        )
+
+    await _complete(
+        GeminiProvider("test", client=client(handler)),
+        model="gemini-2.5-pro",
+        params={"thinking_level": "medium"},
+    )
+
+
 async def test_gemini_embeddings() -> None:
     seen: list[httpx.Request] = []
 

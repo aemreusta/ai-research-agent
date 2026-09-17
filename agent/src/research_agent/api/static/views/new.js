@@ -16,10 +16,19 @@ function control(field, overrides) {
     field.minimum !== null || field.maximum !== null
       ? ` (${field.minimum ?? "…"} – ${field.maximum ?? "…"})` : "");
 
+  if (field.options) {
+    const select = h("select", { id, onchange: () => { overrides[field.path] = select.value; } },
+      ...field.options.map((option) => h("option", { value: option.value }, option.label)));
+    select.value = current ?? "";
+    const label = field.path === "llm.reasoning_model" ? "Planning & verification" : "Extraction & search";
+    return h("div", { class: "field" }, h("label", { for: id }, label), select, help);
+  }
+
   if (field.type === "boolean") {
     const box = h("input", { type: "checkbox", id, checked: Boolean(current),
       onchange: () => { overrides[field.path] = box.checked; } });
-    return h("div", { class: "field" }, h("label", { class: "inline", for: id }, box, field.path.split(".").pop()), help);
+    return h("div", { class: "field" }, h("label", { class: "inline", for: id }, box,
+      field.path === "llm.allow_fallback" ? "Allow provider fallback" : field.path.split(".").pop()), help);
   }
   if (field.type === "integer" || field.type === "number") {
     const input = h("input", {
@@ -58,10 +67,20 @@ export async function render(root) {
     h("option", { value: "" }, "No preset"),
     ...presetList.presets.map((p) => h("option", { value: p.name }, p.name)));
 
-  const groups = schema.groups.map((group) => h("fieldset", {},
-    h("legend", {}, group),
-    h("div", { class: "form-grid" },
-      ...schema.fields.filter((f) => f.group === group).map((f) => control(f, overrides)))));
+  const modelControls = h("div", { class: "form-grid" });
+  const advancedControls = h("div");
+  function drawControls() {
+    mount(modelControls, ...schema.fields.filter((f) => f.group === "Models").map((f) => control(f, overrides)));
+    mount(advancedControls, ...schema.groups.filter((group) => group !== "Models").map((group) => h("fieldset", {},
+      h("legend", {}, group), h("div", { class: "form-grid" },
+        ...schema.fields.filter((f) => f.group === group).map((f) => control(f, overrides))))));
+  }
+  presetSelect.addEventListener("change", () => {
+    for (const key of Object.keys(overrides)) delete overrides[key];
+    Object.assign(overrides, presetList.presets.find((p) => p.name === presetSelect.value)?.overrides || {});
+    drawControls();
+  });
+  drawControls();
 
   const submit = h("button", {}, "Start research");
   const warning = readiness.ready ? null : h("div", { class: "banner warn" },
@@ -98,6 +117,7 @@ export async function render(root) {
       await api("/api/presets", { method: "POST", body: { name: presetName.value.trim(), overrides } });
       toast("Preset saved.");
       presetSelect.append(h("option", { value: presetName.value.trim() }, presetName.value.trim()));
+      presetList.presets.push({ name: presetName.value.trim(), overrides: { ...overrides } });
     } catch (error) {
       toast(error.body?.message || error.message, "bad");
     }
@@ -113,11 +133,13 @@ export async function render(root) {
         h("div", { class: "help" }, "Identifiers such as national ids, IBANs, cards, emails and phone numbers are masked before anything is stored or sent.")),
       h("div", { class: "row", style: "margin-bottom:14px" }, h("span", { class: "muted small" }, "Try:"),
         ...EXAMPLES.map((example) => h("span", { class: "chip", onclick: () => { question.value = example; question.focus(); } }, example))),
+      h("fieldset", {}, h("legend", {}, "Models"), modelControls,
+        h("p", { class: "help" }, "Choose each stage independently, or leave Automatic. A selected provider needs its API key in Settings. OpenAI models use API billing; a ChatGPT subscription is separate. Local models must be installed in Ollama.")),
       h("details", { class: "advanced" },
         h("summary", {}, "Advanced settings"),
         h("p", { class: "muted small" }, "Defaults come from config/settings.yaml. Changes apply to this run only and are recorded in its config snapshot. Wall-clock and cost budgets are disabled unless you set them."),
         h("div", { class: "row", style: "margin-bottom:12px" }, h("label", { class: "inline" }, "Preset"), presetSelect, presetName, savePreset),
-        ...groups),
+        advancedControls),
       h("div", { class: "row end" }, submit)),
   );
   question.focus();

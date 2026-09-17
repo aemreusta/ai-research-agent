@@ -59,6 +59,35 @@ async def test_readyz_reports_each_dependency(client: httpx.AsyncClient) -> None
 # --- creating runs -----------------------------------------------------------
 
 
+async def test_model_selections_are_discoverable_and_persisted(client: httpx.AsyncClient) -> None:
+    schema = (await client.get("/api/config/schema")).json()
+    field = next(f for f in schema["fields"] if f["path"] == "llm.reasoning_model")
+    assert "gemini-3.1-pro-preview" in {o["value"] for o in field["options"]}
+    response = await client.post(
+        "/api/runs",
+        json={
+            "question": "Compare database releases",
+            "overrides": {
+                "llm.reasoning_model": "gemini-3.1-pro-preview",
+                "llm.fast_model": "gpt-5.6-luna",
+                "llm.allow_fallback": False,
+            },
+        },
+    )
+    assert response.status_code == 201
+    run = (await client.get(f"/api/runs/{response.json()['run_id']}")).json()
+    assert run["config_snapshot"]["llm"]["reasoning_model"] == "gemini-3.1-pro-preview"
+    assert run["config_snapshot"]["llm"]["allow_fallback"] is False
+    rejected = await client.post(
+        "/api/runs",
+        json={
+            "question": "Compare database releases",
+            "overrides": {"llm.reasoning_model": "unknown-model"},
+        },
+    )
+    assert rejected.status_code == 400
+
+
 async def test_creating_a_run_queues_it(
     client: httpx.AsyncClient, db_session: AsyncSession
 ) -> None:

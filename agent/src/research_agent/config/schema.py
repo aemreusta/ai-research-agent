@@ -238,6 +238,21 @@ class ConcurrencySettings(_Section):
 
 
 class LlmSettings(_Section):
+    reasoning_model: str = tunable(
+        "",
+        group="Models",
+        description="Planning, synthesis and evidence verification. Empty = automatic.",
+    )
+    fast_model: str = tunable(
+        "",
+        group="Models",
+        description="Search queries, source scoring and claim extraction. Empty = automatic.",
+    )
+    allow_fallback: bool = tunable(
+        True,
+        group="Models",
+        description="Allow another provider on failure. Switches appear in the timeline.",
+    )
     timeout_seconds: float = tunable(
         60.0, group="LLM", description="Per-call timeout.", gt=0, le=600
     )
