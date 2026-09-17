@@ -1,5 +1,5 @@
 id: generate_queries
-version: 1
+version: 2
 # Must equal the hash of the output model in code (prompting/schemas.py); a test checks it.
 output_schema_hash: b0bad5c814db0627
 description: Write diverse web search queries for the open targets of this round.
@@ -16,6 +16,9 @@ instructions: |
     official title of a document, the company's legal name.
   - For a missing facet, target that facet directly. For a contradiction, look for the primary
     source that can settle it (the regulation text, the company announcement).
+  - For legal obligations, deadlines or exemptions, include a query for the operative article
+    or detailed regulator guidance. Official press releases and overview timelines can omit
+    applicability exceptions. Use the consolidated rule to establish who is actually covered.
   - Never repeat or lightly reword a query from the "already tried" list.
   - Use `site:` only for official domains, and only occasionally.
   - Use the ids exactly as given for subq_id and facet_id.

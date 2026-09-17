@@ -111,18 +111,33 @@ def plan_targets(state: ResearchState, deps: AgentDeps) -> list[Target]:
 
 
 def _freshness_gap(state: ResearchState, subq_id: str, facet_id: str) -> str:
+    authority_gaps = [
+        c
+        for c in state.claims.values()
+        if c.subq_id == subq_id
+        and c.facet_id == facet_id
+        and c.validation_reason.startswith("Legal authority:")
+    ]
+    authority_hint = (
+        ". Find the operative regulation, article or detailed regulator guidance, including "
+        "scope and exceptions. Do not use law-firm commentary, press releases or overview "
+        "timelines as the final evidence of a legal obligation. Candidates needing primary "
+        "confirmation: " + "; ".join(c.text for c in authority_gaps[:3])
+        if authority_gaps
+        else ""
+    )
     held = [
         c
         for c in state.claims.values()
         if c.subq_id == subq_id and c.facet_id == facet_id and c.requires_fresh_confirmation
     ]
     if not held:
-        return ""
+        return authority_hint
     values = "; ".join(
         f"{c.entity or ''} {c.attribute or ''}: {c.value or c.text} ({c.as_of or 'undated'})"
         for c in held[:3]
     )
-    return (
+    return authority_hint + (
         f". Fresh official confirmation needed as of {state.as_of}: {values}. "
         "Search for amendments, replacement thresholds and current consolidated guidance; "
         "do not repeat the old source as proof of the current rule."

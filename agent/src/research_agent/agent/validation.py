@@ -10,6 +10,7 @@ from research_agent.agent.freshness import (
     assess_claim_freshness,
     document_evidence,
 )
+from research_agent.agent.legal_authority import legal_evidence_gap
 from research_agent.agent.runtime import EventSink
 from research_agent.agent.state import Claim, Document, ResearchState
 from research_agent.prompting.predict import untrusted
@@ -74,6 +75,9 @@ async def validate_claims(
             )
             claim.time_sensitive = claim.time_sensitive or item.time_sensitive
             assess_claim_freshness(claim, document, state)
+            if reason := legal_evidence_gap(claim, document, state):
+                claim.validation_status = "unsupported"
+                claim.validation_reason = reason
     for claim in pending.values():
         claim.validation_status = "unavailable"
         claim.validation_reason = "No complete source-entailment verdict after one retry."
