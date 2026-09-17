@@ -311,6 +311,7 @@ async def ledger(run_id: Annotated[uuid.UUID, Path()], api: Api) -> JSONResponse
             "stop_reason": state.get("stop_reason"),
             "stop_detail": state.get("stop_detail"),
             "counters": state.get("counters"),
+            "heuristic_checks": state.get("heuristic_checks", []),
             "budget": state.get("budget"),
         }
     )

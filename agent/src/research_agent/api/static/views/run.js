@@ -11,6 +11,7 @@ const NODE_LABELS = {
   extract_claims: "extract", cluster_and_corroborate: "ledger", detect_contradictions: "conflicts",
   assess_coverage: "coverage", synthesize: "synthesize", verify_citations: "verify",
   output_gate: "gate", dispatcher: "dispatcher", agent: "agent", prompts: "prompts",
+  check_plan: "plan checks", review_evidence: "heuristics",
 };
 
 export async function render(root, runId) {
@@ -94,6 +95,7 @@ export async function render(root, runId) {
       ["report", "Report", null],
       ["timeline", "Timeline", state.events.length],
       ["gate", "Gate", null],
+      ["heuristics", "Heuristic checks", ledger?.heuristic_checks?.length],
       ["plan", "Plan & queries", ledger?.queries?.length],
       ["sources", "Sources", ledger?.documents?.length],
       ["findings", "Findings", ledger?.clusters?.length],
@@ -105,11 +107,24 @@ export async function render(root, runId) {
   }
 
   function drawContent() {
-    const view = { report, timeline, gate, plan, sources, findings }[state.tab];
+    const view = { report, timeline, gate, heuristics, plan, sources, findings }[state.tab];
     mount(content, view());
   }
 
   // --- tabs -------------------------------------------------------------------------------------
+
+  function heuristics() {
+    const checks = state.ledger?.heuristic_checks || state.events
+      .filter((event) => event.data?.heuristic).map((event) => event.data.heuristic);
+    return h("div", { class: "panel" }, h("h2", {}, "Heuristic checks"),
+      h("p", { class: "muted" }, "Deterministic review of the plan, evidence and report. Warnings identify limitations; a pass does not certify factual accuracy. Report checks run before gate remediation."),
+      checks.length ? checks.map((check) => h("div", { class: "check" },
+        h("strong", {}, check.id), h("span", { class: `badge ${check.status === "pass" ? "ok" : "warn"}` }, check.status),
+        h("div", {}, h("strong", {}, check.name), h("div", {}, check.summary),
+          check.related_ids?.length ? h("details", {}, h("summary", {}, "Affected evidence"),
+            h("div", { class: "mono small" }, check.related_ids.join(", "))) : null)))
+        : h("div", { class: "empty" }, ACTIVE.has(state.run.status) ? "Checks appear as research progresses." : "This run predates heuristic checks."));
+  }
 
   function report() {
     const run = state.run;

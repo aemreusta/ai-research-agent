@@ -21,7 +21,7 @@ from typing import Any, TypedDict, cast
 from langgraph.graph import END, START, StateGraph
 
 from research_agent.agent.deps import AgentDeps
-from research_agent.agent.nodes import coverage, evidence, intake, report, search
+from research_agent.agent.nodes import coverage, evidence, heuristics, intake, report, search
 from research_agent.agent.runner import CancelledByRequest
 from research_agent.agent.runtime import EventSink
 from research_agent.agent.state import ResearchState
@@ -39,6 +39,7 @@ NODES: list[tuple[str, NodeFn]] = [
     ("intake_guard", intake.intake_guard),
     ("analyze_query", intake.analyze_query),
     ("plan", intake.plan),
+    ("check_plan", heuristics.check_plan),
     ("generate_queries", search.generate_queries),
     ("search", search.search),
     ("process_results", search.process_results),
@@ -49,6 +50,7 @@ NODES: list[tuple[str, NodeFn]] = [
     ("assess_coverage", coverage.assess_coverage),
     ("synthesize", report.synthesize),
     ("verify_citations", report.verify_citations),
+    ("review_evidence", heuristics.review_evidence),
     ("output_gate", report.output_gate),
 ]
 
@@ -111,7 +113,8 @@ def build_graph(deps: AgentDeps) -> StateGraph[GraphState]:
         {"generate_queries": "generate_queries", "synthesize": "synthesize"},
     )
     graph.add_edge("synthesize", "verify_citations")
-    graph.add_edge("verify_citations", "output_gate")
+    graph.add_edge("verify_citations", "review_evidence")
+    graph.add_edge("review_evidence", "output_gate")
     graph.add_edge("output_gate", END)
     return graph
 
@@ -119,4 +122,4 @@ def build_graph(deps: AgentDeps) -> StateGraph[GraphState]:
 def recursion_limit(deps: AgentDeps) -> int:
     """Enough steps for the configured rounds, and not one more: a bug cannot loop forever."""
     per_round = 8
-    return 3 + per_round * deps.settings.budget.max_iterations + 3 + 5
+    return 4 + per_round * deps.settings.budget.max_iterations + 4 + 5

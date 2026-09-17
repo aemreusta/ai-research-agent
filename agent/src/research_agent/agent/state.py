@@ -350,6 +350,15 @@ class RouteRecord(_Model):
     detail: str = ""
 
 
+class HeuristicCheck(_Model):
+    id: str
+    stage: str
+    name: str
+    status: Literal["pass", "warn"]
+    summary: str
+    related_ids: list[str] = Field(default_factory=list)
+
+
 class ResearchState(_Model):
     run_id: uuid.UUID
     question: str
@@ -370,6 +379,7 @@ class ResearchState(_Model):
     report_markdown: str = ""
     gate_result: dict[str, Any] | None = None
     verification: dict[str, object] = Field(default_factory=dict)
+    heuristic_checks: list[HeuristicCheck] = Field(default_factory=list)
     counters: dict[str, int] = Field(default_factory=dict)
     """Dropped claims, rejected quotes, failed fetches... - surfaced in the report metadata."""
     budget: dict[str, float | int] = Field(default_factory=dict)
