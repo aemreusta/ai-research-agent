@@ -1,0 +1,32 @@
+{
+  "gemini-pro-postgresql-uuid": {
+    "run_id": "99812ca5-b4c4-4a0c-b520-617d28a5fd05",
+    "question": "Using official PostgreSQL documentation, explain what the uuidv7() function added in PostgreSQL 18 does and how it differs from uuidv4(). Include limitations and avoid unsupported performance claims.",
+    "started": 1789631112.302241,
+    "status": "succeeded_with_warnings",
+    "elapsed_seconds": 93.84,
+    "gate_status": "pass",
+    "stop_reason": "max_iterations",
+    "metrics": {
+      "cost_usd": 0.207572,
+      "tokens_in": 119380,
+      "tokens_out": 20186,
+      "searches_used": 6,
+      "iteration": 1,
+      "duration_seconds": 86.272106
+    },
+    "error_code": null,
+    "attempts": 1,
+    "models_used": {
+      "fast": "gemini:gemini-3.1-flash-lite",
+      "embedding": "gemini-embedding-001",
+      "reasoning": "gemini:gemini-3.1-pro-preview"
+    },
+    "selected_models": {
+      "reasoning_model": "gemini-3.1-pro-preview",
+      "fast_model": "gemini-3.1-flash-lite",
+      "allow_fallback": false
+    },
+    "exported": true
+  }
+}

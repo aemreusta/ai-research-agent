@@ -1,0 +1,969 @@
+{
+  "question": "Türkiye'deki SaaS şirketleri için 2026 KVKK uyum aksiyon planı nedir?",
+  "language": "tr",
+  "title": "Türkiye'deki SaaS Şirketleri İçin 2026 KVKK Uyum Raporu ve Aksiyon Planı",
+  "banner": null,
+  "sections": [
+    {
+      "key": "summary",
+      "title": "Özet",
+      "sentences": [
+        {
+          "text": "SaaS şirketleri, kendi kullanıcı verileri yönünden veri sorumlusu, B2B müşterilerinin verileri yönünden ise veri işleyen sıfatıyla çift role sahiptir.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k1",
+            "k7",
+            "k8"
+          ],
+          "sources": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "text": "Tek bir kaynağa göre B2B SaaS modellerinde Veri İşleme Eki (DPA) imzalanması hukuki bir zorunluluk olup, eksikliği 2026 yılında 256.357 TL ile 17.092.242 TL arasında idari para cezası riski doğurmaktadır.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k2",
+            "k3"
+          ],
+          "sources": [
+            1
+          ]
+        },
+        {
+          "text": "Yurt dışına veri aktarımında Kurul'un 4 Haziran 2024 tarihli ve 2024/959 sayılı kararıyla kabul edilen standart sözleşmelerin imzalanması halinde, bunların 5 iş günü içinde Kurum'a bildirilmesi gerekmektedir.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k37",
+            "k52"
+          ],
+          "sources": [
+            6,
+            7
+          ]
+        },
+        {
+          "text": "Kanıt yetersizliği nedeniyle 1 cümle çıkarıldı - ayrıntılar gate_result.json'da",
+          "kind": "meta",
+          "labels": [
+            "gate_note"
+          ],
+          "findings": [],
+          "sources": []
+        }
+      ]
+    },
+    {
+      "key": "key_findings",
+      "title": "Temel Bulgular",
+      "sentences": [
+        {
+          "text": "Veri sorumlusu işleme amaç ve vasıtalarını belirlerken, veri işleyen bu talimatlar doğrultusunda veri işlemektedir.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k7",
+            "k8"
+          ],
+          "sources": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "text": "Tek bir kaynağa göre SaaS şirketleri, veri sorumlusunun 72 saatlik yasal bildirimini yapabilmesi için veri ihlallerini en geç 24 saat içinde bildirmek durumundadır.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k4"
+          ],
+          "sources": [
+            1
+          ]
+        },
+        {
+          "text": "Tek bir kaynakta, veri işleyenin alt veri işleyeni ancak veri sorumlusunun yetkisi ve eşdeğer bir sözleşmeyle sürece dahil edebileceği belirtilmiştir.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k14"
+          ],
+          "sources": [
+            8
+          ]
+        },
+        {
+          "text": "Tek bir kaynağa göre ürün verisinin hem aktarım hem de depolama sırasında şifrelenmesi ve destek personelinin veri erişimlerinin loglanması zorunludur.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k5",
+            "k6"
+          ],
+          "sources": [
+            1
+          ]
+        },
+        {
+          "text": "Tek bir kaynakta, mali bilanço şartları sebebiyle yeni yükümlü olan şirketler için VERBİS son kayıt tarihinin 05.06.2026 olarak güncellendiği bildirilmiştir.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k22"
+          ],
+          "sources": [
+            9
+          ]
+        },
+        {
+          "text": "Tek bir kaynakta, 2026 yılında KVKK idari para cezalarının hesaplanmasında esas alınan yeniden değerleme oranının %25,49 olduğu aktarılmıştır.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k48"
+          ],
+          "sources": [
+            10
+          ]
+        }
+      ]
+    },
+    {
+      "key": "conflicting_or_uncertain",
+      "title": "Çelişkili / Belirsiz Bilgiler",
+      "sentences": []
+    },
+    {
+      "key": "recommendations",
+      "title": "Öneriler / Aksiyon Planı",
+      "sentences": [
+        {
+          "text": "B2B müşterilerle yapılan sözleşmelere işleme konusu, süresi, güvenlik tedbirleri ve alt işleyen kurallarını içeren Veri İşleme Eki (DPA) dahil edilmelidir.",
+          "kind": "recommendation",
+          "labels": [],
+          "findings": [
+            "k2",
+            "k13"
+          ],
+          "sources": [
+            1,
+            8
+          ]
+        },
+        {
+          "text": "Destek ekiplerinin ürün verilerine erişimleri eksiksiz loglanmalı ve veri depolama ile aktarım aşamalarında şifreleme mekanizmaları işletilmelidir.",
+          "kind": "recommendation",
+          "labels": [],
+          "findings": [
+            "k5",
+            "k6",
+            "k11"
+          ],
+          "sources": [
+            1,
+            2
+          ]
+        },
+        {
+          "text": "Olası veri ihlallerinde müşterilere en geç 24 saat içinde bildirim yapılmasını sağlayacak dahili bir ihlal müdahale prosedürü kurulmalıdır.",
+          "kind": "recommendation",
+          "labels": [],
+          "findings": [
+            "k4"
+          ],
+          "sources": [
+            1
+          ]
+        },
+        {
+          "text": "Yurt dışı sunucu veya alt yüklenici kullanımında 2024/959 sayılı Kurul kararı kapsamındaki standart sözleşmeler imzalanmalı ve imzanın ardından 5 iş günü içinde Kurum'a bildirilmelidir.",
+          "kind": "recommendation",
+          "labels": [],
+          "findings": [
+            "k37",
+            "k52",
+            "k53"
+          ],
+          "sources": [
+            6,
+            7
+          ]
+        },
+        {
+          "text": "Yıllık çalışan sayısı veya bilanço eşiklerini aşan şirketler, veri işleme envanterlerini güncelleyerek VERBİS kayıt ve bildirim yükümlülüklerini yerine getirmelidir.",
+          "kind": "recommendation",
+          "labels": [],
+          "findings": [
+            "k19",
+            "k20",
+            "k21"
+          ],
+          "sources": [
+            11
+          ]
+        }
+      ]
+    },
+    {
+      "key": "conclusion",
+      "title": "Sonuç",
+      "sentences": [
+        {
+          "text": "SaaS şirketlerinin uyum sürecinde teknik güvenlik önlemleri, sözleşmesel DPA yükümlülükleri ve sınır ötesi veri aktarım mekanizmaları öncelikli alanları oluşturmaktadır.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k2",
+            "k5",
+            "k6",
+            "k52"
+          ],
+          "sources": [
+            1,
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "key": "known_gaps",
+      "title": "Bilinen Eksikler",
+      "sentences": [
+        {
+          "text": "SaaS şirketleri için VERBİS kayıt yükümlülüğü kriterleri ve muafiyet şartları nelerdir? - yeterli bağımsız ya da birincil kaynak bulunamadı (envanter zorunluluğu)",
+          "kind": "meta",
+          "labels": [
+            "gap:s3"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "SaaS yazılımlarında KVKK Kişisel Veri Güvenliği Rehberi uyarınca zorunlu tutulan teknik tedbirler ve ihlal halinde 2026 yılı ceza riskleri nelerdir? - yeterli bağımsız ya da birincil kaynak bulunamadı (teknik güvenlik standartları, veri ihlali bildirim süresi)",
+          "kind": "meta",
+          "labels": [
+            "gap:s4"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "42 aday iddia kullanılmadı: kaynak desteği, koşulları veya güncel geçerliliği doğrulanamadı; ayrıntılar kanıt defterindedir.",
+          "kind": "meta",
+          "labels": [],
+          "findings": [],
+          "sources": []
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "number": 1,
+      "doc_id": "d19",
+      "url": "https://gunespartners.com/makale/saas-sirketleri-kvkk-rehberi",
+      "title": "SaaS Şirketleri İçin KVKK Uyum Rehberi: Veri Sorumlusu vs ...",
+      "domain": "gunespartners.com",
+      "score": 0.4075
+    },
+    {
+      "number": 2,
+      "doc_id": "d20",
+      "url": "https://nesilteknoloji.com/veri-isleyen-ve-veri-sorumlusu-farki-kvkk-sorumluluk-rehberi",
+      "title": "Veri İşleyen ve Veri Sorumlusu Farkı: 2026 Sorumluluk ...",
+      "domain": "nesilteknoloji.com",
+      "score": 0.4
+    },
+    {
+      "number": 3,
+      "doc_id": "d22",
+      "url": "https://kvkk.gov.tr/SharedFolderServer/CMSFiles/31d9c444-27a5-4a75-95b1-1ca9bdb81ea5.pdf",
+      "title": "VERİ SORUMLUSU VE VERİ İŞLEYEN",
+      "domain": "kvkk.gov.tr",
+      "score": 0.81
+    },
+    {
+      "number": 4,
+      "doc_id": "d23",
+      "url": "https://kvkk.gov.tr/Icerik/6874/2020-71",
+      "title": "“Veri sorumlusu ve veri işleyenin tespitinde göz önünde ...",
+      "domain": "kvkk.gov.tr",
+      "score": 0.68
+    },
+    {
+      "number": 5,
+      "doc_id": "d108",
+      "url": "https://nesilteknoloji.com/veri-sorumlusu-ile-veri-isleyen-iliskisinin-yurutulmesi",
+      "title": "Veri Sorumlusu ile Veri İşleyen İlişkisi - Nesil Teknoloji",
+      "domain": "nesilteknoloji.com",
+      "score": 0.26
+    },
+    {
+      "number": 6,
+      "doc_id": "d103",
+      "url": "https://kvkk.gov.tr/Icerik/7938/Standart-Sozlesmeler-ve-Baglayici-Sirket-Kurallarina-Iliskin-Dokumanlar-Hakkinda-Kamuoyu-Duyurusu",
+      "title": "Standart Sözleşmeler ve Bağlayıcı Şirket Kurallarına İlişkin ...",
+      "domain": "kvkk.gov.tr",
+      "score": 0.755
+    },
+    {
+      "number": 7,
+      "doc_id": "d94",
+      "url": "https://kvkk.gov.tr/Icerik/8142/Kisisel-Verilerin-Yurt-Disina-Aktarilmasi-Rehberi",
+      "title": "[PDF] KİŞİSEL VERİLERİN YURT DIŞINA AKTARILMASI REHBERİ - KVKK",
+      "domain": "kvkk.gov.tr",
+      "score": 0.8975
+    },
+    {
+      "number": 8,
+      "doc_id": "d21",
+      "url": "https://virconlegal.com/tr/term/veri-isleyen",
+      "title": "Veri İşleyen Nedir? Tanım ve Pratik | Vircon Sözlük",
+      "domain": "virconlegal.com",
+      "score": 0.455
+    },
+    {
+      "number": 9,
+      "doc_id": "d58",
+      "url": "https://kvkkrehberi.com/verbis-kayit-suresi-uzatildi",
+      "title": "VERBİS Kayıt Süresi Uzatıldı - KVKK Rehberi",
+      "domain": "kvkkrehberi.com",
+      "score": 0.375
+    },
+    {
+      "number": 10,
+      "doc_id": "d38",
+      "url": "https://mondaq.com/turkey/data-protection/1729106/2026-y%C4%B1l%C4%B1nda-kvkk-kapsam%C4%B1ndaki-%C4%B0dari-para-cezas%C4%B1-tutarlar%C4%B1-g%C3%BCncellendi",
+      "title": "2026 Yılında KVKK Kapsamındaki  İdari Para Cezası Tutarları  Güncellendi - Data Protection - Turkey",
+      "domain": "mondaq.com",
+      "score": 0.4175
+    },
+    {
+      "number": 11,
+      "doc_id": "d56",
+      "url": "https://bilalalyar.av.tr/kvkk-verbis-kayit-sirket-uyum-rehberi-2026",
+      "title": "KVKK VERBİS Kayıt Rehberi 2026: Şirketler İçin Adım Adım ...",
+      "domain": "bilalalyar.av.tr",
+      "score": 0.4675
+    }
+  ],
+  "findings": {
+    "k1": {
+      "statement": "SaaS şirketleri, kendi son kullanıcı verileri açısından veri sorumlusu, B2B müşterilerinin platformda işlediği veriler açısından veri işleyen olarak çift role sahiptir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.326,
+      "sources": [
+        1
+      ]
+    },
+    "k2": {
+      "statement": "B2B SaaS iş modellerinde Veri İşleme Eki (DPA) imzalanması bir hukuki zorunluluktur.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.326,
+      "sources": [
+        1
+      ]
+    },
+    "k3": {
+      "statement": "2026 yılında Veri İşleme Eki (DPA) bulunmaması nedeniyle uygulanabilecek idari para cezası 256.357 TL ile 17.092.242 TL arasındadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.326,
+      "sources": [
+        1
+      ]
+    },
+    "k4": {
+      "statement": "SaaS şirketlerinin, veri sorumlusu olan müşterilerinin 72 saatlik Kurul bildirim süresini yönetebilmesi için veri ihlallerini en geç 24 saat içinde bildirmesi pratikte zorunludur.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.326,
+      "sources": [
+        1
+      ]
+    },
+    "k5": {
+      "statement": "SaaS şirketleri, destek personelinin ürün verisine her erişimini loglamakla yükümlüdür.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.326,
+      "sources": [
+        1
+      ]
+    },
+    "k6": {
+      "statement": "SaaS şirketlerinde ürün verisi hem depolama hem de aktarım sırasında şifrelenmelidir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.326,
+      "sources": [
+        1
+      ]
+    },
+    "k7": {
+      "statement": "Veri sorumlusu, kişisel verilerin işleme amaçlarını ve vasıtalarını (yöntemlerini) belirleyen gerçek veya tüzel kişidir.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.7606,
+      "sources": [
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "k8": {
+      "statement": "Veri işleyen, veri sorumlusunun talimatları doğrultusunda, onun adına kişisel verileri işleyen gerçek veya tüzel kişidir.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.7606,
+      "sources": [
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "k9": {
+      "statement": "Bir yazılım geliştirme firması SaaS hizmeti sunarken ürünün sahibi olup amaç ve vasıtaları kendisi belirliyorsa, veri sorumlusu olma ihtimali artmaktadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.32,
+      "sources": [
+        2
+      ]
+    },
+    "k10": {
+      "statement": "KVKK kapsamında idari para cezalarının yıllık olarak güncellenmesi nedeniyle, risk değerlendirmelerinde geçen yılın verilerini baz almak yanıltıcıdır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.32,
+      "sources": [
+        2
+      ]
+    },
+    "k11": {
+      "statement": "Veri işleyenlerin, sözleşmelerinde yetkilendirme, erişim kayıtları (log), şifreleme ve alt yüklenici yönetimi gibi teknik güvenlik başlıklarını net bir şekilde tanımlaması gerekmektedir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.32,
+      "sources": [
+        2
+      ]
+    },
+    "k12": {
+      "statement": "Veri işleyen, sunucu lokasyonu, alt-işleyen seçimi ve güvenlik konfigürasyonu gibi işlemenin operasyonel yöntemlerine veri sorumlusunun belirlediği sınırlar içinde karar verir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.364,
+      "sources": [
+        8
+      ]
+    },
+    "k13": {
+      "statement": "KVKK ve GDPR kapsamında, veri işleme sözleşmesinin (DPA) işlemenin konusunu, süresini, kapsamını, teknik ve idari güvenlik tedbirlerini, alt işleyen kullanımını ve verinin iadesi/silinmesini içermesi gerekir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.364,
+      "sources": [
+        8
+      ]
+    },
+    "k14": {
+      "statement": "Alt veri işleyen ancak veri sorumlusunun yetkisi ve eşdeğer sözleşme ile işleme sürecine dahil edilebilir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.364,
+      "sources": [
+        8
+      ]
+    },
+    "k15": {
+      "statement": "Bir bulut bilişim hizmeti sunan şirket, kendi çalışanlarının verileri bakımından veri sorumlusu, müşterisi olan şirketlerin verileri bakımından ise veri işleyen sıfatıyla hareket eder.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.648,
+      "sources": [
+        3
+      ]
+    },
+    "k16": {
+      "statement": "Bir kamu kuruluşunun kişisel verilerini saklamak için sözleşme yaptığı bulut hizmeti sağlayıcısı, bu işlem bakımından veri işleyen statüsündedir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.648,
+      "sources": [
+        3
+      ]
+    },
+    "k17": {
+      "statement": "Aydınlatma yükümlülüğü veri sorumlusuna aittir ancak veri sorumlusunun yetkilendirdiği kişi (veri işleyen dahil) tarafından yerine getirilebilir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.544,
+      "sources": [
+        4
+      ]
+    },
+    "k18": {
+      "statement": "KVKK kapsamındaki idari para cezaları, 2017-2026 yılları arasında her yıl için Vergi Usul Kanunu uyarınca belirlenen yeniden değerleme oranına göre artırılmaktadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.584,
+      "sources": []
+    },
+    "k19": {
+      "statement": "VERBİS kayıt yükümlülüğü; yıllık çalışan sayısı 50'den fazla olan veya yıllık mali bilanço toplamı 100 milyon TL'yi aşan gerçek ve tüzel kişi veri sorumluları için geçerlidir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.374,
+      "sources": [
+        11
+      ]
+    },
+    "k20": {
+      "statement": "VERBİS kaydı için 50 çalışan eşiği hesaplanırken yıl içindeki herhangi bir zaman diliminde ulaşılan sayı dikkate alınır ve part-time, stajyer ile sözleşmeli çalışanlar dahildir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.374,
+      "sources": [
+        11
+      ]
+    },
+    "k21": {
+      "statement": "Veri Sorumluları Sicili Hakkında Yönetmelik m.5 gereği kişisel veri işleme envanteri hazırlanması zorunludur ve bu envanter VERBİS kaydına temel oluşturur.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.374,
+      "sources": [
+        11
+      ]
+    },
+    "k22": {
+      "statement": "VERBİS kayıt yükümlülüğü için son tarih 05.06.2026 olarak güncellenmiştir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.3,
+      "sources": [
+        9
+      ]
+    },
+    "k23": {
+      "statement": "Ana faaliyet konusu özel nitelikli kişisel veri işleme olmayan ve mali bilanço toplamı 100 milyon TL ve üzeri olan şirketler VERBİS kayıt yükümlülüğü kapsamındadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.3,
+      "sources": [
+        9
+      ]
+    },
+    "k24": {
+      "statement": "Ana faaliyet konusu özel nitelikli kişisel veri işleme olan ve mali bilanço toplamı 10 milyon TL ve üzeri olan şirketler VERBİS kayıt yükümlülüğü kapsamındadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.3,
+      "sources": [
+        9
+      ]
+    },
+    "k25": {
+      "statement": "Son 1 yıl içinde çalışan sayı ortalaması 50’nin üzerinde olan şirketler VERBİS kayıt yükümlülüğü kapsamındadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.3,
+      "sources": [
+        9
+      ]
+    },
+    "k26": {
+      "statement": "Veri sorumlularının VERBİS'e kayıt yükümlülüğünden istisna tutulabilmesi için yıllık çalışan sayısının 50'den az ve yıllık mali bilanço toplamının 100 milyon Türk lirasından az olması, ayrıca ana faaliyet konusunun özel nitelikli kişisel veri işleme olmaması gerekmektedir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.544,
+      "sources": []
+    },
+    "k27": {
+      "statement": "Veri sorumlusu, hizmet aldığı veri işleyenler ile yazılı bir sözleşme yapmalı ve veri işleyenin sadece veri sorumlusunun talimatları doğrultusunda hareket edeceğine dair hükümler eklemelidir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.668,
+      "sources": []
+    },
+    "k28": {
+      "statement": "Veri sorumlusu ile veri işleyen arasındaki sözleşmede, veri ihlali durumunda veri işleyenin durumu derhal veri sorumlusuna bildirme yükümlülüğü öngörülmelidir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.668,
+      "sources": []
+    },
+    "k29": {
+      "statement": "Bulutta depolanan kişisel veriler, depolanma ve kullanım sırasında kriptografik yöntemlerle şifrelenmeli ve mümkünse her bulut çözümü için ayrı şifreleme anahtarları kullanılmalıdır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.668,
+      "sources": []
+    },
+    "k30": {
+      "statement": "Bulut bilişim hizmet ilişkisi sona erdiğinde, verileri kullanılabilir hale getiren şifreleme anahtarlarının tüm kopyaları yok edilmelidir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.668,
+      "sources": []
+    },
+    "k31": {
+      "statement": "Veri işleyenler, 6698 sayılı Kanun'un 12. maddesi uyarınca kişisel verilerin güvenliğinin sağlanması konusunda veri sorumlusuyla müştereken sorumludur.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.718,
+      "sources": []
+    },
+    "k32": {
+      "statement": "Kişisel veri güvenliğinin takibi için tüm kullanıcıların işlem hareketlerine ilişkin log kayıtlarının düzenli olarak tutulması zorunludur.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.718,
+      "sources": []
+    },
+    "k33": {
+      "statement": "Erişim güvenliği için güçlü şifre/parola kullanımı, şifre girişi deneme sayısı sınırlaması ve yönetici yetkilerinin sınırlandırılması gerekmektedir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.718,
+      "sources": []
+    },
+    "k34": {
+      "statement": "Veri sorumlusu, kişisel verilerin üçüncü kişiler tarafından işlendiği durumlarda, gerekli güvenlik tedbirlerinin alınması konusunda bu kişilerle birlikte müştereken sorumludur.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.544,
+      "sources": []
+    },
+    "k35": {
+      "statement": "Kişisel verilerin kanuni olmayan yollarla başkaları tarafından elde edilmesi durumunda, veri sorumlusu bu durumu en kısa sürede ilgili kişiye ve Kurula bildirmelidir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.544,
+      "sources": []
+    },
+    "k36": {
+      "statement": "Kişisel verilerin yurt dışına aktarılmasında 'standart sözleşmeler' ve 'bağlayıcı şirket kuralları' uygun güvence sağlama yöntemi olarak öngörülmüştür.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.604,
+      "sources": [
+        6
+      ]
+    },
+    "k37": {
+      "statement": "Kişisel Verileri Koruma Kurulu, 4 Haziran 2024 tarihli ve 2024/959 sayılı kararı ile veri aktarımında kullanılacak standart sözleşme metinlerini, bağlayıcı şirket kuralları başvuru formlarını ve yardımcı kılavuzları kabul etmiştir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.604,
+      "sources": [
+        6
+      ]
+    },
+    "k38": {
+      "statement": "KVKK madde 12/2 uyarınca, veri sorumlusu adına veri işleyen aracılığıyla yapılan işlemlerde hukuka aykırı işleme, erişim ve muhafaza süreçlerinde her iki taraf birlikte sorumludur.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.208,
+      "sources": [
+        5
+      ]
+    },
+    "k39": {
+      "statement": "Kişisel veri ihlali durumunda, veri işleyenin olası ihlali derhal veri sorumlusuna bildirmesi gerekir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.208,
+      "sources": [
+        5
+      ]
+    },
+    "k40": {
+      "statement": "Veri sorumlusu ile veri işleyen arasındaki ilişki, KVKK m.12 kapsamındaki sorumlulukların yönetimi için mutlaka yazılı bir sözleşme ile düzenlenmelidir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.208,
+      "sources": [
+        5
+      ]
+    },
+    "k41": {
+      "statement": "Yurt dışına veri aktarımı için geçerli 'Bağlayıcı Şirket Kuralları' (BŞK), 6698 sayılı Kanun'un 9. maddesinin 4. fıkrasının (b) bendi uyarınca, Kurul tarafından onaylanması şartıyla uygun bir güvence mekanizmasıdır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.708,
+      "sources": []
+    },
+    "k42": {
+      "statement": "Veri İşleyenler için Bağlayıcı Şirket Kuralları (Vİ BŞK), Türkiye'de yerleşik ve grup üyesi olmayan bir veri sorumlusu adına veri işleyen sıfatıyla işlenen ve daha sonra yeterli koruma düzeyi bulunmayan ülkelere aktarılan veriler için geçerlidir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.708,
+      "sources": []
+    },
+    "k43": {
+      "statement": "Veri sorumlusu ile veri işleyen arasında, Türk hukukunda geçerli bir 'Hizmet Sözleşmesi' bulunması zorunludur ve bu sözleşme Kanuna aykırı unsurlar içermemelidir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.708,
+      "sources": []
+    },
+    "k44": {
+      "statement": "Vİ BŞK kapsamında, veri işleyenin her türlü kişisel veri ihlalini veri sorumlusuna bildirme yükümlülüğü bulunmaktadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.708,
+      "sources": []
+    },
+    "k45": {
+      "statement": "Veri sorumlusu, kişisel verilerin işleme amaçlarını ve vasıtalarını belirleyen taraftır; veri işleyen ise veri sorumlusunun talimatları doğrultusunda onun adına veri işleyen taraftır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.188,
+      "sources": []
+    },
+    "k46": {
+      "statement": "Veri sorumlusu, veri işleyenin alt işleyen kullanımını onay mekanizmasına bağlamalı ve sözleşmede bu hususu düzenlemelidir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.188,
+      "sources": []
+    },
+    "k47": {
+      "statement": "Veri sorumlusu, veri işleyenin neden olduğu ihlallerden de müştereken sorumludur; bu sebeple veri işleyenin güvenlik yeteneklerine göre seçilmesi ve denetlenmesi gerekmektedir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.188,
+      "sources": []
+    },
+    "k48": {
+      "statement": "2026 yılında KVKK kapsamındaki idari para cezalarının hesaplanmasında esas alınan yeniden değerleme oranı %25,49 olarak belirlenmiştir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.334,
+      "sources": [
+        10
+      ]
+    },
+    "k49": {
+      "statement": "2026 yılı için uygulanacak KVKK idari para cezalarının belirlenmesinde esas alınan yeniden değerleme oranı yüzde 25,49 olarak belirlenmiştir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.214,
+      "sources": []
+    },
+    "k50": {
+      "statement": "Veri sorumluları, “Veri Sorumluları Sicili Hakkında Yönetmelik” ve “Kişisel Verilerin Silinmesi, Yok Edilmesi veya Anonim Hale Getirilmesi Hakkında Yönetmelik” gereği kişisel veri işleme envanteri hazırlamakla yükümlüdür.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.584,
+      "sources": []
+    },
+    "k51": {
+      "statement": "Kişisel verilerin yurt dışına aktarılmasına ilişkin Kanun değişiklikleri 1 Haziran 2024 tarihinde yürürlüğe girmiştir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.718,
+      "sources": [
+        7
+      ]
+    },
+    "k52": {
+      "statement": "Standart sözleşmelerin imzalanmasından sonra, veri sorumlusu veya veri işleyen tarafından 5 iş günü içerisinde Kurum'a bildirilmesi zorunludur.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.718,
+      "sources": [
+        7
+      ]
+    },
+    "k53": {
+      "statement": "Yeterlilik kararı olmayan ülkeler için veri aktarımı; veri işleme şartlarının sağlanması, ilgili ülkede hak arama yollarının bulunması ve uygun güvencelerin (uluslararası anlaşma, bağlayıcı şirket kuralları, standart sözleşme, taahhütname) sağlanması koşuluyla mümkündür.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.718,
+      "sources": [
+        7
+      ]
+    },
+    "k54": {
+      "statement": "Arızi aktarım; yurt dışına düzenli olmayan, tek veya birkaç sefer gerçekleşen ve süreklilik arz etmeyen veri aktarımlarını ifade eder.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.718,
+      "sources": [
+        7
+      ]
+    },
+    "k55": {
+      "statement": "Alt veri işleyen, veri işleyenin talimatları doğrultusunda hareket eden, veri işleyen adına kişisel verileri işleyen gerçek veya tüzel kişidir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.718,
+      "sources": [
+        7
+      ]
+    },
+    "k56": {
+      "statement": "Veri sorumluları ve veri işleyenler, kişisel verilerin yurt dışına aktarılmasında uygun güvence yöntemi olarak standart sözleşmeleri kullanabilirler.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.564,
+      "sources": []
+    },
+    "k57": {
+      "statement": "İmzalanan standart sözleşmelerin Kurum'a bildirilmesi için yasal süre 5 iş günüdür.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.564,
+      "sources": []
+    },
+    "k58": {
+      "statement": "Standart sözleşme bildirimleri, Kurum'un kullanıma sunduğu Standart Sözleşme Bildirim Modülü üzerinden gerçekleştirilebilir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.564,
+      "sources": []
+    }
+  },
+  "metadata": {
+    "config_hash": "6690d3331d90f3671d1b2919996f43a0e5f35d929ae3a0cd60a2e9108c514765",
+    "models_used": {
+      "reasoning": "gemini:gemini-3.8-flash",
+      "fast": "gemini:gemini-3.1-flash-lite",
+      "embedding": "gemini-embedding-001"
+    },
+    "prompt_versions": {
+      "analyze_query": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "a727cb4344e9",
+        "label": "production"
+      },
+      "assess_coverage": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "e846c73d92bf",
+        "label": "production"
+      },
+      "evaluate_sources": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "b548bfeecc30",
+        "label": "production"
+      },
+      "extract_claims": {
+        "version": "4",
+        "source": "langfuse",
+        "content_hash": "7bb08d1d31b9",
+        "label": "production"
+      },
+      "generate_queries": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "c529f97cebe9",
+        "label": "production"
+      },
+      "judge_contradictions": {
+        "version": "5",
+        "source": "langfuse",
+        "content_hash": "726f52b7aa1e",
+        "label": "production"
+      },
+      "plan": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "1ec8bb17ccf2",
+        "label": "production"
+      },
+      "synthesize": {
+        "version": "3",
+        "source": "langfuse",
+        "content_hash": "94db375c9234",
+        "label": "production"
+      },
+      "validate_claims": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "68ed4e47da0e",
+        "label": "production"
+      },
+      "verify_citations": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "32456e1a0b5a",
+        "label": "production"
+      }
+    },
+    "search_providers": [
+      "tavily"
+    ],
+    "llm_providers": [
+      "gemini",
+      "openai"
+    ],
+    "model_selection": {
+      "reasoning": "automatic",
+      "fast": "automatic",
+      "allow_fallback": true
+    },
+    "stop_reason": "sufficient",
+    "stop_detail": "all 2 required sub-questions are answered",
+    "iterations": 2,
+    "budget": {
+      "iteration": 2,
+      "searches": 17,
+      "searches_left": 28,
+      "llm_calls": 72,
+      "tokens_in": 649816,
+      "tokens_out": 116903,
+      "cost_usd": 0.705505,
+      "elapsed_seconds": 201.22
+    },
+    "gate_verdict": "pass_with_warnings",
+    "counters": {
+      "fetch_failures": 0,
+      "duplicate_urls": 12,
+      "claims_validation_unsupported": 15,
+      "claims_need_fresh_confirmation": 36,
+      "claims_rejected_quote": 5,
+      "extraction_failures": 0,
+      "claims_rejected_injection": 0,
+      "sentences_dropped_by_verifier": 0
+    },
+    "skills": [
+      "regulatory-research-tr"
+    ]
+  }
+}

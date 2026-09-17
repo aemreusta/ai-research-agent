@@ -1,0 +1,961 @@
+{
+  "question": "Türkiye'deki SaaS şirketleri için 2026 KVKK uyum aksiyon planı nedir?",
+  "language": "tr",
+  "title": "SaaS Şirketleri İçin 2026 KVKK Uyum Aksiyon Planı",
+  "banner": null,
+  "sections": [
+    {
+      "key": "summary",
+      "title": "Özet",
+      "sentences": [
+        {
+          "text": "Kişisel verilerin işleme amaçlarını ve vasıtalarını belirleyen taraf veri sorumlusu iken, veri sorumlusunun verdiği yetkiyle onun adına veri işleyen taraf veri işleyendir.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k21",
+            "k22"
+          ],
+          "sources": [
+            1,
+            2
+          ]
+        },
+        {
+          "text": "Tek bir kaynağa göre, Kurul tarafından ilan edilen standart sözleşme metninin kullanılması halinde yurt dışına veri aktarımı için Kuruldan ayrıca izin alınması gerekmemektedir.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k18"
+          ],
+          "sources": [
+            3
+          ]
+        },
+        {
+          "text": "Tek bir kaynağa göre, kişisel veri ihlalinin öğrenilmesinden itibaren başlayan 72 saatlik süre içinde Kurula bildirimde bulunulması zorunludur.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k37"
+          ],
+          "sources": [
+            4
+          ]
+        },
+        {
+          "text": "Kanıt yetersizliği nedeniyle 1 cümle çıkarıldı - ayrıntılar gate_result.json'da",
+          "kind": "meta",
+          "labels": [
+            "gate_note"
+          ],
+          "findings": [],
+          "sources": []
+        }
+      ]
+    },
+    {
+      "key": "key_findings",
+      "title": "Temel Bulgular",
+      "sentences": [
+        {
+          "text": "Veri sorumlusu, kişisel verilerin işleme amaçlarını ve vasıtalarını belirleyen, veri kayıt sisteminin kurulmasından ve yönetilmesinden sorumlu olan gerçek veya tüzel kişidir.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k21"
+          ],
+          "sources": [
+            1,
+            2
+          ]
+        },
+        {
+          "text": "Veri işleyen, veri sorumlusunun verdiği yetkiye dayanarak onun adına kişisel verileri işleyen, veri sorumlusunun organizasyonu dışındaki gerçek veya tüzel kişidir.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k22"
+          ],
+          "sources": [
+            1,
+            2
+          ]
+        },
+        {
+          "text": "Tek bir kaynağa göre, Kişisel Verilerin Yurt Dışına Aktarılmasına İlişkin Usul ve Esaslar Hakkında Yönetmelik 10 Temmuz 2024 tarihinde yayımlanmıştır.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k43"
+          ],
+          "sources": [
+            5
+          ]
+        },
+        {
+          "text": "Tek bir kaynağa göre, kişisel verilerin yurt dışına aktarılması için Kurul tarafından 4 farklı standart sözleşme modeli geliştirilmiştir.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k42"
+          ],
+          "sources": [
+            5
+          ]
+        },
+        {
+          "text": "Tek bir kaynağa göre, sözleşmenin Kurum'a bildirilmesinin taraflarca tercih edilmesi durumunda, veri sorumlusundan veri işleyene yapılan aktarımlara ilişkin standart sözleşme, imzaların tamamlanmasından itibaren beş iş günü içinde Kişisel Verileri Koruma Kurumu'na bildirilmelidir.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k48"
+          ],
+          "sources": [
+            6
+          ]
+        },
+        {
+          "text": "Tek bir kaynağa göre, kişisel verilerin hukuka aykırı yollarla başkaları tarafından elde edilmesi hâlinde veri alıcısı, kişisel veri ihlallerini Kurum'un internet sitesinde ilan edilen 'Veri İhlali Bildirim Formu'nu kullanarak bildirmekle yükümlüdür.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k49"
+          ],
+          "sources": [
+            6
+          ]
+        },
+        {
+          "text": "Tek bir kaynağa göre, Kurul'un 24.01.2019 tarih ve 2019/10 sayılı Kararı uyarınca kişisel veri ihlalinin öğrenilmesinden itibaren başlayan 72 saatlik süre içerisinde Kurula bildirim yapılması zorunludur.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k37"
+          ],
+          "sources": [
+            4
+          ]
+        },
+        {
+          "text": "Tek bir kaynağa göre, çalışan sayısı veya bilanço eşiğini sonradan sağlayan şirketler, kriterlerin sağlandığı tarihten itibaren 30 gün içinde VERBİS'e kayıt olmak zorundadır.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k47"
+          ],
+          "sources": [
+            7
+          ]
+        },
+        {
+          "text": "Tek bir kaynağa göre, kişisel verilerin bulutta depolanması durumunda uzaktan erişim için iki kademeli kimlik doğrulama uygulanması ve verilerin kriptografik yöntemlerle şifrelenmesi önerilmektedir.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k10"
+          ],
+          "sources": [
+            8
+          ]
+        },
+        {
+          "text": "Tek bir kaynağa göre, sistem erişim parolalarının büyük küçük harf, rakam ve sembollerden oluşması ve düzenli olarak değiştirilmesi gerekmektedir.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k11"
+          ],
+          "sources": [
+            8
+          ]
+        },
+        {
+          "text": "Tek bir kaynağa göre, çalışanların işe alınma süreçlerinde gizlilik anlaşması imzalatılması tavsiye edilmektedir.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k9"
+          ],
+          "sources": [
+            8
+          ]
+        },
+        {
+          "text": "Tek bir kaynağa göre, veri güvenliği yükümlülüklerini yerine getirmeyenlere KVKK madde 12 uyarınca 15.000 TL ile 1.000.000 TL arasında idari para cezası uygulanabilmektedir.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k39"
+          ],
+          "sources": [
+            4
+          ]
+        },
+        {
+          "text": "Tek bir kaynağa göre, 6698 sayılı Kanun'un 18. maddesinde düzenlenen idari para cezaları 2026 yılı için yeniden değerleme oranında artırılarak uygulanmaktadır.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k17"
+          ],
+          "sources": [
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "key": "conflicting_or_uncertain",
+      "title": "Çelişkili / Belirsiz Bilgiler",
+      "sentences": []
+    },
+    {
+      "key": "recommendations",
+      "title": "Öneriler / Aksiyon Planı",
+      "sentences": [
+        {
+          "text": "Şirket organizasyonundaki iş süreçleri için veri envanteri oluşturunuz ve bilanço veya çalışan sayısı kriterleri sonradan sağlandığı takdirde 30 gün içinde VERBİS kaydını tamamlayınız.",
+          "kind": "recommendation",
+          "labels": [],
+          "findings": [
+            "k21",
+            "k22",
+            "k28",
+            "k47"
+          ],
+          "sources": [
+            1,
+            2,
+            7,
+            10
+          ]
+        },
+        {
+          "text": "Bulut ortamındaki verilere uzaktan erişimde iki kademeli kimlik doğrulama ve kriptografik şifreleme uygulayınız; güçlü parola politikaları belirleyiniz.",
+          "kind": "recommendation",
+          "labels": [],
+          "findings": [
+            "k10",
+            "k11"
+          ],
+          "sources": [
+            8
+          ]
+        },
+        {
+          "text": "İşe alımlarda gizlilik anlaşması akdediniz, çalışanlara veri koruma ile siber güvenlik eğitimleri veriniz ve görev tanımlarındaki rol-sorumlulukları belirleyiniz.",
+          "kind": "recommendation",
+          "labels": [],
+          "findings": [
+            "k9",
+            "k38"
+          ],
+          "sources": [
+            4,
+            8
+          ]
+        },
+        {
+          "text": "Yurt dışına veri aktarımı gerektiren durumlarda Kurul'un standart sözleşme modellerini kullanınız; taraflarca Kurum'a bildirim tercih edilmişse imzaların tamamlanmasından itibaren beş iş günü içinde Kurum'a bildirimi gerçekleştiriniz.",
+          "kind": "recommendation",
+          "labels": [],
+          "findings": [
+            "k18",
+            "k42",
+            "k48"
+          ],
+          "sources": [
+            3,
+            5,
+            6
+          ]
+        },
+        {
+          "text": "Veri ihlali gerçekleşmesi durumunda, öğrenilmesinden itibaren 72 saat içinde Kurula bildirimde bulununuz ve veri alıcısı konumunda hukuka aykırı erişim gerçekleştiğinde Veri İhlali Bildirim Formu'nu kullanınız.",
+          "kind": "recommendation",
+          "labels": [],
+          "findings": [
+            "k37",
+            "k49"
+          ],
+          "sources": [
+            4,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "key": "conclusion",
+      "title": "Sonuç",
+      "sentences": [
+        {
+          "text": "Veri güvenliği yükümlülüklerine aykırılık halinde öngörülen idari para cezaları 2026 takvim yılında yeniden değerleme oranında artırılarak tatbik edilmektedir.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k17",
+            "k39"
+          ],
+          "sources": [
+            4,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "key": "known_gaps",
+      "title": "Bilinen Eksikler",
+      "sentences": [
+        {
+          "text": "SaaS iş modellerinde veri sorumlusu ve veri işleyen ayrımı ile VERBİS kayıt zorunluluğu kriterleri 2026 yılı için nelerdir? - yeterli bağımsız ya da birincil kaynak bulunamadı (rol ayrımı ve sözleşme hükümleri, VERBİS kayıt kriterleri)",
+          "kind": "meta",
+          "labels": [
+            "gap:s2"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "KVKK kapsamındaki yükümlülüklere aykırılık halinde 2026 yılı için geçerli idari para cezaları ve itiraz merci kuralları nelerdir? - yeterli bağımsız ya da birincil kaynak bulunamadı (yargı yolu değişikliği)",
+          "kind": "meta",
+          "labels": [
+            "gap:s4"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "124 aday iddia kullanılmadı: kaynak desteği, koşulları veya güncel geçerliliği doğrulanamadı; ayrıntılar kanıt defterindedir.",
+          "kind": "meta",
+          "labels": [],
+          "findings": [],
+          "sources": []
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "number": 1,
+      "doc_id": "d51",
+      "url": "https://kvkk.gov.tr/SharedFolderServer/CMSFiles/31d9c444-27a5-4a75-95b1-1ca9bdb81ea5.pdf",
+      "title": "VERİ SORUMLUSU VE VERİ İŞLEYEN",
+      "domain": "kvkk.gov.tr",
+      "score": 0.91
+    },
+    {
+      "number": 2,
+      "doc_id": "d57",
+      "url": "https://tahanci.av.tr/kisisel-verileri-koruma-kurulu-kararlarina-karsi-basvuru-ve-itiraz-yolu",
+      "title": "Kişisel Verileri Koruma Kurulu Kararlarına Karşı Başvuru ve İtiraz Yolu",
+      "domain": "tahanci.av.tr",
+      "score": 0.4
+    },
+    {
+      "number": 3,
+      "doc_id": "d38",
+      "url": "https://birasyo.com/tr/blog/kvkk-yurt-disi-veri-aktarimi-yeni-yonetmelik-standart-sozlesme",
+      "title": "KVKK Yurt Dışına Veri Aktarımı: Yeni Yönetmelik, Standart Sözleşme ...",
+      "domain": "birasyo.com",
+      "score": 0.4725
+    },
+    {
+      "number": 4,
+      "doc_id": "d97",
+      "url": "https://kvkk.gov.tr/Icerik/8858/2024-728",
+      "title": "Finans ve muhasebe alanında faaliyet gösteren uluslararası ... - KVKK",
+      "domain": "kvkk.gov.tr",
+      "score": 0.8
+    },
+    {
+      "number": 5,
+      "doc_id": "d138",
+      "url": "https://kvkk.gov.tr/Icerik/8139/2024-Yili-Kisisel-Verileri-Koruma-Kurumu-KVKK-Faaliyet-Bilgi-Notu",
+      "title": "2024 Yılı Kişisel Verileri Koruma Kurumu (KVKK) Faaliyet ...",
+      "domain": "kvkk.gov.tr",
+      "score": 0.8675
+    },
+    {
+      "number": 6,
+      "doc_id": "d147",
+      "url": "https://kvkk.gov.tr/Icerik/7931/Kisisel-Verilerin-Yurt-Disina-Aktarilmasinda-Kullanilacak-Standart-Sozlesme-2-Veri-Sorumlusundan-Veri-Isleyene-",
+      "title": "[PDF] KİŞİSEL VERİLERİN YURT DIŞINA AKTARILMASINDA ... - KVKK",
+      "domain": "kvkk.gov.tr",
+      "score": 0.8975
+    },
+    {
+      "number": 7,
+      "doc_id": "d143",
+      "url": "https://avferhatayhan.com/post/verbi%CC%87s-kay%C4%B1t-zorunlulu%C4%9Fu-kriterleri-i%CC%87stisnalar%C4%B1-ve-cezalar%C4%B1-rehberi",
+      "title": "VERBİS Kayıt Zorunluluğu Kriterleri, İstisnaları ve Cezaları RehberiAvferhatayhan",
+      "domain": "avferhatayhan.com",
+      "score": 0.215
+    },
+    {
+      "number": 8,
+      "doc_id": "d13",
+      "url": "https://kvkk.gov.tr/yayinlar/veri_guvenligi_rehberi.pdf",
+      "title": "Kişisel Veri Güvenliği Rehberi (Teknik ve İdari Tedbirler)",
+      "domain": "kvkk.gov.tr",
+      "score": 0.6925
+    },
+    {
+      "number": 9,
+      "doc_id": "d35",
+      "url": "https://kvkk.gov.tr/Icerik/8145/6698-sayili-kisisel-verilerin-korunmasi-kanunu-kapsaminda-idari-para-cezasi-tutarlari",
+      "title": "6698 Sayılı Kişisel Verilerin Korunması Kanunu Kapsamında İdari Para Cezası Tutarları | Kişisel Verileri Koruma Kurumu",
+      "domain": "kvkk.gov.tr",
+      "score": 0.68
+    },
+    {
+      "number": 10,
+      "doc_id": "d75",
+      "url": "https://bilalalyar.av.tr/kvkk-verbis-kayit-sirket-uyum-rehberi-2026",
+      "title": "KVKK VERBİS Kayıt Rehberi 2026: Şirketler İçin Adım Adım ...",
+      "domain": "bilalalyar.av.tr",
+      "score": 0.4
+    }
+  ],
+  "findings": {
+    "k1": {
+      "statement": "Data controllers using third-party service providers must ensure that data processors provide a security level at least equivalent to their own.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.718,
+      "sources": []
+    },
+    "k2": {
+      "statement": "Contracts with data processors should be written and mandate that the processor acts only under the controller's instructions, complies with data protection laws, adheres to the Data Retention and Destruction Policy, and maintains confidentiality.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.718,
+      "sources": []
+    },
+    "k3": {
+      "statement": "Contracts with data processors should include a provision requiring the processor to immediately notify the controller of any data breach.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.718,
+      "sources": []
+    },
+    "k4": {
+      "statement": "Data controllers are recommended to establish an access authorization and control matrix and implement separate access policies and procedures.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.718,
+      "sources": []
+    },
+    "k5": {
+      "statement": "To prevent brute force attacks, systems should limit the number of login attempts, and passwords must be complex (uppercase, lowercase, numbers, symbols).",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.718,
+      "sources": []
+    },
+    "k6": {
+      "statement": "Organizations must regularly record and maintain logs of all user activity to ensure security monitoring.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.718,
+      "sources": []
+    },
+    "k7": {
+      "statement": "Vulnerability scans and penetration tests must be performed regularly on IT systems to protect against known security weaknesses.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.718,
+      "sources": []
+    },
+    "k8": {
+      "statement": "Veri sorumluları, kişisel verilerin korunması için gerekli teknik ve idari tedbirleri planlarken maliyet, uygulanabilirlik ve yararlılık ilkelerini dikkate almalıdır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.554,
+      "sources": [
+        8
+      ]
+    },
+    "k9": {
+      "statement": "Çalışanların işe alınma süreçlerinde gizlilik anlaşması imzalatılması tavsiye edilmektedir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.554,
+      "sources": [
+        8
+      ]
+    },
+    "k10": {
+      "statement": "Bulut bilişim hizmetlerinde uzaktan erişim için iki kademeli kimlik doğrulama uygulanması ve verilerin kriptografik yöntemlerle şifrelenmesi önerilmektedir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.554,
+      "sources": [
+        8
+      ]
+    },
+    "k11": {
+      "statement": "Sistem erişim parolaları; büyük küçük harf, rakam ve sembollerden oluşmalı ve düzenli olarak değiştirilmelidir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.554,
+      "sources": [
+        8
+      ]
+    },
+    "k12": {
+      "statement": "Veri sorumlusu, kişisel verilerin kendi adına başka bir gerçek veya tüzel kişi tarafından işlenmesi halinde, gerekli tedbirlerin alınması konusunda bu kişilerle müştereken sorumludur.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.604,
+      "sources": []
+    },
+    "k13": {
+      "statement": "Veri sorumlusu, uygun güvenlik düzeyini temin etmek için gerekli teknik ve idari tedbirleri almakla yükümlüdür.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.604,
+      "sources": []
+    },
+    "k14": {
+      "statement": "Kişisel verilerin kanuni olmayan yollarla başkaları tarafından elde edilmesi halinde, veri sorumlusu bu durumu en kısa sürede ilgilisine ve Kurula bildirmekle yükümlüdür.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.604,
+      "sources": []
+    },
+    "k15": {
+      "statement": "Aynı teşebbüs grubu içindeki şirketler arasında, Kurul tarafından onaylanmış bağlayıcı şirket kurallarının bulunması halinde, 5 ve 6. maddelerdeki veri işleme şartları mevcutsa, Kuruldan ek izin alınmadan veri aktarımı gerçekleştirilebilir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.694,
+      "sources": []
+    },
+    "k16": {
+      "statement": "Yurt dışına veri aktarımında kullanılan yeterlilik kararları Kurul tarafından her dört yılda bir gözden geçirilir; değerlendirme yapılmaması durumunda mevcut karar geçerliğini korur.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.694,
+      "sources": []
+    },
+    "k17": {
+      "statement": "6698 sayılı Kanun'un 18. maddesinde düzenlenen idari para cezaları, 2026 yılı için yeniden değerleme oranında artırılarak uygulanmaktadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.544,
+      "sources": [
+        9
+      ]
+    },
+    "k18": {
+      "statement": "Kurul tarafından ilan edilen standart sözleşme metninin kullanılması halinde, yurt dışına veri aktarımı için Kuruldan ayrıca izin alınmasına gerek yoktur.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.378,
+      "sources": [
+        3
+      ]
+    },
+    "k19": {
+      "statement": "Kişisel verilerin yurt dışına aktarılmasına ilişkin usul ve esaslar 10 Temmuz 2024 tarihli ve 32598 sayılı Resmî Gazete'de yayımlanan yönetmelikle yeniden düzenlenmiştir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.378,
+      "sources": [
+        3
+      ]
+    },
+    "k20": {
+      "statement": "Standart sözleşmelerin, taraflarca imzalanmasını takiben 5 iş günü içerisinde veri sorumlusu veya veri işleyen tarafından Kurum'a bildirilmesi zorunludur.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.728,
+      "sources": []
+    },
+    "k21": {
+      "statement": "Veri sorumlusu, kişisel verilerin işleme amaçlarını ve vasıtalarını belirleyen, veri kayıt sisteminin kurulmasından ve yönetilmesinden sorumlu olan gerçek veya tüzel kişidir.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.815,
+      "sources": [
+        1,
+        2
+      ]
+    },
+    "k22": {
+      "statement": "Veri işleyen, veri sorumlusunun verdiği yetkiye dayanarak onun adına kişisel verileri işleyen, veri sorumlusunun organizasyonu dışındaki gerçek veya tüzel kişilerdir.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.815,
+      "sources": [
+        1,
+        2
+      ]
+    },
+    "k23": {
+      "statement": "Bulut bilişim hizmeti sunan bir şirket; kendi çalışanlarının verileri bakımından veri sorumlusu, müşterisi olan şirketlerin verileri bakımından ise veri işleyen sıfatıyla hareket eder.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.728,
+      "sources": [
+        1
+      ]
+    },
+    "k24": {
+      "statement": "Veri sorumlusu, kişisel veri işleme sözleşmesi yoluyla veri işleyene; kullanılacak BT sistemleri, saklama yöntemleri, güvenlik önlemleri, aktarım yöntemleri, veri silme/yok etme yöntemleri konularında karar yetkisi verebilir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.728,
+      "sources": [
+        1
+      ]
+    },
+    "k25": {
+      "statement": "Bir kamu kuruluşu ile sözleşme yapan bulut hizmeti sağlayıcısı, verileri kendi amaçları için kullanmadığı ve kurum talimatları doğrultusunda sakladığı sürece veri işleyen statüsündedir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.728,
+      "sources": [
+        1
+      ]
+    },
+    "k26": {
+      "statement": "Yurt dışında veri merkezi bulunan platformların kullanımı durumunda, 6698 sayılı KVKK'nın 9. maddesinde belirtilen şartlara aykırı veri aktarımı ihlal teşkil edebilir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.584,
+      "sources": []
+    },
+    "k27": {
+      "statement": "Uzaktan eğitim/yazılım platformları, KVKK tarafından hazırlanan 'Kişisel Veri Güvenliği Rehberi (İdari ve Teknik Tedbirler)' ile 31/01/2018 tarihli ve 2018/10 sayılı Kurul kararında belirtilen yeterli önlemleri almakla yükümlüdür.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.584,
+      "sources": []
+    },
+    "k28": {
+      "statement": "VERBİS envanterinde; faaliyet veya iş süreci, veri kategorisi, veri işleme amacı, verilerin toplanma yöntemi, hukuki sebep, veri saklama süresi, aktarım alıcıları ve güvenlik tedbirlerine dair bilgiler yer almalıdır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.32,
+      "sources": [
+        10
+      ]
+    },
+    "k29": {
+      "statement": "Yurtiçinde yapılan işlerde bulut sağlayıcılarının veya yurt dışı merkezli e-posta sistemlerinin kullanılması yurt dışına veri aktarımı olarak değerlendirilir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.248,
+      "sources": []
+    },
+    "k30": {
+      "statement": "Kurum tarafından yayımlanan standart sözleşme metinlerinde, seçimlik veya alternatif maddeler haricinde değişiklik, ekleme veya revizyon yapılması sözleşmenin geçersiz sayılmasına neden olur.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.248,
+      "sources": []
+    },
+    "k31": {
+      "statement": "6698 sayılı KVKK'nın 9/4-a maddesi uyarınca, Türkiye'deki kamu kurumları ve uluslararası kuruluşlar arasında yapılan, uluslararası sözleşme niteliğinde olmayan anlaşmaların varlığı ve Kişisel Verileri Koruma Kurulu tarafından izin verilmesi halinde kişisel veriler yurt dışına aktarılabilir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.228,
+      "sources": []
+    },
+    "k32": {
+      "statement": "TÜİK tarafından açıklanan enflasyon verileri baz alınarak 2026 yılı için yeniden değerleme oranı %25,49 olarak belirlenmiştir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.18,
+      "sources": []
+    },
+    "k33": {
+      "statement": "Cumhurbaşkanının, belirlenen yeniden değerleme oranını %50 azaltma veya %50 artırma yetkisi bulunmaktadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.18,
+      "sources": []
+    },
+    "k34": {
+      "statement": "Veri sorumlularından yıllık çalışan sayısı 50’den az ve yıllık mali bilanço toplamı 100 milyon Türk lirasından az olanlar, ana faaliyet konusu özel nitelikli kişisel veri işleme olmaması şartıyla Veri Sorumluları Siciline kayıt yükümlülüğünden istisna tutulmuştur.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.564,
+      "sources": []
+    },
+    "k35": {
+      "statement": "Kişisel verilerin işlenmesi bağlamında veri sorumlusu ve veri işleyen kavramları, Veri Sorumluları Siciline kayıt yükümlülüğü ve istisnalar gibi temel kavramlar KVKK rehberinde tanımlanmıştır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.628,
+      "sources": []
+    },
+    "k36": {
+      "statement": "6698 sayılı Kanunun 16. maddesi uyarınca veri sorumlularının Veri Sorumluları Siciline (VERBİS) kayıt yaptırması ve bilgi girişi yapması bir kanuni yükümlülüktür.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.628,
+      "sources": []
+    },
+    "k37": {
+      "statement": "Kişisel veri ihlalinin öğrenilmesinden itibaren başlayan 72 saatlik süre içerisinde Kurula bildirimde bulunulması zorunludur.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.64,
+      "sources": [
+        4
+      ]
+    },
+    "k38": {
+      "statement": "Veri sorumluları, çalışanların KVKK uyumu ve siber güvenlik tehditleri konusunda bilinçlendirilmesi için farkındalık eğitimleri vermek ve rol-sorumlulukları görev tanımlarında netleştirmekle yükümlüdür.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.64,
+      "sources": [
+        4
+      ]
+    },
+    "k39": {
+      "statement": "KVKK madde 12 uyarınca veri güvenliğine ilişkin yükümlülükleri yerine getirmeyenlere 15.000 TL ile 1.000.000 TL arasında idari para cezası uygulanabilir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.64,
+      "sources": [
+        4
+      ]
+    },
+    "k40": {
+      "statement": "Veri sorumluları, bilişim ağlarında sızmaları tespit etmek için erişim kayıtlarını ve logları düzenli olarak kontrol etmekle yükümlüdür.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.64,
+      "sources": []
+    },
+    "k41": {
+      "statement": "KVKK madde 12'deki yükümlülüklere aykırılık halinde 15.000 TL ile 1.000.000 TL arasında idari para cezası uygulanabilmektedir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.64,
+      "sources": []
+    },
+    "k42": {
+      "statement": "Kişisel verilerin yurt dışına aktarılması için Kurul tarafından 4 farklı standart sözleşme modeli geliştirilmiştir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.694,
+      "sources": [
+        5
+      ]
+    },
+    "k43": {
+      "statement": "Kişisel Verilerin Yurt Dışına Aktarılmasına İlişkin Usul ve Esaslar Hakkında Yönetmelik 10 Temmuz 2024 tarihinde yayımlanmıştır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.694,
+      "sources": [
+        5
+      ]
+    },
+    "k44": {
+      "statement": "KVKK itiraz süreci, Kurul kararının veri sorumlusuna usulüne uygun şekilde tebliğ edilmesiyle başlar.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.284,
+      "sources": []
+    },
+    "k45": {
+      "statement": "Kurul tarafından kişisel verilerin yurt dışına aktarılması kapsamında yeterli nitelikleri taşıyan 9 adet taahhütname onaylanmıştır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.544,
+      "sources": []
+    },
+    "k46": {
+      "statement": "Veri sorumluları, Kanun hükümlerinin uygulanmasını sağlamak amacıyla kendi kurum veya kuruluşlarında gerekli denetimleri yapmak veya yaptırmakla yükümlüdür.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.544,
+      "sources": []
+    },
+    "k47": {
+      "statement": "VERBİS kayıt kriterlerini (çalışan sayısı veya bilanço eşiği) sonradan sağlayan şirketler, kriterlerin sağlandığı tarihten itibaren 30 gün içinde VERBİS'e kayıt olmak zorundadır.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.172,
+      "sources": [
+        7
+      ]
+    },
+    "k48": {
+      "statement": "Veri sorumlusundan veri işleyene yapılan aktarımlara ilişkin standart sözleşme, imzaların tamamlanmasından itibaren beş iş günü içinde Kişisel Verileri Koruma Kurumu'na bildirilmelidir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.718,
+      "sources": [
+        6
+      ]
+    },
+    "k49": {
+      "statement": "Veri alıcısı, kişisel veri ihlallerini Kurum'un internet sitesinde ilan edilen 'Veri İhlali Bildirim Formu'nu kullanarak bildirmekle yükümlüdür.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.718,
+      "sources": [
+        6
+      ]
+    },
+    "k50": {
+      "statement": "5237 sayılı Türk Ceza Kanunu'nda kişisel verilerin kaydedilmesi, hukuka aykırı olarak verme veya ele geçirme ve verileri yok etmeme fiilleri suç olarak düzenlenmiştir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.608,
+      "sources": []
+    },
+    "k51": {
+      "statement": "Yurt dışı veri aktarımları için alınan eski açık rızalar 1 Eylül 2024 tarihine kadar geçerli kabul edilmiştir.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.292,
+      "sources": []
+    }
+  },
+  "metadata": {
+    "config_hash": "6690d3331d90f3671d1b2919996f43a0e5f35d929ae3a0cd60a2e9108c514765",
+    "models_used": {
+      "reasoning": "gemini:gemini-3.8-flash",
+      "fast": "gemini:gemini-3.1-flash-lite",
+      "embedding": "gemini-embedding-001"
+    },
+    "prompt_versions": {
+      "analyze_query": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "a727cb4344e9",
+        "label": "production"
+      },
+      "assess_coverage": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "e846c73d92bf",
+        "label": "production"
+      },
+      "evaluate_sources": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "b548bfeecc30",
+        "label": "production"
+      },
+      "extract_claims": {
+        "version": "4",
+        "source": "langfuse",
+        "content_hash": "7bb08d1d31b9",
+        "label": "production"
+      },
+      "generate_queries": {
+        "version": "2",
+        "source": "yaml",
+        "content_hash": "ef04b573731a"
+      },
+      "judge_contradictions": {
+        "version": "5",
+        "source": "langfuse",
+        "content_hash": "726f52b7aa1e",
+        "label": "production"
+      },
+      "plan": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "1ec8bb17ccf2",
+        "label": "production"
+      },
+      "synthesize": {
+        "version": "3",
+        "source": "langfuse",
+        "content_hash": "94db375c9234",
+        "label": "production"
+      },
+      "validate_claims": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "68ed4e47da0e",
+        "label": "production"
+      },
+      "verify_citations": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "32456e1a0b5a",
+        "label": "production"
+      }
+    },
+    "search_providers": [
+      "tavily"
+    ],
+    "llm_providers": [
+      "gemini",
+      "openai"
+    ],
+    "model_selection": {
+      "reasoning": "automatic",
+      "fast": "automatic",
+      "allow_fallback": true
+    },
+    "stop_reason": "max_iterations",
+    "stop_detail": "max_iterations=4 reached",
+    "iterations": 4,
+    "budget": {
+      "iteration": 4,
+      "searches": 26,
+      "searches_left": 19,
+      "llm_calls": 115,
+      "tokens_in": 826958,
+      "tokens_out": 198166,
+      "cost_usd": 0.98336,
+      "elapsed_seconds": 327.98
+    },
+    "gate_verdict": "pass_with_warnings",
+    "counters": {
+      "fetch_failures": 1,
+      "duplicate_urls": 42,
+      "claims_need_fresh_confirmation": 43,
+      "claims_validation_unsupported": 95,
+      "claims_rejected_quote": 13,
+      "extraction_failures": 0,
+      "claims_rejected_injection": 0,
+      "sentences_dropped_by_verifier": 0
+    },
+    "skills": [
+      "regulatory-research-tr"
+    ]
+  }
+}

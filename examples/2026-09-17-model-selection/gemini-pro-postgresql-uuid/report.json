@@ -1,0 +1,478 @@
+{
+  "question": "Using official PostgreSQL documentation, explain what the uuidv7() function added in PostgreSQL 18 does and how it differs from uuidv4(). Include limitations and avoid unsupported performance claims.",
+  "language": "en",
+  "title": "Comparison of uuidv7() and uuidv4() Functions in PostgreSQL 18",
+  "banner": null,
+  "sections": [
+    {
+      "key": "summary",
+      "title": "Summary",
+      "sentences": [
+        {
+          "text": "PostgreSQL provides native support for generating UUIDs using the UUIDv4 and UUIDv7 algorithms.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k11"
+          ],
+          "sources": [
+            1
+          ]
+        },
+        {
+          "text": "While uuidv4() generates random identifiers, the uuidv7() function introduced in PostgreSQL 18 creates time-ordered, sortable UUIDs.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k4",
+            "k5",
+            "k7"
+          ],
+          "sources": [
+            2,
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "key": "key_findings",
+      "title": "Key Findings",
+      "sentences": [
+        {
+          "text": "The uuidv7() function generates a version 7 time-ordered UUID using a UNIX timestamp with millisecond precision, sub-millisecond timestamp data, and random bits.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k1",
+            "k5"
+          ],
+          "sources": [
+            2,
+            3,
+            5
+          ]
+        },
+        {
+          "text": "According to a single source, uuidv7() embeds the current time at the beginning to ensure sortability, and monotonicity is ensured within the same backend.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k7",
+            "k8"
+          ],
+          "sources": [
+            4
+          ]
+        },
+        {
+          "text": "The native UUID type supported UUIDv4 generation prior to PostgreSQL 18, and the uuidv4() function generates a version 4 random UUID.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k4",
+            "k9"
+          ],
+          "sources": [
+            2,
+            4
+          ]
+        },
+        {
+          "text": "A single source notes that UUIDv4 values are not monotonic, whereas UUIDv7 values are sortable.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k10"
+          ],
+          "sources": [
+            4
+          ]
+        },
+        {
+          "text": "The uuid_extract_timestamp() function solely supports extracting timestamps from version 1 or 7 UUIDs, returning null for other versions.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k2"
+          ],
+          "sources": [
+            2
+          ]
+        },
+        {
+          "text": "A single source states that a limitation of uuidv7() is that it reveals the approximate creation time, which is a potential privacy concern.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k6"
+          ],
+          "sources": [
+            5
+          ]
+        },
+        {
+          "text": "The official documentation for PostgreSQL UUID generation functions is located in Section 9.14 at https://postgresql.org/docs/current/functions-uuid.html.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k3",
+            "k12"
+          ],
+          "sources": [
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "key": "conflicting_or_uncertain",
+      "title": "Conflicting / Uncertain Information",
+      "sentences": []
+    },
+    {
+      "key": "conclusion",
+      "title": "Conclusion",
+      "sentences": [
+        {
+          "text": "The uuidv7() function differs from uuidv4() by embedding a timestamp to produce sortable, monotonic identifiers instead of purely random values.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k1",
+            "k4",
+            "k10"
+          ],
+          "sources": [
+            2,
+            4,
+            5
+          ]
+        },
+        {
+          "text": "Although uuidv7() enables timestamp extraction, a single source highlights that exposing the creation time poses a privacy limitation.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k2",
+            "k6"
+          ],
+          "sources": [
+            2,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "key": "known_gaps",
+      "title": "Known Gaps",
+      "sentences": [
+        {
+          "text": "How does the uuidv4() function generate UUIDs in PostgreSQL according to official documentation? - not enough independent or primary sources were found (PostgreSQL module)",
+          "kind": "meta",
+          "labels": [
+            "gap:s2"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "According to PostgreSQL official documentation, how does the uuidv7() function differ from the uuidv4() function? - not enough independent or primary sources were found (Sorting and ordering, Structural difference)",
+          "kind": "meta",
+          "labels": [
+            "gap:s3"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "1 candidate claim(s) withheld: source support, conditions or current applicability could not be confirmed; see the evidence ledger.",
+          "kind": "meta",
+          "labels": [],
+          "findings": [],
+          "sources": []
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "number": 1,
+      "doc_id": "d8",
+      "url": "https://postgresql.org/docs/current/datatype-uuid.html",
+      "title": "PostgreSQL: Documentation: 18: 8.12. UUID Type",
+      "domain": "postgresql.org",
+      "score": 0.68
+    },
+    {
+      "number": 2,
+      "doc_id": "d1",
+      "url": "https://postgresql.org/docs/current/functions-uuid.html",
+      "title": "Documentation: 18: 9.14. UUID Functions - PostgreSQL",
+      "domain": "postgresql.org",
+      "score": 0.755
+    },
+    {
+      "number": 3,
+      "doc_id": "d2",
+      "url": "https://postgresql.org/docs/current/release-18.html",
+      "title": "Documentation: 18: E.6. Release 18 - PostgreSQL",
+      "domain": "postgresql.org",
+      "score": 0.755
+    },
+    {
+      "number": 4,
+      "doc_id": "d39",
+      "url": "https://xata.io/blog/going-down-the-rabbit-hole-of-postgres-18-features",
+      "title": "Postgres 18 Features: Async I/O, UUIDv7, OAuth and More",
+      "domain": "xata.io",
+      "score": 0.24
+    },
+    {
+      "number": 5,
+      "doc_id": "d35",
+      "url": "https://guidgenerator.com/uuids-in-databases/uuidv4-vs-uuidv7-for-database-primary-keys-a-practical-comparison",
+      "title": "UUID v4 vs UUID v7 for Database Primary Keys, A Practical Comparison",
+      "domain": "guidgenerator.com",
+      "score": 0.27
+    }
+  ],
+  "findings": {
+    "k1": {
+      "statement": "The uuidv7() function generates a version 7 (time-ordered) UUID using a UNIX timestamp with millisecond precision, sub-millisecond timestamp data, and random bits.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.6895,
+      "sources": [
+        2,
+        5
+      ]
+    },
+    "k2": {
+      "statement": "The uuid_extract_timestamp() function only supports extracting timestamps from version 1 or 7 UUIDs, returning null for other versions.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.604,
+      "sources": [
+        2
+      ]
+    },
+    "k3": {
+      "statement": "The official documentation URL for PostgreSQL 18 UUID functions is https://postgresql.org/docs/current/functions-uuid.html.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.604,
+      "sources": [
+        2
+      ]
+    },
+    "k4": {
+      "statement": "The uuidv4() function generates a version 4 (random) UUID.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.604,
+      "sources": [
+        2
+      ]
+    },
+    "k5": {
+      "statement": "The uuidv7() function introduced in PostgreSQL 18 generates timestamp-ordered UUIDs.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.604,
+      "sources": [
+        3
+      ]
+    },
+    "k6": {
+      "statement": "The uuidv7() function reveals approximate creation time, which is a potential privacy concern.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.216,
+      "sources": [
+        5
+      ]
+    },
+    "k7": {
+      "statement": "The uuidv7() function in PostgreSQL 18 generates UUIDs that are sortable and embed the current time at the beginning.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.192,
+      "sources": [
+        4
+      ]
+    },
+    "k8": {
+      "statement": "The monotonicity of generated UUIDv7 values is ensured within the same backend.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.192,
+      "sources": [
+        4
+      ]
+    },
+    "k9": {
+      "statement": "Before PostgreSQL 18, the native UUID type supported UUIDv4 generation.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.192,
+      "sources": [
+        4
+      ]
+    },
+    "k10": {
+      "statement": "UUIDv4 values are not monotonic, which affects index locality and compression efficiency, whereas UUIDv7 values are sortable.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.192,
+      "sources": [
+        4
+      ]
+    },
+    "k11": {
+      "statement": "PostgreSQL provides native support for generating UUIDs using the UUIDv4 and UUIDv7 algorithms.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.544,
+      "sources": [
+        1
+      ]
+    },
+    "k12": {
+      "statement": "PostgreSQL documentation for UUID generation functions is located in Section 9.14.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.544,
+      "sources": [
+        1
+      ]
+    }
+  },
+  "metadata": {
+    "config_hash": "5ec053f8dc73a89d94bf0aa746ad8780d2adbd1527bd6eeaf39a9e76ecba133f",
+    "models_used": {
+      "reasoning": "gemini:gemini-3.1-pro-preview",
+      "fast": "gemini:gemini-3.1-flash-lite",
+      "embedding": "gemini-embedding-001"
+    },
+    "prompt_versions": {
+      "analyze_query": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "a727cb4344e9",
+        "label": "production"
+      },
+      "assess_coverage": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "e846c73d92bf",
+        "label": "production"
+      },
+      "evaluate_sources": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "b548bfeecc30",
+        "label": "production"
+      },
+      "extract_claims": {
+        "version": "4",
+        "source": "langfuse",
+        "content_hash": "7bb08d1d31b9",
+        "label": "production"
+      },
+      "generate_queries": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "c529f97cebe9",
+        "label": "production"
+      },
+      "judge_contradictions": {
+        "version": "5",
+        "source": "langfuse",
+        "content_hash": "726f52b7aa1e",
+        "label": "production"
+      },
+      "plan": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "1ec8bb17ccf2",
+        "label": "production"
+      },
+      "synthesize": {
+        "version": "3",
+        "source": "langfuse",
+        "content_hash": "94db375c9234",
+        "label": "production"
+      },
+      "validate_claims": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "68ed4e47da0e",
+        "label": "production"
+      },
+      "verify_citations": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "32456e1a0b5a",
+        "label": "production"
+      }
+    },
+    "search_providers": [
+      "tavily"
+    ],
+    "llm_providers": [
+      "gemini",
+      "openai"
+    ],
+    "model_selection": {
+      "reasoning": "gemini-3.1-pro-preview",
+      "fast": "gemini-3.1-flash-lite",
+      "allow_fallback": false
+    },
+    "stop_reason": "max_iterations",
+    "stop_detail": "max_iterations=1 reached",
+    "iterations": 1,
+    "budget": {
+      "iteration": 1,
+      "searches": 6,
+      "searches_left": 3,
+      "llm_calls": 20,
+      "tokens_in": 119380,
+      "tokens_out": 20186,
+      "cost_usd": 0.207572,
+      "elapsed_seconds": 86.07
+    },
+    "gate_verdict": "pass",
+    "counters": {
+      "fetch_failures": 0,
+      "duplicate_urls": 19,
+      "claims_validation_unsupported": 1,
+      "claims_rejected_quote": 4,
+      "extraction_failures": 0,
+      "claims_rejected_injection": 0,
+      "sentences_dropped_by_verifier": 0
+    },
+    "skills": []
+  }
+}

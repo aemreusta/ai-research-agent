@@ -1,0 +1,62 @@
+{
+  "eu-ai-act-timeline": {
+    "run_id": "d1b38caf-01b3-4d78-9986-ac33b31fcaf7",
+    "question": "What changed in the EU AI Act implementation timeline?",
+    "started": 1789632031.167252,
+    "status": "succeeded_with_warnings",
+    "elapsed_seconds": 361.27,
+    "gate_status": "pass_with_warnings",
+    "stop_reason": "max_iterations",
+    "metrics": {
+      "cost_usd": 1.00517,
+      "tokens_in": 792411,
+      "tokens_out": 198433,
+      "searches_used": 31,
+      "iteration": 4,
+      "duration_seconds": 356.49341
+    },
+    "error_code": null,
+    "attempts": 1,
+    "models_used": {
+      "fast": "gemini:gemini-3.1-flash-lite",
+      "embedding": "gemini-embedding-001",
+      "reasoning": "gemini:gemini-3.8-flash"
+    },
+    "selected_models": {
+      "reasoning_model": "",
+      "fast_model": "",
+      "allow_fallback": true
+    },
+    "exported": true
+  },
+  "kvkk-2026-saas-action-plan": {
+    "run_id": "6587bd2a-b781-40c6-89b8-3cecc46b16d8",
+    "question": "Türkiye'deki SaaS şirketleri için 2026 KVKK uyum aksiyon planı nedir?",
+    "started": 1789632031.1686091,
+    "status": "succeeded_with_warnings",
+    "elapsed_seconds": 331.2,
+    "gate_status": "pass_with_warnings",
+    "stop_reason": "max_iterations",
+    "metrics": {
+      "cost_usd": 0.98336,
+      "tokens_in": 826958,
+      "tokens_out": 198166,
+      "searches_used": 26,
+      "iteration": 4,
+      "duration_seconds": 328.188301
+    },
+    "error_code": null,
+    "attempts": 1,
+    "models_used": {
+      "fast": "gemini:gemini-3.1-flash-lite",
+      "embedding": "gemini-embedding-001",
+      "reasoning": "gemini:gemini-3.8-flash"
+    },
+    "selected_models": {
+      "reasoning_model": "",
+      "fast_model": "",
+      "allow_fallback": true
+    },
+    "exported": true
+  }
+}

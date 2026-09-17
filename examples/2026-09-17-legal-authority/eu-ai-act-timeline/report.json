@@ -1,0 +1,767 @@
+{
+  "question": "What changed in the EU AI Act implementation timeline?",
+  "language": "en",
+  "title": "Changes in the EU AI Act Implementation Timeline",
+  "banner": null,
+  "sections": [
+    {
+      "key": "summary",
+      "title": "Summary",
+      "sentences": [
+        {
+          "text": "The General-Purpose AI (GPAI) Code of Practice was published on 10 July 2025, more than two months later than initially planned, while GPAI rules became applicable on 2 August 2025.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k7",
+            "k8",
+            "k13"
+          ],
+          "sources": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "text": "Regulation (EU) 2026/1744 entered into force on 27 July 2026, changing the timeline for Article 6(1)/Annex I and Article 6(2)/Annex III high-risk routes to later dates.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k26",
+            "k27"
+          ],
+          "sources": [
+            6,
+            7
+          ]
+        },
+        {
+          "text": "The majority of the EU AI Act's rules became applicable on 2 August 2026, with some exceptions.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k3",
+            "k4"
+          ],
+          "sources": [
+            8,
+            9
+          ]
+        },
+        {
+          "text": "1 sentence(s) removed for insufficient evidence - see gate_result.json",
+          "kind": "meta",
+          "labels": [
+            "gate_note"
+          ],
+          "findings": [],
+          "sources": []
+        }
+      ]
+    },
+    {
+      "key": "key_findings",
+      "title": "Key Findings",
+      "sentences": [
+        {
+          "text": "According to a single source, the GPAI Code of Practice was initially expected by 2 May 2025, but its final version was published on 10 July 2025, more than two months later than initially planned.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k11",
+            "k13"
+          ],
+          "sources": [
+            4,
+            5,
+            10
+          ]
+        },
+        {
+          "text": "The EU AI Act rules regarding General-Purpose AI became applicable starting from 2 August 2025.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k8",
+            "k10"
+          ],
+          "sources": [
+            3,
+            10
+          ]
+        },
+        {
+          "text": "Regulation (EU) 2026/1744 was published on 24 July 2026 and entered into force on 27 July 2026 to simplify the implementation of harmonised rules on artificial intelligence.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k19",
+            "k20",
+            "k26"
+          ],
+          "sources": [
+            6,
+            7,
+            11,
+            12
+          ]
+        },
+        {
+          "text": "Regulation (EU) 2026/1744 changed the timeline for Article 6(2)/Annex III and Article 6(1)/Annex I high-risk routes, moving them to later dates.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k26",
+            "k27"
+          ],
+          "sources": [
+            6,
+            7
+          ]
+        },
+        {
+          "text": "A single source reports that a narrow Article 50(2) legacy-system transition ends on 2 December 2026.",
+          "kind": "fact",
+          "labels": [
+            "single_source"
+          ],
+          "findings": [
+            "k28"
+          ],
+          "sources": [
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "key": "conflicting_or_uncertain",
+      "title": "Conflicting / Uncertain Information",
+      "sentences": [
+        {
+          "text": "Sources contest the timing of political agreement on the Digital Omnibus on AI, citing either 7 May 2026 or a provisional agreement on 6 May 2026 confirmed on 13 May 2026.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k14",
+            "k23"
+          ],
+          "sources": [
+            13,
+            14,
+            15
+          ]
+        }
+      ]
+    },
+    {
+      "key": "conclusion",
+      "title": "Conclusion",
+      "sentences": [
+        {
+          "text": "While GPAI rules took effect on 2 August 2025 following the release of the GPAI Code of Practice on 10 July 2025, the high-risk system timelines under Annex I and Annex III were postponed by Regulation (EU) 2026/1744.",
+          "kind": "fact",
+          "labels": [],
+          "findings": [
+            "k8",
+            "k13",
+            "k26",
+            "k27"
+          ],
+          "sources": [
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        },
+        {
+          "text": "The general rules of the AI Act became applicable on 2 August 2026, with specific transition periods and delegated act deadlines continuing into December 2026 and August 2027.",
+          "kind": "fact",
+          "labels": [
+            "single_source",
+            "approximate"
+          ],
+          "findings": [
+            "k3",
+            "k4",
+            "k18",
+            "k28"
+          ],
+          "sources": [
+            6,
+            8,
+            9,
+            16
+          ]
+        }
+      ]
+    },
+    {
+      "key": "known_gaps",
+      "title": "Known Gaps",
+      "sentences": [
+        {
+          "text": "Have any formal revisions, delays, or grace periods been announced by the European Commission or EU AI Office regarding the EU AI Act timeline? - not enough independent or primary sources were found (reasons for timeline adjustments)",
+          "kind": "meta",
+          "labels": [
+            "gap:s2"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "What changes or clarified schedules have emerged for the drafting and applicability of General-Purpose AI (GPAI) Codes of Practice? - not enough independent or primary sources were found (GPAI compliance cut-off)",
+          "kind": "meta",
+          "labels": [
+            "gap:s3"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "How have the implementation dates and transitional relief for Annex I and Annex III high-risk AI systems evolved? - not enough independent or primary sources were found (harmonised standards delivery dates, legacy system transition rules)",
+          "kind": "meta",
+          "labels": [
+            "gap:s4"
+          ],
+          "findings": [],
+          "sources": []
+        },
+        {
+          "text": "120 candidate claim(s) withheld: source support, conditions or current applicability could not be confirmed; see the evidence ledger.",
+          "kind": "meta",
+          "labels": [],
+          "findings": [],
+          "sources": []
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "number": 1,
+      "doc_id": "d62",
+      "url": "https://digital-strategy.ec.europa.eu/en/policies/contents-code-gpai",
+      "title": "The General-Purpose AI Code of Practice",
+      "domain": "digital-strategy.ec.europa.eu",
+      "score": 1.0
+    },
+    {
+      "number": 2,
+      "doc_id": "d66",
+      "url": "https://kennedyslaw.com/en/thought-leadership/article/2026/the-eu-ai-act-implementation-timeline-understanding-the-next-deadline-for-compliance",
+      "title": "The EU AI Act implementation timeline",
+      "domain": "kennedyslaw.com",
+      "score": 0.315
+    },
+    {
+      "number": 3,
+      "doc_id": "d67",
+      "url": "https://digital-strategy.ec.europa.eu/en/policies/ai-code-practice",
+      "title": "Drawing-up a General-Purpose AI Code of Practice",
+      "domain": "digital-strategy.ec.europa.eu",
+      "score": 0.915
+    },
+    {
+      "number": 4,
+      "doc_id": "d75",
+      "url": "https://en.wikipedia.org/wiki/General-Purpose_AI_Code_of_Practice",
+      "title": "General-Purpose AI Code of Practice",
+      "domain": "en.wikipedia.org",
+      "score": 0.265
+    },
+    {
+      "number": 5,
+      "doc_id": "d57",
+      "url": "https://regulations.ai/regulations/RAI-EU-NA-GACPVXX-2025",
+      "title": "European Union - General-Purpose AI Code of Practice",
+      "domain": "regulations.ai",
+      "score": 0.275
+    },
+    {
+      "number": 6,
+      "doc_id": "d156",
+      "url": "https://euaicompass.com/timeline.html",
+      "title": "EU AI Act timeline and planning dates",
+      "domain": "euaicompass.com",
+      "score": 0.39
+    },
+    {
+      "number": 7,
+      "doc_id": "d79",
+      "url": "https://annexops.com/eu-ai-act-annex-iii-deadline-2027",
+      "title": "EU AI Act Annex III Deadline 2027: Complete Guide",
+      "domain": "annexops.com",
+      "score": 0.205
+    },
+    {
+      "number": 8,
+      "doc_id": "d39",
+      "url": "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai",
+      "title": "AI Act | Shaping Europe's digital future - European Union",
+      "domain": "digital-strategy.ec.europa.eu",
+      "score": 0.975
+    },
+    {
+      "number": 9,
+      "doc_id": "d40",
+      "url": "https://consilium.europa.eu/en/policies/artificial-intelligence-act/timeline-artificial-intelligence",
+      "title": "Timeline - Artificial intelligence - consilium.europa.eu",
+      "domain": "consilium.europa.eu",
+      "score": 0.8975
+    },
+    {
+      "number": 10,
+      "doc_id": "d74",
+      "url": "https://deloitte.com/ce/en/related-content/bg-eus-general-purpose-ai-code-practice-need-know.html",
+      "title": "The EU's General Purpose AI Code of Practice: What You ...",
+      "domain": "deloitte.com",
+      "score": 0.35
+    },
+    {
+      "number": 11,
+      "doc_id": "d134",
+      "url": "https://eur-lex.europa.eu/eli/reg/2026/1744/oj/eng",
+      "title": "Regulation - EU - 2026/1744 - EN - EUR-Lex - European Union",
+      "domain": "eur-lex.europa.eu",
+      "score": 0.885
+    },
+    {
+      "number": 12,
+      "doc_id": "d135",
+      "url": "https://eur-lex.europa.eu/search.html?CT_1_CODED=TECN&DC_CODED=3030&DC_TT_CODED=2914&DTS_SUBDOM=LEGISLATION&PROC_TYP=OLP&SUBDOM_INIT=ALL_ALL&lang=en&qid=1783592328224&sortOne=DD&sortOneOrder=desc&type=advanced",
+      "title": "Search results - EUR-Lex",
+      "domain": "eur-lex.europa.eu",
+      "score": 0.86
+    },
+    {
+      "number": 13,
+      "doc_id": "d82",
+      "url": "https://gibsondunn.com/eu-ai-act-omnibus-agreement-postponed-high-risk-deadlines-and-other-key-changes",
+      "title": "EU AI Act Omnibus Agreement — Postponed High-Risk ...",
+      "domain": "gibsondunn.com",
+      "score": 0.4925
+    },
+    {
+      "number": 14,
+      "doc_id": "d101",
+      "url": "https://winstontaylor.com/insights/ai-act-rules-on-high-risk-ai-delayed-as-ai-digital-omnibus-agreed",
+      "title": "AI Act rules on high-risk AI delayed as AI Digital Omnibus ...",
+      "domain": "winstontaylor.com",
+      "score": 0.4675
+    },
+    {
+      "number": 15,
+      "doc_id": "d171",
+      "url": "https://europarl.europa.eu/thinktank/en/document/EPRS_ATA(2026)789329",
+      "title": "Digital Omnibus on AI: Adoption in plenary | Think Tank | European Parliament",
+      "domain": "europarl.europa.eu",
+      "score": 0.885
+    },
+    {
+      "number": 16,
+      "doc_id": "d133",
+      "url": "https://eur-lex.europa.eu/eli/reg/2024/1689/2026-07-27/eng",
+      "title": "02024R1689-20260727 - EN - EUR-Lex - European Union",
+      "domain": "eur-lex.europa.eu",
+      "score": 0.76
+    }
+  ],
+  "findings": {
+    "k1": {
+      "statement": "The EU AI Act entered into force on 1 August 2024.",
+      "status": "contested",
+      "support": 9,
+      "confidence": 0.9832,
+      "sources": [
+        2,
+        5,
+        9,
+        13
+      ]
+    },
+    "k2": {
+      "statement": "The EU AI Act entered into force on 1 August 2024.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.78,
+      "sources": [
+        8
+      ]
+    },
+    "k3": {
+      "statement": "The EU AI Act became applicable on 2 August 2026, with some exceptions.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.78,
+      "sources": [
+        8
+      ]
+    },
+    "k4": {
+      "statement": "The majority of the AI act's rules came into force on 2 August 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.718,
+      "sources": [
+        9
+      ]
+    },
+    "k5": {
+      "statement": "The EU AI Act will be fully applicable 24 months after its entry into force.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.56,
+      "sources": []
+    },
+    "k6": {
+      "statement": "The obligations for high-risk AI systems will become applicable 36 months after the entry into force of the EU AI Act.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.56,
+      "sources": []
+    },
+    "k7": {
+      "statement": "The General-Purpose AI Code of Practice was published on July 10, 2025.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.8504,
+      "sources": [
+        1,
+        2
+      ]
+    },
+    "k8": {
+      "statement": "The EU AI Act rules regarding General-Purpose AI (GPAI) are applicable starting from 2 August 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.732,
+      "sources": [
+        3
+      ]
+    },
+    "k9": {
+      "statement": "The final version of the General-Purpose AI (GPAI) Code of Practice was published on 10 July 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.228,
+      "sources": []
+    },
+    "k10": {
+      "statement": "The applicability date for GPAI rules under the EU AI Act is 2 August 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.28,
+      "sources": [
+        10
+      ]
+    },
+    "k11": {
+      "statement": "The GPAI Code of Practice was initially expected by 2 May 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.28,
+      "sources": [
+        10
+      ]
+    },
+    "k12": {
+      "statement": "The final iteration of the GPAI Code of Practice was released on 10 July 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.28,
+      "sources": [
+        10
+      ]
+    },
+    "k13": {
+      "statement": "The final version of the General-Purpose AI Code of Practice was published on 10 July 2025, which was more than two months later than initially planned.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.3854,
+      "sources": [
+        4,
+        5
+      ]
+    },
+    "k14": {
+      "statement": "The European institutions reached a provisional political agreement on the Digital Omnibus on AI on 6 May 2026, which was confirmed by Member State representatives on 13 May 2026.",
+      "status": "contested",
+      "support": 1,
+      "confidence": 0.394,
+      "sources": [
+        13
+      ]
+    },
+    "k15": {
+      "statement": "The 'AI omnibus' was adopted in June 2026, introducing targeted amendments to the AI Act.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.7,
+      "sources": []
+    },
+    "k16": {
+      "statement": "The amendments to the AI Act from the 'AI omnibus' entered into force on 27 July 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.78,
+      "sources": []
+    },
+    "k17": {
+      "statement": "The Fourth GPAI Signatory Taskforce meeting took place on 3 August 2026, covering the Safety and Security Chapter and the Copyright Chapter.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.72,
+      "sources": []
+    },
+    "k18": {
+      "statement": "The European Commission is mandated to adopt delegated acts by 2 August 2027 to specify which high-risk AI systems may have limited application of specific requirements or obligations and the conditions for such limitations.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.608,
+      "sources": [
+        16
+      ]
+    },
+    "k19": {
+      "statement": "The European Parliament and Council enacted Regulation (EU) 2026/1744 on 8 July 2026, which amends the main AI Act (Regulation (EU) 2024/1689) to simplify the implementation of harmonised AI rules.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.708,
+      "sources": [
+        11
+      ]
+    },
+    "k20": {
+      "statement": "A new regulation, Regulation (EU) 2026/1744, was enacted to amend Regulation (EU) 2024/1689 (the EU AI Act) concerning the simplification of the implementation of harmonised rules on artificial intelligence.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.688,
+      "sources": [
+        12
+      ]
+    },
+    "k21": {
+      "statement": "The EU Commission published the GPAI Code of Practice on 10 July 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.242,
+      "sources": []
+    },
+    "k22": {
+      "statement": "The European Commission published the Digital Omnibus proposal on 19 November 2025 to address implementation issues in the AI Act.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.374,
+      "sources": [
+        14
+      ]
+    },
+    "k23": {
+      "statement": "Political agreement on the AI element of the Digital Omnibus was reached on 7 May 2026.",
+      "status": "contested",
+      "support": 2,
+      "confidence": 0.8172,
+      "sources": [
+        14,
+        15
+      ]
+    },
+    "k24": {
+      "statement": "The EU AI Act (Regulation (EU) 2024/1689) entered into force on 2 August 2024.",
+      "status": "contested",
+      "support": 1,
+      "confidence": 0.264,
+      "sources": []
+    },
+    "k25": {
+      "statement": "The European standard EN 18286:2026 concerning quality management systems for the EU AI Act was approved on 12 July 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.284,
+      "sources": []
+    },
+    "k26": {
+      "statement": "Regulation (EU) 2026/1744 was published in the Official Journal on 24 July 2026 and entered into force on 27 July 2026.",
+      "status": "supported",
+      "support": 2,
+      "confidence": 0.4248,
+      "sources": [
+        6,
+        7
+      ]
+    },
+    "k27": {
+      "statement": "Regulation (EU) 2026/1744 changed the timeline for Article 6(2)/Annex III and Article 6(1)/Annex I high-risk routes, moving them to later dates.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.312,
+      "sources": [
+        6
+      ]
+    },
+    "k28": {
+      "statement": "A narrow Article 50(2) legacy-system transition ends on 2 December 2026.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.312,
+      "sources": [
+        6
+      ]
+    },
+    "k29": {
+      "statement": "AI Act rules for high-risk AI systems embedded in regulated products become applicable on August 2, 2027.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.22,
+      "sources": [
+        5
+      ]
+    },
+    "k30": {
+      "statement": "First results for technical standards development are expected for late 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.212,
+      "sources": []
+    },
+    "k31": {
+      "statement": "Certain provisions of the EU AI Act became effective on 2 February 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.708,
+      "sources": []
+    },
+    "k32": {
+      "statement": "The European AI Office released the final GPAI Code of Practice on 10 July 2025.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.232,
+      "sources": []
+    },
+    "k33": {
+      "statement": "Small mid-cap enterprises (SMCs) are defined as enterprises that are not SMEs, employ fewer than 750 people, and have an annual turnover of no more than €150 million or an annual balance-sheet total of no more than €129 million.",
+      "status": "single_source",
+      "support": 1,
+      "confidence": 0.164,
+      "sources": [
+        7
+      ]
+    }
+  },
+  "metadata": {
+    "config_hash": "6690d3331d90f3671d1b2919996f43a0e5f35d929ae3a0cd60a2e9108c514765",
+    "models_used": {
+      "reasoning": "gemini:gemini-3.8-flash",
+      "fast": "gemini:gemini-3.1-flash-lite",
+      "embedding": "gemini-embedding-001"
+    },
+    "prompt_versions": {
+      "analyze_query": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "a727cb4344e9",
+        "label": "production"
+      },
+      "assess_coverage": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "e846c73d92bf",
+        "label": "production"
+      },
+      "evaluate_sources": {
+        "version": "1",
+        "source": "langfuse",
+        "content_hash": "b548bfeecc30",
+        "label": "production"
+      },
+      "extract_claims": {
+        "version": "4",
+        "source": "langfuse",
+        "content_hash": "7bb08d1d31b9",
+        "label": "production"
+      },
+      "generate_queries": {
+        "version": "2",
+        "source": "yaml",
+        "content_hash": "ef04b573731a"
+      },
+      "judge_contradictions": {
+        "version": "5",
+        "source": "langfuse",
+        "content_hash": "726f52b7aa1e",
+        "label": "production"
+      },
+      "plan": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "1ec8bb17ccf2",
+        "label": "production"
+      },
+      "synthesize": {
+        "version": "3",
+        "source": "langfuse",
+        "content_hash": "94db375c9234",
+        "label": "production"
+      },
+      "validate_claims": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "68ed4e47da0e",
+        "label": "production"
+      },
+      "verify_citations": {
+        "version": "2",
+        "source": "langfuse",
+        "content_hash": "32456e1a0b5a",
+        "label": "production"
+      }
+    },
+    "search_providers": [
+      "tavily"
+    ],
+    "llm_providers": [
+      "gemini",
+      "openai"
+    ],
+    "model_selection": {
+      "reasoning": "automatic",
+      "fast": "automatic",
+      "allow_fallback": true
+    },
+    "stop_reason": "max_iterations",
+    "stop_detail": "max_iterations=4 reached",
+    "iterations": 4,
+    "budget": {
+      "iteration": 4,
+      "searches": 31,
+      "searches_left": 14,
+      "llm_calls": 127,
+      "tokens_in": 792411,
+      "tokens_out": 198433,
+      "cost_usd": 1.00517,
+      "elapsed_seconds": 356.17
+    },
+    "gate_verdict": "pass_with_warnings",
+    "counters": {
+      "fetch_failures": 1,
+      "duplicate_urls": 96,
+      "claims_validation_unsupported": 116,
+      "claims_need_fresh_confirmation": 21,
+      "claims_rejected_quote": 19,
+      "extraction_failures": 0,
+      "claims_rejected_injection": 0,
+      "sentences_dropped_by_verifier": 1
+    },
+    "skills": []
+  }
+}
